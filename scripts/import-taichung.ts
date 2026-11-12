@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
 import { load } from 'cheerio';
 import { mongoClient, snapshots } from '../lib/mongodb.ts';
@@ -26,7 +25,7 @@ const request = async (url: string) => {
 const get = async (url: string) => new Uint8Array(await (await request(url)).arrayBuffer());
 const html = async (url: string) => (await request(url)).text();
 const districtOf = (address: string) => address.match(/^臺中市([^區]+區)/)?.[1] ?? '';
-const existingPublicIds = new Map([
+const nonMunicipalPublicIds = new Map([
   ['國立公共資訊圖書館', 'ncl-3aa0574ed94d0f22'],
   [limingName, 'ncl-1ba74ad50e9db0a9'],
   ['臺中市和平區立圖書館', 'ncl-a37723154b3ab4dc'],
@@ -71,10 +70,11 @@ async function importTaichung() {
     if (branches.has(key)) continue;
     const { row, details } = evidence;
     const name = clean(row.Name);
+    const id = nonMunicipalPublicIds.get(name);
+    if (!id) continue;
     const address = clean(row.Address).replace(/^\d{3,6}\s*/, '');
     const district = districtOf(address);
-    if (!name || !district || !details) throw new Error('公立館舍資料不完整：' + name);
-    const id = existingPublicIds.get(name) ?? 'plis-' + createHash('sha256').update(details.url).digest('hex').slice(0, 16);
+    if (!district || !details) throw new Error('公立館舍資料不完整：' + name);
     const library: Library = {
       id, name, district, address, types: ['公共圖書館'], sources: [],
       website: row.URL && URL.canParse(row.URL) ? row.URL : undefined,
@@ -83,6 +83,9 @@ async function importTaichung() {
     };
     applyPublicEvidence(library, evidence);
     libraries.set(id, library);
+  }
+  for (const [name, id] of nonMunicipalPublicIds) {
+    if (!libraries.has(id)) throw new Error('公立館舍名錄缺少：' + name);
   }
 
   for (const [key, branch] of branches) {

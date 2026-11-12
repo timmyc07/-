@@ -102,7 +102,7 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
   const changed = library.checkDates?.includes(query.date);
   if (changed) missing.push('指定日期有特殊時段或入場方式，請查館方公告');
   if (library.notices?.length) missing.push('有開館異動待核對');
-  if (!area && query.kind === 'study' && library.studyRoom === false) failed.push('官方資料標示沒有自修室');
+  if (!area && query.kind === 'study' && library.studyRoom === false) failed.push('館舍目前無對外開放的自修室');
   else if (!area) missing.push('空間規則待確認');
   else {
     if (query.kind && area.kind !== query.kind) failed.push('空間類型不符');

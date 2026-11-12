@@ -106,6 +106,8 @@ const hepingDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/Libr
 const hepingNcl = nclDirectory + 'L5268000';
 const hepingWifi = 'https://da.taichung.gov.tw/media/1183959/111及112年臺中市免費無線上網服務-itaichung-使用情形.pdf';
 const hepingReopening = 'https://www.facebook.com/photo/?fbid=1424988006497461';
+const hepingClosed = 'https://school.tc.edu.tw/open-message/064731/get-file/6954b2c7837b7238900668a3';
+const hepingExtension = 'https://www.heping.taichung.gov.tw/3933936/post';
 const holidays2026 = 'https://www.dgpa.gov.tw/information?pid=12685&uid=55';
 const election2026 = 'https://info.cec.gov.tw/vote2026/question/';
 const fengyuanMap = citySite + 'lib/content/index?Parser=1,117,315';
@@ -122,6 +124,9 @@ const dongshiGuide = citySite + 'lib/content/index?Parser=1,149,720';
 const dongshiReading = 'https://epaper.tc.edu.tw/application/show-article?id=6222';
 const qingshuiGuide = citySite + 'lib/content/index?Parser=1,125,395';
 const qingshuiOldHours = 'https://www.taichung.gov.tw/media/270688/512291511171.pdf';
+const qingshuiClosed = 'https://www.taichung.gov.tw/8868/8872/9962/2831779/';
+const qingshuiFacilities = 'https://eservices.taichung.gov.tw/LocationNew/Introduction/150/FacilityRental/4e98a291-3c3a-4008-bc67-85c3c0e63a5f';
+const cityChronology = citySite + 'table/index?Parser=4,3,69,32';
 const beitunDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000228';
 const beitunGuide = citySite + 'lib/content/index?Parser=1,113,275';
 const beitunNcl = 'https://libstat.ncl.edu.tw/libraryDataDetail/L5247000';
@@ -149,6 +154,17 @@ const houliIntro = citySite + 'lib/Introduction/index?Parser=99,138,524';
 const greenMuseumPlan = 'https://www.rdec.taichung.gov.tw/media/1251864/673th_1140527_-%E6%96%87%E5%8C%96%E5%B1%80-%E7%B6%A0%E7%BE%8E%E5%9C%96.pdf';
 const greenMuseumTeen = citySite + 'lib/tour/Details?Parser=14,101,703,,,,46';
 const likeyongGuide = citySite + 'lib/content/index?Parser=1,112,265';
+const xinganGuide = citySite + 'lib/content/index?Parser=1,115,295';
+const xinganIntro = citySite + 'lib/Introduction/index?Parser=99,115,294';
+const xinganVisit = 'https://www.walkerland.com.tw/article/view/349577';
+const daliIntro = citySite + 'lib/Introduction/index?Parser=99,120,344';
+const xiquFacilities = 'https://eservices.taichung.gov.tw/LocationNew/Introduction/150/FacilityRental/273b7047-42a9-4ea8-8326-02f633ecb621';
+const dajiaFacilities = 'https://eservices.taichung.gov.tw/LocationNew/Introduction/150/FacilityRental/4337e051-9c3a-4014-97a8-f9403c2d9525';
+const wuriFacilities = 'https://eservices.taichung.gov.tw/LocationNew/Introduction/150/FacilityRental/63f714bc-8755-4e56-85f6-23a3763a69de';
+const xitunGuide = citySite + 'lib/content/index?Parser=1,109,235';
+const xixiGuide = citySite + 'lib/content/index?Parser=1,110,245';
+const shangfengGuide = citySite + 'lib/content/index?Parser=1,137,515';
+const longjingGuide = citySite + 'lib/content/index?Parser=1,141,555';
 const dadunIntro = citySite + 'lib/Introduction/index?Parser=99,105,194';
 const dadunDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000198';
 const dadunCenterHours = 'https://www.dadun.culture.taichung.gov.tw/TCDCCFrontend/SpaceGuide/DadunCenterGuide';
@@ -206,9 +222,16 @@ export const reviewedSources: Record<string, {
     accessNote: '分館介紹列有筆電席位。3 樓資訊檢索區旁的閱覽桌設有可供筆電充電的插座。',
   },
   梧棲分館: { studyRoom: false, sources: [nclDirectory + 'L5278000'] },
-  溪西分館: { studyRoom: false, sources: [nclDirectory + 'L4899005'] },
+  溪西分館: { studyRoom: false,
+    sources: [nclDirectory + 'L4899005', xixiGuide, 'https://niniandblue.com/blog/post/xixilibrary'],
+    readingEquipment: { laptop: true, outlet: true },
+    accessNote: '館方列有筆電席位。2 樓部分靠窗閱覽桌有插座，請使用館方指定的充電位置。',
+  },
   精武圖書館: { studyRoom: false, sources: [nclDirectory + 'L4899003'] },
-  興安分館: { studyRoom: false, sources: [nclDirectory + 'L5011000'] },
+  興安分館: { studyRoom: false, sources: [nclDirectory + 'L5011000', xinganGuide, xinganIntro, xinganVisit],
+    readingEquipment: { laptop: true, outlet: true },
+    accessNote: '分館介紹列有筆電席位。現場紀錄顯示 2 樓開架閱覽區的高腳長桌有可供讀者使用的插座。',
+  },
   龍井山頂分館: { studyRoom: false, sources: [nclDirectory + 'L5277000'] },
   龍井龍津分館: { studyRoom: false, sources: [nclDirectory + 'L5253000'] },
   豐原分館A棟: { studyRoom: null, sources: [fengyuanMap, fengyuanIntro, fengyuanNotice, 'https://www.facebook.com/FYLIB/'],
@@ -246,12 +269,30 @@ export const reviewedSources: Record<string, {
     areaUpdates: [{ name: '3 樓自習室', kind: 'study', slots: null, access: null, equipment: {},
       sources: [xinsheNotice, xinsheGuide, xinsheReopened] }],
   },
-  清水分館: { sources: [qingshuiGuide, qingshuiOldHours],
-    accessNote: '館方現行導覽列 4 樓自習室，照片顯示座位有編號和隔板。市府舊刊載有自習室 08:00 開放，現行官網列全館 08:30 開館。自習室是否仍提早開放及固定時段待確認。' },
+  清水分館: { sources: [qingshuiGuide, qingshuiOldHours, qingshuiClosed, cityChronology, qingshuiFacilities],
+    readingEquipment: { laptop: true },
+    accessNote: '館方現行導覽列 4 樓自習室，市府另列館內筆電專區。分館完成耐震補強後於 2025 年 8 月 12 日重新開館。整修前市府刊物載自習室 08:00 開放，現行官網列全館 08:30 開館。自習室目前是否提早開放及固定時段待確認。',
+    closures: [{ from: '2024-12-03', until: '2025-08-11', reason: '耐震補強期間暫停閱覽及自習服務', url: qingshuiClosed }],
+  },
   大里大新分館: { sources: [citySite + 'lib/content/index?Parser=1,121,355'],
     accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。' },
-  西屯分館: { sources: [xitunRules],
-    accessNote: '館方的討論室須知明訂討論室不得用於個人自修。獨立自習室時段仍待確認。' },
+  大里分館: {
+    sources: [daliIntro, 'https://www.walkerland.com.tw/article/view/211808',
+      citySite + 'latestevent/Details?Parser=22,3,38,27,,,1832'],
+    readingEquipment: { laptop: true },
+    accessNote: '館方現行介紹列有筆電席位。較早的現場紀錄指出 2 樓青少年閱覽桌有插座，2026 年另有閱讀設備升級採購，現行充電座位待確認。',
+  },
+  西區分館: {
+    sources: [xiquFacilities, citySite + 'lib/content/index?Parser=1,104,185'],
+    readingEquipment: { laptop: true },
+    accessNote: '市府服務 e 櫃檯列有筆電專區，現行插座規則待確認。B1 自習室的獨立時段待確認。',
+  },
+  西屯分館: { sources: [xitunRules, xitunGuide, citySite + 'lib/Introduction/index?Parser=99,109,234'],
+    readingEquipment: { laptop: true },
+    accessNote: '館方列有筆電席位，2 樓導覽標示無線上網區。討論室不得用於個人自修。獨立自習室時段仍待確認。' },
+  大甲分館: { sources: [dajiaFacilities], readingEquipment: { laptop: true },
+    accessNote: '市府列有筆電專區及 3 樓自習室。筆電席位樓層、插座與自習室時段待確認。',
+  },
   北屯分館: { studyRoom: null,
     sources: [beitunDirectory, beitunGuide, beitunNcl, beitunClosed, beitunReopened, seatSystem],
     accessNote: '北屯分館於 2025 年 1 月 17 日整修後重新開館。國資圖名錄的 B1 自習說明屬 2011 年整修後的舊配置。市圖最新空間導覽僅列 1 至 3 樓，館舍介紹未列自習席數。B1 是否對外開放、時段、入場資格與設備待確認。館內另列 4 席公用電腦，須現場登記。',
@@ -272,8 +313,9 @@ export const reviewedSources: Record<string, {
         reason: '分館於 11:00 啟用', url: shigangReopened },
     ],
   },
-  烏日分館: { sources: [wuriNotice],
-    accessNote: '館方公告 2026 年 11 月 14 日 08:30–16:30 配合台電工程停電閉館。若提前復電或取消施工，館方將即時恢復服務。5 樓自習室的平日時段仍待確認。',
+  烏日分館: { sources: [wuriNotice, wuriFacilities],
+    readingEquipment: { laptop: true },
+    accessNote: '市府列有筆電專區及 5 樓自習室。館方公告 2026 年 11 月 14 日 08:30–16:30 配合台電工程停電閉館。若提前復電或取消施工，館方將即時恢復服務。5 樓自習室的平日時段仍待確認。',
     closures: [{ from: '2026-11-14', until: '2026-11-14', time: { start: minutes('08:30'), end: minutes('16:30') },
       reason: '公告 08:30–16:30 停電閉館', url: wuriNotice }],
   },
@@ -288,16 +330,19 @@ export const reviewedSources: Record<string, {
     closures: [{ from: '2025-11-17', until: '2026-08-31', reason: '原館耐震補強期間閉館', url: wufengIntro }],
   },
   上楓分館: { studyRoom: false, sources: [nclDirectory + 'c7a7740d7c404f1f80b7f3e28f7d011b'],
-    areaUpdates: [{ name: '館內筆電插座席', kind: 'reading', slots: null, access: 'walk-in', seats: 20,
+    accessNote: '館方列有 20 個筆電插座席。現場紀錄顯示 2 樓開架閱覽區設有附插座的閱覽桌，採館方一般閱覽時段。',
+    areaUpdates: [{ name: '館內筆電插座席', kind: 'reading', slots: parseSlots(standardReadingHours), access: 'walk-in', seats: 20,
       equipment: { laptop: true, outlet: true, wifi: true },
       sources: ['https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000620',
-        'https://www.taichung.gov.tw/2095906/post', readingRules, wifiFaq] }],
+        'https://www.taichung.gov.tw/2095906/post', shangfengGuide,
+        'https://www.ptt.cc/bbs/TaichungBun/M.1662060495.A.FD1.html', readingRules, wifiFaq] }],
   },
   龍井分館: {
-    areaUpdates: [{ name: '館內附插座閱覽座位', kind: 'reading', slots: null, access: 'walk-in', seats: 17,
+    accessNote: '國資圖刊物確認 17 個附插座座位與書架交錯設置，依分館的一般閱覽時段使用。',
+    areaUpdates: [{ name: '館內附插座閱覽座位', kind: 'reading', slots: parseSlots(standardReadingHours), access: 'walk-in', seats: 17,
       equipment: { laptop: true, outlet: true, wifi: true },
-      sources: ['https://www.nlpi.edu.tw/FileDownLoad/LibraryPublication/20241118095635201427904.pdf',
-        'https://www.tccc.gov.tw/pic/DocSimple/17308827690156%282%29.pdf', readingRules, wifiFaq] }],
+      sources: ['https://www-old.nlpi.edu.tw/JournalDetailC003313.aspx?Cond=26ca6952-6617-452f-97e6-36e7bf0bef8b',
+        'https://www.tccc.gov.tw/pic/DocSimple/17308827690156%282%29.pdf', longjingGuide, readingRules, wifiFaq] }],
   },
   大墩分館: { sources: [dadunCenterHours],
     accessNote: 'B 棟 2 樓自習室週二至週日 08:00–21:00，390 席。分館官網另列筆電優先使用區 24 席，國資圖名錄列 12 席，採用分館官網數字。該區獨立時段、入場方式及插座待確認。',
@@ -323,9 +368,12 @@ export const reviewedSources: Record<string, {
       equipment: {}, sources: [dongshiGuide, citySite + 'lib/Introduction/index?Parser=99,149,719'] }],
   },
   臺中市和平區立圖書館: { website: heping,
-    sources: [hepingRules, hepingPdf, hepingReopening, holidays2026, election2026],
+    sources: [hepingRules, hepingPdf, hepingReopening, hepingClosed, hepingExtension, holidays2026, election2026],
     accessNote: '2026 年 11 月 1 日恢復開館。一般閱覽週二至週日 08:00–17:00，中午照常開放，週一及國定假日休館。11 月 28 日投票日的開館情況待館方公告。館內提供無線網路，筆電、平板及手機限指定區域充電，禁止自備延長線及轉接插頭。自習室的樓層、獨立時段、入場資格、座位數及座位設備仍待確認。',
-    closures: [{ from: '2026-12-25', until: '2026-12-25', reason: '行憲紀念日休館', url: heping }],
+    closures: [
+      { from: '2025-12-30', until: '2026-06-08', reason: '原館耐震補強期間暫停閱覽及自習服務', url: hepingExtension },
+      { from: '2026-12-25', until: '2026-12-25', reason: '行憲紀念日休館', url: heping },
+    ],
     areas: [
       { name: '館內一般閱覽', kind: 'reading', slots: parseSlots('週二至週日8:00至17:00'), access: 'walk-in',
         equipment: { wifi: true }, sources: [heping, hepingPdf, cityFacilities, hepingWifi] },

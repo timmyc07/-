@@ -23,7 +23,6 @@ export type Library = {
   phone?: string;
   website?: string;
   studyRoom?: boolean;
-  directoryStatus?: string;
   accessNote?: string;
   reviewNote?: string;
   ruleLinks?: string[];
@@ -39,7 +38,7 @@ export type Library = {
 export type Snapshot = {
   _id: 'taichung';
   importedAt: string;
-  sourceCounts: { ncl: number; city: number; branches: number; directoryDetails?: number; publicLibraries?: number; siteChecks?: number };
+  sourceCounts: { city: number; branches: number; publicLibraries: number };
   issues: string[];
   libraries: Library[];
 };

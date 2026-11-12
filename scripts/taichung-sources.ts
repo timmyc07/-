@@ -4,7 +4,6 @@ import type { Area, Closure, Slot } from '../lib/study.ts';
 
 export const citySite = 'https://www.library.taichung.gov.tw/';
 export const cityDirectory = 'https://data.gov.tw/dataset/83865';
-export const nclDirectory = 'https://data.gov.tw/dataset/8306';
 export const cityHours = citySite + 'content/index?Parser=1,3,72,32';
 export const cityRules = citySite + 'form/Details?Parser=2,3,48,28,,,204';
 export const cityNotices = citySite + 'latestevent/index?Parser=9,3,41,27';
@@ -29,7 +28,8 @@ export function clean(text: string) {
 export function branchName(text: string) {
   const name = clean(text).replace(/^臺中市立圖書館/, '').replace(/[() ]/g, '');
   if (name === '東勢分館') return '東勢許良宇圖書館';
-  if (name.includes('精武分館') && name.includes('臺中市立圖書館營運')) return '精武圖書館';
+  if (name === '國立公共資訊圖書館精武分館' ||
+      (name.includes('精武分館') && name.includes('臺中市立圖書館營運'))) return '精武圖書館';
   return name;
 }
 

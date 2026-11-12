@@ -25,15 +25,12 @@ export default async function Admin() {
   const gaps = snapshot.libraries.filter((library) => coverageGaps(library).length).length;
   return <main className="shell admin">
     <Link href="/">← 返回查詢</Link>
-    <h1>臺中資料狀態</h1>
+    <h1>臺中公立圖書館資料狀態</h1>
     <p>最近匯入 {new Date(snapshot.importedAt).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })}</p>
     <ul>
-      <li><a href="https://data.gov.tw/dataset/8306">國圖名錄</a> · 臺中 {snapshot.sourceCounts.ncl} 筆原始資料</li>
       <li><a href="https://data.gov.tw/dataset/83865">臺中市政府聯絡資訊</a> · {snapshot.sourceCounts.city} 筆原始資料</li>
       <li><a href="https://www.library.taichung.gov.tw/">臺中市立圖書館官網</a> · {snapshot.sourceCounts.branches} 個館舍入口</li>
-      <li><a href="https://libstat.ncl.edu.tw/libraryData/search">國圖館舍詳情</a> · {snapshot.sourceCounts.directoryDetails ?? 0} 筆</li>
-      <li>政府及學校館方網址 · {snapshot.sourceCounts.siteChecks ?? 0} 筆已查</li>
-      <li><a href="https://data.gov.tw/dataset/99567">公共圖書館基本資料</a> · {snapshot.sourceCounts.publicLibraries ?? 0} 筆臺中資料</li>
+      <li><a href="https://data.gov.tw/dataset/99567">公共圖書館基本資料</a> · {snapshot.sourceCounts.publicLibraries} 筆臺中公立圖書館資料</li>
     </ul>
     <p>{gaps} 筆館舍仍有待核對欄位。<a href="/admin/gaps">下載逐館缺口清單（CSV）</a></p>
     {snapshot.issues.length > 0 && <><h2>匯入待查</h2><ul>{snapshot.issues.map((issue) => <li key={issue}>{issue}</li>)}</ul></>}

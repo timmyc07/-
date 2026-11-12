@@ -76,14 +76,14 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
     <header className="header">
       <div className="shell bar">
         <Link className="brand" href="/" aria-label="StudyGo 首頁"><span className="brand-icon" aria-hidden="true">S</span>StudyGo</Link>
-        <span className="place">臺中市 · 圖書館自修查詢</span>
+        <span className="place">臺中市 · 公立圖書館自修查詢</span>
         <Link href="/admin" className="data-link">資料狀態 <span aria-hidden="true">↗</span></Link>
       </div>
     </header>
     <main className="shell">
       <section className="hero" aria-labelledby="title">
         <div>
-          <p className="eyebrow">臺中市圖書館</p>
+          <p className="eyebrow">臺中市公立圖書館</p>
           <h1 id="title">找一個時段，<br />安靜讀書。</h1>
           <p className="intro">按時間、空間和設備找自修地點，出發前確認入場規則與休館公告。</p>
         </div>
@@ -175,7 +175,6 @@ function LibraryCard({ library, area, status, reasons, closure, originalLink }: 
           area?.access === 'conditional' ? '須符合校外訪客資格' : '待確認'}</dd>
         {library.reviewNote && !library.accessNote && <><dt>規則核對</dt><dd>{library.reviewNote}</dd></>}
         {library.accessNote && <><dt>館方補充</dt><dd>{library.accessNote}</dd></>}
-        {library.directoryStatus && <><dt>國圖名錄館況</dt><dd>{library.directoryStatus}</dd></>}
         <dt>每週開放</dt><dd>{area?.slots?.map((slot) => <span className="slot" key={slot.day + ':' + slot.start}>
           週{weekdays[slot.day]} {clock(slot.start)}–{clock(slot.end)}</span>) ?? '空間時段待確認'}</dd>
         {!area?.slots && library.schedule?.length ? <><dt>館舍開放時間</dt><dd>{library.schedule.map((slot) =>

@@ -1,17 +1,16 @@
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
+import { setTimeout as delay } from 'node:timers/promises';
 import { load } from 'cheerio';
 import { mongoClient, snapshots } from '../lib/mongodb.ts';
 import { coverageGaps } from '../lib/study.ts';
 import type { Library } from '../lib/study.ts';
-import { download, institutionalUrl, robotsAllows } from './crawl-taichung-sites.ts';
-import { matchSchoolContact, schoolContacts } from './school-contacts.ts';
 import { clean } from './taichung-sources.ts';
 
-const output = '.local/taichung-rule-audit.json';
-const operatorHosts = new Set(['site.jah.org.tw', 'www.cathay-cultural.org.tw', 'www.amtbtc.org.tw',
-  'www.wanhegong.org.tw', 'www.sltung.com.tw', 'ck.ccgh.com.tw']);
-const libraryLink = /^(?:圖書(?:館|室|資訊處|服務)(?:首頁|網站)?|閱讀教育(?:專區)?|閱覽服務|流通服務|空間設備|法令規章|開放時間|服務時間|館規)$/;
-const rules = /(?:自[修習](?:閱覽)?[室區]|社區共讀站|校外(?:讀者|人士|民眾)(?!協助|入校協助)|(?:圖書[館室]|閱覽).{0,4}(?:開放|使用|管理|借閱|法規|章則|章程)|入館(?:須知|規則|辦法))/;
+const output = '.local/taichung-public-rule-audit.json';
+const publicHosts = new Set(['www.library.taichung.gov.tw', 'www.heping.taichung.gov.tw',
+  'nlpi.edu.tw', 'www.nlpi.edu.tw', 'w3.nlpi.edu.tw', 'plisnet.nlpi.edu.tw', 'edu.law.moe.gov.tw']);
+const libraryLink = /^(?:閱覽服務|流通服務|空間設備|法令規章|開放時間|服務時間|館規)$/;
+const rules = /(?:自[修習](?:閱覽)?[室區]|(?:圖書[館室]|閱覽).{0,4}(?:開放|使用|管理|借閱|法規|章則|章程)|入館(?:須知|規則|辦法))/;
 const details = /開放|入[館校室]|登記|換證|憑證|插座|網路|使用對象|使用規定|服務時間/;
 type Link = { url: string; label: string };
 type Page = { url: string; status: string; title?: string; evidence?: string[]; links?: Link[] };
@@ -26,14 +25,50 @@ export async function readRuleAudit(): Promise<RuleAudit | undefined> {
 }
 
 function officialUrl(value: string) {
-  const institution = institutionalUrl(value);
-  if (institution) return institution;
   if (!URL.canParse(value)) return;
   const url = new URL(value);
-  if (!['http:', 'https:'].includes(url.protocol) || !operatorHosts.has(url.hostname) ||
+  if (!['http:', 'https:'].includes(url.protocol) || !publicHosts.has(url.hostname) ||
       url.username || url.password || url.port) return;
   url.hash = '';
   return url;
+}
+
+async function download(url: URL) {
+  await delay(350);
+  const response = await fetch(url, { redirect: 'manual', signal: AbortSignal.timeout(5500) });
+  if (!response.ok) return response;
+  const size = Number(response.headers.get('content-length'));
+  if (size > 1_500_000) {
+    await response.body?.cancel();
+    throw new Error('頁面過大');
+  }
+  return response;
+}
+
+const robotsByOrigin = new Map<string, Promise<string[] | null>>();
+async function robotsAllows(url: URL) {
+  let pending = robotsByOrigin.get(url.origin);
+  if (!pending) {
+    pending = (async () => {
+      try {
+        const response = await download(new URL('/robots.txt', url));
+        if (response.status === 404 || response.status === 410) return [];
+        if (!response.ok) return null;
+        const text = await response.text();
+        if (!/User-agent:/i.test(text) && /<html/i.test(text)) return [];
+        return [...text.matchAll(/^\s*Disallow:\s*(\S+)/gim)].map((match) => match[1].split('#')[0]);
+      } catch {
+        return null;
+      }
+    })();
+    robotsByOrigin.set(url.origin, pending);
+  }
+  const paths = await pending;
+  // Nonempty exclusions are respected conservatively, including those scoped to a different agent.
+  return paths !== null && !paths.some((path) => {
+    const literalPrefix = path.split(/[*$]/)[0];
+    return literalPrefix && (url.pathname + url.search).startsWith(literalPrefix);
+  });
 }
 
 const runningByOrigin = new Map<string, Promise<Page>>();
@@ -78,8 +113,8 @@ function readPage(url: URL): Promise<Page> {
   return pending;
 }
 
-async function auditLibrary(library: Library, schoolUrl?: string) {
-  const queue = [...new Set([...(library.ruleLinks ?? []), library.website, schoolUrl].filter(Boolean))];
+async function auditLibrary(library: Library) {
+  const queue = [...new Set([library.website, ...library.sources, ...library.areas.flatMap((area) => area.sources)].filter(Boolean))];
   const visited = new Set<string>();
   const pages: Page[] = [];
   const documents = new Map<string, Link>();
@@ -107,20 +142,14 @@ async function crawl() {
   const client = mongoClient();
   const snapshot = await snapshots(client).findOne({ _id: 'taichung' }).finally(() => client.close());
   if (!snapshot) throw new Error('臺中資料尚未匯入');
-  const pending = snapshot.libraries.filter((library) => coverageGaps(library).length).sort((a, b) =>
-    Number(coverageGaps(a).includes('自修空間使用規則')) - Number(coverageGaps(b).includes('自修空間使用規則')));
-  const schools = await schoolContacts(async (url) => {
-    const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
-    if (!response.ok) throw new Error('教育部名錄無法讀取');
-    return response.text();
-  });
+  if (snapshot.libraries.some((library) => library.types.length !== 1 || library.types[0] !== '公共圖書館')) {
+    throw new Error('請先匯入公立公共圖書館名錄');
+  }
+  const pending = snapshot.libraries.filter((library) => coverageGaps(library).length);
   const reviewed: Awaited<ReturnType<typeof auditLibrary>>[] = [];
   await Promise.all(Array.from({ length: 8 }, async () => {
     for (let library = pending.pop(); library; library = pending.pop()) {
-      const contact = matchSchoolContact(library, schools);
-      const website = contact?.website;
-      const schoolUrl = website && (/^https?:\/\//.test(website) ? website : 'https://' + website);
-      reviewed.push(await auditLibrary(library, schoolUrl || undefined));
+      reviewed.push(await auditLibrary(library));
     }
   }));
   await mkdir('.local', { recursive: true });

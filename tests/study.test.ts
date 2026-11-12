@@ -2,7 +2,7 @@ import { strict as assert } from 'node:assert';
 import { test } from 'node:test';
 import { coverageGaps, evaluate, validDate } from '../lib/study.ts';
 import type { Area, Library, Query } from '../lib/study.ts';
-import { branchHours, branchInfo, parseSlots } from '../scripts/taichung-sources.ts';
+import { branchHours, branchInfo, branchName, parseSlots } from '../scripts/taichung-sources.ts';
 
 const area: Area = {
   name: '自習室', kind: 'study', slots: parseSlots('週二至週六 8:30–12:30、13:30–17:30'),
@@ -62,15 +62,6 @@ test('有明確證據的無自修室可以排除，訪客換證需求保留待�
   assert.equal(evaluate(library, { ...area, access: 'conditional' }, query).status, 'unknown');
 });
 
-test('國圖舊 CSV 的缺字只補對應字元', async () => {
-  const { matchesDirectoryText, parseDirectoryEntry } = await import('../scripts/crawl-taichung-directory.ts');
-  assert.equal(matchesDirectoryText('臺中市北屯區?子路666號', '臺中市北屯區廍子路666號'), true);
-  assert.equal(matchesDirectoryText('臺中市北屯區?子路666號', '臺中市北屯區廍子路667號'), false);
-  const entry = parseDirectoryEntry('<ul class="detailed-text"><li><p>中文館名：某國小圖書室</p></li><li><p>有無自修室：無</p></li></ul>',
-    'https://libstat.ncl.edu.tw/libraryDataDetail/example', '臺中市北區');
-  assert.equal(entry.studyRoom, false);
-});
-
 test('公共館開放資料只在新舊地址一致時補上座標', async () => {
   const { applyPublicEvidence } = await import('../scripts/public-library-data.ts');
   const venue = { ...library, address: '臺中市西屯區中科路2201號', sources: [] } as Library;
@@ -83,21 +74,7 @@ test('公共館開放資料只在新舊地址一致時補上座標', async () =>
   assert.deepEqual(venue.coordinates, { latitude: 24.1, longitude: 120.6 });
 });
 
-test('學校聯絡資料須同時符合校名和校址，不以其他校區覆蓋', async () => {
-  const { applySchoolContact } = await import('../scripts/school-contacts.ts');
-  const venue = { ...library, name: '臺中市立龍津國民小學傳枝圖書館', address: '臺中市龍井區中央路一段165巷50號',
-    types: ['國民小學圖書館'], website: 'https://read.moe.edu.tw/064688/library', sources: [] };
-  const school = { name: '市立龍津國小', address: '[434]臺中市龍井區龍津里中央路一段165巷50號',
-    phone: '(04)26393394', website: 'https://lges.tc.edu.tw', source: 'https://data.gov.tw/dataset/6087' };
-  applySchoolContact(venue, [{ ...school, address: school.address.replace('50號', '51號') }]);
-  assert.ok(!('phone' in venue));
-  applySchoolContact(venue, [school]);
-  assert.equal((venue as Library).phone, school.phone);
-  assert.equal(venue.website, 'https://read.moe.edu.tw/064688/library');
-  assert.deepEqual(venue.sources, [school.source]);
-});
-
-test('學期時段只影響公告期間，新增一般閱覽區不會消除自修缺口', () => {
+test('特殊時段只影響公告期間，新增一般閱覽區不會消除自修缺口', () => {
   const termArea = { ...area, slotPeriod: { from: '2026-09-14', until: '2027-01-17' } };
   assert.equal(evaluate(library, termArea, { ...query, start: 450 }).status, 'no');
   assert.equal(evaluate(library, termArea, { ...query, date: '2027-01-21', start: 450 }).status, 'unknown');
@@ -105,16 +82,7 @@ test('學期時段只影響公告期間，新增一般閱覽區不會消除自�
   assert.ok(coverageGaps(venue).includes('自修空間使用規則'));
 });
 
-test('核對自修室後保留既有訪客閱覽區，重跑不重複寫入', async () => {
-  const { applyTaichungRuleReview } = await import('../scripts/taichung-rule-reviews.ts');
-  const reading = { ...area, name: '館內閱覽', kind: 'reading' as const, access: 'conditional' as const };
-  const venue = { ...library, name: '東海大學圖書館', studyRoom: true, areas: [reading] };
-  applyTaichungRuleReview(venue);
-  const reviewed = structuredClone(venue);
-  applyTaichungRuleReview(venue);
-  assert.deepEqual(venue, reviewed);
-  assert.equal(venue.areas.length, 3);
-  assert.equal(venue.areas[0].access, 'conditional');
-  assert.equal(evaluate(venue, venue.areas[1], query).status, 'no');
-  assert.ok(!coverageGaps(venue).includes('自修空間使用規則'));
+test('市圖與國資圖的精武館舍使用同一個名錄鍵', () => {
+  assert.equal(branchName('國立公共資訊圖書館精武分館'), branchName('精武圖書館'));
+  assert.notEqual(branchName('國立公共資訊圖書館'), branchName('臺中市立圖書館總館'));
 });

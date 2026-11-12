@@ -2,8 +2,8 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { load } from 'cheerio';
 import { mongoClient, snapshots } from '../lib/mongodb.ts';
 import type { Library, Snapshot } from '../lib/study.ts';
-import { applyPublicEvidence, cityFacilities, laptopFaq, limingName, municipalFacilities,
-  publicEvidence, readingRules, reviewedSources, studyLocations, wifiFaq } from './public-library-data.ts';
+import { addressKey, applyPublicEvidence, cityFacilities, laptopFaq, limingName, municipalFacilities,
+  publicEvidence, readingRules, reviewedSources, studyLocations, verifiedCoordinates, wifiFaq } from './public-library-data.ts';
 import { readRuleAudit } from './crawl-taichung-rules.ts';
 import { branchHours, branchInfo, branchName, cityCalendar, cityDirectory, cityHours,
   cityNotices, cityRules, citySite, cityWeatherClosures, clean, dateKey, nationalCalendar,
@@ -217,6 +217,12 @@ async function importTaichung() {
   }
 
   for (const library of libraries.values()) {
+    const site = verifiedCoordinates[library.id];
+    if (site && addressKey(site[0]) === addressKey(library.address)) {
+      const [, latitude, longitude, source] = site;
+      library.coordinates = { latitude, longitude };
+      library.sources.push(source);
+    }
     const review = reviewedSources[library.name];
     if (!review) continue;
     if (review.website) {

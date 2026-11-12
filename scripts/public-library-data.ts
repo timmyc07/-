@@ -198,6 +198,8 @@ const tanziExhibit = citySite + 'lib/active/details?Parser=51,140,543,,,,22942';
 const tanziIntro = citySite + 'lib/Introduction/index?Parser=99,140,544';
 const iTaichungHotspots = 'https://data.gov.tw/dataset/83840';
 const iTaiwanHotspots = 'https://itaiwan.gov.tw/ftp/upload/HotspotData/hotspotlist_tw.csv';
+const iTaiwanLocations = 'https://data.gov.tw/dataset/5962';
+const municipalAddressLocations = 'https://data.gov.tw/dataset/177460';
 const dadunIntro = citySite + 'lib/Introduction/index?Parser=99,105,194';
 const dadunGuide = citySite + 'lib/content/index?Parser=1,105,195';
 const dadunDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000198';
@@ -237,6 +239,25 @@ export const studyLocations: Record<string, readonly [name: string, guide: strin
   '147': ['3 樓自習室', '615'],
 };
 
+export const verifiedCoordinates: Record<string, [address: string, latitude: number, longitude: number, source: string]> = {
+  'tc-112': ['臺中市南屯區龍富路五段一號', 24.152045, 120.626405, municipalAddressLocations],
+  'tc-117-a': ['臺中市豐原區市政路2號', 24.241688, 120.717513, iTaiwanLocations],
+  'tc-117': ['臺中市豐原區育仁路81號', 24.241138, 120.717404,
+    'https://eservices.taichung.gov.tw/LocationNew/Introduction/150/FacilityRental/525cffbf-7077-49fe-bc0f-f58e201d60d1'],
+  'tc-119': ['臺中市豐原區水源路17巷2號', 24.255042, 120.744705, iTaiwanLocations],
+  'tc-122': ['臺中市大里區德芳路一段229號四、五樓', 24.108108, 120.686173, municipalAddressLocations],
+  'tc-126': ['臺中市沙鹿區鎮南路二段488號', 24.233416, 120.564099, municipalAddressLocations],
+  'tc-127': ['臺中市沙鹿區文昌街12號', 24.236289, 120.562098, municipalAddressLocations],
+  'tc-131': ['臺中市梧棲區民生街15之77號', 24.251865, 120.533033, municipalAddressLocations],
+  'tc-134': ['臺中市大肚區頂街里大德6街30號', 24.153804, 120.540962, municipalAddressLocations],
+  'tc-136': ['臺中市大雅區雅潭路4段800號', 24.221822, 120.650267, municipalAddressLocations],
+  'tc-137': ['臺中市大雅區上楓里樹德街255巷5號', 24.236745, 120.666107, iTaiwanLocations],
+  'tc-139': ['臺中市霧峰區大同路8號', 24.061478, 120.698982, iTaiwanLocations],
+  'tc-140': ['臺中市潭子區潭秀里中山路二段399號', 24.213537, 120.705020, municipalAddressLocations],
+  'tc-145': ['臺中市石岡區明德175號', 24.273927, 120.775870, municipalAddressLocations],
+  'tc-147': ['臺中市新社區新社里興社街四段1巷1號', 24.240613, 120.809648, iTaiwanLocations],
+};
+
 export const reviewedSources: Record<string, {
   website?: string; studyRoom?: false | null; accessNote?: string; sources?: string[];
   areas?: Area[]; areaUpdates?: Area[]; closures?: Closure[];
@@ -249,17 +270,19 @@ export const reviewedSources: Record<string, {
     accessNote: '大安分館原館於 2025 年 11 月 10 日至 2026 年 8 月 17 日因耐震補強暫停一般閱覽，8 月 18 日重新開館。1 樓網路查詢區有 2 席公用電腦，可持借閱證或身分證現場登記，每次 1 小時。一般閱覽的筆電席及指定充電位置待確認。',
     closures: [{ from: '2025-11-10', until: '2026-08-17', reason: '原館耐震補強期間暫停一般閱覽', url: daanClosed }],
   },
-  大肚分館: { studyRoom: false, sources: [nclDirectory + 'L5274000',
+  大肚分館: { studyRoom: false, sources: [nclDirectory + 'L5274000', 'https://www.taichung.gov.tw/3229939/post',
+    citySite + 'lib/content/index?Parser=1,134,485',
     seatRules + '2c9dbfe59cf2e26f019d050adfa004a5', seatRules + '2c9dbfe59bd50daa019bd58c832600f7'],
-    accessNote: '市圖空間系統列 2 樓兒童區及 3 樓閱覽區各有 4 席公用電腦，憑借閱證或身分證現場登記，每次 1 小時，閉館前 30 分鐘停止受理。指定充電位置待確認。',
+    accessNote: '2026 年市府公開照片可辨認 3 樓靠窗的筆電專用區及使用筆電的讀者。指定充電位置待確認。市圖空間系統列 2 樓兒童區及 3 樓閱覽區各有 4 席公用電腦，憑借閱證或身分證現場登記，每次 1 小時，閉館前 30 分鐘停止受理。',
     closures: [inventoryClosure('2026-10-26', '2026-10-27', citySite + 'latestevent/Details?Parser=9,3,38,27,,,1934')],
   },
   大肚瑞井分館: { studyRoom: false,
     sources: [nclDirectory + 'L4899004', citySite + 'lib/Introduction/index?Parser=99,135,494',
       'https://maps.app.goo.gl/n39Ge5bFqz6XwbFn6', 'https://maps.app.goo.gl/ucB1Tv55J1fzQUh3A',
+      'https://lh3.googleusercontent.com/gps-cs-s/ANWiy9TP4koXFmhLsbJCM_wkVs430BWpSWr410BWJfXCvyn5j321GJ0LqZdbB_MWzX0ge9uFjhNX4TlMW7OVaDsX8naU1PGEjDOKwFH2hAmBVzHyexVGmwfcVsb6YCOasPhJbZRzjq5HTzYLaBKR=s4000',
       seatRules + '2c9dbfe59bd50daa019bd5601981005b'],
     readingEquipment: { laptop: true },
-    accessNote: '館方列有指定筆電席位。到館紀錄指出 2 樓有可自備筆電的閱覽座位，插座待確認。市圖空間系統列檢索區有 2 席公用電腦，憑借閱證或身分證現場登記，每次 1 小時，閉館前 30 分鐘停止受理。',
+    accessNote: '館方列有指定筆電席位。到館紀錄指出 2 樓有可自備筆電的閱覽座位。2026 年 4 月到館照片可見 2 樓開架閱覽區靠窗長桌旁有插座，讀者充電許可待確認。市圖空間系統列檢索區有 2 席公用電腦，憑借閱證或身分證現場登記，每次 1 小時，閉館前 30 分鐘停止受理。',
   },
   中區分館: {
     sources: [citySite + 'lib/Introduction/index?Parser=99,102,164', citySite + 'lib/content/index?Parser=1,102,165',
@@ -368,10 +391,11 @@ export const reviewedSources: Record<string, {
         'https://maps.app.goo.gl/V7GVmJHERGKT8UEu7'] }],
   },
   梧棲親子館: { sources: [citySite + 'lib/content/index?Parser=1,131,455',
+    'https://assess-public.taichung.gov.tw/ImportantWork/Detail/115DQ00004',
     seatRules + '2c9dbfe59bd50daa019bd592fdf10127', seatRules + '2c9dbfe59e20ca16019e24f03302042b',
     'https://spaceme.library.taichung.gov.tw/rest/council/common/resourceLocations/2c9dbfe59bd50daa019bd580538500af',
     'https://spaceme.library.taichung.gov.tw/rest/council/common/resourceLocations/2c9dbfe59bd50daa019bd57fcd4700ae'],
-    accessNote: '市圖空間系統列 1 樓網路資源區有 5 席公用電腦，嬰幼兒視聽區有 2 席視聽電腦。可憑借閱證或身分證登記，每次 1 小時，閉館前 30 分鐘停止受理。一般閱覽區的指定充電位置待確認。',
+    accessNote: '市圖空間系統列 1 樓網路資源區有 5 席公用電腦，嬰幼兒視聽區有 2 席視聽電腦。可憑借閱證或身分證登記，每次 1 小時，閉館前 30 分鐘停止受理。一般閱覽區的指定充電位置待確認。市府列空間改造及閱讀設備更新仍在前置作業，預計 2027 年 12 月 1 日完工。服務異動待館方公告。',
   },
   溪西分館: { studyRoom: false,
     sources: [nclDirectory + 'L4899005', xixiGuide, 'https://niniandblue.com/blog/post/xixilibrary'],
@@ -416,8 +440,8 @@ export const reviewedSources: Record<string, {
       slots: parseSlots('週二至週六8:30至21:00、週日8:30至17:30'), access: 'walk-in',
       equipment: { wifi: true }, sources: [fengyuanB, fengyuanMap, readingRules, wifiFaq] }],
   },
-  豐原南嵩分館: { sources: [nansongNotice],
-    accessNote: '原館自 2026 年 2 月 3 日起施工休館，館方預計 2027 年 3 月重新開放。施工期間借閱及預約取書可使用豐原分館 B 棟或葫蘆墩分館。實際開館日及整修後空間配置待確認。',
+  豐原南嵩分館: { sources: [nansongNotice, 'https://assess-public.taichung.gov.tw/ImportantWork/Detail/114DQ00014'],
+    accessNote: '原館自 2026 年 2 月 3 日起施工休館。市府列三館耐震補強共案預計 2026 年 12 月 1 日完工，館方預計南嵩分館於 2027 年 3 月重新開放。施工期間借閱及預約取書可使用豐原分館 B 棟或葫蘆墩分館。實際開館日及整修後空間配置待確認。',
   },
   [limingName]: { website: liming,
     accessNote: '國資圖閱覽規定限指定充電區臨時充電。4 樓自修室座位不提供充電，筆電使用方式待確認。',
@@ -455,18 +479,19 @@ export const reviewedSources: Record<string, {
     'https://maps.app.goo.gl/d73kT4ABtaTPrKfD7', daxinExtendedClosure,
     'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=156557',
     'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=156556',
-    'https://data.gov.tw/dataset/83840',
+    'https://data.gov.tw/dataset/83840', seatRules + '2c9dbfe59bd27da1019bd4dfbb44000e',
     'https://itaiwan.gov.tw/ITaiwanHotspotQuery/ConditionalQuery?KeyWord=大里大新分館&City=臺中市&Type=1'],
-    accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。更新版館門公告載明 2025 年 7 月 17 日至 2026 年 3 月 30 日因耐震補強閉館，施工期間安排館旁行動圖書車。文化局紀錄顯示 4 月 1 日起有 1 樓櫃檯及自助借書服務。3 月 31 日開放情況及 B1 自習室復開日、固定時段仍待確認。市府 2026 年 6 月熱點資料列原館有 iTaichung，iTaiwan 名錄仍列該熱點暫停。',
+    accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。更新版館門公告載明 2025 年 7 月 17 日至 2026 年 3 月 30 日因耐震補強閉館，施工期間安排館旁行動圖書車。文化局紀錄顯示 4 月 1 日起有 1 樓櫃檯及自助借書服務。1 樓一般上網區有 5 席公用電腦，憑借閱證或身分證現場登記，每次 1 小時。3 月 31 日開放情況及 B1 自習室復開日、固定時段仍待確認。市府 2026 年 6 月熱點資料列原館有 iTaichung，iTaiwan 名錄仍列該熱點暫停。',
     checkDates: ['2026-03-31'],
     closures: [{ from: '2025-07-17', until: '2026-03-30', reason: '耐震補強期間暫停閱覽及自習服務',
       url: daxinExtendedClosure }],
   },
   大里德芳分館: { sources: [citySite + 'lib/Introduction/index?Parser=99,122,364',
     citySite + 'lib/content/index?Parser=1,122,365', wufengIntro, 'https://maps.app.goo.gl/NhFVxcEkegUgA8Yt7',
-    'https://maps.app.goo.gl/yqCx1y6JGXwuunbQ6', 'https://maps.app.goo.gl/M9hgWUGhdbv7m9bg9'],
+    'https://maps.app.goo.gl/yqCx1y6JGXwuunbQ6', 'https://maps.app.goo.gl/M9hgWUGhdbv7m9bg9',
+    seatRules + '2c9dbfe59bd50daa019bd58d1bf700fd', seatLocations + '2c9dbfe59bd50daa019bd57e232900a8'],
     readingEquipment: { laptop: true, outlet: true },
-    accessNote: '館方公開回覆，5 樓筆電優先使用區有地面插座，當時列 6 組、共 12 個插孔。手機緊急充電可洽櫃檯。霧峰以文分館整修公告曾列本館為自習替代據點，2026 年春季有讀者使用自習室。5 樓獨立自習室的固定時段待確認。',
+    accessNote: '館方公開回覆，5 樓筆電優先使用區有地面插座，當時列 6 組、共 12 個插孔。手機緊急充電可洽櫃檯。霧峰以文分館整修公告曾列本館為自習替代據點，2026 年春季有讀者使用自習室。5 樓獨立自習室的固定時段待確認。4 樓有 12 席公用電腦，憑借閱證或身分證現場登記，每次 1 小時。',
   },
   沙鹿文昌分館: { sources: [wenchangGuide, wenchangReopened, cityChronology,
     'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=153801', 'https://maps.app.goo.gl/Ecqg2PhBkV17Et3m8',
@@ -477,9 +502,10 @@ export const reviewedSources: Record<string, {
     sources: [daliIntro, 'https://www.walkerland.com.tw/article/view/211808',
       citySite + 'latestevent/Details?Parser=22,3,38,27,,,1832', wufengIntro, 'https://www.keywow.com.tw/projects/y7',
       'https://www.dcard.tw/f/taichung/p/256811485', 'https://maps.app.goo.gl/cXH2amUJkKXK6qmb6',
-      'https://maps.app.goo.gl/jttjVEaJJYqLqDsj9'],
+      'https://maps.app.goo.gl/jttjVEaJJYqLqDsj9', seatRules + '2c9dbfe59e43e938019e4d9ec18a102e',
+      seatRules + '2c9dbfe59bae711e019bb5eae3e4011b'],
     readingEquipment: { laptop: true },
-    accessNote: '館方列有筆電席位，2026 年夏季到館紀錄指出筆電及平板專用區有 6 席。較早的到館紀錄指出 2 樓有筆電充電座位，2026 年另有閱讀設備升級採購，現行充電位置待確認。原設計資料列有 B1 自習室的獨立出入口，2024 年讀者貼文提及過去曾從館旁階梯進入。現行入口開放方式及專室時段待確認。',
+    accessNote: '館方列有筆電席位，2026 年夏季到館紀錄指出筆電及平板專用區有 6 席。較早的到館紀錄指出 2 樓有筆電充電座位，2026 年另有閱讀設備升級採購，現行充電位置待確認。2 樓兒童區有 6 席、青少年區有 4 席公用電腦，憑借閱證或身分證現場登記，每次 1 小時。原設計資料列有 B1 自習室的獨立出入口，2024 年讀者貼文提及過去曾從館旁階梯進入。現行入口開放方式及專室時段待確認。',
   },
   西區分館: {
     sources: [xiquFacilities, citySite + 'lib/content/index?Parser=1,104,185',
@@ -643,8 +669,9 @@ export const reviewedSources: Record<string, {
   臺中市和平區立圖書館: { website: heping,
     sources: [hepingRules, hepingCurrentRules, hepingPdf, hepingReopening, hepingClosed, hepingExtension, holidays2026, election2026,
       'https://www.xinshe.taichung.gov.tw/media/1407885/和平區公所函.pdf',
+      'https://www.facebook.com/permalink.php?story_fbid=pfbid027VSbS21r1RowNSaNThVtPq4NpkZRYoDEC6WiXkqp8N83ksi1ACYuRCaoRprkwo6nl&id=100069588254904',
       'https://www.facebook.com/permalink.php?story_fbid=pfbid0Q4vrYmEveUiTtrzetEAEL23f4bYTXUvmaL6i81jZwyM1BrasA65bm19TT9xhCJHXl&id=100069588254904'],
-    accessNote: '館方確認 2026 年 11 月 1 日為整修後正式開館首日。一般閱覽週二至週日 08:00–17:00，中午照常開放，週一及國定假日休館。11 月 28 日投票日的開館情況待館方公告。館內使用自建無線網路，原 iTaichung 熱點已停用。筆電、平板及手機限指定區域充電，禁止自備延長線及轉接插頭。指定充電區是否設有閱覽座位及自習室的樓層、時段、入場資格和設備仍待確認。',
+    accessNote: '館方確認 2026 年 11 月 1 日為整修後正式開館首日。一般閱覽週二至週日 08:00–17:00，中午照常開放，週一及國定假日休館。11 月 28 日投票日的開館情況待館方公告。館方復館後公告使用 2 樓會議室辦理講座及織布課程。館內使用自建無線網路，原 iTaichung 熱點已停用。筆電、平板及手機限指定區域充電，禁止自備延長線及轉接插頭。指定充電區是否設有閱覽座位及自習室的樓層、時段、入場資格和設備仍待確認。',
     closures: [
       { from: '2025-12-30', until: '2026-06-08', reason: '原館耐震補強期間暫停閱覽及自習服務', url: hepingExtension },
       { from: '2026-06-09', until: '2026-06-09', reason: '和平區公告停止上班', url: 'https://www.personnel.taichung.gov.tw/3294704/post' },

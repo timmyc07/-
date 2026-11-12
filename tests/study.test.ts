@@ -55,3 +55,30 @@ test('解析器保留空間和館舍不同時段，地址以官網欄位為準',
   assert.equal(hours.study[0].start, 480);
   assert.equal(branchInfo('<div class="sub_info"><strong>地址：407011臺中市西屯區中科路2201號</strong><strong>自習室座位：32席</strong></div>').address, '臺中市西屯區中科路2201號');
 });
+
+test('有明確證據的無自修室可以排除，訪客換證需求保留待確認', () => {
+  assert.equal(evaluate({ ...library, studyRoom: false }, undefined, query).status, 'no');
+  assert.equal(evaluate({ ...library, studyRoom: true }, undefined, query).status, 'unknown');
+  assert.equal(evaluate(library, { ...area, access: 'conditional' }, query).status, 'unknown');
+});
+
+test('國圖舊 CSV 的缺字只補對應字元', async () => {
+  const { matchesDirectoryText, parseDirectoryEntry } = await import('../scripts/crawl-taichung-directory.ts');
+  assert.equal(matchesDirectoryText('臺中市北屯區?子路666號', '臺中市北屯區廍子路666號'), true);
+  assert.equal(matchesDirectoryText('臺中市北屯區?子路666號', '臺中市北屯區廍子路667號'), false);
+  const entry = parseDirectoryEntry('<ul class="detailed-text"><li><p>中文館名：某國小圖書室</p></li><li><p>有無自修室：無</p></li></ul>',
+    'https://libstat.ncl.edu.tw/libraryDataDetail/example', '臺中市北區');
+  assert.equal(entry.studyRoom, false);
+});
+
+test('公共館開放資料只在新舊地址一致時補上座標', async () => {
+  const { applyPublicEvidence } = await import('../scripts/public-library-data.ts');
+  const venue = { ...library, address: '臺中市西屯區中科路2201號', sources: [] } as Library;
+  const row = { Name: venue.name, Address: '406 臺中市北屯區豐樂路二段158號', TEL: '04-00000000',
+    Latitude: '24.1', Longitude: '120.6' };
+  applyPublicEvidence(venue, { row, url: 'https://data.gov.tw/dataset/99567' });
+  assert.equal(venue.coordinates, undefined);
+  row.Address = '407011臺中市西屯區中科路2201號';
+  applyPublicEvidence(venue, { row, url: 'https://data.gov.tw/dataset/99567' });
+  assert.deepEqual(venue.coordinates, { latitude: 24.1, longitude: 120.6 });
+});

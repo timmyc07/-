@@ -10,18 +10,22 @@
 
 ```sh
 npm ci
+npm run crawl:taichung-directory
+npm run crawl:taichung-sites
 npm run import:taichung
 npm run dev
 ```
 
 匯入一次只更新臺中的資料快照。完整解析並檢查館舍、行政區和試點空間後才寫入，重跑更新同一份資料，抓取失敗時保留上一份。館舍名錄優先讀政府資料，館方官網用來補足新館、搬遷、分棟、自習室及公告。網站每次查詢都讀取 MongoDB 的當前快照。
 
-## 臺中驗收進度
+## 臺中資料與驗收
 
-- 2026-11-12 匯入結果為 29 個行政區、478 筆館舍名錄、24 個有官方空間資料的自修空間。原始來源包含 475 筆國圖臺中名錄、46 筆臺中市開放資料及 47 個市圖館舍入口。豐原分館 A、B 棟各列一筆。
-- 大墩分館 B 棟 2 樓及國資圖總館 B1 已核對每週時段、入場規則與年度休館資料。太平分館等館已辨識自習室，尚無空間專用時段證據時顯示「待確認」。學校、專門與私立館目前主要提供名錄資料。
-- 驗證案例含大墩自習室早上 8 點開放、國資圖借閱證及登記門檻、11 月 28 日選舉日休館、豐原南嵩整修停館、指定座位插座不符與改選備案。市圖總館地址以綠美圖館方現行資料為準。 [市圖開放時間與休館](https://www.library.taichung.gov.tw/content/index?Parser=1,3,72,32) · [國資圖休館日](https://www.nlpi.edu.tw/ServiceMail/feedback/Holiday)
-- `npm test` 驗證時段與條件判定，`npm run check` 驗證型別，`npm run build` 驗證網站可建置。跨日查詢及尚無核對資料的未來年度，會分別顯示輸入提示或待確認。
+- 2026-11-12 整合臺中 29 個行政區、478 筆館舍。來源包括國圖臺中名錄及 475 筆館舍詳情、46 筆市府聯絡資訊、51 筆公共館開放資料和 47 個市圖館舍入口。比對國圖線上詳情修正舊 CSV 的缺字，並依館方現址保留綠美圖及豐原分館 A、B 棟的資料。 [國圖線上名錄](https://libstat.ncl.edu.tw/libraryData/search) · [公共圖書館基本資料](https://data.gov.tw/dataset/99567)
+- 國圖詳情補齊公開館況、總機、網址及自修室有無。另檢查 371 筆政府及學校館方網址，保留可定位的規則與待查狀態。自修室獨立時段、校外訪客條件及設備以館方公開規則為準。 [市圖自習區筆電規則](https://www.library.taichung.gov.tw/faq/Details?Parser=30,3,49,28,,,97) · [市圖無線網路](https://www.library.taichung.gov.tw/faq/Details?Parser=30,3,49,28,,,67)
+- 在[資料狀態](http://127.0.0.1:3000/admin)可依行政區查看覆蓋情況，並[下載逐館缺口 CSV](http://127.0.0.1:3000/admin/gaps)。例如，太平分館有自習室與設備證據，其獨立時段仍待館方核實。對外使用規則無法查證的館舍保留待確認。 [太平分館官方資料](https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000226)
+- `npm test` 驗證時間、資格、休館、設備及匯入比對，`npm run check` 驗證型別，`npm run build` 驗證網站可建置。跨日查詢及尚無核對資料的年度，會分別顯示輸入提示或待確認。
+
+Atlas 的資料位置為 `studygo_dev.city_snapshots`，臺中快照的 `_id` 為 `taichung`。本機網站切換至 Atlas 時，只需以可存取此資料庫的 Atlas 連線字串更新本機 `.env` 的 `MONGODB_URI`，再重啟網站。 [MongoDB Atlas 連線說明](https://www.mongodb.com/docs/atlas/connect-to-database-deployment/)
 
 實作使用 Next.js 16.4.6、MongoDB Node.js 驅動 7.8.0 與 Cheerio 1.2.0。 [Next.js 16.4.6](https://github.com/vercel/next.js/blob/v16.4.6/docs/01-app/03-api-reference/03-file-conventions/page.mdx) · [MongoDB 驅動 7.8](https://mongodb.github.io/node-mongodb-native/7.8/classes/Collection.html) · [Cheerio 1.2.0](https://github.com/cheeriojs/cheerio/releases/tag/v1.2.0)
 

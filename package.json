@@ -8,6 +8,8 @@
     "dev": "next dev --hostname 127.0.0.1",
     "build": "next build",
     "start": "next start --hostname 127.0.0.1",
+    "crawl:taichung-directory": "node scripts/crawl-taichung-directory.ts",
+    "crawl:taichung-sites": "node scripts/crawl-taichung-sites.ts",
     "import:taichung": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env scripts/import-taichung.ts",
     "test": "node --disable-warning=ExperimentalWarning --test tests/*.test.ts",
     "check": "tsc --noEmit"

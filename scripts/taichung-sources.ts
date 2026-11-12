@@ -37,7 +37,7 @@ const weekdayNumber = '日一二三四五六';
 const clockRange = '(\\d{1,2}:[0-5]\\d)(?:至|[-~–—～－])(\\d{1,2}:[0-5]\\d)';
 
 export function parseSlots(text: string): Slot[] {
-  const rules = /(?:週|星期)([日一二三四五六])(?:至(?:週|星期)?([日一二三四五六]))?[:：]?\s*((?:\d{1,2}:[0-5]\d(?:至|[-~–—～－])\d{1,2}:[0-5]\d[、,]?)+)/g;
+  const rules = /(?:週|星期)([日一二三四五六])(?:至(?:週|星期)?([日一二三四五六]))?[:：]?\s*((?:\d{1,2}:[0-5]\d(?:至|[-~–—～－])\d{1,2}:[0-5]\d[、,;]?)+)/g;
   const slots: Slot[] = [];
   for (const [, first, last, ranges] of clean(text).replace(/\s+/g, '').matchAll(rules)) {
     const startDay = weekdayNumber.indexOf(first);
@@ -57,7 +57,10 @@ export function branchHours(html: string) {
   const $ = load(html);
   const block = $('.open_time li .time_txt').first();
   block.find('br').replaceWith('\n');
-  const text = block.text();
+  return roomHours(block.text());
+}
+
+export function roomHours(text: string) {
   const named = /([^\n]*(?:自習室|自修室)[^\n]*)\n([\s\S]*)/.exec(text);
   if (named) {
     return { regular: parseSlots(text.slice(0, named.index)), study: parseSlots(named[2]), label: clean(named[1]) };
@@ -72,13 +75,20 @@ export function branchInfo(html: string) {
   const address = field('地址')?.replace(/^\d{3,6}\s*/, '').replace(/^(?=[^臺]*區)/, '臺中市');
   const phone = field('電話')?.match(/(?:\(04\)|04[- ])\s*\d{4}-?\d{3,4}/)?.[0];
   const buildingAddresses = [...(field('地址') ?? '').matchAll(/([A-Z])棟-?\s*\d{3,6}\s*(臺中市.*?號)(?=\s|$)/g)]
-    .map(([, building, value]) => ({ building, address: value }));
+    .map(([, building, value]) => ({ building, address: value,
+      phone: (field('電話') ?? '').split(building + '棟')[1]?.match(/^\s*(\(04\)\s*\d{4}-?\d{4})/)?.[1],
+    }));
   const listed = field('服務設施') ?? '';
   const studySeats = field('自習室座位') ?? '';
+  const readingSeats = field('一般閱覽席位') ?? '';
+  const seats = (value: string) => Number(value.replace(/,/g, '').match(/^\d+/)?.[0]) || undefined;
   return {
     address: address?.startsWith('臺中市') ? address : undefined,
     phone, buildingAddresses,
-    study: /自[修習]室/.test(listed) || /^\d/.test(studySeats),
+    study: /自[修習]室/.test(listed) || Boolean(seats(studySeats)),
+    noStudy: /^(?:無|0席?)$/.test(studySeats),
+    studySeats: seats(studySeats),
+    readingSeats: seats(readingSeats),
   };
 }
 

@@ -4,7 +4,7 @@ import type { Snapshot } from './study.ts';
 export function mongoClient() {
   const uri = process.env.MONGODB_URI;
   if (!uri) throw new Error('請在 .env 設定 MONGODB_URI');
-  return new MongoClient(uri, { serverSelectionTimeoutMS: 4000 });
+  return new MongoClient(uri, { serverSelectionTimeoutMS: 4000, ignoreUndefined: true });
 }
 
 export function snapshots(client: MongoClient) {

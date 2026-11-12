@@ -4,6 +4,10 @@ import { load } from 'cheerio';
 import { parse } from 'csv-parse/sync';
 import { mongoClient, snapshots } from '../lib/mongodb.ts';
 import type { Library, Snapshot } from '../lib/study.ts';
+import { matchesDirectoryText, readDirectory } from './crawl-taichung-directory.ts';
+import { readSiteEvidence } from './crawl-taichung-sites.ts';
+import { addressKey, applyPublicEvidence, cityFacilities, laptopFaq, limingName, municipalFacilities,
+  publicEvidence, readingRules, reviewedSources, wifiFaq } from './public-library-data.ts';
 import { branchHours, branchInfo, branchName, cityCalendar, cityDirectory, cityHours,
   cityNotices, cityRules, citySite, clean, dateKey, nationalCalendar, nclDirectory,
   nlpiArea, nlpiCalendar } from './taichung-sources.ts';
@@ -12,8 +16,14 @@ const cityJson = 'https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.
 const nclCsv = 'https://www.ncl.edu.tw/OpenDataFile/0Q112417873324994331/4cbfc49a-1127-45b1-9da6-113ebb444a12';
 type Row = Record<string, string>;
 const request = async (url: string) => {
-  const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
-  if (!response.ok) throw new Error(new URL(url).hostname + ' HTTP ' + response.status);
+  let response = await fetch(url, { signal: AbortSignal.timeout(15000) });
+  if (response.status === 429 || response.status >= 500) {
+    const retry = Number(response.headers.get('Retry-After'));
+    await response.body?.cancel();
+    await delay(retry > 0 ? Math.min(retry, 60) * 1000 : 1600);
+    response = await fetch(url, { signal: AbortSignal.timeout(15000) });
+  }
+  if (!response.ok) throw new Error('HTTP ' + response.status + ' · ' + url);
   return response;
 };
 const get = async (url: string) => new Uint8Array(await (await request(url)).arrayBuffer());
@@ -23,8 +33,9 @@ const idFor = (name: string, address: string) => 'ncl-' +
   createHash('sha256').update(name + '\0' + address).digest('hex').slice(0, 16);
 
 async function importTaichung() {
-  const [nclBytes, cityBytes, home, holidays, notices, rules, nationalHolidays] = await Promise.all([
+  const [nclBytes, cityBytes, home, holidays, notices, rules, nationalHolidays, publicLibraries, facilityPage, laptopPage, wifiPage, nclDetails, siteDetails] = await Promise.all([
     get(nclCsv), get(cityJson), html(citySite), html(cityHours), html(cityNotices), html(cityRules), html(nlpiCalendar),
+    publicEvidence(html), html(cityFacilities), html(laptopFaq), html(wifiFaq), readDirectory(), readSiteEvidence(),
   ]);
   const national: Row[] = parse(new TextDecoder('big5', { fatal: true }).decode(nclBytes), {
     columns: true, skip_empty_lines: true,
@@ -38,6 +49,11 @@ async function importTaichung() {
   if (!commonRules.includes('自由入座') || !commonRules.includes('不提供插座充電')) {
     throw new Error('市圖自習區使用規則需要重新核對');
   }
+  if (!load(laptopPage)('main').text().includes('可攜帶筆記型電腦') ||
+      !load(wifiPage)('main').text().replace(/\s/g, '').includes('各分館館內均有提供無線上網服務')) {
+    throw new Error('市圖設備規則需要重新核對');
+  }
+  const branchFacilities = municipalFacilities(facilityPage);
   const calendar = cityCalendar(holidays);
   const nlpi = nationalCalendar(nationalHolidays);
   const noticePage = load(notices);
@@ -54,20 +70,38 @@ async function importTaichung() {
   if (branches.size < 45) throw new Error('市圖官方館舍清單不完整');
   const contact = new Map(city.map((row) => [branchName(row['館別']), row]));
   const libraries = new Map<string, Library>();
-  const issues: string[] = [];
+  const issues = [...publicLibraries.errors, ...(nclDetails?.errors ?? [])];
+  if (!nclDetails) issues.push('尚未抓取國圖臺中館舍詳情');
+  const siteByDirectory = new Map(siteDetails.map((site) => [site.directoryUrl, site]));
+  const detailsByIdentity = new Map(nclDetails?.entries.map((entry) =>
+    [entry.name + '\0' + addressKey(entry.address), entry]));
   for (const row of taichung) {
-    const name = clean(row['中文館名'] ?? '');
-    const address = clean(row['中文地址'] ?? '');
+    const archivedName = clean(row['中文館名'] ?? '');
+    const archivedAddress = clean(row['中文地址'] ?? '');
+    let evidence = detailsByIdentity.get(archivedName + '\0' + addressKey(archivedAddress));
+    if (!evidence && (archivedName.includes('?') || archivedAddress.includes('?'))) {
+      const matches = nclDetails?.entries.filter((entry) =>
+        matchesDirectoryText(archivedName, entry.name) &&
+        matchesDirectoryText(addressKey(archivedAddress), addressKey(entry.address)));
+      if (matches?.length === 1) evidence = matches[0];
+    }
+    const name = evidence?.name ?? archivedName;
+    const address = (evidence?.address ?? archivedAddress).replace(/^(臺中市)([^區]+區)\2/, '$1$2');
     const district = clean(row['區域'] ?? '');
     if (!name || !district) throw new Error('國圖名錄缺少館名或行政區');
     const types = row['圖書館類型'].split(',').map(clean);
     const branch = types.includes('公共圖書館') && branches.get(branchName(name));
-    const id = branch ? 'tc-' + branch.code : idFor(name, address);
+    const id = branch ? 'tc-' + branch.code : idFor(archivedName, archivedAddress);
     const existing = libraries.get(id);
     if (existing) {
       existing.types = [...new Set([...existing.types, ...types])];
     } else {
-      libraries.set(id, { id, name, district, address, types, sources: [nclDirectory], areas: [], closures: [] });
+      const site = evidence && siteByDirectory.get(evidence.url);
+      libraries.set(id, { id, name, district, address, types, sources: [nclDirectory, ...(evidence ? [evidence.url] : [])],
+        phone: evidence?.phone && /^(?:\+886[\s-]*|0|\(0)[2-8]/.test(evidence.phone) ? evidence.phone : undefined,
+        website: site?.url ?? (evidence?.website && URL.canParse(evidence.website) ? evidence.website : undefined), directoryStatus: evidence?.status,
+        ruleLinks: site?.rules.filter((url) => url !== 'https://jfes.tc.edu.tw/p/404-1360-31562.php'), reviewNote: site?.note,
+        studyRoom: evidence?.studyRoom, areas: [], closures: [] });
     }
   }
 
@@ -75,20 +109,30 @@ async function importTaichung() {
     const id = 'tc-' + branch.code;
     const previous = libraries.get(id);
     const cityContact = contact.get(key);
-    const address = clean(cityContact?.['地址'] ?? previous?.address ?? '');
+    const publicInfo = publicLibraries.records.get(key);
+    const listed = branchFacilities.get(branch.code);
+    const publicRoom = publicInfo?.details;
+    const confirmedStudy = publicRoom?.schedule.study ?? [];
+    const wifi = listed?.includes('無線上網') ? true : undefined;
+    const studyEquipment = { outlet: false, laptop: true, wifi };
+    const studyRules = [cityRules, laptopFaq, ...(wifi ? [wifiFaq, cityFacilities] : [])];
+    const address = clean(cityContact?.['地址'] ?? previous?.address ?? publicInfo?.row.Address ?? '').replace(/^\d{3,6}\s*/, '');
     const library: Library = {
       id, name: branch.code === '101' ? '臺中市立圖書館總館（綠美圖）' : branch.name,
       district: districtOf(address) || previous?.district || '', address,
       types: previous?.types ?? ['公共圖書館'],
       sources: [...(previous?.sources ?? []), ...(cityContact ? [cityDirectory] : []), branch.url, cityHours, cityNotices],
-      phone: cityContact?.['市話'], website: branch.url, areas: [], closures: [], calendarYear: calendar.year,
+      phone: cityContact?.['市話'] ?? previous?.phone, website: branch.url, areas: [], closures: [], calendarYear: calendar.year,
+      directoryStatus: previous?.directoryStatus, facilities: listed,
     };
 
     await delay(400);
     const branchResponse = await request(branch.url);
     const page = await branchResponse.text();
     const times = branchHours(page);
-    library.schedule = times.regular.length ? times.regular : undefined;
+    const regular = times.regular.length ? times.regular : publicRoom?.schedule.regular;
+    const studySlots = times.study.length ? times.study : confirmedStudy;
+    library.schedule = regular?.length ? regular : undefined;
     const branchPage = load(page);
     let buildings: ReturnType<typeof branchInfo>['buildingAddresses'] = [];
     const introHref = branchPage('a[title="分館介紹"], a[title="總館介紹"]').first().attr('href');
@@ -106,20 +150,32 @@ async function importTaichung() {
       }
       library.phone = info.phone ?? library.phone;
       library.sources.push(intro.href);
-      if (times.study.length || info.study) {
+      const hasStudy = studySlots.length > 0 || info.study || (!info.noStudy &&
+        (Boolean(publicRoom?.study) || Boolean(listed?.some((item) => /自[修習]室/.test(item)))));
+      library.studyRoom = hasStudy ? true : info.noStudy ? false : undefined;
+      if (hasStudy) {
         library.areas.push({
-          name: times.label || '自習室', kind: 'study',
-          slots: times.study.length ? times.study : null,
-          access: 'walk-in', equipment: { outlet: false },
-          sources: [intro.href, branch.url, cityRules],
+          name: times.label || publicRoom?.schedule.label || '自習室', kind: 'study',
+          slots: studySlots.length ? studySlots : null,
+          access: 'walk-in', seats: info.studySeats, equipment: studyEquipment,
+          sources: [intro.href, branch.url, ...(publicRoom ? [publicRoom.url] : []), ...studyRules],
         });
       }
-    } else if (times.study.length) {
+      if (info.readingSeats && !buildings.length) {
+        library.areas.push({
+          name: '一般閱覽座位', kind: 'reading', slots: library.schedule ?? null, access: 'walk-in',
+          seats: info.readingSeats, equipment: { wifi },
+          sources: [intro.href, branch.url, readingRules, ...(wifi ? [wifiFaq, cityFacilities] : [])],
+        });
+      }
+    } else if (studySlots.length) {
+      library.studyRoom = true;
       library.areas.push({
-        name: times.label, kind: 'study', slots: times.study,
-        access: 'walk-in', equipment: { outlet: false }, sources: [branch.url, cityRules],
+        name: times.label || '自習室', kind: 'study', slots: studySlots,
+        access: 'walk-in', equipment: studyEquipment, sources: [branch.url, ...studyRules],
       });
     }
+    applyPublicEvidence(library, publicInfo);
     if (!library.address || !library.district) issues.push(library.name + '的聯絡資料待確認');
 
     library.checkDates = [];
@@ -154,7 +210,8 @@ async function importTaichung() {
         const siteId = knownSite ? id : id + '-' + building.building.toLowerCase();
         libraries.set(siteId, { ...library, id: siteId, address: building.address,
           district: districtOf(building.address), name: library.name + building.building + '棟',
-          phone: knownSite ? cityContact?.['市話'] : undefined, areas: knownSite ? library.areas : [] });
+          coordinates: knownSite ? library.coordinates : undefined, studyRoom: knownSite ? library.studyRoom : undefined,
+          phone: building.phone ?? (knownSite ? cityContact?.['市話'] : undefined), areas: knownSite ? library.areas : [] });
       }
       if (!siteWithStudy) {
         libraries.delete(id);
@@ -165,10 +222,26 @@ async function importTaichung() {
     }
   }
 
+  for (const library of libraries.values()) {
+    if (!library.id.startsWith('tc-')) applyPublicEvidence(library, publicLibraries.records.get(branchName(library.name)));
+    const review = reviewedSources[library.name];
+    if (!review) continue;
+    library.website = review.website;
+    library.sources.push(review.website, ...(review.sources ?? []));
+    library.accessNote = review.accessNote;
+    if (review.areas) library.areas = review.areas;
+    if (library.areas.some((area) => area.kind === 'study')) library.studyRoom = true;
+    if (library.name === limingName) {
+      library.closures = nlpi.closures;
+      library.calendarYear = nlpi.year;
+      library.sources.push(nlpiCalendar);
+    }
+  }
   const nlpiMain = [...libraries.values()].find((library) => library.name === '國立公共資訊圖書館');
   if (!nlpiMain) throw new Error('國圖名錄缺少國資圖總館');
   nlpiMain.website = 'https://www.nlpi.edu.tw/';
   nlpiMain.areas = [nlpiArea];
+  nlpiMain.studyRoom = true;
   nlpiMain.closures = nlpi.closures;
   nlpiMain.calendarYear = nlpi.year;
   nlpiMain.checkDates = ['2026-11-09'];
@@ -184,10 +257,14 @@ async function importTaichung() {
       peace.sources.push(cityDirectory);
     }
   }
+  const unique = new Map([...libraries.values()].map((library) => [library.id, {
+    ...library, sources: [...new Set(library.sources)],
+  }]));
   const snapshot: Snapshot = {
     _id: 'taichung', importedAt: new Date().toISOString(), issues,
-    sourceCounts: { ncl: taichung.length, city: city.length, branches: branches.size },
-    libraries: [...libraries.values()].sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant')),
+    sourceCounts: { ncl: taichung.length, city: city.length, branches: branches.size,
+      directoryDetails: nclDetails?.entries.length, publicLibraries: publicLibraries.count, siteChecks: siteDetails.length },
+    libraries: [...unique.values()].sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant')),
   };
   if (new Set(snapshot.libraries.map((library) => library.district)).size < 29 ||
       !snapshot.libraries.some((library) => library.id === 'tc-105' && library.areas[0]?.slots?.length)) {
@@ -198,6 +275,7 @@ async function importTaichung() {
   try {
     await snapshots(client).replaceOne({ _id: snapshot._id }, snapshot, { upsert: true });
     console.log(JSON.stringify({ ...snapshot.sourceCounts, libraries: snapshot.libraries.length,
+      directoryMatched: snapshot.libraries.filter((library) => library.sources.some((source) => source.includes('/libraryDataDetail/'))).length,
       areas: snapshot.libraries.flatMap((library) => library.areas).length,
       checkedSlots: snapshot.libraries.filter((library) => library.areas.some((area) => area.slots)).length,
       issues }, null, 2));

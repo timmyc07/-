@@ -47,7 +47,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const candidates = libraries.filter((library) => (!district || library.district === district) &&
     (!keyword || normalized(library.name + ' ' + library.address).includes(normalized(keyword))));
   const results = searched && !invalid ? candidates.flatMap((library) => {
-    const areas: (Area | undefined)[] = library.areas.length ? library.areas : [undefined];
+    const matching = kind ? library.areas.filter((area) => area.kind === kind) : library.areas;
+    const areas: (Area | undefined)[] = matching.length ? matching : [undefined];
     return areas.map((area) => ({ library, area, ...evaluate(library, area, query) }));
   }) : [];
   const rank = { yes: 0, unknown: 1, no: 2 };
@@ -57,7 +58,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const currentPage = Math.min(totalPages, page);
   const backups = results.filter((item) => item.status === 'yes' && item.library.id !== original).slice(0, 3);
   const originalResult = selected && evaluate(selected, selected.areas.find((area) => !kind || area.kind === kind), query);
-  const checked = libraries.filter((library) => library.areas.some((area) => area.slots?.length));
+  const checked = libraries.filter((library) => library.areas.some((area) =>
+    area.kind === 'study' && area.slots?.length && (area.access === 'walk-in' || area.access === 'card')));
   const featured = checked.slice(0, 4);
 
   function href(changes: Record<string, string>) {
@@ -118,7 +120,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
       <section id="results" className="results" aria-labelledby="results-title">
         {invalid && <p className="notice" role="alert">請輸入有效日期、開始時間與正整數分鐘。使用時段須在同一天內。</p>}
         {!searched && <><h2 id="results-title">已核對空間時段</h2>
-          <div className="cards">{featured.map((library) => <LibraryCard key={library.id} library={library} area={library.areas.find((area) => area.slots?.length)} />)}</div>
+          <div className="cards">{featured.map((library) => <LibraryCard key={library.id} library={library} area={library.areas.find((area) => area.kind === 'study' && area.slots?.length)} />)}</div>
         </>}
         {searched && !invalid && <>
           <div className="result-heading"><h2 id="results-title">查詢結果</h2><p>{date} · {start}–{clock(query.start + duration)}</p></div>
@@ -163,22 +165,30 @@ function LibraryCard({ library, area, status, reasons, closure, originalLink }: 
   return <article className="card">
     <div className="card-top"><span>{library.district}</span>{status && <span className={'badge ' + status}>{statuses[status]}</span>}</div>
     <h3>{library.name}</h3>
-    <p className="area">{area?.name ?? '閱覽空間待確認'}</p>
+    <p className="area">{area?.name ?? (library.studyRoom === false ? '官方資料標示無自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
     <p className="address">{library.address || '地址待確認'}</p>
     {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul> : null}
     <details>
       <summary>使用規則與來源</summary>
       <dl>
-        <dt>入場</dt><dd>{area?.access === 'walk-in' ? '現場入座' : area?.access === 'card' ? '個人借閱證，須預約或現場登記' : '待確認'}</dd>
+        <dt>入場</dt><dd>{area?.access === 'walk-in' ? '現場入座' : area?.access === 'card' ? '個人借閱證，須預約或現場登記' : area?.access === 'restricted' ? '限指定身分' :
+          area?.access === 'conditional' ? '須符合校外訪客資格' : '待確認'}</dd>
+        {library.reviewNote && !library.accessNote && <><dt>規則核對</dt><dd>{library.reviewNote}</dd></>}
+        {library.accessNote && <><dt>館方補充</dt><dd>{library.accessNote}</dd></>}
+        {library.directoryStatus && <><dt>國圖名錄館況</dt><dd>{library.directoryStatus}</dd></>}
         <dt>每週開放</dt><dd>{area?.slots?.map((slot) => <span className="slot" key={slot.day + ':' + slot.start}>
           週{weekdays[slot.day]} {clock(slot.start)}–{clock(slot.end)}</span>) ?? '空間時段待確認'}</dd>
+        {!area?.slots && library.schedule?.length ? <><dt>館舍開放時間</dt><dd>{library.schedule.map((slot) =>
+          <span className="slot" key={slot.day + ':' + slot.start}>週{weekdays[slot.day]} {clock(slot.start)}–{clock(slot.end)}</span>)}</dd></> : null}
         <dt>設備</dt><dd>{facilityKeys.map((key) => facilities[key] + ' ' +
           (area?.equipment[key] === true ? '有' : area?.equipment[key] === false ? '未提供' : '待確認')).join(' · ')}</dd>
+        {library.facilities?.length ? <><dt>館舍設備</dt><dd>{library.facilities.join('、')}</dd></> : null}
         {library.phone && <><dt>電話</dt><dd>{library.phone}</dd></>}
       </dl>
       <div className="source-links">
         {library.website && <a href={library.website}>館方網站 ↗</a>}
         {area?.reservation && <a href={area.reservation}>官方座位預約 ↗</a>}
+        {library.ruleLinks?.map((link, index) => <a key={link} href={link}>館方規則 {index + 1} ↗</a>)}
         {closure && <a href={closure.url}>休館來源 ↗</a>}
         {[...new Set([...(area?.sources ?? []), ...library.sources, ...(library.notices ?? [])])].map((source, index) =>
           <a href={source} key={source}>來源 {index + 1} ↗</a>)}

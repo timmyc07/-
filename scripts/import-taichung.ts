@@ -269,6 +269,10 @@ async function importTaichung() {
   const checkedOn = ruleAudit && new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', dateStyle: 'short' })
     .format(new Date(ruleAudit.checkedAt));
   for (const library of libraries.values()) {
+    if (library.areas.some((area) => area.kind === 'study' && area.access === 'walk-in' && area.sources.includes(cityRules))) {
+      const seating = '市圖自習區原則上自由入座，每人一席。館方可在開館前發放號碼牌，離席逾一小時視同占位。';
+      library.accessNote = library.accessNote ? library.accessNote + ' ' + seating : seating;
+    }
     const audit = auditById.get(library.id);
     if (audit && checkedOn) {
       const result = audit.pages.some((page) => page.status === '已讀取') ? '已查館方公開網頁，缺漏欄位仍待核實'

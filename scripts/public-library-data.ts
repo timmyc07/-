@@ -109,10 +109,15 @@ const fengyuanIntro = citySite + 'lib/Introduction/index?Parser=99,117,314';
 const fengyuanB = citySite + 'lib/index?117';
 const fengyuanNotice = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1629';
 const xinsheNotice = citySite + 'lib/Introduction/index?Parser=99,147,614';
+const xinsheGuide = citySite + 'lib/content/index?Parser=1,147,615';
 const xinsheClosed = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1483';
 const xinsheReopened = citySite + 'latestevent/Details?Parser=22,3,38,27,,,1972';
+const xinsheExhibit = citySite + 'lib/active/details?Parser=51,147,613,,,,26332';
 const xitunRules = citySite + 'df_ufiles/lib08/臺中市西屯區圖書館討論室使用須知-1050301.pdf';
 const dongshiGuide = citySite + 'lib/content/index?Parser=1,149,720';
+const dongshiReading = 'https://epaper.tc.edu.tw/application/show-article?id=6222';
+const qingshuiGuide = citySite + 'lib/content/index?Parser=1,125,395';
+const qingshuiOldHours = 'https://www.taichung.gov.tw/media/270688/512291511171.pdf';
 const beitunDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000228';
 const beitunGuide = citySite + 'lib/content/index?Parser=1,113,275';
 const beitunNcl = 'https://libstat.ncl.edu.tw/libraryDataDetail/L5247000';
@@ -186,8 +191,8 @@ export const reviewedSources: Record<string, {
     slots: parseSlots('週二至週六9:00至21:00、週日9:00至17:00'), access: 'walk-in',
     equipment: { wifi: true }, sources: [liming, nlpiWifi],
   }] },
-  新社分館: { sources: [xinsheNotice, xinsheClosed, xinsheReopened],
-    accessNote: '市圖公告原館（興社街四段 1 巷 1 號）於 2026 年 11 月 13 日 11:30 啟用，臨時服務處於 11 月 12 日 17:30 結束。整修前館方列出 3 樓自習室 32 席，重新開放後的自習室時段、入場資格及設備待確認。',
+  新社分館: { sources: [xinsheNotice, xinsheGuide, xinsheClosed, xinsheReopened, xinsheExhibit, seatSystem],
+    accessNote: '市圖公告原館（興社街四段 1 巷 1 號）於 2026 年 11 月 13 日 11:30 啟用，臨時服務處於 11 月 12 日 17:30 結束。全館常態時間為週二至週日 08:30–17:30。3 樓導覽最後更新於 2025 年 8 月 19 日，整修前館方列自習室 32 席。整修後的自習室是否開放、時段、入場資格及設備待確認。市圖空間系統另列 5 席公用電腦，須現場登記。',
     closures: [
       { from: '2025-08-19', until: '2026-11-12', reason: '原館整修期間暫停開放', url: xinsheClosed },
       { from: '2026-11-13', until: '2026-11-13', time: { start: 0, end: minutes('11:30') },
@@ -195,8 +200,12 @@ export const reviewedSources: Record<string, {
     ],
     studyRoom: null,
     areaUpdates: [{ name: '3 樓自習室', kind: 'study', slots: null, access: null, equipment: {},
-      sources: [xinsheNotice, xinsheReopened] }],
+      sources: [xinsheNotice, xinsheGuide, xinsheReopened] }],
   },
+  清水分館: { sources: [qingshuiGuide, qingshuiOldHours],
+    accessNote: '館方現行導覽列 4 樓自習室，照片顯示座位有編號和隔板。市府舊刊載有自習室 08:00 開放，現行官網列全館 08:30 開館。自習室是否仍提早開放及固定時段待確認。' },
+  大里大新分館: { sources: [citySite + 'lib/content/index?Parser=1,121,355'],
+    accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。' },
   西屯分館: { sources: [xitunRules],
     accessNote: '館方的討論室須知明訂討論室不得用於個人自修。獨立自習室時段仍待確認。' },
   北屯分館: { studyRoom: null,
@@ -257,8 +266,8 @@ export const reviewedSources: Record<string, {
       equipment: { laptop: true, wifi: true }, sources: [citySite + 'lib/content/index?Parser=1,126,405', wifiFaq] }],
   },
   東勢許良宇圖書館: { studyRoom: null,
-    sources: [dongshiGuide, xinsheNotice, 'https://www.facebook.com/DongshiHsuLiangYuLibrary', seatSystem],
-    accessNote: '全館週二至週六 08:30–21:00、週日 08:30–17:30 開放。新社分館公告列為自修替代地點，樓層導覽標示 2 樓自修室，館舍介紹列 0 席。市圖空間管理系統列 6 席公用電腦、須現場登記。2 樓自修室是否對外開放、獨立時段、入場資格及設備待確認。',
+    sources: [dongshiGuide, dongshiReading, xinsheNotice, 'https://www.facebook.com/DongshiHsuLiangYuLibrary', seatSystem],
+    accessNote: '全館週二至週六 08:30–21:00、週日 08:30–17:30 開放。新社分館公告曾列為自修替代地點，樓層導覽標示 2 樓自修室，館舍介紹列 0 席。2、3 樓一般閱覽座位有檯燈，市圖空間管理系統另列 6 席公用電腦、須現場登記。2 樓自修室是否對外開放、獨立時段、入場資格及設備待確認。',
     areaUpdates: [{ name: '2 樓自修室（開放待確認）', kind: 'study', slots: null, access: null,
       equipment: {}, sources: [dongshiGuide, citySite + 'lib/Introduction/index?Parser=99,149,719'] }],
   },

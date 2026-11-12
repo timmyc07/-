@@ -1,6 +1,6 @@
 import { strict as assert } from 'node:assert';
 import { test } from 'node:test';
-import { evaluate, validDate } from '../lib/study.ts';
+import { coverageGaps, evaluate, validDate } from '../lib/study.ts';
 import type { Area, Library, Query } from '../lib/study.ts';
 import { branchHours, branchInfo, parseSlots } from '../scripts/taichung-sources.ts';
 
@@ -81,4 +81,26 @@ test('公共館開放資料只在新舊地址一致時補上座標', async () =>
   row.Address = '407011臺中市西屯區中科路2201號';
   applyPublicEvidence(venue, { row, url: 'https://data.gov.tw/dataset/99567' });
   assert.deepEqual(venue.coordinates, { latitude: 24.1, longitude: 120.6 });
+});
+
+test('學校聯絡資料須同時符合校名和校址，不以其他校區覆蓋', async () => {
+  const { applySchoolContact } = await import('../scripts/school-contacts.ts');
+  const venue = { ...library, name: '臺中市立龍津國民小學傳枝圖書館', address: '臺中市龍井區中央路一段165巷50號',
+    types: ['國民小學圖書館'], website: 'https://read.moe.edu.tw/064688/library', sources: [] };
+  const school = { name: '市立龍津國小', address: '[434]臺中市龍井區龍津里中央路一段165巷50號',
+    phone: '(04)26393394', website: 'https://lges.tc.edu.tw', source: 'https://data.gov.tw/dataset/6087' };
+  applySchoolContact(venue, [{ ...school, address: school.address.replace('50號', '51號') }]);
+  assert.ok(!('phone' in venue));
+  applySchoolContact(venue, [school]);
+  assert.equal((venue as Library).phone, school.phone);
+  assert.equal(venue.website, 'https://read.moe.edu.tw/064688/library');
+  assert.deepEqual(venue.sources, [school.source]);
+});
+
+test('學期時段只影響公告期間，新增一般閱覽區不會消除自修缺口', () => {
+  const termArea = { ...area, slotPeriod: { from: '2026-09-14', until: '2027-01-17' } };
+  assert.equal(evaluate(library, termArea, { ...query, start: 450 }).status, 'no');
+  assert.equal(evaluate(library, termArea, { ...query, date: '2027-01-21', start: 450 }).status, 'unknown');
+  const venue = { ...library, studyRoom: true, areas: [{ ...area, kind: 'reading' as const }] };
+  assert.ok(coverageGaps(venue).includes('自修空間使用規則'));
 });

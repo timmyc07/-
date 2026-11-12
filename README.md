@@ -22,12 +22,13 @@ npm run dev
 
 - 2026-11-12 整合臺中 29 個行政區、478 筆館舍。來源包括國圖臺中名錄及 475 筆館舍詳情、46 筆市府聯絡資訊、51 筆公共館開放資料和 47 個市圖館舍入口。比對國圖線上詳情修正舊 CSV 的缺字，並依館方現址保留綠美圖及豐原分館 A、B 棟的資料。 [國圖線上名錄](https://libstat.ncl.edu.tw/libraryData/search) · [公共圖書館基本資料](https://data.gov.tw/dataset/99567)
 - 國圖詳情補齊公開館況、總機、網址及自修室有無。另檢查 371 筆政府及學校館方網址，保留可定位的規則與待查狀態。自修室獨立時段、校外訪客條件及設備以館方公開規則為準。 [市圖自習區筆電規則](https://www.library.taichung.gov.tw/faq/Details?Parser=30,3,49,28,,,97) · [市圖無線網路](https://www.library.taichung.gov.tw/faq/Details?Parser=30,3,49,28,,,67)
+- 學校聯絡資料優先以教育部 115 學年名錄和特殊教育學校名錄補足，需同時核對校名與地址。館舍專線或專頁缺漏時，使用能確認的校方總機或校網。另核對部分大學和學校共讀站的訪客資格，以及豐原分館 A 棟重新開館、B 棟一般閱覽區和和平區立圖書館的開館資訊。 [國小名錄](https://data.gov.tw/dataset/6087) · [國中名錄](https://data.gov.tw/dataset/6088) · [豐原 A 棟重新開館](https://www.library.taichung.gov.tw/active/details?Parser=9%2C3%2C39%2C27%2C%2C%2C25595) · [和平區立圖書館開館公告](https://www.heping.taichung.gov.tw/4086049/post)
 - 在[資料狀態](http://127.0.0.1:3000/admin)可依行政區查看覆蓋情況，並[下載逐館缺口 CSV](http://127.0.0.1:3000/admin/gaps)。例如，太平分館有自習室與設備證據，其獨立時段仍待館方核實。對外使用規則無法查證的館舍保留待確認。 [太平分館官方資料](https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000226)
 - `npm test` 驗證時間、資格、休館、設備及匯入比對，`npm run check` 驗證型別，`npm run build` 驗證網站可建置。跨日查詢及尚無核對資料的年度，會分別顯示輸入提示或待確認。
 
 Atlas 的資料位置為 `studygo_dev.city_snapshots`，臺中快照的 `_id` 為 `taichung`。本機網站切換至 Atlas 時，只需以可存取此資料庫的 Atlas 連線字串更新本機 `.env` 的 `MONGODB_URI`，再重啟網站。 [MongoDB Atlas 連線說明](https://www.mongodb.com/docs/atlas/connect-to-database-deployment/)
 
-實作使用 Next.js 16.4.6、MongoDB Node.js 驅動 7.8.0 與 Cheerio 1.2.0。 [Next.js 16.4.6](https://github.com/vercel/next.js/blob/v16.4.6/docs/01-app/03-api-reference/03-file-conventions/page.mdx) · [MongoDB 驅動 7.8](https://mongodb.github.io/node-mongodb-native/7.8/classes/Collection.html) · [Cheerio 1.2.0](https://github.com/cheeriojs/cheerio/releases/tag/v1.2.0)
+實作使用 Next.js 16.4.6、MongoDB Node.js 驅動 7.8.0、Cheerio 1.2.0 與 CSV Parse 7.0.3。 [Next.js 16.4.6](https://github.com/vercel/next.js/blob/v16.4.6/docs/01-app/03-api-reference/03-file-conventions/page.mdx) · [MongoDB 驅動 7.8](https://mongodb.github.io/node-mongodb-native/7.8/classes/Collection.html) · [Cheerio 1.2.0](https://github.com/cheeriojs/cheerio/releases/tag/v1.2.0) · [CSV Parse 7.0.3](https://github.com/adaltas/node-csv/tree/csv-parse%407.0.3/packages/csv-parse)
 
 ## 全臺實作計劃
 

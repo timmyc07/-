@@ -8,6 +8,7 @@ import { matchesDirectoryText, readDirectory } from './crawl-taichung-directory.
 import { readSiteEvidence } from './crawl-taichung-sites.ts';
 import { addressKey, applyPublicEvidence, cityFacilities, laptopFaq, limingName, municipalFacilities,
   publicEvidence, readingRules, reviewedSources, wifiFaq } from './public-library-data.ts';
+import { applySchoolContact, schoolContacts } from './school-contacts.ts';
 import { branchHours, branchInfo, branchName, cityCalendar, cityDirectory, cityHours,
   cityNotices, cityRules, citySite, clean, dateKey, nationalCalendar, nclDirectory,
   nlpiArea, nlpiCalendar } from './taichung-sources.ts';
@@ -33,9 +34,9 @@ const idFor = (name: string, address: string) => 'ncl-' +
   createHash('sha256').update(name + '\0' + address).digest('hex').slice(0, 16);
 
 async function importTaichung() {
-  const [nclBytes, cityBytes, home, holidays, notices, rules, nationalHolidays, publicLibraries, facilityPage, laptopPage, wifiPage, nclDetails, siteDetails] = await Promise.all([
+  const [nclBytes, cityBytes, home, holidays, notices, rules, nationalHolidays, publicLibraries, facilityPage, laptopPage, wifiPage, nclDetails, siteDetails, schools] = await Promise.all([
     get(nclCsv), get(cityJson), html(citySite), html(cityHours), html(cityNotices), html(cityRules), html(nlpiCalendar),
-    publicEvidence(html), html(cityFacilities), html(laptopFaq), html(wifiFaq), readDirectory(), readSiteEvidence(),
+    publicEvidence(html), html(cityFacilities), html(laptopFaq), html(wifiFaq), readDirectory(), readSiteEvidence(), schoolContacts(html),
   ]);
   const national: Row[] = parse(new TextDecoder('big5', { fatal: true }).decode(nclBytes), {
     columns: true, skip_empty_lines: true,
@@ -190,11 +191,18 @@ async function importTaichung() {
     }
     // shortcut: 特殊時段須核對到空間，待確認後再套用空間時段。
     if (calendar.year === 2026) library.checkDates.push('2026-02-20', '2026-02-21');
+    const buildingClosures = new Map<string, Library['closures']>();
     for (const notice of announcements.filter(({ label }) => label.includes(branch.name))) {
       const since = notice.label.match(/(\d{3})年(\d+)月(\d+)日/);
       if (since && /施工期間暫停開放/.test(notice.label)) {
-        library.closures.unshift({ from: dateKey(Number(since[1]) + 1911, since[2], since[3]),
-          reason: '整修期間暫停開放', url: notice.url });
+        const closure = { from: dateKey(Number(since[1]) + 1911, since[2], since[3]),
+          reason: '整修期間暫停開放', url: notice.url };
+        const building = buildings.find((site) => notice.label.includes(branch.name + site.building + '棟'));
+        if (building) {
+          buildingClosures.set(building.building, [closure, ...(buildingClosures.get(building.building) ?? [])]);
+        } else {
+          library.closures.unshift(closure);
+        }
       } else if (branch.code === '140' && notice.url.endsWith(',,,1941')) {
         library.closures.unshift({ from: '2026-01-26', until: '2026-11-16',
           reason: '潭子分館訂於 11 月 17 日啟用', url: notice.url });
@@ -211,6 +219,7 @@ async function importTaichung() {
         libraries.set(siteId, { ...library, id: siteId, address: building.address,
           district: districtOf(building.address), name: library.name + building.building + '棟',
           coordinates: knownSite ? library.coordinates : undefined, studyRoom: knownSite ? library.studyRoom : undefined,
+          closures: [...(buildingClosures.get(building.building) ?? []), ...library.closures],
           phone: building.phone ?? (knownSite ? cityContact?.['市話'] : undefined), areas: knownSite ? library.areas : [] });
       }
       if (!siteWithStudy) {
@@ -224,12 +233,26 @@ async function importTaichung() {
 
   for (const library of libraries.values()) {
     if (!library.id.startsWith('tc-')) applyPublicEvidence(library, publicLibraries.records.get(branchName(library.name)));
+    applySchoolContact(library, schools);
     const review = reviewedSources[library.name];
     if (!review) continue;
-    library.website = review.website;
-    library.sources.push(review.website, ...(review.sources ?? []));
-    library.accessNote = review.accessNote;
-    if (review.areas) library.areas = review.areas;
+    if (review.website) library.website = review.website;
+    if (review.phone) library.phone ??= review.phone;
+    if (review.address) library.address = review.address;
+    if (review.website) library.sources.push(review.website);
+    library.sources.push(...(review.sources ?? []));
+    if (review.accessNote) library.accessNote = review.accessNote;
+    if (review.studyRoom !== undefined) library.studyRoom = review.studyRoom ?? undefined;
+    if (review.areas) {
+      library.areas = review.areas;
+      library.reviewNote = undefined;
+      for (const area of review.areas) library.sources.push(...area.sources);
+    }
+    if (review.checkDates) library.checkDates = review.checkDates;
+    if (review.closures) {
+      const updatedUrls = new Set(review.closures.map((closure) => closure.url));
+      library.closures = [...review.closures, ...library.closures.filter((closure) => !updatedUrls.has(closure.url))];
+    }
     if (library.areas.some((area) => area.kind === 'study')) library.studyRoom = true;
     if (library.name === limingName) {
       library.closures = nlpi.closures;

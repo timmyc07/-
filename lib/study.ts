@@ -5,6 +5,7 @@ export type Area = {
   name: string;
   kind: 'study' | 'quiet' | 'reading';
   slots: Slot[] | null;
+  slotPeriod?: { from: string; until: string };
   access: 'walk-in' | 'card' | 'restricted' | 'conditional' | null;
   reservation?: string;
   seats?: number;
@@ -84,7 +85,8 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
   else if (!area) missing.push('空間規則待確認');
   else {
     if (query.kind && area.kind !== query.kind) failed.push('空間類型不符');
-    if (!area.slots) missing.push('空間時段待確認');
+    const outsidePeriod = area.slotPeriod && (query.date < area.slotPeriod.from || query.date > area.slotPeriod.until);
+    if (!area.slots || outsidePeriod) missing.push('空間時段待確認');
     else if (!changed) {
       const day = new Date(query.date + 'T00:00:00Z').getUTCDay();
       if (!area.slots.some((slot) => slot.day === day && slot.start <= query.start &&
@@ -115,7 +117,9 @@ export function coverageGaps(library: Library) {
   if (!library.website) gaps.push('館方網站');
   if (typeof library.studyRoom !== 'boolean') gaps.push('有無自修室');
   const areas = library.areas.length > 0;
-  if (!areas && library.studyRoom === true) gaps.push('自修空間使用規則');
+  if (library.studyRoom === true && !library.areas.some((area) => area.kind !== 'reading')) {
+    gaps.push('自修空間使用規則');
+  }
   if (!areas && typeof library.studyRoom !== 'boolean') gaps.push('閱覽空間資料');
   if (areas && !library.calendarYear) gaps.push('年度休館公告');
   for (const area of library.areas) {

@@ -56,6 +56,13 @@ test('館方公告的自由入座日期不要求借閱證或登記', () => {
   assert.equal(evaluate(library, cardArea, { ...query, date: '2026-11-13' }).status, 'no');
 });
 
+test('短期自由入座只適用公告時段內的查詢', () => {
+  const study: Area = { ...area, access: 'card', walkInDates: [{ date: query.date, start: 570, end: 750 }] };
+  assert.equal(evaluate(library, study, { ...query, start: 570, duration: 180 }).status, 'yes');
+  assert.equal(evaluate(library, study, { ...query, start: 569, duration: 30 }).status, 'no');
+  assert.equal(evaluate(library, study, { ...query, start: 720, duration: 31 }).status, 'no');
+});
+
 test('休館優先，特殊時段與未核對年度保持待確認', () => {
   const closure = { from: '2026-11-12', until: '2026-11-12', reason: '臨時休館', url: 'https://example.org' };
   assert.equal(evaluate({ ...library, closures: [closure] }, undefined, query).status, 'no');

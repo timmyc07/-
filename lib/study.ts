@@ -8,7 +8,7 @@ export type Area = {
   slotPeriod?: { from: string; until: string };
   limitedOpening?: { from: string; until: string; name: string };
   access: 'walk-in' | 'card' | 'restricted' | 'conditional' | null;
-  walkInDates?: string[];
+  walkInDates?: (string | { date: string; start: number; end: number })[];
   reservation?: string;
   seats?: number;
   equipment: Partial<Record<Facility, boolean>>;
@@ -80,18 +80,20 @@ export function validDate(date: string) {
 }
 
 export function evaluate(library: Library, area: Area | undefined, query: Query) {
+  const end = query.start + query.duration;
   const limited = area?.limitedOpening;
   if (area && limited && limited.from <= query.date && query.date <= limited.until) {
     area = { ...area, name: limited.name, seats: undefined, equipment: {} };
   }
-  if (area?.walkInDates?.includes(query.date)) {
+  if (area?.walkInDates?.some((opening) => typeof opening === 'string' ? opening === query.date :
+    opening.date === query.date && opening.start <= query.start && end <= opening.end)) {
     area = { ...area, access: 'walk-in', reservation: undefined };
   }
   const missing: string[] = [];
   const failed: string[] = [];
   const closure = library.closures.find(({ from, until, time }) =>
     from <= query.date && (!until || query.date <= until) &&
-    (!time || (time.start < query.start + query.duration && query.start < time.end)));
+    (!time || (time.start < end && query.start < time.end)));
   if (closure) failed.push(closure.reason);
   if (library.calendarYear !== Number(query.date.slice(0, 4)) ||
       (library.calendarFrom && query.date < library.calendarFrom)) {
@@ -109,7 +111,7 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
     else if (!changed) {
       const day = new Date(query.date + 'T00:00:00Z').getUTCDay();
       if (!area.slots.some((slot) => slot.day === day && slot.start <= query.start &&
-        slot.end >= query.start + query.duration)) failed.push('開放時段無法涵蓋整段使用時間');
+        slot.end >= end)) failed.push('開放時段無法涵蓋整段使用時間');
     }
     if (area.access === null) missing.push('入場資格或預約方式待確認');
     if (area.access === 'conditional') missing.push('依館方規則須符合訪客條件');

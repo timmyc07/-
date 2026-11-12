@@ -12,16 +12,17 @@ export const nlpiRules = 'https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001461
 const nlpiFloors = 'https://www.nlpi.edu.tw/StaticPage/main-floors';
 const nlpiSpaceRules = 'https://www.nlpi.edu.tw/StandardTemplates/Handlers/FileHandler.ashx?fid=54e87fb9-acf8-4c00-86d7-cfed2e012d35&no=1&sourceType=0&type=FileUpload';
 const nlpiSpaceMaintenance = 'https://www.nlpi.edu.tw/Announcement/news?PageType=1&id=7a11da3b-2a48-4fa9-8e60-0968fd2c9d3d&pageIndex=1';
+const nlpiNovemberMaintenance = 'https://www.nlpi.edu.tw/uploadplugin/getFile?Caption=1109%E5%85%AC%E5%91%8A.jpg&file=1M%2BSg%2Bka6ovENNjFZWbLnxXOPgLQ%2FVSwn0ml%2BLb4hd8Dyxmj0WnysiJAadiGyjbj';
 export const nlpiArea: Area = {
   name: 'B1 自修閱覽室',
   kind: 'study',
   slots: Array.from({ length: 7 }, (_, day) => ({ day, start: 480, end: day < 2 ? 1020 : 1260 })),
   access: 'card',
-  walkInDates: ['2026-10-12'],
+  walkInDates: ['2026-10-12', { date: '2026-11-09', start: minutes('09:30'), end: minutes('12:30') }],
   seats: 316,
   reservation: 'https://ispace.nlpi.edu.tw/',
   equipment: { outlet: false, wifi: true },
-  sources: [nlpiRules, nlpiFloors, nlpiSpaceRules, nlpiSpaceMaintenance,
+  sources: [nlpiRules, nlpiFloors, nlpiSpaceRules, nlpiSpaceMaintenance, nlpiNovemberMaintenance,
     'https://ispace.nlpi.edu.tw/#/rules/8a8a99e57bc9e858017bcb1a9b4a0001',
     'https://www.nlpi.edu.tw/StaticPage/laptop-charging',
     'https://www.nlpi.edu.tw/StaticPage/internet-access'],

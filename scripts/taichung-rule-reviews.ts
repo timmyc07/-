@@ -48,6 +48,15 @@ const xinshe = 'https://www.library.taichung.gov.tw/lib/Introduction/index?Parse
 const xitun = 'https://www.library.taichung.gov.tw/df_ufiles/lib08/臺中市西屯區圖書館討論室使用須知-1050301.pdf';
 const ftjh = 'https://ftjh.tc.edu.tw/p/405-1137-42954,c18938.php';
 const wpjh = 'https://wpjh.tc.edu.tw/p/405-1134-3087,c803.php';
+const gmjh = 'https://gmjh.tc.edu.tw/var/file/161/1161/img/663539670.pdf';
+const kfjh = 'https://kfjh.tc.edu.tw/p/406-1162-468231,r1012.php';
+const cmshRoom = 'https://epaper.tc.edu.tw/application/show-article?id=3589';
+const cmshStudy = 'https://cmsh.tc.edu.tw/p/406-1065-514730,r2388.php';
+const kfjhReview: Review = {
+  sources: [kfjh],
+  note: '霧峰光復國中小共讀站供霧峰區民眾、學生及家長使用。學期中週一至週五 09:00–15:00，寒暑假週一至週五 09:00–12:00。獨立自修區及設備待確認。',
+  areas: [{ name: '光復國中小共讀站', kind: 'reading', slots: null, access: 'conditional', equipment: {}, sources: [kfjh] }],
+};
 
 // The sources distinguish library-wide hours from the schedule of each study area.
 export const taichungRuleReviews: Record<string, Review> = {
@@ -91,7 +100,7 @@ export const taichungRuleReviews: Record<string, Review> = {
   },
   朝陽科技大學波錠紀念圖書館: {
     sources: [cyutSpace, cyutHours],
-    note: '校內閱覽室供朝陽教職員生憑證使用。1 樓 iSpace 另供師生和社區民眾使用，開放式討論區也可個人閱讀，小組優先。部分座位有筆電插座。',
+    note: '1 樓校內安靜閱覽室從館外刷證進入，限朝陽教職員生。115 學年度第 1 學期週一至週五 08:00–23:00、週日 08:00–20:00、週六不開放，連假依館方公告。1 樓 iSpace 另供師生和社區民眾使用，開放式討論區也可個人閱讀，小組優先。部分座位有筆電插座。',
     areas: [{ name: '1 樓 iSpace 個人閱讀座位', kind: 'reading', slots: null, access: 'conditional',
       equipment: { laptop: true, outlet: true }, sources: [cyutSpace, cyutHours] }],
   },
@@ -163,6 +172,34 @@ export const taichungRuleReviews: Record<string, Review> = {
   臺中市立大里國民小學圖書室: {
     sources: [dlps],
     note: '共讀站官網仍列工程暫停對外開放通知，預計日期會依工程調整。恢復對外開放及現行時段待校方確認。',
+  },
+  臺中市立公明國民中學圖書室: {
+    sources: [gmjh, 'https://gmjh.tc.edu.tw/p/403-1161-70.php?Lang=zh-tw'],
+    note: '悠閱館共讀站平日 09:00–17:00，社區民眾可自由使用，優先服務學齡兒童、學生及親子共讀。幼童須由家長或監護人全程陪同，例假日或特殊情況另行公告。獨立自修區及設備待確認。',
+    areas: [{ name: '悠閱館社區共讀站', kind: 'reading', slots: parseSlots('週一至週五9:00至17:00'),
+      access: 'walk-in', equipment: {}, sources: [gmjh] }],
+  },
+  '臺中市立光復國民(中)小學圖書室': kfjhReview,
+  '臺中市立光復國民中(小)學圖書室': kfjhReview,
+  臺中市立至善國民中學圖書館: {
+    sources: ['https://school.tc.edu.tw/open-message/193521/view-news/5939',
+      'https://school.tc.edu.tw/open-message/193521/get-file/6965ba7af66a82934606e9a4'],
+    note: '共讀站供校友、退休教職員工、教育志工及學生家長使用。首次到教務處辦借書證，其後持借書證及附照片證件向警衛換證。上班日 09:00–12:00、13:00–17:00，視人力調整。寒暑假另行安排。閱覽區不提供讀者 Wi-Fi 或座位充電，資訊檢索區另有公用電腦及網路。',
+  },
+  臺中市立東山高級中學暨附設國中部圖書室: {
+    sources: ['https://tsjh.tsjh.tc.edu.tw/ischool/publish_page/8/?cid=1247', 'https://www.taichung.gov.tw/941961/post'],
+    note: '校方館舍介紹列圖書音樂大樓 4 樓閱讀自修室。現行時段、入場資格及設備待確認。',
+  },
+  臺中市立忠明高級中學暨附設國中部圖書館: {
+    sources: [cmshRoom, cmshStudy, 'https://cmsh.tc.edu.tw/index.php'],
+    note: '臺中市教育電子報記載圖書資訊館 1 樓閱覽室供學生自修，設有空調、照明與茶水設備。114 學年度第 1 學期晚自習採申請與分配座位，規定不得使用平板或電腦。115 學年度的每日時段與設備規則請依當期公告。',
+    areas: [{ name: '圖書資訊館 1 樓學生自修閱覽室', kind: 'study', slots: null, access: 'restricted',
+      equipment: {}, sources: [cmshRoom, cmshStudy] }],
+  },
+  臺中市立新社高級中學暨附設國中部圖書館: {
+    sources: ['https://lib.sshs.tc.edu.tw/webopac/holiday.aspx', 'https://school.tc.edu.tw/open-message/064328/get-file/6706381c5980dc4fb658a6a7',
+      'https://digi.sshs.tc.edu.tw/school/Landing'],
+    note: '館方行事曆列圖書館平日 08:00–17:00。校方文件列圖書館 1 樓自習室，另有校務平台提供晚自習預約。自習室的現行時段、入場資格及設備待確認。',
   },
   臺中市立豐東國民中學圖書館: {
     sources: [ftjh],

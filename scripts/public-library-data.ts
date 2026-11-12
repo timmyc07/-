@@ -201,9 +201,9 @@ export const reviewedSources: Record<string, {
     accessNote: '閱覽室供朝陽教職員生憑證使用。這份時段適用 115 學年度第 1 學期，連假另有公告。',
     checkDates: ['2026-09-25', '2026-09-26', '2026-09-27', '2026-09-28', '2026-10-09', '2026-10-10',
       '2026-10-25', '2026-10-26', '2026-11-28', '2026-12-25', '2026-12-26', '2027-01-01', '2027-01-02'],
-    areas: [{ name: '校內閱覽室', kind: 'reading', slots: parseSlots('週一至週五8:00至23:00、週日8:00至20:00'),
+    areas: [{ name: '校內閱覽室', kind: 'quiet', slots: parseSlots('週一至週五8:00至23:00、週日8:00至20:00'),
       slotPeriod: { from: '2026-09-14', until: '2027-01-17' }, access: 'restricted', equipment: {},
-      sources: [cyutHours, cyutRules] }] },
+      sources: [cyutHours, cyutRules, 'https://pmlis.cyut.edu.tw/libx/promotion_109_news.php'] }] },
   [limingName]: { website: liming, areas: [{
     name: '4 樓讀者自修室', kind: 'study',
     slots: parseSlots('週二至週六9:00至21:00、週日9:00至17:00'), access: 'walk-in',

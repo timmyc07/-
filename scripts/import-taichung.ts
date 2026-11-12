@@ -203,6 +203,7 @@ async function importTaichung() {
         libraries.set(siteId, { ...library, id: siteId, address: building.address,
           district: districtOf(building.address), name: library.name + building.building + '棟',
           coordinates: knownSite ? library.coordinates : undefined, studyRoom: knownSite ? library.studyRoom : undefined,
+          facilities: knownSite ? library.facilities : library.facilities?.filter((facility) => !/自[修習]室|筆電席位/.test(facility)),
           closures: [...(buildingClosures.get(building.building) ?? []), ...library.closures],
           phone: building.phone ?? (knownSite ? cityContact?.['市話'] : undefined), areas: knownSite ? library.areas : [] });
       }

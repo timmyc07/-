@@ -49,7 +49,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const results = searched && !invalid ? candidates.flatMap((library) => {
     const matching = kind ? library.areas.filter((area) => area.kind === kind) : library.areas;
     const areas: (Area | undefined)[] = matching.length ? matching : [undefined];
-    return areas.map((area) => ({ library, area, ...evaluate(library, area, query) }));
+    return areas.map((area) => ({ library, ...evaluate(library, area, query) }));
   }) : [];
   const rank = { yes: 0, unknown: 1, no: 2 };
   results.sort((a, b) => rank[a.status] - rank[b.status]);

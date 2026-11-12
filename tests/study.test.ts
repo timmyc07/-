@@ -71,6 +71,19 @@ test('重開館後的休館日曆只適用於生效日起', () => {
   assert.equal(evaluate(venue, area, { ...query, date: '2026-11-13' }).status, 'yes');
 });
 
+test('部分開館時只顯示開放區域與該區可確認的設備', () => {
+  const reading: Area = { ...area, name: '一般閱覽座位', kind: 'reading', seats: 160,
+    limitedOpening: { from: '2026-11-03', until: '2026-11-16', name: '1 樓閱覽區（試營運）' } };
+  const duringTrial = evaluate(library, reading, { ...query, kind: 'reading' });
+  assert.equal(duringTrial.status, 'yes');
+  assert.equal(duringTrial.area?.name, '1 樓閱覽區（試營運）');
+  assert.equal(duringTrial.area?.seats, undefined);
+  assert.equal(evaluate(library, reading, { ...query, kind: 'reading', required: ['wifi'] }).status, 'unknown');
+  const afterTrial = evaluate(library, reading, { ...query, date: '2026-11-17', kind: 'reading', required: ['wifi'] });
+  assert.equal(afterTrial.status, 'yes');
+  assert.equal(afterTrial.area?.seats, 160);
+});
+
 test('解析器保留空間和館舍不同時段，地址以官網欄位為準', () => {
   const markup = '<div class="open_time"><li><span class="time_txt">A棟<br>週二至週日8:30至21:00<br>B棟2F自習室<br>週二至週日8:00至21:00</span></li></div>';
   const hours = branchHours(markup);

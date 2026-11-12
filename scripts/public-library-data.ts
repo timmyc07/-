@@ -175,7 +175,13 @@ const daxinClosure = 'https://activity.culture.taichung.gov.tw/hisdata/index-1.a
 const daxinWorks = 'https://assess-public.taichung.gov.tw/ImportantWork/ConstructionDetail/011425697';
 const southClosed = 'https://idoor.taichung.gov.tw/info/newsDetail?id=386CB584-D805-4BBE-BD05-14F41773727D';
 const southReopened = citySite + 'latestevent/Details?Parser=9,3,37,27,,,189';
+const dayaClosed = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1597';
+const dayaReopened = citySite + 'latestevent/Details?Parser=22,3,38,27,,,1962';
+const tanziClosed = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1598';
+const tanziReopened = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1941';
+const tanziExhibit = citySite + 'lib/active/details?Parser=51,140,543,,,,22942';
 const dadunIntro = citySite + 'lib/Introduction/index?Parser=99,105,194';
+const dadunGuide = citySite + 'lib/content/index?Parser=1,105,195';
 const dadunDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000198';
 const dadunCenterHours = 'https://www.dadun.culture.taichung.gov.tw/TCDCCFrontend/SpaceGuide/DadunCenterGuide';
 const standardReadingHours = '週二至週六8:30至21:00、週日8:30至17:30';
@@ -206,7 +212,8 @@ export const studyLocations: Record<string, readonly [name: string, guide: strin
 export const reviewedSources: Record<string, {
   website?: string; studyRoom?: false | null; accessNote?: string; sources?: string[];
   areas?: Area[]; areaUpdates?: Area[]; closures?: Closure[];
-  readingEquipment?: Area['equipment'];
+  schedule?: Library['schedule']; reopening?: string;
+  readingEquipment?: Area['equipment']; readingLimitedOpening?: Area['limitedOpening'];
 }> = {
   大安分館: { studyRoom: false, sources: [nclDirectory + 'L5284000', daanReopened] },
   大肚分館: { studyRoom: false, sources: [nclDirectory + 'L5274000'] },
@@ -229,8 +236,16 @@ export const reviewedSources: Record<string, {
     readingEquipment: { laptop: true },
     accessNote: '分館介紹列有指定筆電席位。自習室獨立時段及閱覽座位插座待確認。',
   },
-  大雅分館: { sources: [citySite + 'lib/Introduction/index?Parser=99,136,504'],
-    accessNote: '原館因耐震補強暫停閱覽，館方預計 2027 年 1 月底完工。臨時服務處在大雅社區發展協會 3 樓（永和路 222 號），公告服務至 2027 年 1 月 31 日。原館重開日期及自習室配置待確認。',
+  大雅分館: { sources: [dayaClosed, dayaReopened], reopening: dayaReopened,
+    schedule: parseSlots(standardReadingHours),
+    accessNote: '館方公告雅潭路四段 800 號原館於 2026 年 12 月 15 日全面恢復服務。原館週二至週六 08:30–21:00、週日 08:30–17:30。永和路 222 號 3 樓臨時服務處於 12 月 13 日閉館，當日起可使用原館還書箱。整修後自習室配置與充電座位待確認。',
+    closures: [{ from: '2026-05-26', until: '2026-12-14', reason: '原館整修後於 12 月 15 日重新開館', url: dayaClosed }],
+  },
+  潭子分館: { sources: [tanziClosed, tanziReopened, tanziExhibit], reopening: tanziReopened,
+    schedule: parseSlots(standardReadingHours),
+    accessNote: '館方公告原館於 2026 年 11 月 3 日起試營運，提供 1 樓閱覽、預約取書及還書箱服務。11 月 17 日全面開放。週二至週六 08:30–21:00、週日 08:30–17:30。整修後獨立自習室與設備待確認。',
+    closures: [{ from: '2026-01-26', until: '2026-11-02', reason: '原館整修後於 11 月 3 日開始試營運', url: tanziReopened }],
+    readingLimitedOpening: { from: '2026-11-03', until: '2026-11-16', name: '1 樓閱覽區（試營運）' },
   },
   太平分館: {
     sources: ['https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000226',
@@ -351,8 +366,10 @@ export const reviewedSources: Record<string, {
     areaUpdates: [{ name: '自習室', kind: 'study', slots: null, access: null, equipment: {},
       sources: [beitunDirectory, beitunGuide, beitunReopened] }],
   },
-  南屯分館: { studyRoom: null, sources: [nantunDirectory, nantunIntro, nantunGuide],
-    accessNote: '國圖名錄列有自修室，市圖現行樓層導覽列兩層閱覽區，館舍介紹自習室席位空白。獨立自修室目前是否開放、時段、入場資格及設備待確認。市圖另列館內有 Wi-Fi 及筆電席位。',
+  南屯分館: { studyRoom: null, sources: [nantunDirectory, nantunIntro, nantunGuide,
+    'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000205'],
+    readingEquipment: { laptop: true },
+    accessNote: '國資圖 2026 年更新的公共圖書館名錄列有自習室。市圖現行樓層導覽列兩層閱覽區，館舍介紹自習室席位空白。獨立自修室是否開放、時段、入場資格與設備待確認。館內另有指定筆電席位，插座位置待確認。',
     areaUpdates: [{ name: '自習室', kind: 'study', slots: null, access: null, equipment: {},
       sources: [nantunDirectory, nantunIntro, nantunGuide] }],
   },
@@ -371,13 +388,17 @@ export const reviewedSources: Record<string, {
       reason: '公告 08:30–16:30 停電閉館', url: wuriNotice }],
   },
   葫蘆墩分館: {
+    sources: [huludunIntro, huludunGuide],
+    readingEquipment: { laptop: true },
+    accessNote: '分館介紹列有指定筆電席位。筆電席位置及插座待確認。',
     areaUpdates: [{ name: '4 樓自習室', kind: 'study',
       slots: parseSlots('週二至週六08:30至21:00、週日08:30至17:30'), access: 'walk-in', seats: 122,
       equipment: { laptop: true, outlet: false, wifi: true },
       sources: [huludunHours, huludunGuide, huludunIntro, cityRules, laptopFaq, wifiFaq] }],
   },
   霧峰以文分館: { sources: [wufengIntro, wufengExhibit, wufengEvents, daanReopened, seatSystem],
-    accessNote: '市府公告原館於 2026 年 9 月 1 日重新開館。館方列出 2 樓自習室 84 席，獨立時段仍待確認。市圖空間系統另列 8 席公用電腦，須現場登記。',
+    readingEquipment: { laptop: true },
+    accessNote: '市府公告原館於 2026 年 9 月 1 日重新開館。館方列出 2 樓自習室 84 席，獨立時段仍待確認。館內另有指定筆電席位，插座位置待確認。市圖空間系統列 8 席公用電腦，須現場登記。',
     closures: [{ from: '2025-11-17', until: '2026-08-31', reason: '原館耐震補強期間閉館', url: wufengIntro }],
   },
   上楓分館: { studyRoom: false, sources: [nclDirectory + 'c7a7740d7c404f1f80b7f3e28f7d011b'],
@@ -398,10 +419,10 @@ export const reviewedSources: Record<string, {
       sources: ['https://www-old.nlpi.edu.tw/JournalDetailC003313.aspx?Cond=26ca6952-6617-452f-97e6-36e7bf0bef8b',
         'https://www.tccc.gov.tw/pic/DocSimple/17308827690156%282%29.pdf', longjingGuide, readingRules, wifiFaq] }],
   },
-  大墩分館: { sources: [dadunCenterHours],
-    accessNote: 'B 棟 2 樓自習室週二至週日 08:00–21:00，390 席。分館官網另列筆電優先使用區 24 席，國資圖名錄列 12 席，採用分館官網數字。該區獨立時段、入場方式及插座待確認。',
-    areaUpdates: [{ name: 'B 棟 2 樓筆電優先使用區', kind: 'reading', slots: null, access: null, seats: 24,
-      equipment: { laptop: true, wifi: true }, sources: [dadunIntro, dadunDirectory, wifiFaq] }],
+  大墩分館: { sources: [dadunCenterHours, dadunGuide, readingRules],
+    accessNote: 'B 棟 2 樓自習室週二至週日 08:00–21:00，390 席。同樓筆電優先使用區依閱覽須知的分館一般時段週二至週日 08:30–21:00。席數依分館官網列 24 席。該區入場方式及插座待確認。',
+    areaUpdates: [{ name: 'B 棟 2 樓筆電優先使用區', kind: 'reading', slots: parseSlots('週二至週日08:30至21:00'), access: null,
+      seats: 24, equipment: { laptop: true, wifi: true }, sources: [dadunIntro, dadunGuide, dadunDirectory, readingRules, wifiFaq] }],
   },
   溪東分館: {
     accessNote: '2 樓筆電優先區依市圖一般閱覽時段開放，靠窗長桌有插座。',

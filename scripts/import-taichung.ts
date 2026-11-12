@@ -188,11 +188,7 @@ async function importTaichung() {
         } else {
           library.closures.unshift(closure);
         }
-      } else if (branch.code === '140' && notice.url.endsWith(',,,1941')) {
-        library.closures.unshift({ from: '2026-01-26', until: '2026-11-16',
-          reason: '潭子分館訂於 11 月 17 日啟用', url: notice.url });
-        library.sources.push(citySite + 'latestevent/Details?Parser=9,3,41,27,,,1598');
-      } else {
+      } else if (notice.url !== reviewedSources[library.name]?.reopening) {
         library.notices = [...(library.notices ?? []), notice.url];
       }
     }
@@ -232,8 +228,11 @@ async function importTaichung() {
       library.areas = [...areas.values()];
     }
     const reading = library.areas.find((area) => area.name === '一般閱覽座位');
-    if (review.readingEquipment && reading) {
-      reading.equipment = { ...reading.equipment, ...review.readingEquipment };
+    if (review.schedule) library.schedule = review.schedule;
+    if (reading && (review.readingEquipment || review.schedule || review.readingLimitedOpening)) {
+      if (review.readingEquipment) reading.equipment = { ...reading.equipment, ...review.readingEquipment };
+      if (review.schedule) reading.slots = review.schedule;
+      if (review.readingLimitedOpening) reading.limitedOpening = review.readingLimitedOpening;
       reading.sources = [...new Set([...reading.sources, ...(review.sources ?? [])])];
     }
     for (const area of [...(review.areas ?? []), ...(review.areaUpdates ?? [])]) library.sources.push(...area.sources);

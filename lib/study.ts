@@ -6,6 +6,7 @@ export type Area = {
   kind: 'study' | 'quiet' | 'reading';
   slots: Slot[] | null;
   slotPeriod?: { from: string; until: string };
+  limitedOpening?: { from: string; until: string; name: string };
   access: 'walk-in' | 'card' | 'restricted' | 'conditional' | null;
   reservation?: string;
   seats?: number;
@@ -78,6 +79,10 @@ export function validDate(date: string) {
 }
 
 export function evaluate(library: Library, area: Area | undefined, query: Query) {
+  const limited = area?.limitedOpening;
+  if (area && limited && limited.from <= query.date && query.date <= limited.until) {
+    area = { ...area, name: limited.name, seats: undefined, equipment: {} };
+  }
   const missing: string[] = [];
   const failed: string[] = [];
   const closure = library.closures.find(({ from, until, time }) =>
@@ -114,6 +119,7 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
     }
   }
   return {
+    area,
     status: failed.length ? 'no' : missing.length ? 'unknown' : 'yes',
     reasons: [...failed, ...missing],
     closure,

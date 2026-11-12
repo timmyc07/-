@@ -244,6 +244,7 @@ async function importTaichung() {
       const updatedUrls = new Set(review.closures.map((closure) => closure.url));
       library.closures = [...review.closures, ...library.closures.filter((closure) => !updatedUrls.has(closure.url))];
     }
+    if (review.checkDates) library.checkDates = [...new Set([...(library.checkDates ?? []), ...review.checkDates])];
     if (review.studyRoom === false) {
       library.areas = library.areas.filter((area) => area.kind !== 'study');
       library.facilities = library.facilities?.filter((facility) => !/自[修習]室/.test(facility));

@@ -182,6 +182,7 @@ const longjingGuide = citySite + 'lib/content/index?Parser=1,141,555';
 const longjingClosed = 'https://www.culture.taichung.gov.tw/2061063/2098033/2274235';
 const longjingReopened = 'https://www.taichung.gov.tw/2734955/post';
 const daxinClosure = 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=151616';
+const daxinExtendedClosure = 'https://lh3.googleusercontent.com/gps-cs-s/ANWiy9SypnA_06US96O89tOaMxDIusv9OkhEiRgciu2Jqdh-_Gx5hizm573T2EQn_ffCL1oHZTDg6urE9mw3xMJh0mY3TIO3iqNsIIZWcsoFtvth_JRbLFnweNIWh48lCbVOhodLTKdZP6chSfNJ=w2227-h2970-k-no';
 const daxinWorks = 'https://assess-public.taichung.gov.tw/ImportantWork/ConstructionDetail/011425697';
 const daxinFebruary = 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=155422';
 const daxinBookmobile = 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=155491';
@@ -236,7 +237,7 @@ export const studyLocations: Record<string, readonly [name: string, guide: strin
 export const reviewedSources: Record<string, {
   website?: string; studyRoom?: false | null; accessNote?: string; sources?: string[];
   areas?: Area[]; areaUpdates?: Area[]; closures?: Closure[];
-  schedule?: Library['schedule']; reopening?: string;
+  schedule?: Library['schedule']; reopening?: string; checkDates?: Library['checkDates'];
   readingEquipment?: Area['equipment']; readingLimitedOpening?: Area['limitedOpening'];
 }> = {
   大安分館: { studyRoom: false, sources: [nclDirectory + 'L5284000', daanClosed, daanReopened,
@@ -430,13 +431,15 @@ export const reviewedSources: Record<string, {
   大里大新分館: { sources: [citySite + 'lib/content/index?Parser=1,121,355', daxinClosure, daxinWorks,
     daxinFebruary, daxinBookmobile, daxinApril, 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=153726',
     'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=154566', 'https://maps.app.goo.gl/yLDS13VQPmJzoYkT7',
-    'https://maps.app.goo.gl/d73kT4ABtaTPrKfD7'],
-    accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。館門公告載明 2025 年 7 月 17 日至 12 月 15 日因耐震補強暫停開放，文化局紀錄另載 2026 年 2 月下旬暫停館內服務。2026 年 1 至 3 月部分週六在館旁設行動書車，4 月有館內 1 樓展覽紀錄，5 月前後有整修後到館紀錄。確切復館日及自習室獨立時段待確認。',
-    closures: [
-      { from: '2025-07-17', until: '2025-12-15', reason: '耐震補強期間暫停閱覽及自習服務',
-        url: 'https://maps.app.goo.gl/yLDS13VQPmJzoYkT7' },
-      { from: '2026-02-20', until: '2026-02-28', reason: '耐震補強期間暫停館內服務', url: daxinFebruary },
-    ],
+    'https://maps.app.goo.gl/d73kT4ABtaTPrKfD7', daxinExtendedClosure,
+    'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=156557',
+    'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=156556',
+    'https://data.gov.tw/dataset/83840',
+    'https://itaiwan.gov.tw/ITaiwanHotspotQuery/ConditionalQuery?KeyWord=大里大新分館&City=臺中市&Type=1'],
+    accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。更新版館門公告載明 2025 年 7 月 17 日至 2026 年 3 月 30 日因耐震補強閉館，施工期間安排館旁行動圖書車。文化局紀錄顯示 4 月 1 日起有 1 樓櫃檯及自助借書服務。3 月 31 日開放情況及 B1 自習室復開日、固定時段仍待確認。市府 2026 年 6 月熱點資料列原館有 iTaichung，iTaiwan 名錄仍列該熱點暫停。',
+    checkDates: ['2026-03-31'],
+    closures: [{ from: '2025-07-17', until: '2026-03-30', reason: '耐震補強期間暫停閱覽及自習服務',
+      url: daxinExtendedClosure }],
   },
   大里德芳分館: { sources: [citySite + 'lib/Introduction/index?Parser=99,122,364',
     citySite + 'lib/content/index?Parser=1,122,365', wufengIntro, 'https://maps.app.goo.gl/NhFVxcEkegUgA8Yt7',
@@ -445,8 +448,9 @@ export const reviewedSources: Record<string, {
     accessNote: '館方公開回覆，5 樓筆電優先使用區有地面插座，當時列 6 組、共 12 個插孔。手機緊急充電可洽櫃檯。霧峰以文分館整修公告曾列本館為自習替代據點，2026 年春季有讀者使用自習室。5 樓獨立自習室的固定時段待確認。',
   },
   沙鹿文昌分館: { sources: [wenchangGuide, wenchangReopened, cityChronology,
-    'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=153801', 'https://maps.app.goo.gl/Ecqg2PhBkV17Et3m8'],
-    accessNote: '分館完成耐震補強及增設電梯後於 2025 年 4 月 17 日重新開館。3 樓自習室有 100 席，館方照片顯示桌面有隔板，2025 年 6 月到館照片可見讀者使用。2026 年 1 月的市府活動紀錄列該室為漫畫原稿展場。日常自習時段待確認。',
+    'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=153801', 'https://maps.app.goo.gl/Ecqg2PhBkV17Et3m8',
+    citySite + 'lib/active/details?Parser=51,127,413,,,,23183'],
+    accessNote: '分館完成耐震補強及增設電梯後於 2025 年 4 月 17 日重新開館。3 樓自習室有 100 席，館方照片顯示桌面有隔板，2025 年 6 月到館照片可見讀者使用。2026 年 1 月的市府活動紀錄列該室為漫畫原稿展場。日常自習時段待確認。館方 11 月 1 日至 29 日推廣平板借用，公告載明憑借閱證可借 14 天、續借一次。',
   },
   大里分館: {
     sources: [daliIntro, 'https://www.walkerland.com.tw/article/view/211808',

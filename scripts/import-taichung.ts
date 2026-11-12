@@ -253,7 +253,7 @@ async function importTaichung() {
   if (!nlpiMain) throw new Error('公立公共圖書館名錄缺少國資圖總館');
   nlpiMain.website = 'https://www.nlpi.edu.tw/';
   nlpiMain.areas = [nlpiArea];
-  nlpiMain.accessNote = '持國資圖或臺中市立圖書館本人實體個人借閱證，可線上預約或現場登記。已預約者於使用日 08:30 前報到，現場登記取得座位號後須於 10 分鐘內報到。';
+  nlpiMain.accessNote = 'B1 自修閱覽室須持國資圖或臺中市立圖書館本人實體個人借閱證，可線上預約或現場登記。已預約者於使用日 08:30 前報到，現場登記取得座位號後須於 10 分鐘內報到。2 至 5 樓另有 46 個筆電優先閱覽席，館方規定該區禁止自修。';
   nlpiMain.studyRoom = true;
   nlpiMain.closures = nlpi.closures;
   nlpiMain.calendarYear = nlpi.year;
@@ -277,6 +277,15 @@ async function importTaichung() {
   const checkedOn = ruleAudit && new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', dateStyle: 'short' })
     .format(new Date(ruleAudit.checkedAt));
   for (const library of libraries.values()) {
+    const [reading] = library.areas;
+    if (library.studyRoom === false && library.areas.length === 1 && reading.kind === 'reading' &&
+        reading.equipment.laptop === undefined && library.facilities?.includes('筆電席位')) {
+      reading.equipment.laptop = true;
+      if (!reading.sources.includes(cityFacilities)) reading.sources.push(cityFacilities);
+      library.sources.push(cityFacilities);
+      const laptopNote = '市圖列有指定筆電席位。';
+      library.accessNote = library.accessNote ? library.accessNote + ' ' + laptopNote : laptopNote;
+    }
     if (library.areas.some((area) => area.kind === 'study' && area.access === 'walk-in' && area.sources.includes(cityRules))) {
       const seating = '市圖自習區原則上自由入座，每人一席。館方可在開館前發放號碼牌，離席逾一小時視同占位。';
       library.accessNote = library.accessNote ? library.accessNote + ' ' + seating : seating;

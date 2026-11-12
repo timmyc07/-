@@ -98,6 +98,7 @@ export function applyPublicEvidence(library: Library, evidence: PublicEvidence |
 const liming = 'https://w3.nlpi.edu.tw/LibraryInfo/libraryinfo?PageType=1&id=056cad82-2733-4735-a97d-df52863a3839&pageIndex=1';
 const nlpiWifi = 'https://www.nlpi.edu.tw/StaticPage/internet-access';
 const nlpiStudySeats = 'https://data.gov.tw/dataset/99698';
+const limingDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000195';
 const nclDirectory = 'https://libstat.ncl.edu.tw/libraryDataDetail/';
 const heping = 'https://www.heping.taichung.gov.tw/4086049/post';
 const hepingRules = 'https://www.heping.taichung.gov.tw/983338/983564/983630/983636';
@@ -113,6 +114,7 @@ const election2026 = 'https://info.cec.gov.tw/vote2026/question/';
 const fengyuanMap = citySite + 'lib/content/index?Parser=1,117,315';
 const fengyuanIntro = citySite + 'lib/Introduction/index?Parser=99,117,314';
 const fengyuanB = citySite + 'lib/index?117';
+const fengyuanBFacilities = 'https://eservices.taichung.gov.tw/LocationNew/Introduction/150/FacilityRental/525cffbf-7077-49fe-bc0f-f58e201d60d1';
 const fengyuanNotice = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1629';
 const xinsheNotice = citySite + 'lib/Introduction/index?Parser=99,147,614';
 const xinsheGuide = citySite + 'lib/content/index?Parser=1,147,615';
@@ -161,6 +163,7 @@ const daliIntro = citySite + 'lib/Introduction/index?Parser=99,120,344';
 const xiquFacilities = 'https://eservices.taichung.gov.tw/LocationNew/Introduction/150/FacilityRental/273b7047-42a9-4ea8-8326-02f633ecb621';
 const dajiaFacilities = 'https://eservices.taichung.gov.tw/LocationNew/Introduction/150/FacilityRental/4337e051-9c3a-4014-97a8-f9403c2d9525';
 const wuriFacilities = 'https://eservices.taichung.gov.tw/LocationNew/Introduction/150/FacilityRental/63f714bc-8755-4e56-85f6-23a3763a69de';
+const shengangFacilities = 'https://eservices.taichung.gov.tw/LocationNew/Introduction/150/FacilityRental/de9f1431-df4b-4156-8bcf-63f372ff84a9';
 const xitunGuide = citySite + 'lib/content/index?Parser=1,109,235';
 const xixiGuide = citySite + 'lib/content/index?Parser=1,110,245';
 const shangfengGuide = citySite + 'lib/content/index?Parser=1,137,515';
@@ -201,6 +204,17 @@ export const reviewedSources: Record<string, {
   大安分館: { studyRoom: false, sources: [nclDirectory + 'L5284000', daanReopened] },
   大肚分館: { studyRoom: false, sources: [nclDirectory + 'L5274000'] },
   大肚瑞井分館: { studyRoom: false, sources: [nclDirectory + 'L4899004'] },
+  中區分館: {
+    sources: [citySite + 'lib/Introduction/index?Parser=99,102,164', citySite + 'lib/content/index?Parser=1,102,165'],
+    readingEquipment: { laptop: true },
+    accessNote: '中區分館位於區公所 7 樓，館方列有筆電席位。座位插座待確認。',
+  },
+  太平分館: {
+    sources: ['https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000226',
+      citySite + 'lib/content/index?Parser=1,123,375'],
+    readingEquipment: { laptop: true },
+    accessNote: '國資圖名錄列有筆電優先座位，館方導覽列 1 樓一般閱覽區及 B1 自習室。筆電席位位置、插座及自習室獨立時段待確認。',
+  },
   太平坪林分館: { studyRoom: false, sources: [nclDirectory + 'L5256000'] },
   四張犁分館: { studyRoom: false, sources: [nclDirectory + 'L4899001'] },
   外埔分館: { studyRoom: false, sources: [nclDirectory + 'L5282000'] },
@@ -227,7 +241,11 @@ export const reviewedSources: Record<string, {
     readingEquipment: { laptop: true, outlet: true },
     accessNote: '館方列有筆電席位。2 樓部分靠窗閱覽桌有插座，請使用館方指定的充電位置。',
   },
-  精武圖書館: { studyRoom: false, sources: [nclDirectory + 'L4899003'] },
+  精武圖書館: { studyRoom: false,
+    sources: [nclDirectory + 'L4899003', citySite + 'lib/Introduction/index?Parser=99,108,224'],
+    readingEquipment: { laptop: true },
+    accessNote: '館方列有筆電席位。筆電席位樓層及插座待確認。',
+  },
   興安分館: { studyRoom: false, sources: [nclDirectory + 'L5011000', xinganGuide, xinganIntro, xinganVisit],
     readingEquipment: { laptop: true, outlet: true },
     accessNote: '分館介紹列有筆電席位。現場紀錄顯示 2 樓開架閱覽區的高腳長桌有可供讀者使用的插座。',
@@ -244,8 +262,8 @@ export const reviewedSources: Record<string, {
         slots: parseSlots('週二至週六8:30至21:00、週日8:30至17:30'), access: 'walk-in',
         equipment: { wifi: true }, sources: [fengyuanMap, fengyuanIntro, readingRules, wifiFaq] },
     ] },
-  豐原分館B棟: { studyRoom: null, sources: [fengyuanMap, fengyuanB, xinsheNotice, seatSystem],
-    accessNote: 'B 棟 1 樓有一般閱覽空間，曾列為新社分館施工時的自修替代地點。市圖空間系統列 2 席公用電腦，須現場登記。B 棟有無獨立自習室仍待確認。',
+  豐原分館B棟: { studyRoom: null, sources: [fengyuanMap, fengyuanB, xinsheNotice, seatSystem, fengyuanBFacilities],
+    accessNote: 'B 棟 1 樓有一般閱覽空間，曾列為新社分館施工時的自修替代地點。市圖空間系統列 2 席公用電腦，須現場登記。市府 B 棟資料列自修室及筆電專區，市圖現行樓層導覽未標示兩者位置。獨立自習室是否開放及筆電席位置仍待確認。',
     areas: [{ name: '1 樓一般閱覽區', kind: 'reading',
       slots: parseSlots('週二至週六8:30至21:00、週日8:30至17:30'), access: 'walk-in',
       equipment: { wifi: true }, sources: [fengyuanB, fengyuanMap, readingRules, wifiFaq] }],
@@ -255,7 +273,7 @@ export const reviewedSources: Record<string, {
     areas: [{
       name: '4 樓讀者自修室', kind: 'study',
       slots: parseSlots('週二至週六9:00至21:00、週日9:00至17:00'), access: 'walk-in', seats: 84,
-      equipment: { wifi: true, outlet: false }, sources: [liming, nlpiWifi, nlpiRules, nlpiStudySeats],
+      equipment: { wifi: true, outlet: false }, sources: [liming, nlpiWifi, nlpiRules, nlpiStudySeats, limingDirectory],
     }],
   },
   新社分館: { sources: [xinsheNotice, xinsheGuide, xinsheClosed, xinsheReopened, xinsheExhibit, seatSystem],
@@ -292,6 +310,9 @@ export const reviewedSources: Record<string, {
     accessNote: '館方列有筆電席位，2 樓導覽標示無線上網區。討論室不得用於個人自修。獨立自習室時段仍待確認。' },
   大甲分館: { sources: [dajiaFacilities], readingEquipment: { laptop: true },
     accessNote: '市府列有筆電專區及 3 樓自習室。筆電席位樓層、插座與自習室時段待確認。',
+  },
+  神岡分館: { sources: [shengangFacilities], readingEquipment: { laptop: true },
+    accessNote: '市府列有筆電專區，館方導覽列 3 樓自習室。筆電席位置、插座及自習室獨立時段待確認。',
   },
   北屯分館: { studyRoom: null,
     sources: [beitunDirectory, beitunGuide, beitunNcl, beitunClosed, beitunReopened, seatSystem],

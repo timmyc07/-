@@ -167,7 +167,7 @@ function LibraryCard({ library, area, status, reasons, closure, originalLink }: 
   return <article className="card">
     <div className="card-top"><span>{library.district}</span>{status && <span className={'badge ' + status}>{statuses[status]}</span>}</div>
     <h3>{library.name}</h3>
-    <p className="area">{area?.name ?? (library.studyRoom === false ? '官方資料標示無自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
+    <p className="area">{area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
     <p className="address">{library.address || '地址待確認'}</p>
     {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul> : null}
     <details>

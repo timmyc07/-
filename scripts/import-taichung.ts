@@ -244,7 +244,10 @@ async function importTaichung() {
       const updatedUrls = new Set(review.closures.map((closure) => closure.url));
       library.closures = [...review.closures, ...library.closures.filter((closure) => !updatedUrls.has(closure.url))];
     }
-    if (review.studyRoom === false) library.areas = library.areas.filter((area) => area.kind !== 'study');
+    if (review.studyRoom === false) {
+      library.areas = library.areas.filter((area) => area.kind !== 'study');
+      library.facilities = library.facilities?.filter((facility) => !/自[修習]室/.test(facility));
+    }
     if (review.studyRoom !== undefined) library.studyRoom = review.studyRoom ?? undefined;
     else if (library.areas.some((area) => area.kind === 'study')) library.studyRoom = true;
     if (library.name === limingName) {
@@ -286,7 +289,7 @@ async function importTaichung() {
     .format(new Date(ruleAudit.checkedAt));
   for (const library of libraries.values()) {
     const [reading] = library.areas;
-    if (library.studyRoom === false && library.areas.length === 1 && reading.kind === 'reading' &&
+    if (library.studyRoom === false && library.areas.length === 1 && reading.name === '一般閱覽座位' &&
         reading.equipment.laptop === undefined && library.facilities?.includes('筆電席位')) {
       reading.equipment.laptop = true;
       if (!reading.sources.includes(cityFacilities)) reading.sources.push(cityFacilities);

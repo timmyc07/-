@@ -97,11 +97,13 @@ export function applyPublicEvidence(library: Library, evidence: PublicEvidence |
 
 const liming = 'https://w3.nlpi.edu.tw/LibraryInfo/libraryinfo?PageType=1&id=056cad82-2733-4735-a97d-df52863a3839&pageIndex=1';
 const nlpiWifi = 'https://www.nlpi.edu.tw/StaticPage/internet-access';
+const nclDirectory = 'https://libstat.ncl.edu.tw/libraryDataDetail/';
 const heping = 'https://www.heping.taichung.gov.tw/4086049/post';
 const hepingRules = 'https://www.heping.taichung.gov.tw/983338/983564/983630/983636';
 const hepingPdf = 'https://www.heping.taichung.gov.tw/media/1324681/臺中市和平區立圖書館閱覽使用須知.pdf';
 const hepingDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000224';
-const hepingNcl = 'https://libstat.ncl.edu.tw/libraryDataDetail/L5268000';
+const hepingNcl = nclDirectory + 'L5268000';
+const hepingWifi = 'https://da.taichung.gov.tw/media/1183959/111及112年臺中市免費無線上網服務-itaichung-使用情形.pdf';
 const hepingReopening = 'https://www.facebook.com/photo/?fbid=1424988006497461';
 const holidays2026 = 'https://www.dgpa.gov.tw/information?pid=12685&uid=55';
 const fengyuanMap = citySite + 'lib/content/index?Parser=1,117,315';
@@ -139,6 +141,7 @@ const huludunIntro = citySite + 'lib/Introduction/index?Parser=99,118,324';
 const wufengIntro = citySite + 'lib/Introduction/index?Parser=99,139,534';
 const wufengExhibit = 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=159776';
 const wufengEvents = citySite + 'lib/active/index?Parser=51,139,533';
+const daanReopened = 'https://www.taichung.gov.tw/3344989/post';
 const dadunIntro = citySite + 'lib/Introduction/index?Parser=99,105,194';
 const dadunDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000198';
 const dadunCenterHours = 'https://www.dadun.culture.taichung.gov.tw/TCDCCFrontend/SpaceGuide/DadunCenterGuide';
@@ -167,9 +170,22 @@ export const studyLocations: Record<string, readonly [name: string, guide: strin
 };
 
 export const reviewedSources: Record<string, {
-  website?: string; studyRoom?: null; accessNote?: string; sources?: string[];
+  website?: string; studyRoom?: false | null; accessNote?: string; sources?: string[];
   areas?: Area[]; areaUpdates?: Area[]; closures?: Closure[];
 }> = {
+  大安分館: { studyRoom: false, sources: [nclDirectory + 'L5284000', daanReopened] },
+  大肚分館: { studyRoom: false, sources: [nclDirectory + 'L5274000'] },
+  大肚瑞井分館: { studyRoom: false, sources: [nclDirectory + 'L4899004'] },
+  太平坪林分館: { studyRoom: false, sources: [nclDirectory + 'L5256000'] },
+  四張犁分館: { studyRoom: false, sources: [nclDirectory + 'L4899001'] },
+  外埔分館: { studyRoom: false, sources: [nclDirectory + 'L5282000'] },
+  后里分館: { studyRoom: false, sources: [nclDirectory + 'L5264000'] },
+  梧棲分館: { studyRoom: false, sources: [nclDirectory + 'L5278000'] },
+  溪西分館: { studyRoom: false, sources: [nclDirectory + 'L4899005'] },
+  精武圖書館: { studyRoom: false, sources: [nclDirectory + 'L4899003'] },
+  興安分館: { studyRoom: false, sources: [nclDirectory + 'L5011000'] },
+  龍井山頂分館: { studyRoom: false, sources: [nclDirectory + 'L5277000'] },
+  龍井龍津分館: { studyRoom: false, sources: [nclDirectory + 'L5253000'] },
   豐原分館A棟: { studyRoom: null, sources: [fengyuanMap, fengyuanIntro, fengyuanNotice, 'https://www.facebook.com/FYLIB/'],
     accessNote: 'A 棟於 2026 年 10 月 3 日重新開館。市圖 11 月 6 日更新導覽，3 樓現列嬰幼兒、兒童及漫畫區。分館介紹合列 53 席自習室座位，A 棟是否仍設獨立自習室及其時段、入場資格與設備待確認。',
     closures: [{ from: '2026-02-03', until: '2026-10-02', reason: '整修期間暫停開放', url: fengyuanNotice }],
@@ -184,7 +200,7 @@ export const reviewedSources: Record<string, {
     accessNote: 'B 棟 1 樓有一般閱覽空間，曾列為新社分館施工時的自修替代地點。市圖空間系統列 2 席公用電腦，須現場登記。B 棟有無獨立自習室仍待確認。',
     areas: [{ name: '1 樓一般閱覽區', kind: 'reading',
       slots: parseSlots('週二至週六8:30至21:00、週日8:30至17:30'), access: 'walk-in',
-      equipment: {}, sources: [fengyuanB, fengyuanMap, readingRules] }],
+      equipment: { wifi: true }, sources: [fengyuanB, fengyuanMap, readingRules, wifiFaq] }],
   },
   [limingName]: { website: liming, areas: [{
     name: '4 樓讀者自修室', kind: 'study',
@@ -239,9 +255,11 @@ export const reviewedSources: Record<string, {
       equipment: { laptop: true, outlet: false, wifi: true },
       sources: [huludunHours, huludunGuide, huludunIntro, cityRules, laptopFaq, wifiFaq] }],
   },
-  霧峰以文分館: { sources: [wufengIntro, wufengExhibit, wufengEvents, seatSystem],
-    accessNote: '文化局活動資料顯示原館自 2026 年 9 月 1 日已恢復館內活動。館方列出 2 樓自習室 84 席，獨立時段仍待確認。市圖空間系統另列 8 席公用電腦，須現場登記。' },
-  上楓分館: {
+  霧峰以文分館: { sources: [wufengIntro, wufengExhibit, wufengEvents, daanReopened, seatSystem],
+    accessNote: '市府公告原館於 2026 年 9 月 1 日重新開館。館方列出 2 樓自習室 84 席，獨立時段仍待確認。市圖空間系統另列 8 席公用電腦，須現場登記。',
+    closures: [{ from: '2025-11-17', until: '2026-08-31', reason: '原館耐震補強期間閉館', url: wufengIntro }],
+  },
+  上楓分館: { studyRoom: false, sources: [nclDirectory + 'c7a7740d7c404f1f80b7f3e28f7d011b'],
     areaUpdates: [{ name: '館內筆電插座席', kind: 'reading', slots: null, access: null, seats: 20,
       equipment: { laptop: true, outlet: true, wifi: true },
       sources: ['https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000620',
@@ -277,7 +295,7 @@ export const reviewedSources: Record<string, {
     closures: [{ from: '2026-12-25', until: '2026-12-25', reason: '行憲紀念日休館', url: heping }],
     areas: [
       { name: '館內一般閱覽', kind: 'reading', slots: parseSlots('週二至週日8:00至17:00'), access: 'walk-in',
-        equipment: {}, sources: [heping, hepingPdf] },
+        equipment: { wifi: true }, sources: [heping, hepingPdf, cityFacilities, hepingWifi] },
       { name: '自習室', kind: 'study', slots: null, access: null, equipment: {},
         sources: [hepingDirectory, hepingNcl, cityFacilities] },
     ],

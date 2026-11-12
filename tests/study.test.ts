@@ -57,6 +57,12 @@ test('分段休館只排除與公告時段重疊的查詢', () => {
   assert.equal(evaluate(venue, area, { ...query, date: '2026-11-13' }).status, 'yes');
 });
 
+test('重開館後的休館日曆只適用於生效日起', () => {
+  const venue = { ...library, calendarFrom: '2026-11-13' };
+  assert.equal(evaluate(venue, area, query).status, 'unknown');
+  assert.equal(evaluate(venue, area, { ...query, date: '2026-11-13' }).status, 'yes');
+});
+
 test('解析器保留空間和館舍不同時段，地址以官網欄位為準', () => {
   const markup = '<div class="open_time"><li><span class="time_txt">A棟<br>週二至週日8:30至21:00<br>B棟2F自習室<br>週二至週日8:00至21:00</span></li></div>';
   const hours = branchHours(markup);

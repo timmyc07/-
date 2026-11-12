@@ -231,6 +231,11 @@ async function importTaichung() {
       for (const area of review.areaUpdates) areas.set(area.name, area);
       library.areas = [...areas.values()];
     }
+    const reading = library.areas.find((area) => area.name === '一般閱覽座位');
+    if (review.readingEquipment && reading) {
+      reading.equipment = { ...reading.equipment, ...review.readingEquipment };
+      reading.sources = [...new Set([...reading.sources, ...(review.sources ?? [])])];
+    }
     for (const area of [...(review.areas ?? []), ...(review.areaUpdates ?? [])]) library.sources.push(...area.sources);
     if (review.closures) {
       const updatedUrls = new Set(review.closures.map((closure) => closure.url));
@@ -258,6 +263,9 @@ async function importTaichung() {
   const peace = [...libraries.values()].find((library) => library.name === '臺中市和平區立圖書館');
   const peaceContact = contact.get('和平區立圖書館');
   if (peace) {
+    peace.calendarYear = 2026;
+    peace.calendarFrom = '2026-11-01';
+    peace.checkDates = ['2026-11-28'];
     peace.studyRoom = true;
     peace.facilities = ['自習室', '無線上網', '哺乳室', '資訊檢索'];
     if (peaceContact) {

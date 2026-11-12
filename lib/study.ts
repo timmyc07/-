@@ -32,6 +32,7 @@ export type Library = {
   areas: Area[];
   closures: Closure[];
   calendarYear?: number;
+  calendarFrom?: string;
   notices?: string[];
   checkDates?: string[];
 };
@@ -78,7 +79,10 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
     from <= query.date && (!until || query.date <= until) &&
     (!time || (time.start < query.start + query.duration && query.start < time.end)));
   if (closure) failed.push(closure.reason);
-  if (library.calendarYear !== Number(query.date.slice(0, 4))) missing.push('指定日期的休館公告待確認');
+  if (library.calendarYear !== Number(query.date.slice(0, 4)) ||
+      (library.calendarFrom && query.date < library.calendarFrom)) {
+    missing.push('指定日期的休館公告待確認');
+  }
   const changed = library.checkDates?.includes(query.date);
   if (changed) missing.push('指定日期有特殊時段或入場方式，請查館方公告');
   if (library.notices?.length) missing.push('有開館異動待核對');

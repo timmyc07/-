@@ -1,7 +1,7 @@
 import { setTimeout as delay } from 'node:timers/promises';
 import { load } from 'cheerio';
 import { minutes, type Area, type Closure, type Library } from '../lib/study.ts';
-import { branchName, clean, parseSlots, roomHours, cityRules, citySite } from './taichung-sources.ts';
+import { branchName, clean, parseSlots, roomHours, cityRules, citySite, nlpiRules } from './taichung-sources.ts';
 
 export const plisDirectory = 'https://data.gov.tw/dataset/99567';
 const plisList = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryList?city=City000009';
@@ -97,6 +97,7 @@ export function applyPublicEvidence(library: Library, evidence: PublicEvidence |
 
 const liming = 'https://w3.nlpi.edu.tw/LibraryInfo/libraryinfo?PageType=1&id=056cad82-2733-4735-a97d-df52863a3839&pageIndex=1';
 const nlpiWifi = 'https://www.nlpi.edu.tw/StaticPage/internet-access';
+const nlpiStudySeats = 'https://data.gov.tw/dataset/99698';
 const nclDirectory = 'https://libstat.ncl.edu.tw/libraryDataDetail/';
 const heping = 'https://www.heping.taichung.gov.tw/4086049/post';
 const hepingRules = 'https://www.heping.taichung.gov.tw/983338/983564/983630/983636';
@@ -106,6 +107,7 @@ const hepingNcl = nclDirectory + 'L5268000';
 const hepingWifi = 'https://da.taichung.gov.tw/media/1183959/111及112年臺中市免費無線上網服務-itaichung-使用情形.pdf';
 const hepingReopening = 'https://www.facebook.com/photo/?fbid=1424988006497461';
 const holidays2026 = 'https://www.dgpa.gov.tw/information?pid=12685&uid=55';
+const election2026 = 'https://info.cec.gov.tw/vote2026/question/';
 const fengyuanMap = citySite + 'lib/content/index?Parser=1,117,315';
 const fengyuanIntro = citySite + 'lib/Introduction/index?Parser=99,117,314';
 const fengyuanB = citySite + 'lib/index?117';
@@ -142,9 +144,15 @@ const wufengIntro = citySite + 'lib/Introduction/index?Parser=99,139,534';
 const wufengExhibit = 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=159776';
 const wufengEvents = citySite + 'lib/active/index?Parser=51,139,533';
 const daanReopened = 'https://www.taichung.gov.tw/3344989/post';
+const houliReopened = 'https://www.taichung.gov.tw/2105371/post';
+const houliIntro = citySite + 'lib/Introduction/index?Parser=99,138,524';
+const greenMuseumPlan = 'https://www.rdec.taichung.gov.tw/media/1251864/673th_1140527_-%E6%96%87%E5%8C%96%E5%B1%80-%E7%B6%A0%E7%BE%8E%E5%9C%96.pdf';
+const greenMuseumTeen = citySite + 'lib/tour/Details?Parser=14,101,703,,,,46';
+const likeyongGuide = citySite + 'lib/content/index?Parser=1,112,265';
 const dadunIntro = citySite + 'lib/Introduction/index?Parser=99,105,194';
 const dadunDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000198';
 const dadunCenterHours = 'https://www.dadun.culture.taichung.gov.tw/TCDCCFrontend/SpaceGuide/DadunCenterGuide';
+const standardReadingHours = '週二至週六8:30至21:00、週日8:30至17:30';
 
 export const limingName = '國立公共資訊圖書館黎明分館';
 
@@ -172,6 +180,7 @@ export const studyLocations: Record<string, readonly [name: string, guide: strin
 export const reviewedSources: Record<string, {
   website?: string; studyRoom?: false | null; accessNote?: string; sources?: string[];
   areas?: Area[]; areaUpdates?: Area[]; closures?: Closure[];
+  readingEquipment?: Area['equipment'];
 }> = {
   大安分館: { studyRoom: false, sources: [nclDirectory + 'L5284000', daanReopened] },
   大肚分館: { studyRoom: false, sources: [nclDirectory + 'L5274000'] },
@@ -179,7 +188,23 @@ export const reviewedSources: Record<string, {
   太平坪林分館: { studyRoom: false, sources: [nclDirectory + 'L5256000'] },
   四張犁分館: { studyRoom: false, sources: [nclDirectory + 'L4899001'] },
   外埔分館: { studyRoom: false, sources: [nclDirectory + 'L5282000'] },
-  后里分館: { studyRoom: false, sources: [nclDirectory + 'L5264000'] },
+  后里分館: { studyRoom: false, sources: [nclDirectory + 'L5264000', houliReopened, houliIntro],
+    readingEquipment: { laptop: true, outlet: true },
+    accessNote: '分館介紹列有筆電席位。市府公告 2022 年改造後在閱覽桌面增設 22 個插座，請使用館方指定的充電座位。',
+  },
+  '臺中市立圖書館總館（綠美圖）': { sources: [greenMuseumPlan, greenMuseumTeen],
+    readingEquipment: { laptop: true, outlet: true },
+    accessNote: '文化局資料說明閱讀桌有配置插座及檯燈，2 樓青少年閱覽區的安靜座位可使用筆電和平板。充電請使用館方指定的座位。',
+    areaUpdates: [{ name: '2 樓青少年閱覽靜區', kind: 'quiet',
+      slots: parseSlots(standardReadingHours), access: 'walk-in',
+      equipment: { laptop: true, outlet: true, wifi: true },
+      sources: [greenMuseumTeen, greenMuseumPlan, readingRules, wifiFaq] }],
+  },
+  李科永紀念圖書分館: {
+    sources: [likeyongGuide, 'https://travellens.pixnet.net/blog/posts/939436017933247207', 'https://apoarea.tw/lkylib/'],
+    readingEquipment: { laptop: true, outlet: true },
+    accessNote: '分館介紹列有筆電席位。3 樓資訊檢索區旁的閱覽桌設有可供筆電充電的插座。',
+  },
   梧棲分館: { studyRoom: false, sources: [nclDirectory + 'L5278000'] },
   溪西分館: { studyRoom: false, sources: [nclDirectory + 'L4899005'] },
   精武圖書館: { studyRoom: false, sources: [nclDirectory + 'L4899003'] },
@@ -202,11 +227,14 @@ export const reviewedSources: Record<string, {
       slots: parseSlots('週二至週六8:30至21:00、週日8:30至17:30'), access: 'walk-in',
       equipment: { wifi: true }, sources: [fengyuanB, fengyuanMap, readingRules, wifiFaq] }],
   },
-  [limingName]: { website: liming, areas: [{
-    name: '4 樓讀者自修室', kind: 'study',
-    slots: parseSlots('週二至週六9:00至21:00、週日9:00至17:00'), access: 'walk-in',
-    equipment: { wifi: true }, sources: [liming, nlpiWifi],
-  }] },
+  [limingName]: { website: liming,
+    accessNote: '國資圖閱覽規定限指定充電區臨時充電。4 樓自修室座位不提供充電，筆電使用方式待確認。',
+    areas: [{
+      name: '4 樓讀者自修室', kind: 'study',
+      slots: parseSlots('週二至週六9:00至21:00、週日9:00至17:00'), access: 'walk-in', seats: 84,
+      equipment: { wifi: true, outlet: false }, sources: [liming, nlpiWifi, nlpiRules, nlpiStudySeats],
+    }],
+  },
   新社分館: { sources: [xinsheNotice, xinsheGuide, xinsheClosed, xinsheReopened, xinsheExhibit, seatSystem],
     accessNote: '市圖公告原館（興社街四段 1 巷 1 號）於 2026 年 11 月 13 日 11:30 啟用，臨時服務處於 11 月 12 日 17:30 結束。全館常態時間為週二至週日 08:30–17:30。3 樓導覽最後更新於 2025 年 8 月 19 日，整修前館方列自習室 32 席。整修後的自習室是否開放、時段、入場資格及設備待確認。市圖空間系統另列 5 席公用電腦，須現場登記。',
     closures: [
@@ -260,28 +288,33 @@ export const reviewedSources: Record<string, {
     closures: [{ from: '2025-11-17', until: '2026-08-31', reason: '原館耐震補強期間閉館', url: wufengIntro }],
   },
   上楓分館: { studyRoom: false, sources: [nclDirectory + 'c7a7740d7c404f1f80b7f3e28f7d011b'],
-    areaUpdates: [{ name: '館內筆電插座席', kind: 'reading', slots: null, access: null, seats: 20,
+    areaUpdates: [{ name: '館內筆電插座席', kind: 'reading', slots: null, access: 'walk-in', seats: 20,
       equipment: { laptop: true, outlet: true, wifi: true },
       sources: ['https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000620',
-        'https://www.taichung.gov.tw/2095906/post', wifiFaq] }],
+        'https://www.taichung.gov.tw/2095906/post', readingRules, wifiFaq] }],
   },
   龍井分館: {
-    areaUpdates: [{ name: '館內附插座閱覽座位', kind: 'reading', slots: null, access: null, seats: 17,
+    areaUpdates: [{ name: '館內附插座閱覽座位', kind: 'reading', slots: null, access: 'walk-in', seats: 17,
       equipment: { laptop: true, outlet: true, wifi: true },
-      sources: ['https://www.nlpi.edu.tw/FileDownLoad/LibraryPublication/20241118095635201427904.pdf', wifiFaq] }],
+      sources: ['https://www.nlpi.edu.tw/FileDownLoad/LibraryPublication/20241118095635201427904.pdf',
+        'https://www.tccc.gov.tw/pic/DocSimple/17308827690156%282%29.pdf', readingRules, wifiFaq] }],
   },
   大墩分館: { sources: [dadunCenterHours],
-    accessNote: 'B 棟 2 樓自習室週二至週日 08:00–21:00，390 席。另有筆電優先使用區，館方介紹列 24 席，國資圖名錄列 12 席，該區目前席數、獨立時段及插座待確認。',
-    areaUpdates: [{ name: 'B 棟 2 樓筆電優先使用區', kind: 'reading', slots: null, access: null,
+    accessNote: 'B 棟 2 樓自習室週二至週日 08:00–21:00，390 席。分館官網另列筆電優先使用區 24 席，國資圖名錄列 12 席，採用分館官網數字。該區獨立時段、入場方式及插座待確認。',
+    areaUpdates: [{ name: 'B 棟 2 樓筆電優先使用區', kind: 'reading', slots: null, access: null, seats: 24,
       equipment: { laptop: true, wifi: true }, sources: [dadunIntro, dadunDirectory, wifiFaq] }],
   },
   溪東分館: {
-    areaUpdates: [{ name: '2 樓筆電優先區', kind: 'reading', slots: null, access: null,
-      equipment: { laptop: true, wifi: true }, sources: [citySite + 'lib/content/index?Parser=1,148,709', wifiFaq] }],
+    accessNote: '2 樓筆電優先區依市圖一般閱覽時段開放，靠窗長桌有插座。',
+    areaUpdates: [{ name: '2 樓筆電優先區', kind: 'reading', slots: parseSlots(standardReadingHours), access: 'walk-in',
+      equipment: { laptop: true, outlet: true, wifi: true },
+      sources: [citySite + 'lib/content/index?Parser=1,148,709', readingRules, wifiFaq, 'https://flyblog.cc/situng-library/'] }],
   },
   沙鹿深波分館: {
-    areaUpdates: [{ name: '2 樓筆電優先使用區', kind: 'reading', slots: null, access: null,
-      equipment: { laptop: true, wifi: true }, sources: [citySite + 'lib/content/index?Parser=1,126,405', wifiFaq] }],
+    accessNote: '2 樓筆電優先使用區依市圖一般閱覽時段開放。市府 2023 年重開館時公布有 6 席，現行席數及插座待確認。',
+    areaUpdates: [{ name: '2 樓筆電優先使用區', kind: 'reading', slots: parseSlots(standardReadingHours), access: 'walk-in',
+      equipment: { laptop: true, wifi: true }, sources: [citySite + 'lib/content/index?Parser=1,126,405',
+        'https://www.taichung.gov.tw/8868/8872/9962/2367743', readingRules, wifiFaq] }],
   },
   東勢許良宇圖書館: { studyRoom: null,
     sources: [dongshiGuide, dongshiReading, xinsheNotice, 'https://www.facebook.com/DongshiHsuLiangYuLibrary', seatSystem],
@@ -290,8 +323,8 @@ export const reviewedSources: Record<string, {
       equipment: {}, sources: [dongshiGuide, citySite + 'lib/Introduction/index?Parser=99,149,719'] }],
   },
   臺中市和平區立圖書館: { website: heping,
-    sources: [hepingRules, hepingPdf, hepingReopening, holidays2026],
-    accessNote: '2026 年 11 月 1 日恢復開館。一般閱覽週二至週日 08:00–17:00，中午照常開放，週一及國定假日休館。館內提供無線網路，筆電、平板及手機限指定區域充電，禁止自備延長線及轉接插頭。自習室的樓層、獨立時段、入場資格、座位數及座位設備仍待確認。',
+    sources: [hepingRules, hepingPdf, hepingReopening, holidays2026, election2026],
+    accessNote: '2026 年 11 月 1 日恢復開館。一般閱覽週二至週日 08:00–17:00，中午照常開放，週一及國定假日休館。11 月 28 日投票日的開館情況待館方公告。館內提供無線網路，筆電、平板及手機限指定區域充電，禁止自備延長線及轉接插頭。自習室的樓層、獨立時段、入場資格、座位數及座位設備仍待確認。',
     closures: [{ from: '2026-12-25', until: '2026-12-25', reason: '行憲紀念日休館', url: heping }],
     areas: [
       { name: '館內一般閱覽', kind: 'reading', slots: parseSlots('週二至週日8:00至17:00'), access: 'walk-in',

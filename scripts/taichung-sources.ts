@@ -8,7 +8,7 @@ export const cityHours = citySite + 'content/index?Parser=1,3,72,32';
 export const cityRules = citySite + 'form/Details?Parser=2,3,48,28,,,204';
 export const cityNotices = citySite + 'latestevent/index?Parser=9,3,41,27';
 export const nlpiCalendar = 'https://www.nlpi.edu.tw/ServiceMail/feedback/Holiday';
-const nlpiRules = 'https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001461';
+export const nlpiRules = 'https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001461';
 const nlpiFloors = 'https://www.nlpi.edu.tw/StaticPage/main-floors';
 const nlpiSpaceRules = 'https://www.nlpi.edu.tw/StandardTemplates/Handlers/FileHandler.ashx?fid=54e87fb9-acf8-4c00-86d7-cfed2e012d35&no=1&sourceType=0&type=FileUpload';
 export const nlpiArea: Area = {
@@ -19,7 +19,9 @@ export const nlpiArea: Area = {
   seats: 316,
   reservation: 'https://ispace.nlpi.edu.tw/',
   equipment: { outlet: false, wifi: true },
-  sources: [nlpiRules, nlpiFloors, nlpiSpaceRules, 'https://www.nlpi.edu.tw/StaticPage/laptop-charging',
+  sources: [nlpiRules, nlpiFloors, nlpiSpaceRules,
+    'https://ispace.nlpi.edu.tw/#/rules/8a8a99e57bc9e858017bcb1a9b4a0001',
+    'https://www.nlpi.edu.tw/StaticPage/laptop-charging',
     'https://www.nlpi.edu.tw/StaticPage/internet-access'],
 };
 

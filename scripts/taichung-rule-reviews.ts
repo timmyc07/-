@@ -1,7 +1,7 @@
 import type { Area, Library } from '../lib/study.ts';
 import { parseSlots } from './taichung-sources.ts';
 
-type Review = { sources: string[]; note: string; areas?: Area[] };
+type Review = { sources: string[]; note: string; areas?: Area[]; website?: string };
 
 const thuRoom = 'https://lis.thu.edu.tw/web/page/page.php?lang=zh_tw&scid=19&sid=28';
 const thuRules = 'https://lis.thu.edu.tw/web/laws/detail.php?cid=2&id=9&lang=zh_tw';
@@ -52,6 +52,20 @@ const gmjh = 'https://gmjh.tc.edu.tw/var/file/161/1161/img/663539670.pdf';
 const kfjh = 'https://kfjh.tc.edu.tw/p/406-1162-468231,r1012.php';
 const cmshRoom = 'https://epaper.tc.edu.tw/application/show-article?id=3589';
 const cmshStudy = 'https://cmsh.tc.edu.tw/p/406-1065-514730,r2388.php';
+const wanheHours = 'https://www.wanhegong.org.tw/html/about/index.aspx?num=22';
+const wanheRules = 'https://www.wanhegong.org.tw/html/library/01.aspx?num=23';
+const djshRoom = 'https://djsh.tc.edu.tw/p/405-1073-49024,c11660.php';
+const djshNotice = 'https://djsh.tc.edu.tw/p/406-1073-647087,r2147.php';
+const tcivsLibrary = 'https://sites.google.com/tcivs.tc.edu.tw/6100/利用教育';
+const cpjhLibrary = 'https://sites.google.com/st.tc.edu.tw/library/首頁';
+const cpjhIntroduction = 'https://epaper.tc.edu.tw/application/show-article?id=3488';
+const tyjhLibrary = 'https://www.taichung.gov.tw/8868/8872/9962/2339404/';
+const zdesLibrary = 'https://www.taichung.gov.tw/8868/8872/9962/2817928';
+const nutcFloor = 'https://elib.nutc.edu.tw/p/404-1115-119675.php';
+const nutcMinsheng = 'https://elib.nutc.edu.tw/var/file/115/1115/img/3508/236358511.pdf';
+const hwshLibrary = 'https://sites.google.com/mail3.hwsh.tc.edu.tw/hwshlibrary';
+const hwshFloor = 'https://sites.google.com/mail3.hwsh.tc.edu.tw/hwshfreshman/專業空間specialized-facilities/圖書館';
+const hwesNotice = 'https://hwes.tc.edu.tw/p/406-1219-577465,r3548.php';
 const kfjhReview: Review = {
   sources: [kfjh],
   note: '霧峰光復國中小共讀站供霧峰區民眾、學生及家長使用。學期中週一至週五 09:00–15:00，寒暑假週一至週五 09:00–12:00。獨立自修區及設備待確認。',
@@ -173,6 +187,65 @@ export const taichungRuleReviews: Record<string, Review> = {
     sources: [dlps],
     note: '共讀站官網仍列工程暫停對外開放通知，預計日期會依工程調整。恢復對外開放及現行時段待校方確認。',
   },
+  臺中市立大甲高級中等學校圖書館: {
+    sources: [djshRoom, djshNotice],
+    note: '校方在圖書館 1 樓閱覽室安排學生晚自習，館方簡介列 242 席。2026/11/12 晚自習因校運暫停。平常時段、申請細節及設備待校方公告。',
+    areas: [{ name: '1 樓學生晚自習閱覽室', kind: 'study', slots: null, access: 'restricted',
+      seats: 242, equipment: {}, sources: [djshRoom, djshNotice] }],
+  },
+  臺中市立臺中工業高級中等學校圖書館: {
+    website: 'https://tcivs.tc.edu.tw/p/412-1081-9708.php',
+    sources: [tcivsLibrary, 'https://tcivs.tc.edu.tw/p/412-1081-9708.php'],
+    note: '1 樓書報閱覽室供師生閱讀、寫作與自修。館方列全館週一至週五 08:00–17:00，中午照常，例假日休館，並提供社區民眾一般閱覽。1 樓的社區使用資格與獨立時段待確認。2 樓有館方平板供查詢館藏。',
+    areas: [{ name: '1 樓書報閱覽室', kind: 'quiet', slots: null, access: null,
+      equipment: {}, sources: [tcivsLibrary] }],
+  },
+  臺中市立中平國民中學圖書室: {
+    website: cpjhLibrary,
+    sources: [cpjhLibrary, cpjhIntroduction],
+    note: '智慧方舟共讀站上班日 08:30–11:30、13:30–16:30，例假日不開放，寒暑假另行公告。社區居民借書前須先辦共讀站閱覽證，再憑身分證借書。入校手續及個人自修設備待確認。',
+    areas: [{ name: '智慧方舟共讀站閱覽區', kind: 'reading', slots: parseSlots('週一至週五8:30至11:30、13:30至16:30'),
+      access: 'conditional', equipment: {}, sources: [cpjhLibrary, cpjhIntroduction] }],
+  },
+  臺中市立大雅國民中學圖書室: {
+    website: 'https://tyjh.tc.edu.tw/',
+    sources: [tyjhLibrary, 'https://tyjh.tc.edu.tw/'],
+    note: '教育局公告麥香書房設於養慧樓 2 樓，供師生閱覽，並設智慧學習、討論及視聽空間。閱覽時段、校外資格和個人自修設備待確認。',
+  },
+  臺中市立圳堵國民小學圖書室: {
+    website: 'https://zdes.tc.edu.tw/',
+    sources: [zdesLibrary, 'https://zdes.tc.edu.tw/'],
+    note: '教育局公告溪荔文苑社區共讀站於 2024 年 11 月啟用，供校內師生與社區閱讀活動。日常時段、入校手續及設備待確認。',
+  },
+  臺中市立岸裡國民小學圖書館: {
+    sources: ['https://www.tc.edu.tw/page/e78c96c9-54fc-453a-8119-72e5d4d0dcde/activity-school-content?id=107193'],
+    note: '校方報導原圖書室館藏於 2025 年 6 月移至岸裡好識多社區共讀站。現行開放時段、校外入場資格與設備待確認。',
+  },
+  臺中市立大里高級中學暨附設國中部圖書館: {
+    sources: ['https://epaper.tc.edu.tw/application/show-article?id=3821', 'https://www.taichung.gov.tw/8868/8872/9962/2990525'],
+    note: '2020 年教育局報導列共讀站 1 樓一般閱讀區有筆電插座，並在開放時間供社區民眾閱覽。2025 年另有多元學習資源中心啟用，中心設無線網路與行動載具。共讀站現行時段及座位設備待校方確認。',
+  },
+  國立臺中科技大學民生校區圖書分館: {
+    sources: [nutcHours, nutcFloor, nutcMinsheng],
+    note: '3 樓民生分館有 121 個閱讀座位及 21 組單人數位學習座位，設公用電腦與影印、列印、掃描設備。校友、退休人員、跨校選課學生及指定合作館讀者須出示身分證明並換證。學期平日 08:00–20:00，寒暑假週一至週四 09:00–17:00，考前週末可能加開。座位的無線網路及插座待確認。',
+    areas: [{ name: '民生分館館內閱覽', kind: 'reading', slots: null, access: 'restricted',
+      seats: 121, equipment: {}, sources: [nutcHours, nutcFloor, nutcMinsheng] }],
+  },
+  臺中市立惠文高級中學暨附設國中部圖書館: {
+    website: hwshLibrary,
+    sources: [hwshLibrary, hwshFloor],
+    note: '圖書館大樓 4 樓外語教室夜間供學生晚自習，具體日期及設備依校方公告。3 樓圖書館共讀站另供社區民眾使用，持身分證及悠遊卡或一卡通到館辦借閱證。',
+    areas: [
+      { name: '圖書館大樓 4 樓學生晚自習教室', kind: 'study', slots: null, access: 'restricted',
+        equipment: {}, sources: [hwshFloor] },
+      { name: '3 樓社區共讀站閱覽區', kind: 'reading', slots: null, access: 'conditional',
+        equipment: {}, sources: [hwshLibrary, hwshFloor] },
+    ],
+  },
+  臺中市立惠文國民小學圖書室: {
+    sources: [hwesNotice, 'https://hwes.tc.edu.tw/p/406-1219-549884,r3548.php'],
+    note: '閱之森一期於 2025 年 12 月啟用，校方另於 2026 年 3 月公告臨時圖書館供學生借閱。現行閱覽位置、對外資格及時段待校方確認。',
+  },
   臺中市立公明國民中學圖書室: {
     sources: [gmjh, 'https://gmjh.tc.edu.tw/p/403-1161-70.php?Lang=zh-tw'],
     note: '悠閱館共讀站平日 09:00–17:00，社區民眾可自由使用，優先服務學齡兒童、學生及親子共讀。幼童須由家長或監護人全程陪同，例假日或特殊情況另行公告。獨立自修區及設備待確認。',
@@ -187,8 +260,9 @@ export const taichungRuleReviews: Record<string, Review> = {
     note: '共讀站供校友、退休教職員工、教育志工及學生家長使用。首次到教務處辦借書證，其後持借書證及附照片證件向警衛換證。上班日 09:00–12:00、13:00–17:00，視人力調整。寒暑假另行安排。閱覽區不提供讀者 Wi-Fi 或座位充電，資訊檢索區另有公用電腦及網路。',
   },
   臺中市立東山高級中學暨附設國中部圖書室: {
-    sources: ['https://tsjh.tsjh.tc.edu.tw/ischool/publish_page/8/?cid=1247', 'https://www.taichung.gov.tw/941961/post'],
-    note: '校方館舍介紹列圖書音樂大樓 4 樓閱讀自修室。現行時段、入場資格及設備待確認。',
+    sources: ['https://tsjh.tsjh.tc.edu.tw/ischool/publish_page/8/?cid=1247', 'https://www.taichung.gov.tw/941961/post',
+      'https://tsjh.tsjh.tc.edu.tw/ischool/publish_page/8/?cid=4959'],
+    note: '校方館舍介紹列圖書音樂大樓 4 樓閱讀自修室。全館須保持安靜，閱覽室禁止製作海報。自修室現行時段、入場資格及設備待確認。',
   },
   臺中市立忠明高級中學暨附設國中部圖書館: {
     sources: [cmshRoom, cmshStudy, 'https://cmsh.tc.edu.tw/index.php'],
@@ -197,9 +271,10 @@ export const taichungRuleReviews: Record<string, Review> = {
       equipment: {}, sources: [cmshRoom, cmshStudy] }],
   },
   臺中市立新社高級中學暨附設國中部圖書館: {
+    website: 'https://sites.google.com/sshs.tc.edu.tw/007',
     sources: ['https://lib.sshs.tc.edu.tw/webopac/holiday.aspx', 'https://school.tc.edu.tw/open-message/064328/get-file/6706381c5980dc4fb658a6a7',
-      'https://digi.sshs.tc.edu.tw/school/Landing'],
-    note: '館方行事曆列圖書館平日 08:00–17:00。校方文件列圖書館 1 樓自習室，另有校務平台提供晚自習預約。自習室的現行時段、入場資格及設備待確認。',
+      'https://digi.sshs.tc.edu.tw/school/Landing', 'https://sites.google.com/sshs.tc.edu.tw/007/首頁/圖書館空間介紹/一樓'],
+    note: '館方行事曆列圖書館平日 08:00–17:00，空間導覽列 1 樓閱覽室。校方文件也曾列 1 樓自習室，校務平台提供晚自習預約。自習室的現行時段、入場資格及設備待確認。',
   },
   臺中市立豐東國民中學圖書館: {
     sources: [ftjh],
@@ -232,8 +307,14 @@ export const taichungRuleReviews: Record<string, Review> = {
     areas: [{ name: '醫學圖書館館內閱覽', kind: 'reading', slots: null, access: 'restricted', equipment: {}, sources: [army] }],
   },
   財團法人臺中市萬和宮附設圖書館: {
-    sources: ['https://www.wanhegong.org.tw/html/library/01.aspx?num=23'],
-    note: '3 樓閱覽區提供民眾使用，借書證須年滿 7 歲。個人自修室規則及閱覽區設備仍待確認。',
+    sources: [wanheHours, wanheRules],
+    note: '3 樓讀書室週二至週日 09:00–17:00。一般閱覽室同日 09:00–12:00、13:30–17:00。借書證須年滿 7 歲，讀書室是否另有入場限制及設備待確認。',
+    areas: [
+      { name: '3 樓讀書室', kind: 'study', slots: parseSlots('週二至週日9:00至17:00'),
+        access: null, equipment: {}, sources: [wanheHours, wanheRules] },
+      { name: '3 樓閱覽區', kind: 'reading', slots: parseSlots('週二至週日9:00至12:00、13:30至17:00'),
+        access: 'walk-in', equipment: {}, sources: [wanheHours, wanheRules] },
+    ],
   },
   臺中市和平區立圖書館: {
     sources: ['https://www.heping.taichung.gov.tw/4086049/post', hepingRules],
@@ -256,6 +337,7 @@ export const taichungRuleReviews: Record<string, Review> = {
 export function applyTaichungRuleReview(library: Library) {
   const review = taichungRuleReviews[library.name];
   if (!review) return;
+  if (review.website) library.website = review.website;
   library.accessNote = review.note;
   library.reviewNote = '已核對館方公開資訊，缺漏欄位仍待核實';
   library.sources = [...new Set([...library.sources, ...review.sources])];

@@ -46,18 +46,19 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const normalized = (value: string) => value.normalize('NFKC').replaceAll('台', '臺');
   const candidates = libraries.filter((library) => (!district || library.district === district) &&
     (!keyword || normalized(library.name + ' ' + library.address).includes(normalized(keyword))));
-  const results = searched && !invalid ? candidates.flatMap((library) => {
+  const evaluateLibrary = (library: Library) => {
     const matching = kind ? library.areas.filter((area) => area.kind === kind) : library.areas;
     const areas: (Area | undefined)[] = matching.length ? matching : [undefined];
     return areas.map((area) => ({ library, ...evaluate(library, area, query) }));
-  }) : [];
+  };
   const rank = { yes: 0, unknown: 1, no: 2 };
-  results.sort((a, b) => rank[a.status] - rank[b.status]);
+  const compareResults = (a: ReturnType<typeof evaluate>, b: ReturnType<typeof evaluate>) => rank[a.status] - rank[b.status];
+  const results = searched && !invalid ? candidates.flatMap(evaluateLibrary).sort(compareResults) : [];
   const visible = results.filter((item) => !statusFilter || item.status === statusFilter);
   const totalPages = Math.max(1, Math.ceil(visible.length / pageSize));
   const currentPage = Math.min(totalPages, page);
   const backups = results.filter((item) => item.status === 'yes' && item.library.id !== original).slice(0, 3);
-  const originalResult = selected && evaluate(selected, selected.areas.find((area) => !kind || area.kind === kind), query);
+  const originalResult = searched && !invalid && selected ? evaluateLibrary(selected).sort(compareResults)[0] : undefined;
   const checked = libraries.filter((library) => library.areas.some((area) =>
     area.kind === 'study' && area.slots?.length && (area.access === 'walk-in' || area.access === 'card')));
   const featured = checked.slice(0, 4);
@@ -125,6 +126,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
         {searched && !invalid && <>
           <div className="result-heading"><h2 id="results-title">查詢結果</h2><p>{date} · {start}–{clock(query.start + duration)}</p></div>
           {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult && statuses[originalResult.status]}
+            {originalResult?.area && ' · ' + originalResult.area.name}
             {originalResult?.reasons.length ? ' · ' + originalResult.reasons.join('、') : ''}
             {' '}<Link href={href({ original: '' })}>清除原定館舍</Link></div>}
           {selected && <section className="backups" aria-label="備案比較">

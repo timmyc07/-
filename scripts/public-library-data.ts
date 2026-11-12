@@ -125,6 +125,7 @@ const xinsheExhibit = citySite + 'lib/active/details?Parser=51,147,613,,,,26332'
 const xinsheFloorExhibit = citySite + 'lib/active/details?Parser=51,147,613,,,,26193';
 const xitunRules = citySite + 'df_ufiles/lib08/臺中市西屯區圖書館討論室使用須知-1050301.pdf';
 const dongshiGuide = citySite + 'lib/content/index?Parser=1,149,720';
+const dongshiVisit = 'https://allison1951.pixnet.net/blog/posts/927463895613117381';
 const dongshiReading = 'https://epaper.tc.edu.tw/application/show-article?id=6222';
 const qingshuiGuide = citySite + 'lib/content/index?Parser=1,125,395';
 const qingshuiOldHours = 'https://www.taichung.gov.tw/media/270688/512291511171.pdf';
@@ -501,11 +502,12 @@ export const reviewedSources: Record<string, {
   },
   東勢許良宇圖書館: { studyRoom: null,
     sources: [dongshiIntro, dongshiGuide, citySite + 'df_ufiles/720/s_2f-2.jpg',
-      dongshiReading, xinsheNotice, 'https://www.facebook.com/DongshiHsuLiangYuLibrary', seatSystem],
+      citySite + 'df_ufiles/720/s_3f-2.jpg', dongshiVisit, dongshiReading, xinsheNotice,
+      'https://www.facebook.com/DongshiHsuLiangYuLibrary', seatSystem],
     readingEquipment: { laptop: true },
-    accessNote: '全館週二至週六 08:30–21:00、週日 08:30–17:30 開放。新社分館公告曾列為自修替代地點，樓層導覽標示 2 樓自修室，館舍介紹列 0 席。館方列有指定筆電席位，2、3 樓一般閱覽座位有檯燈。2 樓靠窗閱覽長桌可見實體插座，館方開放充電的位置仍待確認。市圖空間管理系統列 6 席公用電腦、須現場登記。2 樓自修室是否開放、獨立時段、入場資格及設備待確認。',
+    accessNote: '全館週二至週六 08:30–21:00、週日 08:30–17:30 開放。新社分館公告曾列為自修替代地點。官網樓層導覽標示 2 樓自修室，館舍介紹列 0 席，2026 年 8 月拍攝的館內樓層牌將 2 樓標為閱覽、研習、多功能及展覽空間。館方列有指定筆電席位，2、3 樓一般閱覽座位有檯燈。2 樓靠窗閱覽長桌可見實體插座，3 樓官方照片可見桌面嵌入式面板，館方開放充電的位置仍待確認。市圖空間管理系統列 6 席公用電腦、須現場登記。2 樓自修室是否開放、獨立時段、入場資格及設備待確認。',
     areaUpdates: [{ name: '2 樓自修室（開放待確認）', kind: 'study', slots: null, access: null,
-      equipment: {}, sources: [dongshiGuide, dongshiIntro] }],
+      equipment: {}, sources: [dongshiGuide, dongshiIntro, dongshiVisit] }],
   },
   臺中市和平區立圖書館: { website: heping,
     sources: [hepingRules, hepingCurrentRules, hepingPdf, hepingReopening, hepingClosed, hepingExtension, holidays2026, election2026],

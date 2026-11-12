@@ -28,7 +28,8 @@ export const nlpiWeatherClosures: Closure[] = [
     url: 'https://www.nlpi.edu.tw/Announcement/news?PageType=1&id=45949f40-f507-436f-8e32-b85545c48f28' },
 ];
 const nlpiFloors = 'https://www.nlpi.edu.tw/StaticPage/main-floors';
-const nlpiSpaceRules = 'https://www.nlpi.edu.tw/StandardTemplates/Handlers/FileHandler.ashx?fid=54e87fb9-acf8-4c00-86d7-cfed2e012d35&no=1&sourceType=0&type=FileUpload';
+const nlpiSpaceRules = 'https://www.nlpi.edu.tw/FileList/government-information?ID=2e0befc6-8fcb-487f-807b-e7f97f01366c&PageIndex=1&PageType=1&SubCategoryID=cdc75d0c-75a2-44af-8384-34df9a39d262';
+const nlpiWifi = 'https://www.nlpi.edu.tw/StaticPage/internet-access';
 const nlpiSpaceMaintenance = 'https://www.nlpi.edu.tw/Announcement/news?PageType=1&id=7a11da3b-2a48-4fa9-8e60-0968fd2c9d3d&pageIndex=1';
 const nlpiNovemberMaintenance = 'https://www.nlpi.edu.tw/uploadplugin/getFile?Caption=1109%E5%85%AC%E5%91%8A.jpg&file=1M%2BSg%2Bka6ovENNjFZWbLnxXOPgLQ%2FVSwn0ml%2BLb4hd8Dyxmj0WnysiJAadiGyjbj';
 export const nlpiArea: Area = {
@@ -43,7 +44,20 @@ export const nlpiArea: Area = {
   sources: [nlpiRules, nlpiFloors, nlpiSpaceRules, nlpiSpaceMaintenance, nlpiNovemberMaintenance,
     'https://ispace.nlpi.edu.tw/#/rules/8a8a99e57bc9e858017bcb1a9b4a0001',
     'https://www.nlpi.edu.tw/StaticPage/laptop-charging',
-    'https://www.nlpi.edu.tw/StaticPage/internet-access'],
+    nlpiWifi],
+};
+
+export const nlpiQuietArea: Area = {
+  name: '4、5 樓開放自修的閱覽席',
+  kind: 'quiet',
+  slots: [0, 2, 3, 4, 5, 6].map((day) => ({
+    day, start: minutes('09:00'), end: minutes(day === 0 ? '16:30' : '20:30'),
+  })),
+  access: 'walk-in',
+  equipment: { outlet: false, wifi: true },
+  sources: [nlpiRules, nlpiFloors, nlpiSpaceRules, nlpiWifi,
+    'https://www.nlpi.edu.tw/Faq/help-faq?ID=a2bcf4e2-82a5-4850-81eb-bf9b7936a9e8&PageIndex=7&PageType=1',
+    'https://www.nlpi.edu.tw/Faq/help-faq?ID=18d0302c-af8b-4b50-a44e-4c98a235357c&PageIndex=12&PageType=1'],
 };
 
 export function clean(text: string) {

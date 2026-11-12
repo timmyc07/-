@@ -7,7 +7,7 @@ import { applyPublicEvidence, cityFacilities, laptopFaq, limingName, municipalFa
 import { readRuleAudit } from './crawl-taichung-rules.ts';
 import { branchHours, branchInfo, branchName, cityCalendar, cityDirectory, cityHours,
   cityNotices, cityRules, citySite, cityWeatherClosures, clean, dateKey, nationalCalendar,
-  nlpiArea, nlpiCalendar, nlpiWeatherClosures } from './taichung-sources.ts';
+  nlpiArea, nlpiCalendar, nlpiQuietArea, nlpiWeatherClosures } from './taichung-sources.ts';
 
 const cityJson = 'https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=654159e4-05e9-427c-bf0c-7facbd66e777';
 type Row = Record<string, string>;
@@ -255,8 +255,8 @@ async function importTaichung() {
   const nlpiMain = [...libraries.values()].find((library) => library.name === '國立公共資訊圖書館');
   if (!nlpiMain) throw new Error('公立公共圖書館名錄缺少國資圖總館');
   nlpiMain.website = 'https://www.nlpi.edu.tw/';
-  nlpiMain.areas = [nlpiArea];
-  nlpiMain.accessNote = 'B1 自修閱覽室須持國資圖或臺中市立圖書館本人實體個人借閱證，可線上預約或現場登記。已預約者於使用日 08:30 前報到，現場登記取得座位號後須於 10 分鐘內報到。2026 年 10 月 12 日全天及 11 月 9 日 09:30–12:30 維護期間，館方公告可直接入座。2 至 5 樓另有 46 個筆電優先閱覽席，館方規定該區禁止自修。';
+  nlpiMain.areas = [nlpiArea, nlpiQuietArea];
+  nlpiMain.accessNote = 'B1 自修閱覽室須持國資圖或臺中市立圖書館本人實體個人借閱證，可線上預約或現場登記。已預約者於使用日 08:30 前報到，現場登記取得座位號後須於 10 分鐘內報到。2026 年 10 月 12 日全天及 11 月 9 日 09:30–12:30 維護期間，館方公告可直接入座。4、5 樓部分一般閱覽席開放自修，免借閱證及預約，館藏閱覽優先。5 樓館藏保留席及 2 至 5 樓的筆電優先區禁止自修。12 歲以下讀者請使用兒童學習中心。自修席有 Wi-Fi，充電須到指定區域，自修席的個人筆電使用規則待確認。';
   nlpiMain.studyRoom = true;
   nlpiMain.closures = [...nlpiWeatherClosures, ...nlpi.closures, {
     from: '2026-07-21', until: '2026-07-21', reason: '國資圖總館因電力檢查休館',
@@ -264,7 +264,7 @@ async function importTaichung() {
   }];
   nlpiMain.calendarYear = nlpi.year;
   nlpiMain.checkDates = nlpi.adjustedDates;
-  nlpiMain.sources.push(nlpiCalendar);
+  nlpiMain.sources.push(nlpiCalendar, ...nlpiArea.sources, ...nlpiQuietArea.sources);
 
   const peace = [...libraries.values()].find((library) => library.name === '臺中市和平區立圖書館');
   const peaceContact = contact.get('和平區立圖書館');

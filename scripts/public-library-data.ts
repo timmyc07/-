@@ -102,6 +102,7 @@ const limingDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/Libr
 const nclDirectory = 'https://libstat.ncl.edu.tw/libraryDataDetail/';
 const heping = 'https://www.heping.taichung.gov.tw/4086049/post';
 const hepingRules = 'https://www.heping.taichung.gov.tw/983338/983564/983630/983636';
+const hepingCurrentRules = 'https://www.heping.taichung.gov.tw/3905220/post';
 const hepingPdf = 'https://www.heping.taichung.gov.tw/media/1324681/臺中市和平區立圖書館閱覽使用須知.pdf';
 const hepingDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000224';
 const hepingNcl = nclDirectory + 'L5268000';
@@ -168,6 +169,12 @@ const xitunGuide = citySite + 'lib/content/index?Parser=1,109,235';
 const xixiGuide = citySite + 'lib/content/index?Parser=1,110,245';
 const shangfengGuide = citySite + 'lib/content/index?Parser=1,137,515';
 const longjingGuide = citySite + 'lib/content/index?Parser=1,141,555';
+const longjingClosed = 'https://www.culture.taichung.gov.tw/2061063/2098033/2274235';
+const longjingReopened = 'https://www.taichung.gov.tw/2734955/post';
+const daxinClosure = 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=151616';
+const daxinWorks = 'https://assess-public.taichung.gov.tw/ImportantWork/ConstructionDetail/011425697';
+const southClosed = 'https://idoor.taichung.gov.tw/info/newsDetail?id=386CB584-D805-4BBE-BD05-14F41773727D';
+const southReopened = citySite + 'latestevent/Details?Parser=9,3,37,27,,,189';
 const dadunIntro = citySite + 'lib/Introduction/index?Parser=99,105,194';
 const dadunDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000198';
 const dadunCenterHours = 'https://www.dadun.culture.taichung.gov.tw/TCDCCFrontend/SpaceGuide/DadunCenterGuide';
@@ -208,6 +215,22 @@ export const reviewedSources: Record<string, {
     sources: [citySite + 'lib/Introduction/index?Parser=99,102,164', citySite + 'lib/content/index?Parser=1,102,165'],
     readingEquipment: { laptop: true },
     accessNote: '中區分館位於區公所 7 樓，館方列有筆電席位。座位插座待確認。',
+  },
+  東區分館: { sources: [citySite + 'lib/Introduction/index?Parser=99,103,174'],
+    readingEquipment: { laptop: true },
+    accessNote: '分館介紹列有指定筆電席位。自習室獨立時段及閱覽座位插座待確認。',
+  },
+  南區分館: { sources: [citySite + 'lib/Introduction/index?Parser=99,106,204', southClosed, southReopened, cityChronology],
+    readingEquipment: { laptop: true },
+    accessNote: '原館完成耐震補強後於 2025 年 3 月 22 日重新開館。分館介紹列有指定筆電席位。4 樓自習室獨立時段及閱覽座位插座待確認。',
+    closures: [{ from: '2024-03-08', until: '2025-03-21', reason: '原館耐震補強期間暫停閱覽及自習服務', url: southClosed }],
+  },
+  北區分館: { sources: [citySite + 'lib/Introduction/index?Parser=99,107,214'],
+    readingEquipment: { laptop: true },
+    accessNote: '分館介紹列有指定筆電席位。自習室獨立時段及閱覽座位插座待確認。',
+  },
+  大雅分館: { sources: [citySite + 'lib/Introduction/index?Parser=99,136,504'],
+    accessNote: '原館因耐震補強暫停閱覽，館方預計 2027 年 1 月底完工。臨時服務處在大雅社區發展協會 3 樓（永和路 222 號），公告服務至 2027 年 1 月 31 日。原館重開日期及自習室配置待確認。',
   },
   太平分館: {
     sources: ['https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000226',
@@ -292,8 +315,15 @@ export const reviewedSources: Record<string, {
     accessNote: '館方現行導覽列 4 樓自習室，市府另列館內筆電專區。分館完成耐震補強後於 2025 年 8 月 12 日重新開館。整修前市府刊物載自習室 08:00 開放，現行官網列全館 08:30 開館。自習室目前是否提早開放及固定時段待確認。',
     closures: [{ from: '2024-12-03', until: '2025-08-11', reason: '耐震補強期間暫停閱覽及自習服務', url: qingshuiClosed }],
   },
-  大里大新分館: { sources: [citySite + 'lib/content/index?Parser=1,121,355'],
-    accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。' },
+  大里大新分館: { sources: [citySite + 'lib/content/index?Parser=1,121,355', daxinClosure, daxinWorks],
+    accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。文化局紀錄顯示 2025 年 10 月耐震補強期間閉館。自習室獨立時段待確認。',
+    closures: [{ from: '2025-10-01', until: '2025-10-31', reason: '耐震補強期間暫停閱覽及自習服務', url: daxinClosure }],
+  },
+  大里德芳分館: { sources: [citySite + 'lib/Introduction/index?Parser=99,122,364',
+    citySite + 'lib/content/index?Parser=1,122,365'],
+    readingEquipment: { laptop: true },
+    accessNote: '分館介紹列有指定筆電席位。5 樓自習室獨立時段及閱覽座位插座待確認。',
+  },
   大里分館: {
     sources: [daliIntro, 'https://www.walkerland.com.tw/article/view/211808',
       citySite + 'latestevent/Details?Parser=22,3,38,27,,,1832'],
@@ -359,7 +389,10 @@ export const reviewedSources: Record<string, {
         'https://www.ptt.cc/bbs/TaichungBun/M.1662060495.A.FD1.html', readingRules, wifiFaq] }],
   },
   龍井分館: {
-    accessNote: '國資圖刊物確認 17 個附插座座位與書架交錯設置，依分館的一般閱覽時段使用。',
+    sources: [longjingClosed, longjingReopened, nclDirectory + 'L5276000',
+      'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000222'],
+    accessNote: '原館完成耐震補強後於 2024 年 8 月 25 日重新開館。現行導覽未列獨立自習室，國圖舊名錄曾列有自修室，現況待確認。國資圖刊物確認 17 個附插座座位與書架交錯設置，依分館的一般閱覽時段使用。',
+    closures: [{ from: '2023-02-01', until: '2024-08-24', reason: '原館耐震補強期間暫停閱覽及自習服務', url: longjingClosed }],
     areaUpdates: [{ name: '館內附插座閱覽座位', kind: 'reading', slots: parseSlots(standardReadingHours), access: 'walk-in', seats: 17,
       equipment: { laptop: true, outlet: true, wifi: true },
       sources: ['https://www-old.nlpi.edu.tw/JournalDetailC003313.aspx?Cond=26ca6952-6617-452f-97e6-36e7bf0bef8b',
@@ -389,8 +422,8 @@ export const reviewedSources: Record<string, {
       equipment: {}, sources: [dongshiGuide, citySite + 'lib/Introduction/index?Parser=99,149,719'] }],
   },
   臺中市和平區立圖書館: { website: heping,
-    sources: [hepingRules, hepingPdf, hepingReopening, hepingClosed, hepingExtension, holidays2026, election2026],
-    accessNote: '2026 年 11 月 1 日恢復開館。一般閱覽週二至週日 08:00–17:00，中午照常開放，週一及國定假日休館。11 月 28 日投票日的開館情況待館方公告。館內提供無線網路，筆電、平板及手機限指定區域充電，禁止自備延長線及轉接插頭。自習室的樓層、獨立時段、入場資格、座位數及座位設備仍待確認。',
+    sources: [hepingRules, hepingCurrentRules, hepingPdf, hepingReopening, hepingClosed, hepingExtension, holidays2026, election2026],
+    accessNote: '2026 年 11 月 1 日恢復開館。一般閱覽週二至週日 08:00–17:00，中午照常開放，週一及國定假日休館。11 月 28 日投票日的開館情況待館方公告。館內使用自建無線網路，原 iTaichung 熱點已停用。筆電、平板及手機限指定區域充電，禁止自備延長線及轉接插頭。自習室的樓層、獨立時段、入場資格、座位數及座位設備仍待確認。',
     closures: [
       { from: '2025-12-30', until: '2026-06-08', reason: '原館耐震補強期間暫停閱覽及自習服務', url: hepingExtension },
       { from: '2026-12-25', until: '2026-12-25', reason: '行憲紀念日休館', url: heping },

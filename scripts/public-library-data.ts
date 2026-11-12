@@ -100,14 +100,39 @@ const nlpiWifi = 'https://www.nlpi.edu.tw/StaticPage/internet-access';
 const heping = 'https://www.heping.taichung.gov.tw/4086049/post';
 const hepingRules = 'https://www.heping.taichung.gov.tw/983338/983564/983630/983636';
 const hepingPdf = 'https://www.heping.taichung.gov.tw/media/1324681/臺中市和平區立圖書館閱覽使用須知.pdf';
+const hepingDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000224';
+const hepingNcl = 'https://libstat.ncl.edu.tw/libraryDataDetail/L5268000';
+const hepingReopening = 'https://www.facebook.com/photo/?fbid=1424988006497461';
+const holidays2026 = 'https://www.dgpa.gov.tw/information?pid=12685&uid=55';
 const fengyuanMap = citySite + 'lib/content/index?Parser=1,117,315';
 const fengyuanB = citySite + 'lib/index?117';
 const fengyuanNotice = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1629';
-const fengyuanReopened = citySite + 'active/details?Parser=9,3,39,27,,,25595';
+const fengyuanReopened = citySite + 'lib/active/details?Parser=51,117,313,,,,25595';
 const xinsheNotice = citySite + 'lib/Introduction/index?Parser=99,147,614';
 const xitunRules = citySite + 'df_ufiles/lib08/臺中市西屯區圖書館討論室使用須知-1050301.pdf';
 
 export const limingName = '國立公共資訊圖書館黎明分館';
+
+export const studyLocations: Record<string, readonly [name: string, guide: string]> = {
+  '103': ['3 樓自習室', '175'],
+  '104': ['B1 自習室', '185'],
+  '105': ['B棟2F自習室', '195'],
+  '106': ['4 樓自習室', '205'],
+  '107': ['B1 自習室', '215'],
+  '109': ['3 樓自習室', '235'],
+  '118': ['4 樓自習室', '325'],
+  '120': ['B1 自習室', '345'],
+  '121': ['B1 自習室', '355'],
+  '122': ['5 樓自習室', '365'],
+  '123': ['B1 自習室', '375'],
+  '125': ['4 樓自習室', '395'],
+  '127': ['3 樓自習室', '415'],
+  '128': ['3 樓自習室', '425'],
+  '132': ['5 樓自習室', '465'],
+  '133': ['3 樓自習室', '475'],
+  '139': ['2 樓自習室', '535'],
+  '147': ['3 樓自習室', '615'],
+};
 
 export const reviewedSources: Record<string, {
   website?: string; studyRoom?: null; accessNote?: string; sources?: string[];
@@ -135,9 +160,18 @@ export const reviewedSources: Record<string, {
     accessNote: '原館施工期間，臨時服務處設於興社街四段 1 巷 2 號。服務含辦證、領取預約書、還書及報紙閱覽，館方另列附近可自修的館舍。' },
   西屯分館: { sources: [xitunRules],
     accessNote: '館方的討論室須知明訂討論室不得用於個人自修。獨立自習室時段仍待確認。' },
-  臺中市和平區立圖書館: { website: heping, sources: [hepingRules, hepingPdf, cityFacilities],
-    accessNote: '2026 年 11 月 1 日恢復開館。一般閱覽週二至週日 08:00–17:00，國定假日休館。市圖名錄列有自習室及館內無線網路，閱覽須知規定電子設備限指定區域充電。自習室的位置、獨立時段、入場資格和座位設備仍待確認。',
-    areas: [{ name: '館內一般閱覽', kind: 'reading', slots: parseSlots('週二至週日8:00至17:00'), access: 'walk-in',
-      equipment: {}, sources: [heping, hepingPdf] }],
+  東勢許良宇圖書館: { studyRoom: null,
+    sources: [citySite + 'lib/content/index?Parser=1,149,720', xinsheNotice],
+    accessNote: '市圖空間導覽列出 2 樓自修室，新社分館公告也將本館列為自修替代地點。館舍介紹的自習室座位欄為 0，專用座位是否開放、獨立時段及入場規則仍待確認。' },
+  臺中市和平區立圖書館: { website: heping,
+    sources: [hepingRules, hepingPdf, hepingReopening, holidays2026],
+    accessNote: '2026 年 11 月 1 日恢復開館。一般閱覽週二至週日 08:00–17:00，中午照常開放，週一及國定假日休館。館內提供無線網路，筆電、平板及手機限指定區域充電，禁止自備延長線及轉接插頭。自習室的樓層、獨立時段、入場資格、座位數及座位設備仍待確認。',
+    closures: [{ from: '2026-12-25', until: '2026-12-25', reason: '行憲紀念日休館', url: heping }],
+    areas: [
+      { name: '館內一般閱覽', kind: 'reading', slots: parseSlots('週二至週日8:00至17:00'), access: 'walk-in',
+        equipment: {}, sources: [heping, hepingPdf] },
+      { name: '自習室', kind: 'study', slots: null, access: null, equipment: {},
+        sources: [hepingDirectory, hepingNcl, cityFacilities] },
+    ],
   },
 };

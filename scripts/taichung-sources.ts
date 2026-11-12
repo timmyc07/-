@@ -10,14 +10,16 @@ export const cityNotices = citySite + 'latestevent/index?Parser=9,3,41,27';
 export const nlpiCalendar = 'https://www.nlpi.edu.tw/ServiceMail/feedback/Holiday';
 const nlpiRules = 'https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001461';
 const nlpiFloors = 'https://www.nlpi.edu.tw/StaticPage/main-floors';
+const nlpiSpaceRules = 'https://www.nlpi.edu.tw/StandardTemplates/Handlers/FileHandler.ashx?fid=54e87fb9-acf8-4c00-86d7-cfed2e012d35&no=1&sourceType=0&type=FileUpload';
 export const nlpiArea: Area = {
   name: 'B1 自修閱覽室',
   kind: 'study',
   slots: Array.from({ length: 7 }, (_, day) => ({ day, start: 480, end: day < 2 ? 1020 : 1260 })),
   access: 'card',
+  seats: 316,
   reservation: 'https://ispace.nlpi.edu.tw/',
   equipment: { outlet: false, wifi: true },
-  sources: [nlpiRules, nlpiFloors, 'https://www.nlpi.edu.tw/StaticPage/laptop-charging',
+  sources: [nlpiRules, nlpiFloors, nlpiSpaceRules, 'https://www.nlpi.edu.tw/StaticPage/laptop-charging',
     'https://www.nlpi.edu.tw/StaticPage/internet-access'],
 };
 

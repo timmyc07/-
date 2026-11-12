@@ -4,7 +4,7 @@ import { load } from 'cheerio';
 import { mongoClient, snapshots } from '../lib/mongodb.ts';
 import type { Library, Snapshot } from '../lib/study.ts';
 import { applyPublicEvidence, cityFacilities, laptopFaq, limingName, municipalFacilities,
-  publicEvidence, readingRules, reviewedSources, wifiFaq } from './public-library-data.ts';
+  publicEvidence, readingRules, reviewedSources, studyLocations, wifiFaq } from './public-library-data.ts';
 import { readRuleAudit } from './crawl-taichung-rules.ts';
 import { branchHours, branchInfo, branchName, cityCalendar, cityDirectory, cityHours,
   cityNotices, cityRules, citySite, clean, dateKey, nationalCalendar,
@@ -154,6 +154,13 @@ async function importTaichung() {
         access: 'walk-in', equipment: studyEquipment, sources: [branch.url, ...studyRules],
       });
     }
+    const studyArea = library.areas.find((area) => area.kind === 'study');
+    const location = studyLocations[branch.code];
+    if (studyArea && location) {
+      const [name, guide] = location;
+      studyArea.name = name;
+      studyArea.sources.push(citySite + 'lib/content/index?Parser=1,' + branch.code + ',' + guide);
+    }
     applyPublicEvidence(library, publicInfo);
     if (!library.address || !library.district) issues.push(library.name + '的聯絡資料待確認');
 
@@ -238,6 +245,7 @@ async function importTaichung() {
   if (!nlpiMain) throw new Error('公立公共圖書館名錄缺少國資圖總館');
   nlpiMain.website = 'https://www.nlpi.edu.tw/';
   nlpiMain.areas = [nlpiArea];
+  nlpiMain.accessNote = '持國資圖或臺中市立圖書館本人實體個人借閱證，可線上預約或現場登記。已預約者於使用日 08:30 前報到，現場登記取得座位號後須於 10 分鐘內報到。';
   nlpiMain.studyRoom = true;
   nlpiMain.closures = nlpi.closures;
   nlpiMain.calendarYear = nlpi.year;
@@ -248,7 +256,7 @@ async function importTaichung() {
   const peaceContact = contact.get('和平區立圖書館');
   if (peace) {
     peace.studyRoom = true;
-    peace.facilities = ['自習室', '無線上網'];
+    peace.facilities = ['自習室', '無線上網', '哺乳室', '資訊檢索'];
     if (peaceContact) {
       peace.phone = peaceContact['市話'];
       peace.sources.push(cityDirectory);

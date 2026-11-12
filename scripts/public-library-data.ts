@@ -121,6 +121,7 @@ const xinsheNotice = citySite + 'lib/Introduction/index?Parser=99,147,614';
 const xinsheGuide = citySite + 'lib/content/index?Parser=1,147,615';
 const xinsheClosed = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1483';
 const xinsheReopened = citySite + 'latestevent/Details?Parser=22,3,38,27,,,1972';
+const xinsheWorks = 'https://assess-public.taichung.gov.tw/ImportantWork/Detail/114DQ00010';
 const xinsheExhibit = citySite + 'lib/active/details?Parser=51,147,613,,,,26332';
 const xinsheFloorExhibit = citySite + 'lib/active/details?Parser=51,147,613,,,,26193';
 const xitunRules = citySite + 'df_ufiles/lib08/臺中市西屯區圖書館討論室使用須知-1050301.pdf';
@@ -362,8 +363,9 @@ export const reviewedSources: Record<string, {
       equipment: { wifi: true, outlet: false }, sources: [liming, nlpiWifi, nlpiRules, nlpiStudySeats, limingDirectory],
     }],
   },
-  新社分館: { sources: [xinsheNotice, xinsheGuide, xinsheClosed, xinsheReopened, xinsheExhibit, xinsheFloorExhibit, seatSystem],
-    accessNote: '市圖公告原館（興社街四段 1 巷 1 號）於 2026 年 11 月 13 日 11:30 啟用，臨時服務處於 11 月 12 日 17:30 結束。全館常態時間為週二至週日 08:30–17:30。館方公告 11 月 13 日起於館內各樓層展出植栽。3 樓導覽最後更新於 2025 年 8 月 19 日，整修前館方列自習室 32 席。整修後的自習室是否開放、時段、入場資格及設備待確認。市圖空間系統另列 5 席公用電腦，須現場登記。',
+  新社分館: { sources: [xinsheNotice, xinsheGuide, xinsheClosed, xinsheReopened, xinsheWorks, xinsheExhibit, xinsheFloorExhibit,
+    'https://data.gov.tw/dataset/83840', 'https://data.gov.tw/dataset/5962', seatSystem],
+    accessNote: '市府工程資料確認原館已完工。市圖公告原館（興社街四段 1 巷 1 號）於 2026 年 11 月 13 日 11:30 啟用，臨時服務處於 11 月 12 日 17:30 結束。全館常態時間為週二至週日 08:30–17:30。館方公告 11 月 13 日起於館內各樓層展出植栽。政府開放資料在原館地址列有 iTaichung 及 iTaiwan 熱點。3 樓導覽最後更新於 2025 年 8 月 19 日，整修前館方列自習室 32 席。整修後的自習室是否開放、時段、入場資格及設備待確認。市圖空間系統另列 5 席公用電腦，須現場登記。',
     closures: [
       { from: '2025-08-19', until: '2026-11-12', reason: '原館整修期間暫停開放', url: xinsheClosed },
       { from: '2026-11-13', until: '2026-11-13', time: { start: 0, end: minutes('11:30') },

@@ -182,6 +182,9 @@ const longjingClosed = 'https://www.culture.taichung.gov.tw/2061063/2098033/2274
 const longjingReopened = 'https://www.taichung.gov.tw/2734955/post';
 const daxinClosure = 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=151616';
 const daxinWorks = 'https://assess-public.taichung.gov.tw/ImportantWork/ConstructionDetail/011425697';
+const daxinFebruary = 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=155422';
+const daxinBookmobile = 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=155491';
+const daxinApril = 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=139455';
 const southClosed = 'https://idoor.taichung.gov.tw/info/newsDetail?id=386CB584-D805-4BBE-BD05-14F41773727D';
 const southReopened = citySite + 'latestevent/Details?Parser=9,3,37,27,,,189';
 const dayaClosed = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1597';
@@ -381,9 +384,13 @@ export const reviewedSources: Record<string, {
     closures: [{ from: '2024-12-03', until: '2025-08-11', reason: '耐震補強期間暫停閱覽及自習服務', url: qingshuiClosed },
       inventoryClosure('2026-09-21', '2026-09-23', citySite + 'latestevent/Details?Parser=9,3,38,27,,,1897')],
   },
-  大里大新分館: { sources: [citySite + 'lib/content/index?Parser=1,121,355', daxinClosure, daxinWorks],
-    accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。文化局紀錄顯示 2025 年 10 月耐震補強期間閉館。自習室獨立時段待確認。',
-    closures: [{ from: '2025-10-01', until: '2025-10-31', reason: '耐震補強期間暫停閱覽及自習服務', url: daxinClosure }],
+  大里大新分館: { sources: [citySite + 'lib/content/index?Parser=1,121,355', daxinClosure, daxinWorks,
+    daxinFebruary, daxinBookmobile, daxinApril],
+    accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。文化局紀錄顯示 2025 年 10 月及 2026 年 2 月下旬因耐震補強暫停館內服務。2026 年 3 月週六在館旁設行動書車，4 月有館內 1 樓展覽紀錄。確切復館日及自習室獨立時段待確認。',
+    closures: [
+      { from: '2025-10-01', until: '2025-10-31', reason: '耐震補強期間暫停閱覽及自習服務', url: daxinClosure },
+      { from: '2026-02-20', until: '2026-02-28', reason: '耐震補強期間暫停館內服務', url: daxinFebruary },
+    ],
   },
   大里德芳分館: { sources: [citySite + 'lib/Introduction/index?Parser=99,122,364',
     citySite + 'lib/content/index?Parser=1,122,365', wufengIntro],
@@ -396,9 +403,10 @@ export const reviewedSources: Record<string, {
   },
   大里分館: {
     sources: [daliIntro, 'https://www.walkerland.com.tw/article/view/211808',
-      citySite + 'latestevent/Details?Parser=22,3,38,27,,,1832', wufengIntro, 'https://www.keywow.com.tw/projects/y7'],
+      citySite + 'latestevent/Details?Parser=22,3,38,27,,,1832', wufengIntro, 'https://www.keywow.com.tw/projects/y7',
+      'https://www.dcard.tw/f/taichung/p/256811485'],
     readingEquipment: { laptop: true },
-    accessNote: '館方現行介紹列有筆電席位。較早的現場紀錄指出 2 樓青少年閱覽桌有插座，2026 年另有閱讀設備升級採購，現行充電座位待確認。原設計資料指出 B1 自習室有獨立出入口動線，專室時段待確認。',
+    accessNote: '館方現行介紹列有筆電席位。較早的現場紀錄指出 2 樓青少年閱覽桌有插座，2026 年另有閱讀設備升級採購，現行充電座位待確認。原設計資料列有 B1 自習室的獨立出入口，2024 年讀者貼文提及過去曾從館旁階梯進入。現行入口開放方式及專室時段待確認。',
   },
   西區分館: {
     sources: [xiquFacilities, citySite + 'lib/content/index?Parser=1,104,185',
@@ -409,9 +417,10 @@ export const reviewedSources: Record<string, {
     readingEquipment: { laptop: true, outlet: true },
     accessNote: '市府列有筆電專區，現行樓層照片顯示 3 樓靠窗的無線上網席。現場紀錄指出該區有兩孔插座。市府空間改造工程仍在前置作業，設備隨工程調整時須重新核對。2026 年 2 至 4 月 B1 自習室分三期作為公開展場，展覽時段為週二至週六 08:30–21:00、週日 08:30–17:30。B1 日常自習的獨立時段待確認。',
   },
-  西屯分館: { sources: [xitunRules, xitunGuide, citySite + 'lib/Introduction/index?Parser=99,109,234'],
+  西屯分館: { sources: [xitunRules, xitunGuide, citySite + 'lib/Introduction/index?Parser=99,109,234',
+    'https://www.pttweb.cc/bbs/TaichungBun/M.1508074669.A.4FC', 'https://www.pttweb.cc/bbs/TaichungBun/M.1583145209.A.C98'],
     readingEquipment: { laptop: true },
-    accessNote: '館方列有筆電席位，2 樓導覽標示無線上網區。討論室不得用於個人自修。獨立自習室時段仍待確認。' },
+    accessNote: '館方列有筆電席位，2 樓導覽標示無線上網區。2017 年與 2020 年的讀者討論提到館內有可供筆電充電的座位，現行指定充電位置待確認。討論室不得用於個人自修。3 樓自習室固定時段待確認。' },
   大甲分館: { sources: [dajiaFacilities], readingEquipment: { laptop: true },
     accessNote: '市府列有筆電專區及 3 樓自習室。筆電席位樓層、插座與自習室時段待確認。',
   },
@@ -428,9 +437,10 @@ export const reviewedSources: Record<string, {
       sources: [beitunDirectory, beitunGuide, beitunReopened] }],
   },
   南屯分館: { studyRoom: null, sources: [nantunDirectory, nantunIntro, nantunGuide,
-    'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000205'],
+    'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000205',
+    'https://spaceme.library.taichung.gov.tw/#/rules/2c9dbfe59bae711e019bb595027c00c2'],
     readingEquipment: { laptop: true },
-    accessNote: '國資圖 2026 年更新的公共圖書館名錄列有自習室。市圖現行樓層導覽列兩層閱覽區，館舍介紹自習室席位空白。獨立自修室是否開放、時段、入場資格與設備待確認。館內另有指定筆電席位，插座位置待確認。',
+    accessNote: '國資圖 2026 年更新的公共圖書館名錄列有自習室。市圖現行樓層導覽列兩層閱覽區，館舍介紹自習室席位空白。獨立自修室是否開放、時段、入場資格與設備待確認。館內另有指定筆電席位，插座位置待確認。2 樓資訊檢索區有 3 席公用電腦，可憑借閱證或身分證明登記，每次 1 小時，閉館前 30 分鐘停止受理。',
     areaUpdates: [{ name: '自習室', kind: 'study', slots: null, access: null, equipment: {},
       sources: [nantunDirectory, nantunIntro, nantunGuide] }],
   },

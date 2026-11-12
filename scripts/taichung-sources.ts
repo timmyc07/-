@@ -120,6 +120,7 @@ export function nationalCalendar(html: string) {
   const year = Number($('select option[selected]').toArray()
     .map((option) => $(option).text().trim()).find((option) => /^20\d{2}$/.test(option)));
   const closures: Closure[] = [];
+  const limingClosures: Closure[] = [];
   const calendarDates: string[] = [];
   for (const row of $('tr').toArray()) {
     const date = $(row).find('td[data-type="日期："]').text().match(/(\d{3})\/(\d{1,2})\/(\d{1,2})/);
@@ -127,11 +128,17 @@ export function nationalCalendar(html: string) {
     const key = dateKey(Number(date[1]) + 1911, date[2], date[3]);
     calendarDates.push(key);
     if (clean($(row).find('td[data-type="休館類型："]').text()) === '全館休館') {
-      closures.push({ from: key, until: key, reason: '國資圖全館休館', url: nlpiCalendar });
+      const occasion = clean($(row).find('td[data-type="節日名稱："]').text());
+      const note = clean($(row).find('td[data-type="說明："]').text());
+      const mainOnly = occasion.includes('總館休館') || /黎明分館[^。]*照常開放/.test(note);
+      const closure = { from: key, until: key, reason: mainOnly ? occasion || '國資圖總館休館' : '國資圖全館休館',
+        url: nlpiCalendar };
+      closures.push(closure);
+      if (!mainOnly) limingClosures.push(closure);
     }
   }
   const years = new Set(calendarDates.map((date) => Number(date.slice(0, 4))));
   const calendarYear = years.size === 1 ? [...years][0] : year;
   if (!calendarYear || closures.length < 5) throw new Error('國資圖休館日表結構有變動');
-  return { year: calendarYear, closures };
+  return { year: calendarYear, closures, limingClosures };
 }

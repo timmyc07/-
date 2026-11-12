@@ -2,7 +2,7 @@ import { strict as assert } from 'node:assert';
 import { test } from 'node:test';
 import { coverageGaps, evaluate, isPublicLibrary, validDate } from '../lib/study.ts';
 import type { Area, Library, Query } from '../lib/study.ts';
-import { branchHours, branchInfo, branchName, parseSlots } from '../scripts/taichung-sources.ts';
+import { branchHours, branchInfo, branchName, nationalCalendar, parseSlots } from '../scripts/taichung-sources.ts';
 
 const area: Area = {
   name: '自習室', kind: 'study', slots: parseSlots('週二至週六 8:30–12:30、13:30–17:30'),
@@ -69,6 +69,19 @@ test('重開館後的休館日曆只適用於生效日起', () => {
   const venue = { ...library, calendarFrom: '2026-11-13' };
   assert.equal(evaluate(venue, area, query).status, 'unknown');
   assert.equal(evaluate(venue, area, { ...query, date: '2026-11-13' }).status, 'yes');
+});
+
+test('國資圖日曆區分總館休館與所有分館同時休館', () => {
+  const row = (day: number, name: string, note = '') => `<tr>
+    <td data-type="日期：">115/06/${day}</td><td data-type="休館類型：">全館休館</td>
+    <td data-type="節日名稱：">${name}</td><td data-type="說明：">${note}</td>
+  </tr>`;
+  const calendar = nationalCalendar('<table>' + [
+    row(17, '冷氣工程總館休館'), row(18, '冷氣工程', '黎明分館及中興分館照常開放。'),
+    row(19, '端午節'), row(20, '全館整修'), row(21, '全館維護'),
+  ].join('') + '</table>');
+  assert.deepEqual(calendar.closures.map((day) => day.from), ['17', '18', '19', '20', '21'].map((day) => '2026-06-' + day));
+  assert.deepEqual(calendar.limingClosures.map((day) => day.from), ['2026-06-19', '2026-06-20', '2026-06-21']);
 });
 
 test('部分開館時只顯示開放區域與該區可確認的設備', () => {

@@ -156,6 +156,8 @@ const houliReopened = 'https://www.taichung.gov.tw/2105371/post';
 const houliIntro = citySite + 'lib/Introduction/index?Parser=99,138,524';
 const greenMuseumPlan = 'https://www.rdec.taichung.gov.tw/media/1251864/673th_1140527_-%E6%96%87%E5%8C%96%E5%B1%80-%E7%B6%A0%E7%BE%8E%E5%9C%96.pdf';
 const greenMuseumTeen = citySite + 'lib/tour/Details?Parser=14,101,703,,,,46';
+const greenMuseumGuide = citySite + 'lib/tour/index?Parser=14,101,703';
+const greenMuseumMap = 'https://tgm-go.com.tw/zh-tw/map';
 const likeyongGuide = citySite + 'lib/content/index?Parser=1,112,265';
 const xinganGuide = citySite + 'lib/content/index?Parser=1,115,295';
 const xinganIntro = citySite + 'lib/Introduction/index?Parser=99,115,294';
@@ -180,10 +182,18 @@ const dayaReopened = citySite + 'latestevent/Details?Parser=22,3,38,27,,,1962';
 const tanziClosed = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1598';
 const tanziReopened = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1941';
 const tanziExhibit = citySite + 'lib/active/details?Parser=51,140,543,,,,22942';
+const tanziIntro = citySite + 'lib/Introduction/index?Parser=99,140,544';
 const dadunIntro = citySite + 'lib/Introduction/index?Parser=99,105,194';
 const dadunGuide = citySite + 'lib/content/index?Parser=1,105,195';
 const dadunDirectory = 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000198';
 const dadunCenterHours = 'https://www.dadun.culture.taichung.gov.tw/TCDCCFrontend/SpaceGuide/DadunCenterGuide';
+const dadunCalendar = 'https://www.dadun.culture.taichung.gov.tw/MessagePublic/MessageDetail?MPID=MP00000665';
+const nansongNotice = citySite + 'latestevent/Details?Parser=22,3,38,27,,,1631';
+const wenchangReopened = 'https://www.taichung.gov.tw/2968215/post';
+const wenchangGuide = citySite + 'lib/content/index?Parser=1,127,415';
+const dongshiIntro = citySite + 'lib/Introduction/index?Parser=99,149,719';
+const xidongIntro = citySite + 'lib/Introduction/index?Parser=99,148,708';
+const xidongGuide = citySite + 'lib/content/index?Parser=1,148,709';
 const standardReadingHours = '週二至週六8:30至21:00、週日8:30至17:30';
 
 export const limingName = '國立公共資訊圖書館黎明分館';
@@ -215,7 +225,9 @@ export const reviewedSources: Record<string, {
   schedule?: Library['schedule']; reopening?: string;
   readingEquipment?: Area['equipment']; readingLimitedOpening?: Area['limitedOpening'];
 }> = {
-  大安分館: { studyRoom: false, sources: [nclDirectory + 'L5284000', daanReopened] },
+  大安分館: { studyRoom: false, sources: [nclDirectory + 'L5284000', daanReopened],
+    accessNote: '市府公告大安分館完成耐震補強後於 2026 年 8 月 18 日重新開館。一般閱覽的筆電席及指定充電位置待確認。',
+  },
   大肚分館: { studyRoom: false, sources: [nclDirectory + 'L5274000'] },
   大肚瑞井分館: { studyRoom: false, sources: [nclDirectory + 'L4899004'] },
   中區分館: {
@@ -241,9 +253,10 @@ export const reviewedSources: Record<string, {
     accessNote: '館方公告雅潭路四段 800 號原館於 2026 年 12 月 15 日全面恢復服務。原館週二至週六 08:30–21:00、週日 08:30–17:30。永和路 222 號 3 樓臨時服務處於 12 月 13 日閉館，當日起可使用原館還書箱。整修後自習室配置與充電座位待確認。',
     closures: [{ from: '2026-05-26', until: '2026-12-14', reason: '原館整修後於 12 月 15 日重新開館', url: dayaClosed }],
   },
-  潭子分館: { sources: [tanziClosed, tanziReopened, tanziExhibit], reopening: tanziReopened,
+  潭子分館: { sources: [tanziClosed, tanziReopened, tanziExhibit, tanziIntro, seatSystem], reopening: tanziReopened,
     schedule: parseSlots(standardReadingHours),
-    accessNote: '館方公告原館於 2026 年 11 月 3 日起試營運，提供 1 樓閱覽、預約取書及還書箱服務。11 月 17 日全面開放。週二至週六 08:30–21:00、週日 08:30–17:30。整修後獨立自習室與設備待確認。',
+    readingEquipment: { laptop: true },
+    accessNote: '館方公告原館於 2026 年 11 月 3 日起試營運，提供 1 樓閱覽、預約取書及還書箱服務。11 月 17 日全面開放。週二至週六 08:30–21:00、週日 08:30–17:30。館舍介紹列有指定筆電席位，市圖空間系統列 5 台公用電腦、須現場登記。試營運期間設備、指定充電位置及獨立自習室待確認。',
     closures: [{ from: '2026-01-26', until: '2026-11-02', reason: '原館整修後於 11 月 3 日開始試營運', url: tanziReopened }],
     readingLimitedOpening: { from: '2026-11-03', until: '2026-11-16', name: '1 樓閱覽區（試營運）' },
   },
@@ -253,16 +266,22 @@ export const reviewedSources: Record<string, {
     readingEquipment: { laptop: true },
     accessNote: '國資圖名錄列有筆電優先座位，館方導覽列 1 樓一般閱覽區及 B1 自習室。筆電席位位置、插座及自習室獨立時段待確認。',
   },
-  太平坪林分館: { studyRoom: false, sources: [nclDirectory + 'L5256000'] },
+  太平坪林分館: { studyRoom: false,
+    sources: [nclDirectory + 'L5256000', citySite + 'lib/Introduction/index?Parser=99,124,384'],
+    readingEquipment: { laptop: true },
+    accessNote: '分館介紹列 1 樓活力區可使用筆電。各樓層各有 80 個閱覽席，指定充電位置待確認。',
+  },
   四張犁分館: { studyRoom: false, sources: [nclDirectory + 'L4899001'] },
   外埔分館: { studyRoom: false, sources: [nclDirectory + 'L5282000'] },
   后里分館: { studyRoom: false, sources: [nclDirectory + 'L5264000', houliReopened, houliIntro],
     readingEquipment: { laptop: true, outlet: true },
     accessNote: '分館介紹列有筆電席位。市府公告 2022 年改造後在閱覽桌面增設 22 個插座，請使用館方指定的充電座位。',
   },
-  '臺中市立圖書館總館（綠美圖）': { sources: [greenMuseumPlan, greenMuseumTeen],
+  '臺中市立圖書館總館（綠美圖）': { studyRoom: false,
+    sources: [greenMuseumPlan, greenMuseumTeen, greenMuseumGuide, greenMuseumGuide + ',,,,,,,,1', greenMuseumMap,
+      'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000633'],
     readingEquipment: { laptop: true, outlet: true },
-    accessNote: '文化局資料說明閱讀桌有配置插座及檯燈，2 樓青少年閱覽區的安靜座位可使用筆電和平板。充電請使用館方指定的座位。',
+    accessNote: '市圖館舍名錄與全館樓層導覽列有一般閱覽座位及青少年閱覽靜區，未列獨立自習室。文化局資料說明閱讀桌有配置插座及檯燈，2 樓青少年閱覽區的安靜座位可使用筆電和平板。充電請使用館方指定的座位。',
     areaUpdates: [{ name: '2 樓青少年閱覽靜區', kind: 'quiet',
       slots: parseSlots(standardReadingHours), access: 'walk-in',
       equipment: { laptop: true, outlet: true, wifi: true },
@@ -280,9 +299,10 @@ export const reviewedSources: Record<string, {
     accessNote: '館方列有筆電席位。2 樓部分靠窗閱覽桌有插座，請使用館方指定的充電位置。',
   },
   精武圖書館: { studyRoom: false,
-    sources: [nclDirectory + 'L4899003', citySite + 'lib/Introduction/index?Parser=99,108,224'],
+    sources: [nclDirectory + 'L4899003', citySite + 'lib/Introduction/index?Parser=99,108,224',
+      'https://apoarea.tw/library2/', 'https://www.cubmaga.com/library/'],
     readingEquipment: { laptop: true },
-    accessNote: '館方列有筆電席位。筆電席位樓層及插座待確認。',
+    accessNote: '館方列有指定筆電席位。現場紀錄顯示筆電區位於 2 樓公用電腦旁，早期照片可見座位插座，現行可充電位置及使用規則待確認。',
   },
   興安分館: { studyRoom: false, sources: [nclDirectory + 'L5011000', xinganGuide, xinganIntro, xinganVisit],
     readingEquipment: { laptop: true, outlet: true },
@@ -306,6 +326,9 @@ export const reviewedSources: Record<string, {
       slots: parseSlots('週二至週六8:30至21:00、週日8:30至17:30'), access: 'walk-in',
       equipment: { wifi: true }, sources: [fengyuanB, fengyuanMap, readingRules, wifiFaq] }],
   },
+  豐原南嵩分館: { sources: [nansongNotice],
+    accessNote: '原館自 2026 年 2 月 3 日起施工休館，館方預計 2027 年 3 月重新開放。施工期間借閱及預約取書可使用豐原分館 B 棟或葫蘆墩分館。實際開館日及整修後空間配置待確認。',
+  },
   [limingName]: { website: liming,
     accessNote: '國資圖閱覽規定限指定充電區臨時充電。4 樓自修室座位不提供充電，筆電使用方式待確認。',
     areas: [{
@@ -327,7 +350,7 @@ export const reviewedSources: Record<string, {
   },
   清水分館: { sources: [qingshuiGuide, qingshuiOldHours, qingshuiClosed, cityChronology, qingshuiFacilities],
     readingEquipment: { laptop: true },
-    accessNote: '館方現行導覽列 4 樓自習室，市府另列館內筆電專區。分館完成耐震補強後於 2025 年 8 月 12 日重新開館。整修前市府刊物載自習室 08:00 開放，現行官網列全館 08:30 開館。自習室目前是否提早開放及固定時段待確認。',
+    accessNote: '館方列 4 樓自習室 100 席，現行照片顯示座位有隔板及編號。市府另列館內筆電專區。分館完成耐震補強後於 2025 年 8 月 12 日重新開館。整修前市府刊物載自習室 08:00 開放，現行官網列全館 08:30 開館。自習室目前是否提早開放及固定時段待確認。',
     closures: [{ from: '2024-12-03', until: '2025-08-11', reason: '耐震補強期間暫停閱覽及自習服務', url: qingshuiClosed }],
   },
   大里大新分館: { sources: [citySite + 'lib/content/index?Parser=1,121,355', daxinClosure, daxinWorks],
@@ -338,6 +361,9 @@ export const reviewedSources: Record<string, {
     citySite + 'lib/content/index?Parser=1,122,365'],
     readingEquipment: { laptop: true },
     accessNote: '分館介紹列有指定筆電席位。5 樓自習室獨立時段及閱覽座位插座待確認。',
+  },
+  沙鹿文昌分館: { sources: [wenchangGuide, wenchangReopened, cityChronology],
+    accessNote: '分館完成耐震補強及增設電梯後於 2025 年 4 月 17 日重新開館。3 樓自習室有 100 席，館方照片顯示桌面有隔板。獨立時段待確認。',
   },
   大里分館: {
     sources: [daliIntro, 'https://www.walkerland.com.tw/article/view/211808',
@@ -419,16 +445,18 @@ export const reviewedSources: Record<string, {
       sources: ['https://www-old.nlpi.edu.tw/JournalDetailC003313.aspx?Cond=26ca6952-6617-452f-97e6-36e7bf0bef8b',
         'https://www.tccc.gov.tw/pic/DocSimple/17308827690156%282%29.pdf', longjingGuide, readingRules, wifiFaq] }],
   },
-  大墩分館: { sources: [dadunCenterHours, dadunGuide, readingRules],
+  大墩分館: { sources: [dadunCenterHours, dadunGuide, dadunCalendar, readingRules],
     accessNote: 'B 棟 2 樓自習室週二至週日 08:00–21:00，390 席。同樓筆電優先使用區依閱覽須知的分館一般時段週二至週日 08:30–21:00。席數依分館官網列 24 席。該區入場方式及插座待確認。',
     areaUpdates: [{ name: 'B 棟 2 樓筆電優先使用區', kind: 'reading', slots: parseSlots('週二至週日08:30至21:00'), access: null,
       seats: 24, equipment: { laptop: true, wifi: true }, sources: [dadunIntro, dadunGuide, dadunDirectory, readingRules, wifiFaq] }],
+    closures: [{ from: '2026-04-20', until: '2026-04-22', reason: '配合大墩文化中心年度機電保養休館', url: dadunCalendar }],
   },
-  溪東分館: {
-    accessNote: '2 樓筆電優先區依市圖一般閱覽時段開放，靠窗長桌有插座。',
+  溪東分館: { studyRoom: false,
+    sources: [xidongIntro, xidongGuide, 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000632'],
+    accessNote: '市圖館舍名錄及 1 至 3 樓完整導覽列有一般閱覽、討論室及筆電優先區，未列獨立自習室。2 樓筆電優先區依市圖一般閱覽時段開放，靠窗長桌有插座。',
     areaUpdates: [{ name: '2 樓筆電優先區', kind: 'reading', slots: parseSlots(standardReadingHours), access: 'walk-in',
       equipment: { laptop: true, outlet: true, wifi: true },
-      sources: [citySite + 'lib/content/index?Parser=1,148,709', readingRules, wifiFaq, 'https://flyblog.cc/situng-library/'] }],
+      sources: [xidongGuide, readingRules, wifiFaq, 'https://flyblog.cc/situng-library/'] }],
   },
   沙鹿深波分館: {
     accessNote: '2 樓筆電優先使用區依市圖一般閱覽時段開放。市府 2023 年重開館時公布有 6 席，現行席數及插座待確認。',
@@ -437,10 +465,11 @@ export const reviewedSources: Record<string, {
         'https://www.taichung.gov.tw/8868/8872/9962/2367743', readingRules, wifiFaq] }],
   },
   東勢許良宇圖書館: { studyRoom: null,
-    sources: [dongshiGuide, dongshiReading, xinsheNotice, 'https://www.facebook.com/DongshiHsuLiangYuLibrary', seatSystem],
-    accessNote: '全館週二至週六 08:30–21:00、週日 08:30–17:30 開放。新社分館公告曾列為自修替代地點，樓層導覽標示 2 樓自修室，館舍介紹列 0 席。2、3 樓一般閱覽座位有檯燈，市圖空間管理系統另列 6 席公用電腦、須現場登記。2 樓自修室是否對外開放、獨立時段、入場資格及設備待確認。',
+    sources: [dongshiIntro, dongshiGuide, dongshiReading, xinsheNotice, 'https://www.facebook.com/DongshiHsuLiangYuLibrary', seatSystem],
+    readingEquipment: { laptop: true },
+    accessNote: '全館週二至週六 08:30–21:00、週日 08:30–17:30 開放。新社分館公告曾列為自修替代地點，樓層導覽標示 2 樓自修室，館舍介紹列 0 席。館方列有指定筆電席位，2、3 樓一般閱覽座位有檯燈。市圖空間管理系統另列 6 席公用電腦、須現場登記。指定充電位置及 2 樓自修室是否開放、獨立時段、入場資格及設備待確認。',
     areaUpdates: [{ name: '2 樓自修室（開放待確認）', kind: 'study', slots: null, access: null,
-      equipment: {}, sources: [dongshiGuide, citySite + 'lib/Introduction/index?Parser=99,149,719'] }],
+      equipment: {}, sources: [dongshiGuide, dongshiIntro] }],
   },
   臺中市和平區立圖書館: { website: heping,
     sources: [hepingRules, hepingCurrentRules, hepingPdf, hepingReopening, hepingClosed, hepingExtension, holidays2026, election2026],

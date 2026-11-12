@@ -8,6 +8,7 @@ export const cityHours = citySite + 'content/index?Parser=1,3,72,32';
 export const cityRules = citySite + 'form/Details?Parser=2,3,48,28,,,204';
 export const cityNotices = citySite + 'latestevent/index?Parser=9,3,41,27';
 export const nlpiCalendar = 'https://www.nlpi.edu.tw/ServiceMail/feedback/Holiday';
+const nlpiElectionNotice = 'https://www.nlpi.edu.tw/Announcement/news?PageType=1&id=935e8cbe-45d8-424a-85d6-38e5b2fb2e64&pageIndex=1';
 export const nlpiRules = 'https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001461';
 const cityBavi = 'https://www.taichung.gov.tw/8868/8872/9962/3318680';
 const nlpiBavi = 'https://www.nlpi.edu.tw/Announcement/news?PageType=1&id=205b2032-71c9-4840-941e-837716577c68';
@@ -170,7 +171,7 @@ export function nationalCalendar(html: string) {
       const note = clean($(row).find('td[data-type="說明："]').text());
       const mainOnly = occasion.includes('總館休館') || /黎明分館[^。]*照常開放/.test(note);
       const closure = { from: key, until: key, reason: mainOnly ? occasion || '國資圖總館休館' : '國資圖全館休館',
-        url: nlpiCalendar };
+        url: key === '2026-11-28' ? nlpiElectionNotice : nlpiCalendar };
       closures.push(closure);
       if (!mainOnly) limingClosures.push(closure);
     }

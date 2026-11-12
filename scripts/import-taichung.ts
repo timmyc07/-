@@ -225,16 +225,19 @@ async function importTaichung() {
     }
     library.sources.push(...(review.sources ?? []));
     if (review.accessNote) library.accessNote = review.accessNote;
-    if (review.studyRoom === null) library.studyRoom = undefined;
-    if (review.areas) {
-      library.areas = review.areas;
-      for (const area of review.areas) library.sources.push(...area.sources);
+    if (review.areas) library.areas = review.areas;
+    if (review.areaUpdates) {
+      const areas = new Map(library.areas.map((area) => [area.name, area]));
+      for (const area of review.areaUpdates) areas.set(area.name, area);
+      library.areas = [...areas.values()];
     }
+    for (const area of [...(review.areas ?? []), ...(review.areaUpdates ?? [])]) library.sources.push(...area.sources);
     if (review.closures) {
       const updatedUrls = new Set(review.closures.map((closure) => closure.url));
       library.closures = [...review.closures, ...library.closures.filter((closure) => !updatedUrls.has(closure.url))];
     }
-    if (library.areas.some((area) => area.kind === 'study')) library.studyRoom = true;
+    if (review.studyRoom === null) library.studyRoom = undefined;
+    else if (library.areas.some((area) => area.kind === 'study')) library.studyRoom = true;
     if (library.name === limingName) {
       library.closures = nlpi.closures;
       library.calendarYear = nlpi.year;

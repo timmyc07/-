@@ -16,7 +16,7 @@ export async function readSiteEvidence(): Promise<WebsiteEvidence[]> {
   }
 }
 
-function institutionalUrl(value: string) {
+export function institutionalUrl(value: string) {
   try {
     const url = new URL(value);
     if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.port) return;
@@ -29,7 +29,7 @@ function institutionalUrl(value: string) {
   }
 }
 
-async function download(url: URL) {
+export async function download(url: URL) {
   await delay(350);
   const response = await fetch(url, { redirect: 'manual', signal: AbortSignal.timeout(5500) });
   if (!response.ok) return response;
@@ -42,7 +42,7 @@ async function download(url: URL) {
 }
 
 const robotsByOrigin = new Map<string, Promise<string[] | null>>();
-async function robotsAllows(url: URL) {
+export async function robotsAllows(url: URL) {
   let pending = robotsByOrigin.get(url.origin);
   if (!pending) {
     pending = (async () => {

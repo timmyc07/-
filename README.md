@@ -18,6 +18,8 @@ npm run dev
 
 匯入一次只更新臺中的資料快照。完整解析並檢查館舍、行政區和試點空間後才寫入，重跑更新同一份資料，抓取失敗時保留上一份。館舍名錄優先讀政府資料，館方官網用來補足新館、搬遷、分棟、自習室及公告。網站每次查詢都讀取 MongoDB 的當前快照。
 
+已有臺中資料時，可先執行 `npm run crawl:taichung-rules` 查核仍有缺漏的館舍。它優先處理自修空間規則，透過教育部名錄尋找校方網站，把公開頁面和可能相關的文件存到 `.local/taichung-rule-audit.json`。下次匯入會帶入查核狀態。經核對的規則記在 `scripts/taichung-rule-reviews.ts`，作為可重跑的匯入來源。 [國中小圖書館概況](https://data.gov.tw/dataset/40119) · [高中圖書館概況](https://data.gov.tw/dataset/40115)
+
 ## 臺中資料與驗收
 
 - 2026-11-12 整合臺中 29 個行政區、478 筆館舍。來源包括國圖臺中名錄及 475 筆館舍詳情、46 筆市府聯絡資訊、51 筆公共館開放資料和 47 個市圖館舍入口。比對國圖線上詳情修正舊 CSV 的缺字，並依館方現址保留綠美圖及豐原分館 A、B 棟的資料。 [國圖線上名錄](https://libstat.ncl.edu.tw/libraryData/search) · [公共圖書館基本資料](https://data.gov.tw/dataset/99567)

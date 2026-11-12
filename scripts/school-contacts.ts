@@ -44,7 +44,8 @@ function schoolName(name: string) {
   return clean(name).replace(/^(?:臺中市立|臺中市(?:[^區]+區)?|市立)/, '')
     .replace(/(?:國民小學|國民中學|高級中學)/g, (label) =>
       label === '國民小學' ? '國小' : label === '國民中學' ? '國中' : '高中')
-    .replace(/國小部/, '國小').replace(/(?:傳枝圖書館|資源中心圖書室|圖書[館室])$/, '');
+    .replace(/暨附設國中部/, '').replace(/國小部/, '國小')
+    .replace(/(?:傳枝圖書館|資源中心圖書室|晨悅圖書館|社區共讀站|書海藝游|光之圖|圖書[館室])$/, '');
 }
 
 function schoolAddress(address: string) {
@@ -53,14 +54,19 @@ function schoolAddress(address: string) {
     .replace(/號(?:教務處|西屯校區)$/, '號');
 }
 
-export function applySchoolContact(library: Library, schools: SchoolContact[]) {
-  if ((library.phone && library.website) ||
-      !library.types.some((type) => /^(?:國民[中小]學|高級中等學校)圖書館$/.test(type))) return;
+export function matchSchoolContact(library: Library, schools: SchoolContact[]) {
+  if (!library.types.some((type) => /^(?:國民[中小]學|高級中等學校)圖書館$/.test(type))) return;
   const name = schoolName(library.name);
   const address = schoolAddress(library.address);
   const matches = schools.filter((school) => schoolName(school.name) === name && schoolAddress(school.address) === address);
-  if (matches.length !== 1) return;
-  const [{ phone, website, source }] = matches;
+  if (matches.length === 1) return matches[0];
+}
+
+export function applySchoolContact(library: Library, schools: SchoolContact[]) {
+  if (library.phone && library.website) return;
+  const contact = matchSchoolContact(library, schools);
+  if (!contact) return;
+  const { phone, website, source } = contact;
   const href = /^https?:\/\//.test(website) ? website : 'https://' + website;
   const addPhone = !library.phone && /^(?:\(04\)|04[- ]?)\s*\d{4}-?\d{4}/.test(phone);
   const addWebsite = !library.website && URL.canParse(href) && /\.edu\.tw$/.test(new URL(href).hostname);

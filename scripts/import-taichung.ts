@@ -9,6 +9,8 @@ import { readSiteEvidence } from './crawl-taichung-sites.ts';
 import { addressKey, applyPublicEvidence, cityFacilities, laptopFaq, limingName, municipalFacilities,
   publicEvidence, readingRules, reviewedSources, wifiFaq } from './public-library-data.ts';
 import { applySchoolContact, schoolContacts } from './school-contacts.ts';
+import { readRuleAudit } from './crawl-taichung-rules.ts';
+import { applyTaichungRuleReview } from './taichung-rule-reviews.ts';
 import { branchHours, branchInfo, branchName, cityCalendar, cityDirectory, cityHours,
   cityNotices, cityRules, citySite, clean, dateKey, nationalCalendar, nclDirectory,
   nlpiArea, nlpiCalendar } from './taichung-sources.ts';
@@ -34,9 +36,9 @@ const idFor = (name: string, address: string) => 'ncl-' +
   createHash('sha256').update(name + '\0' + address).digest('hex').slice(0, 16);
 
 async function importTaichung() {
-  const [nclBytes, cityBytes, home, holidays, notices, rules, nationalHolidays, publicLibraries, facilityPage, laptopPage, wifiPage, nclDetails, siteDetails, schools] = await Promise.all([
+  const [nclBytes, cityBytes, home, holidays, notices, rules, nationalHolidays, publicLibraries, facilityPage, laptopPage, wifiPage, nclDetails, siteDetails, schools, ruleAudit] = await Promise.all([
     get(nclCsv), get(cityJson), html(citySite), html(cityHours), html(cityNotices), html(cityRules), html(nlpiCalendar),
-    publicEvidence(html), html(cityFacilities), html(laptopFaq), html(wifiFaq), readDirectory(), readSiteEvidence(), schoolContacts(html),
+    publicEvidence(html), html(cityFacilities), html(laptopFaq), html(wifiFaq), readDirectory(), readSiteEvidence(), schoolContacts(html), readRuleAudit(),
   ]);
   const national: Row[] = parse(new TextDecoder('big5', { fatal: true }).decode(nclBytes), {
     columns: true, skip_empty_lines: true,
@@ -279,6 +281,18 @@ async function importTaichung() {
       peace.phone = peaceContact['市話'];
       peace.sources.push(cityDirectory);
     }
+  }
+  const auditById = new Map(ruleAudit?.libraries.map((record) => [record.id, record]));
+  const checkedOn = ruleAudit && new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', dateStyle: 'short' })
+    .format(new Date(ruleAudit.checkedAt));
+  for (const library of libraries.values()) {
+    const audit = auditById.get(library.id);
+    if (audit && checkedOn) {
+      const result = audit.pages.some((page) => page.status === '已讀取') ? '已查館方公開網頁，缺漏欄位仍待核實'
+        : audit.pages.length ? '館方網頁無法自動讀取或限制自動查核' : '缺少可自動查核的館方網址';
+      library.reviewNote = checkedOn + ' ' + result;
+    }
+    applyTaichungRuleReview(library);
   }
   const unique = new Map([...libraries.values()].map((library) => [library.id, {
     ...library, sources: [...new Set(library.sources)],

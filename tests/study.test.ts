@@ -104,3 +104,17 @@ test('學期時段只影響公告期間，新增一般閱覽區不會消除自�
   const venue = { ...library, studyRoom: true, areas: [{ ...area, kind: 'reading' as const }] };
   assert.ok(coverageGaps(venue).includes('自修空間使用規則'));
 });
+
+test('核對自修室後保留既有訪客閱覽區，重跑不重複寫入', async () => {
+  const { applyTaichungRuleReview } = await import('../scripts/taichung-rule-reviews.ts');
+  const reading = { ...area, name: '館內閱覽', kind: 'reading' as const, access: 'conditional' as const };
+  const venue = { ...library, name: '東海大學圖書館', studyRoom: true, areas: [reading] };
+  applyTaichungRuleReview(venue);
+  const reviewed = structuredClone(venue);
+  applyTaichungRuleReview(venue);
+  assert.deepEqual(venue, reviewed);
+  assert.equal(venue.areas.length, 3);
+  assert.equal(venue.areas[0].access, 'conditional');
+  assert.equal(evaluate(venue, venue.areas[1], query).status, 'no');
+  assert.ok(!coverageGaps(venue).includes('自修空間使用規則'));
+});

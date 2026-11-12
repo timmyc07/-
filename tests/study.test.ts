@@ -1,6 +1,6 @@
 import { strict as assert } from 'node:assert';
 import { test } from 'node:test';
-import { coverageGaps, evaluate, validDate } from '../lib/study.ts';
+import { coverageGaps, evaluate, isPublicLibrary, validDate } from '../lib/study.ts';
 import type { Area, Library, Query } from '../lib/study.ts';
 import { branchHours, branchInfo, branchName, parseSlots } from '../scripts/taichung-sources.ts';
 
@@ -15,6 +15,14 @@ const library: Library = {
 const query: Query = {
   date: '2026-11-12', start: 630, duration: 120, kind: 'study', card: false, registration: false, required: [],
 };
+
+test('公立館清單排除學校、私立、混合館別及未分類館舍', () => {
+  const publicLibrary = { ...library, types: ['公共圖書館'] };
+  const venues = [publicLibrary, { ...library, types: ['國中圖書館'] },
+    { ...library, types: ['高中圖書館'] }, { ...library, types: ['大專校院圖書館'] },
+    { ...library, types: ['私立圖書館'] }, { ...library, types: ['公共圖書館', '高中圖書館'] }, library];
+  assert.deepEqual(venues.filter(isPublicLibrary), [publicLibrary]);
+});
 
 test('區間剛好到閉館可用，跨午休或週一無法涵蓋', () => {
   assert.equal(evaluate(library, area, query).status, 'yes');

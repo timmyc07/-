@@ -43,6 +43,11 @@ export type Snapshot = {
   issues: string[];
   libraries: Library[];
 };
+
+export function isPublicLibrary(library: Library) {
+  return Array.isArray(library.types) && library.types.length === 1 && library.types[0] === '公共圖書館';
+}
+
 export type Query = {
   date: string;
   start: number;

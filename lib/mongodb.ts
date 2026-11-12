@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import type { Snapshot } from './study.ts';
+import { isPublicLibrary, type Snapshot } from './study.ts';
 
 export function mongoClient() {
   const uri = process.env.MONGODB_URI;
@@ -15,5 +15,7 @@ const globalMongo = globalThis as typeof globalThis & { studygoClient?: MongoCli
 
 export async function taichungSnapshot() {
   const client = globalMongo.studygoClient ??= mongoClient();
-  return snapshots(client).findOne({ _id: 'taichung' });
+  const snapshot = await snapshots(client).findOne({ _id: 'taichung' });
+  if (snapshot) snapshot.libraries = snapshot.libraries.filter(isPublicLibrary);
+  return snapshot;
 }

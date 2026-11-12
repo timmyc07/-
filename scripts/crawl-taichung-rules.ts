@@ -2,7 +2,7 @@ import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
 import { load } from 'cheerio';
 import { mongoClient, snapshots } from '../lib/mongodb.ts';
-import { coverageGaps } from '../lib/study.ts';
+import { coverageGaps, isPublicLibrary } from '../lib/study.ts';
 import type { Library } from '../lib/study.ts';
 import { clean } from './taichung-sources.ts';
 
@@ -142,7 +142,7 @@ async function crawl() {
   const client = mongoClient();
   const snapshot = await snapshots(client).findOne({ _id: 'taichung' }).finally(() => client.close());
   if (!snapshot) throw new Error('臺中資料尚未匯入');
-  if (snapshot.libraries.some((library) => library.types.length !== 1 || library.types[0] !== '公共圖書館')) {
+  if (!snapshot.libraries.every(isPublicLibrary)) {
     throw new Error('請先匯入公立公共圖書館名錄');
   }
   const pending = snapshot.libraries.filter((library) => coverageGaps(library).length);

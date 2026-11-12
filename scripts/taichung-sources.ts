@@ -9,6 +9,24 @@ export const cityRules = citySite + 'form/Details?Parser=2,3,48,28,,,204';
 export const cityNotices = citySite + 'latestevent/index?Parser=9,3,41,27';
 export const nlpiCalendar = 'https://www.nlpi.edu.tw/ServiceMail/feedback/Holiday';
 export const nlpiRules = 'https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001461';
+const cityBavi = 'https://www.taichung.gov.tw/8868/8872/9962/3318680';
+const nlpiBavi = 'https://www.nlpi.edu.tw/Announcement/news?PageType=1&id=205b2032-71c9-4840-941e-837716577c68';
+const baviClosures: Closure[] = [
+  { from: '2026-07-10', until: '2026-07-10', time: { start: 1080, end: 1440 }, reason: '巴威颱風 18:00 起休館', url: cityBavi },
+  { from: '2026-07-11', until: '2026-07-11', reason: '巴威颱風休館', url: cityBavi },
+];
+export const cityWeatherClosures: Closure[] = [
+  ...baviClosures,
+  { from: '2026-10-23', until: '2026-10-23', reason: '薔琵颱風休館', url: 'https://www.dongshi.taichung.gov.tw/982800/982803/982806/4081754' },
+  { from: '2026-10-24', until: '2026-10-24', reason: '薔琵颱風休館', url: citySite + 'latestevent/Details?Parser=9,3,38,27,,,1952' },
+];
+export const nlpiWeatherClosures: Closure[] = [
+  ...baviClosures.map((closure) => ({ ...closure, url: nlpiBavi })),
+  { from: '2026-10-23', until: '2026-10-23', reason: '薔琵颱風休館',
+    url: 'https://www.nlpi.edu.tw/Announcement/news?ID=019d4936-689f-4658-be20-b8ef1d9bb95a&PageType=1' },
+  { from: '2026-10-24', until: '2026-10-24', reason: '薔琵颱風休館',
+    url: 'https://www.nlpi.edu.tw/Announcement/news?PageType=1&id=45949f40-f507-436f-8e32-b85545c48f28' },
+];
 const nlpiFloors = 'https://www.nlpi.edu.tw/StaticPage/main-floors';
 const nlpiSpaceRules = 'https://www.nlpi.edu.tw/StandardTemplates/Handlers/FileHandler.ashx?fid=54e87fb9-acf8-4c00-86d7-cfed2e012d35&no=1&sourceType=0&type=FileUpload';
 const nlpiSpaceMaintenance = 'https://www.nlpi.edu.tw/Announcement/news?PageType=1&id=7a11da3b-2a48-4fa9-8e60-0968fd2c9d3d&pageIndex=1';

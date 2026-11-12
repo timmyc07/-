@@ -200,6 +200,9 @@ const dongshiIntro = citySite + 'lib/Introduction/index?Parser=99,149,719';
 const xidongIntro = citySite + 'lib/Introduction/index?Parser=99,148,708';
 const xidongGuide = citySite + 'lib/content/index?Parser=1,148,709';
 const standardReadingHours = '週二至週六8:30至21:00、週日8:30至17:30';
+const inventoryClosure = (from: string, until: string, url: string): Closure => ({
+  from, until, url, reason: '圖書盤點休館',
+});
 
 export const limingName = '國立公共資訊圖書館黎明分館';
 
@@ -234,12 +237,15 @@ export const reviewedSources: Record<string, {
     accessNote: '大安分館原館於 2025 年 11 月 10 日至 2026 年 8 月 17 日因耐震補強暫停一般閱覽，8 月 18 日重新開館。一般閱覽的筆電席及指定充電位置待確認。',
     closures: [{ from: '2025-11-10', until: '2026-08-17', reason: '原館耐震補強期間暫停一般閱覽', url: daanClosed }],
   },
-  大肚分館: { studyRoom: false, sources: [nclDirectory + 'L5274000'] },
+  大肚分館: { studyRoom: false, sources: [nclDirectory + 'L5274000'],
+    closures: [inventoryClosure('2026-10-26', '2026-10-27', citySite + 'latestevent/Details?Parser=9,3,38,27,,,1934')],
+  },
   大肚瑞井分館: { studyRoom: false, sources: [nclDirectory + 'L4899004'] },
   中區分館: {
     sources: [citySite + 'lib/Introduction/index?Parser=99,102,164', citySite + 'lib/content/index?Parser=1,102,165'],
     readingEquipment: { laptop: true },
     accessNote: '中區分館位於區公所 7 樓，館方列有筆電席位。座位插座待確認。',
+    closures: [inventoryClosure('2026-09-07', '2026-09-08', citySite + 'latestevent/index?Parser=22,3,38,27')],
   },
   東區分館: { sources: [citySite + 'lib/Introduction/index?Parser=99,103,174'],
     readingEquipment: { laptop: true },
@@ -369,25 +375,26 @@ export const reviewedSources: Record<string, {
   清水分館: { sources: [qingshuiGuide, qingshuiOldHours, qingshuiClosed, cityChronology, qingshuiFacilities],
     readingEquipment: { laptop: true },
     accessNote: '館方列 4 樓自習室 100 席，現行照片顯示座位有隔板及編號。市府另列館內筆電專區。分館完成耐震補強後於 2025 年 8 月 12 日重新開館。整修前市府刊物載自習室 08:00 開放，現行官網列全館 08:30 開館。自習室目前是否提早開放及固定時段待確認。',
-    closures: [{ from: '2024-12-03', until: '2025-08-11', reason: '耐震補強期間暫停閱覽及自習服務', url: qingshuiClosed }],
+    closures: [{ from: '2024-12-03', until: '2025-08-11', reason: '耐震補強期間暫停閱覽及自習服務', url: qingshuiClosed },
+      inventoryClosure('2026-09-21', '2026-09-23', citySite + 'latestevent/Details?Parser=9,3,38,27,,,1897')],
   },
   大里大新分館: { sources: [citySite + 'lib/content/index?Parser=1,121,355', daxinClosure, daxinWorks],
     accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。文化局紀錄顯示 2025 年 10 月耐震補強期間閉館。自習室獨立時段待確認。',
     closures: [{ from: '2025-10-01', until: '2025-10-31', reason: '耐震補強期間暫停閱覽及自習服務', url: daxinClosure }],
   },
   大里德芳分館: { sources: [citySite + 'lib/Introduction/index?Parser=99,122,364',
-    citySite + 'lib/content/index?Parser=1,122,365'],
+    citySite + 'lib/content/index?Parser=1,122,365', wufengIntro],
     readingEquipment: { laptop: true },
-    accessNote: '分館介紹列有指定筆電席位。5 樓自習室獨立時段及閱覽座位插座待確認。',
+    accessNote: '分館介紹列有指定筆電席位。霧峰以文分館整修公告列本館為自習替代據點。5 樓自習室獨立時段及閱覽座位插座待確認。',
   },
   沙鹿文昌分館: { sources: [wenchangGuide, wenchangReopened, cityChronology],
     accessNote: '分館完成耐震補強及增設電梯後於 2025 年 4 月 17 日重新開館。3 樓自習室有 100 席，館方照片顯示桌面有隔板。獨立時段待確認。',
   },
   大里分館: {
     sources: [daliIntro, 'https://www.walkerland.com.tw/article/view/211808',
-      citySite + 'latestevent/Details?Parser=22,3,38,27,,,1832'],
+      citySite + 'latestevent/Details?Parser=22,3,38,27,,,1832', wufengIntro, 'https://www.keywow.com.tw/projects/y7'],
     readingEquipment: { laptop: true },
-    accessNote: '館方現行介紹列有筆電席位。較早的現場紀錄指出 2 樓青少年閱覽桌有插座，2026 年另有閱讀設備升級採購，現行充電座位待確認。',
+    accessNote: '館方現行介紹列有筆電席位。較早的現場紀錄指出 2 樓青少年閱覽桌有插座，2026 年另有閱讀設備升級採購，現行充電座位待確認。原設計資料指出 B1 自習室有獨立出入口動線，專室時段待確認。',
   },
   西區分館: {
     sources: [xiquFacilities, citySite + 'lib/content/index?Parser=1,104,185',
@@ -446,7 +453,8 @@ export const reviewedSources: Record<string, {
   霧峰以文分館: { sources: [wufengIntro, wufengExhibit, wufengEvents, daanReopened, seatSystem],
     readingEquipment: { laptop: true },
     accessNote: '市府公告原館於 2026 年 9 月 1 日重新開館。館方列出 2 樓自習室 84 席，獨立時段仍待確認。館內另有指定筆電席位，插座位置待確認。市圖空間系統列 8 席公用電腦，須現場登記。',
-    closures: [{ from: '2025-11-17', until: '2026-08-31', reason: '原館耐震補強期間閉館', url: wufengIntro }],
+    closures: [{ from: '2025-11-17', until: '2026-08-31', reason: '原館耐震補強期間閉館', url: wufengIntro },
+      inventoryClosure('2026-10-19', '2026-10-20', citySite + 'latestevent/Details?Parser=22,3,38,27,,,1923')],
   },
   上楓分館: { studyRoom: false, sources: [nclDirectory + 'c7a7740d7c404f1f80b7f3e28f7d011b',
     'https://www.taichung.gov.tw/2095906/post', shangfengGuide, 'https://apoarea.tw/shangfenglibrary/'],
@@ -485,6 +493,7 @@ export const reviewedSources: Record<string, {
       sources: [xidongGuide, readingRules, wifiFaq, 'https://flyblog.cc/situng-library/'] }],
   },
   沙鹿深波分館: {
+    closures: [inventoryClosure('2026-09-14', '2026-09-16', citySite + 'latestevent/Details?Parser=22,3,38,27,,,1885')],
     accessNote: '2 樓筆電優先使用區依市圖一般閱覽時段開放。市府 2023 年重開館時公布有 6 席，現行席數及插座待確認。',
     areaUpdates: [{ name: '2 樓筆電優先使用區', kind: 'reading', slots: parseSlots(standardReadingHours), access: 'walk-in',
       equipment: { laptop: true, wifi: true }, sources: [citySite + 'lib/content/index?Parser=1,126,405',

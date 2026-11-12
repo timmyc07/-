@@ -6,8 +6,8 @@ import { applyPublicEvidence, cityFacilities, laptopFaq, limingName, municipalFa
   publicEvidence, readingRules, reviewedSources, studyLocations, wifiFaq } from './public-library-data.ts';
 import { readRuleAudit } from './crawl-taichung-rules.ts';
 import { branchHours, branchInfo, branchName, cityCalendar, cityDirectory, cityHours,
-  cityNotices, cityRules, citySite, clean, dateKey, nationalCalendar,
-  nlpiArea, nlpiCalendar } from './taichung-sources.ts';
+  cityNotices, cityRules, citySite, cityWeatherClosures, clean, dateKey, nationalCalendar,
+  nlpiArea, nlpiCalendar, nlpiWeatherClosures } from './taichung-sources.ts';
 
 const cityJson = 'https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=654159e4-05e9-427c-bf0c-7facbd66e777';
 type Row = Record<string, string>;
@@ -104,7 +104,7 @@ async function importTaichung() {
       district: districtOf(address), address,
       types: ['公共圖書館'],
       sources: [...(cityContact ? [cityDirectory] : []), branch.url, cityHours, cityNotices],
-      phone: cityContact?.['市話'], website: branch.url, areas: [], closures: [], calendarYear: calendar.year,
+      phone: cityContact?.['市話'], website: branch.url, areas: [], closures: [...cityWeatherClosures], calendarYear: calendar.year,
       facilities: listed,
     };
 
@@ -246,7 +246,7 @@ async function importTaichung() {
     if (review.studyRoom !== undefined) library.studyRoom = review.studyRoom ?? undefined;
     else if (library.areas.some((area) => area.kind === 'study')) library.studyRoom = true;
     if (library.name === limingName) {
-      library.closures = nlpi.limingClosures;
+      library.closures = [...nlpiWeatherClosures, ...nlpi.limingClosures];
       library.calendarYear = nlpi.year;
       library.checkDates = nlpi.adjustedDates;
       library.sources.push(nlpiCalendar);
@@ -258,7 +258,7 @@ async function importTaichung() {
   nlpiMain.areas = [nlpiArea];
   nlpiMain.accessNote = 'B1 自修閱覽室須持國資圖或臺中市立圖書館本人實體個人借閱證，可線上預約或現場登記。已預約者於使用日 08:30 前報到，現場登記取得座位號後須於 10 分鐘內報到。2026 年 10 月 12 日全天及 11 月 9 日 09:30–12:30 維護期間，館方公告可直接入座。2 至 5 樓另有 46 個筆電優先閱覽席，館方規定該區禁止自修。';
   nlpiMain.studyRoom = true;
-  nlpiMain.closures = [...nlpi.closures, {
+  nlpiMain.closures = [...nlpiWeatherClosures, ...nlpi.closures, {
     from: '2026-07-21', until: '2026-07-21', reason: '國資圖總館因電力檢查休館',
     url: 'https://www.nlpi.edu.tw/Announcement/news?PageType=1&id=776f813d-013e-42b2-ba39-5ab36c8dc3e7',
   }];

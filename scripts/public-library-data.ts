@@ -152,6 +152,10 @@ const wufengIntro = citySite + 'lib/Introduction/index?Parser=99,139,534';
 const wufengExhibit = 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=159776';
 const wufengEvents = citySite + 'lib/active/index?Parser=51,139,533';
 const daanReopened = 'https://www.taichung.gov.tw/3344989/post';
+const daanClosed = citySite + 'df_ufiles/df_pics/Images/附件4-閉館公告_page-0001.jpg';
+const shandingIntro = citySite + 'lib/Introduction/index?Parser=99,142,564';
+const shandingGuide = citySite + 'lib/content/index?Parser=1,142,565';
+const shandingTable = citySite + 'df_ufiles/565/s_s__34316299_0.jpg';
 const houliReopened = 'https://www.taichung.gov.tw/2105371/post';
 const houliIntro = citySite + 'lib/Introduction/index?Parser=99,138,524';
 const greenMuseumPlan = 'https://www.rdec.taichung.gov.tw/media/1251864/673th_1140527_-%E6%96%87%E5%8C%96%E5%B1%80-%E7%B6%A0%E7%BE%8E%E5%9C%96.pdf';
@@ -225,8 +229,9 @@ export const reviewedSources: Record<string, {
   schedule?: Library['schedule']; reopening?: string;
   readingEquipment?: Area['equipment']; readingLimitedOpening?: Area['limitedOpening'];
 }> = {
-  大安分館: { studyRoom: false, sources: [nclDirectory + 'L5284000', daanReopened],
-    accessNote: '市府公告大安分館完成耐震補強後於 2026 年 8 月 18 日重新開館。一般閱覽的筆電席及指定充電位置待確認。',
+  大安分館: { studyRoom: false, sources: [nclDirectory + 'L5284000', daanClosed, daanReopened],
+    accessNote: '大安分館原館於 2025 年 11 月 10 日至 2026 年 8 月 17 日因耐震補強暫停一般閱覽，8 月 18 日重新開館。一般閱覽的筆電席及指定充電位置待確認。',
+    closures: [{ from: '2025-11-10', until: '2026-08-17', reason: '原館耐震補強期間暫停一般閱覽', url: daanClosed }],
   },
   大肚分館: { studyRoom: false, sources: [nclDirectory + 'L5274000'] },
   大肚瑞井分館: { studyRoom: false, sources: [nclDirectory + 'L4899004'] },
@@ -272,7 +277,13 @@ export const reviewedSources: Record<string, {
     accessNote: '分館介紹列 1 樓活力區可使用筆電。各樓層各有 80 個閱覽席，指定充電位置待確認。',
   },
   四張犁分館: { studyRoom: false, sources: [nclDirectory + 'L4899001'] },
-  外埔分館: { studyRoom: false, sources: [nclDirectory + 'L5282000'] },
+  外埔分館: { studyRoom: false, sources: [nclDirectory + 'L5282000',
+    citySite + 'lib/Introduction/index?Parser=99,144,584', citySite + 'lib/content/index?Parser=1,144,585',
+    'https://www.taichung.gov.tw/1833587/post', 'https://apoarea.tw/wpipulibrary/',
+    'https://img.apoarea.tw/20210730125757_13.jpg'],
+    readingEquipment: { laptop: true, outlet: true },
+    accessNote: '館方列有指定筆電席位。擴建後的現場照片顯示 2 樓開架閱覽區部分長桌設有桌面插座，充電請依館方指定位置使用。',
+  },
   后里分館: { studyRoom: false, sources: [nclDirectory + 'L5264000', houliReopened, houliIntro],
     readingEquipment: { laptop: true, outlet: true },
     accessNote: '分館介紹列有筆電席位。市府公告 2022 年改造後在閱覽桌面增設 22 個插座，請使用館方指定的充電座位。',
@@ -308,7 +319,10 @@ export const reviewedSources: Record<string, {
     readingEquipment: { laptop: true, outlet: true },
     accessNote: '分館介紹列有筆電席位。現場紀錄顯示 2 樓開架閱覽區的高腳長桌有可供讀者使用的插座。',
   },
-  龍井山頂分館: { studyRoom: false, sources: [nclDirectory + 'L5277000'] },
+  龍井山頂分館: { studyRoom: false, sources: [nclDirectory + 'L5277000', shandingIntro, shandingGuide, shandingTable],
+    readingEquipment: { laptop: true, outlet: true },
+    accessNote: '館方列有指定筆電席位。2 樓期刊報紙區的閱覽長桌設有桌面插座，充電請依館方指定位置使用。',
+  },
   龍井龍津分館: { studyRoom: false, sources: [nclDirectory + 'L5253000'] },
   豐原分館A棟: { studyRoom: null, sources: [fengyuanMap, fengyuanIntro, fengyuanNotice, 'https://www.facebook.com/FYLIB/'],
     accessNote: 'A 棟於 2026 年 10 月 3 日重新開館。市圖 11 月 6 日更新導覽，3 樓現列嬰幼兒、兒童及漫畫區。分館介紹合列 53 席自習室座位，A 棟是否仍設獨立自習室及其時段、入場資格與設備待確認。',
@@ -465,9 +479,10 @@ export const reviewedSources: Record<string, {
         'https://www.taichung.gov.tw/8868/8872/9962/2367743', readingRules, wifiFaq] }],
   },
   東勢許良宇圖書館: { studyRoom: null,
-    sources: [dongshiIntro, dongshiGuide, dongshiReading, xinsheNotice, 'https://www.facebook.com/DongshiHsuLiangYuLibrary', seatSystem],
+    sources: [dongshiIntro, dongshiGuide, citySite + 'df_ufiles/720/s_2f-2.jpg',
+      dongshiReading, xinsheNotice, 'https://www.facebook.com/DongshiHsuLiangYuLibrary', seatSystem],
     readingEquipment: { laptop: true },
-    accessNote: '全館週二至週六 08:30–21:00、週日 08:30–17:30 開放。新社分館公告曾列為自修替代地點，樓層導覽標示 2 樓自修室，館舍介紹列 0 席。館方列有指定筆電席位，2、3 樓一般閱覽座位有檯燈。市圖空間管理系統另列 6 席公用電腦、須現場登記。指定充電位置及 2 樓自修室是否開放、獨立時段、入場資格及設備待確認。',
+    accessNote: '全館週二至週六 08:30–21:00、週日 08:30–17:30 開放。新社分館公告曾列為自修替代地點，樓層導覽標示 2 樓自修室，館舍介紹列 0 席。館方列有指定筆電席位，2、3 樓一般閱覽座位有檯燈。2 樓靠窗閱覽長桌可見實體插座，館方開放充電的位置仍待確認。市圖空間管理系統列 6 席公用電腦、須現場登記。2 樓自修室是否開放、獨立時段、入場資格及設備待確認。',
     areaUpdates: [{ name: '2 樓自修室（開放待確認）', kind: 'study', slots: null, access: null,
       equipment: {}, sources: [dongshiGuide, dongshiIntro] }],
   },

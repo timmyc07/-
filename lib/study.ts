@@ -8,6 +8,7 @@ export type Area = {
   slotPeriod?: { from: string; until: string };
   limitedOpening?: { from: string; until: string; name: string };
   access: 'walk-in' | 'card' | 'restricted' | 'conditional' | null;
+  walkInDates?: string[];
   reservation?: string;
   seats?: number;
   equipment: Partial<Record<Facility, boolean>>;
@@ -82,6 +83,9 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
   const limited = area?.limitedOpening;
   if (area && limited && limited.from <= query.date && query.date <= limited.until) {
     area = { ...area, name: limited.name, seats: undefined, equipment: {} };
+  }
+  if (area?.walkInDates?.includes(query.date)) {
+    area = { ...area, access: 'walk-in', reservation: undefined };
   }
   const missing: string[] = [];
   const failed: string[] = [];

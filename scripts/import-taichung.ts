@@ -245,6 +245,7 @@ async function importTaichung() {
     if (library.name === limingName) {
       library.closures = nlpi.limingClosures;
       library.calendarYear = nlpi.year;
+      library.checkDates = nlpi.adjustedDates;
       library.sources.push(nlpiCalendar);
     }
   }
@@ -252,13 +253,14 @@ async function importTaichung() {
   if (!nlpiMain) throw new Error('公立公共圖書館名錄缺少國資圖總館');
   nlpiMain.website = 'https://www.nlpi.edu.tw/';
   nlpiMain.areas = [nlpiArea];
-  nlpiMain.accessNote = 'B1 自修閱覽室須持國資圖或臺中市立圖書館本人實體個人借閱證，可線上預約或現場登記。已預約者於使用日 08:30 前報到，現場登記取得座位號後須於 10 分鐘內報到。2 至 5 樓另有 46 個筆電優先閱覽席，館方規定該區禁止自修。';
+  nlpiMain.accessNote = 'B1 自修閱覽室須持國資圖或臺中市立圖書館本人實體個人借閱證，可線上預約或現場登記。已預約者於使用日 08:30 前報到，現場登記取得座位號後須於 10 分鐘內報到。2026 年 10 月 12 日座位系統維護，館方公告當天免報到，有空位即可入座。2 至 5 樓另有 46 個筆電優先閱覽席，館方規定該區禁止自修。';
   nlpiMain.studyRoom = true;
   nlpiMain.closures = [...nlpi.closures, {
     from: '2026-07-21', until: '2026-07-21', reason: '國資圖總館因電力檢查休館',
     url: 'https://www.nlpi.edu.tw/Announcement/news?PageType=1&id=776f813d-013e-42b2-ba39-5ab36c8dc3e7',
   }];
   nlpiMain.calendarYear = nlpi.year;
+  nlpiMain.checkDates = nlpi.adjustedDates;
   nlpiMain.sources.push(nlpiCalendar);
 
   const peace = [...libraries.values()].find((library) => library.name === '臺中市和平區立圖書館');

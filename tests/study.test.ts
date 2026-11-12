@@ -47,6 +47,15 @@ test('借閱證和登記資格皆符合才可使用', () => {
   assert.equal(evaluate(library, cardArea, { ...query, card: true, registration: true }).status, 'yes');
 });
 
+test('館方公告的自由入座日期不要求借閱證或登記', () => {
+  const cardArea = { ...area, access: 'card' as const, reservation: 'https://example.org', walkInDates: [query.date] };
+  const result = evaluate(library, cardArea, query);
+  assert.equal(result.status, 'yes');
+  assert.equal(result.area?.access, 'walk-in');
+  assert.equal(result.area?.reservation, undefined);
+  assert.equal(evaluate(library, cardArea, { ...query, date: '2026-11-13' }).status, 'no');
+});
+
 test('休館優先，特殊時段與未核對年度保持待確認', () => {
   const closure = { from: '2026-11-12', until: '2026-11-12', reason: '臨時休館', url: 'https://example.org' };
   assert.equal(evaluate({ ...library, closures: [closure] }, undefined, query).status, 'no');
@@ -79,9 +88,10 @@ test('國資圖日曆區分總館休館與所有分館同時休館', () => {
   const calendar = nationalCalendar('<table>' + [
     row(17, '冷氣工程總館休館'), row(18, '冷氣工程', '黎明分館及中興分館照常開放。'),
     row(19, '端午節'), row(20, '全館整修'), row(21, '全館維護'),
-  ].join('') + '</table>');
+  ].join('') + '<tr><td data-type="日期：">115/02/20</td><td data-type="休館類型：">調整開館</td></tr></table>');
   assert.deepEqual(calendar.closures.map((day) => day.from), ['17', '18', '19', '20', '21'].map((day) => '2026-06-' + day));
   assert.deepEqual(calendar.limingClosures.map((day) => day.from), ['2026-06-19', '2026-06-20', '2026-06-21']);
+  assert.deepEqual(calendar.adjustedDates, ['2026-02-20']);
 });
 
 test('部分開館時只顯示開放區域與該區可確認的設備', () => {

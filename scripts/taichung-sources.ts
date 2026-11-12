@@ -11,15 +11,17 @@ export const nlpiCalendar = 'https://www.nlpi.edu.tw/ServiceMail/feedback/Holida
 export const nlpiRules = 'https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001461';
 const nlpiFloors = 'https://www.nlpi.edu.tw/StaticPage/main-floors';
 const nlpiSpaceRules = 'https://www.nlpi.edu.tw/StandardTemplates/Handlers/FileHandler.ashx?fid=54e87fb9-acf8-4c00-86d7-cfed2e012d35&no=1&sourceType=0&type=FileUpload';
+const nlpiSpaceMaintenance = 'https://www.nlpi.edu.tw/Announcement/news?PageType=1&id=7a11da3b-2a48-4fa9-8e60-0968fd2c9d3d&pageIndex=1';
 export const nlpiArea: Area = {
   name: 'B1 自修閱覽室',
   kind: 'study',
   slots: Array.from({ length: 7 }, (_, day) => ({ day, start: 480, end: day < 2 ? 1020 : 1260 })),
   access: 'card',
+  walkInDates: ['2026-10-12'],
   seats: 316,
   reservation: 'https://ispace.nlpi.edu.tw/',
   equipment: { outlet: false, wifi: true },
-  sources: [nlpiRules, nlpiFloors, nlpiSpaceRules,
+  sources: [nlpiRules, nlpiFloors, nlpiSpaceRules, nlpiSpaceMaintenance,
     'https://ispace.nlpi.edu.tw/#/rules/8a8a99e57bc9e858017bcb1a9b4a0001',
     'https://www.nlpi.edu.tw/StaticPage/laptop-charging',
     'https://www.nlpi.edu.tw/StaticPage/internet-access'],
@@ -121,13 +123,16 @@ export function nationalCalendar(html: string) {
     .map((option) => $(option).text().trim()).find((option) => /^20\d{2}$/.test(option)));
   const closures: Closure[] = [];
   const limingClosures: Closure[] = [];
+  const adjustedDates: string[] = [];
   const calendarDates: string[] = [];
   for (const row of $('tr').toArray()) {
     const date = $(row).find('td[data-type="日期："]').text().match(/(\d{3})\/(\d{1,2})\/(\d{1,2})/);
     if (!date) continue;
     const key = dateKey(Number(date[1]) + 1911, date[2], date[3]);
     calendarDates.push(key);
-    if (clean($(row).find('td[data-type="休館類型："]').text()) === '全館休館') {
+    const change = clean($(row).find('td[data-type="休館類型："]').text());
+    if (change === '調整開館') adjustedDates.push(key);
+    if (change === '全館休館') {
       const occasion = clean($(row).find('td[data-type="節日名稱："]').text());
       const note = clean($(row).find('td[data-type="說明："]').text());
       const mainOnly = occasion.includes('總館休館') || /黎明分館[^。]*照常開放/.test(note);
@@ -140,5 +145,5 @@ export function nationalCalendar(html: string) {
   const years = new Set(calendarDates.map((date) => Number(date.slice(0, 4))));
   const calendarYear = years.size === 1 ? [...years][0] : year;
   if (!calendarYear || closures.length < 5) throw new Error('國資圖休館日表結構有變動');
-  return { year: calendarYear, closures, limingClosures };
+  return { year: calendarYear, closures, limingClosures, adjustedDates };
 }

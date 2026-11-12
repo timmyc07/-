@@ -47,6 +47,16 @@ test('休館優先，特殊時段與未核對年度保持待確認', () => {
   assert.equal(evaluate(library, area, { ...query, date: '2027-11-12' }).status, 'unknown');
 });
 
+test('分段休館只排除與公告時段重疊的查詢', () => {
+  const closure = { from: query.date, until: query.date, time: { start: 660, end: 690 },
+    reason: '臨時休館', url: 'https://example.org' };
+  const venue = { ...library, closures: [closure] };
+  assert.equal(evaluate(venue, area, { ...query, duration: 30 }).status, 'yes');
+  assert.equal(evaluate(venue, area, { ...query, duration: 31 }).status, 'no');
+  assert.equal(evaluate(venue, area, { ...query, start: 690, duration: 30 }).status, 'yes');
+  assert.equal(evaluate(venue, area, { ...query, date: '2026-11-13' }).status, 'yes');
+});
+
 test('解析器保留空間和館舍不同時段，地址以官網欄位為準', () => {
   const markup = '<div class="open_time"><li><span class="time_txt">A棟<br>週二至週日8:30至21:00<br>B棟2F自習室<br>週二至週日8:00至21:00</span></li></div>';
   const hours = branchHours(markup);

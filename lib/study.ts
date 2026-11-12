@@ -12,7 +12,7 @@ export type Area = {
   equipment: Partial<Record<Facility, boolean>>;
   sources: string[];
 };
-export type Closure = { from: string; until?: string; reason: string; url: string };
+export type Closure = { from: string; until?: string; time?: { start: number; end: number }; reason: string; url: string };
 export type Library = {
   id: string;
   name: string;
@@ -74,7 +74,9 @@ export function validDate(date: string) {
 export function evaluate(library: Library, area: Area | undefined, query: Query) {
   const missing: string[] = [];
   const failed: string[] = [];
-  const closure = library.closures.find(({ from, until }) => from <= query.date && (!until || query.date <= until));
+  const closure = library.closures.find(({ from, until, time }) =>
+    from <= query.date && (!until || query.date <= until) &&
+    (!time || (time.start < query.start + query.duration && query.start < time.end)));
   if (closure) failed.push(closure.reason);
   if (library.calendarYear !== Number(query.date.slice(0, 4))) missing.push('指定日期的休館公告待確認');
   const changed = library.checkDates?.includes(query.date);

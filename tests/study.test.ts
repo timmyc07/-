@@ -1,7 +1,9 @@
 import { strict as assert } from 'node:assert';
 import { test } from 'node:test';
-import { coverageGaps, evaluate, isPublicLibrary, validDate } from '../lib/study.ts';
+import { directionsUrl, distanceKm, parseCoordinates } from '../lib/distance.ts';
+import { backupLibraries, coverageGaps, evaluate, isPublicLibrary, validDate } from '../lib/study.ts';
 import type { Area, Library, Query } from '../lib/study.ts';
+import { pilotVisit } from '../lib/taichung-visits.ts';
 import { branchHours, branchInfo, branchName, nationalCalendar, parseSlots } from '../scripts/taichung-sources.ts';
 
 const area: Area = {
@@ -24,8 +26,46 @@ test('公立館清單排除學校、私立、混合館別及未分類館舍', ()
   assert.deepEqual(venues.filter(isPublicLibrary), [publicLibrary]);
 });
 
+test('備案排除原定館，保留排序後每館第一個符合的空間', () => {
+  const result = (id: string, name: string, status: 'yes' | 'unknown' | 'no' = 'yes') => ({
+    library: { ...library, id }, status, name,
+  });
+  const first = result('a', '一般閱覽區');
+  const second = result('b', '自習室');
+  const third = result('c', '自習室');
+  assert.deepEqual(backupLibraries([
+    result('test', '原定館'), result('a', '時段待確認', 'unknown'), first, result('a', '筆電區'),
+    result('b', '休館', 'no'), second, third, result('d', '第四館'),
+  ], 'test'), [first, second, third]);
+});
+
+test('附近查詢驗證座標，直線距離和導航共用館舍座標', () => {
+  const origin = parseCoordinates('24.142,120.666')!;
+  const nearby = parseCoordinates('24.127,120.670')!;
+  const farther = parseCoordinates('24.119,120.722')!;
+  assert.equal(distanceKm(origin, origin), 0);
+  assert.ok(distanceKm(origin, nearby)! < distanceKm(origin, farther)!);
+  assert.equal(distanceKm(origin, undefined), undefined);
+  for (const invalid of ['', ',120', '24,', '91,120', '24,181', '24,120,0', 'NaN,120']) {
+    assert.equal(parseCoordinates(invalid), undefined);
+  }
+  const url = new URL(directionsUrl(farther));
+  assert.equal(url.searchParams.get('api'), '1');
+  assert.equal(url.searchParams.get('destination'), '24.119,120.722');
+});
+
+test('三館出發資訊依空間顯示，國資圖公告時段不要求刷證', () => {
+  assert.equal(pilotVisit('tc-105', area)?.location, 'B 棟 2 樓');
+  assert.match(pilotVisit('tc-123', area)!.entry, /施工期間.*待確認/);
+  const nlpi = { ...area, access: 'card' as const, walkInDates: [query.date] };
+  assert.match(pilotVisit('ncl-3aa0574ed94d0f22', nlpi)!.entry, /08:30/);
+  const visit = evaluate(library, nlpi, query).area!;
+  assert.match(pilotVisit('ncl-3aa0574ed94d0f22', visit)!.entry, /免借閱證/);
+});
+
 test('區間剛好到閉館可用，跨午休或週一無法涵蓋', () => {
   assert.equal(evaluate(library, area, query).status, 'yes');
+  assert.equal(evaluate(library, area, query).openUntil, 750);
   assert.equal(evaluate(library, area, { ...query, duration: 121 }).status, 'no');
   assert.equal(evaluate(library, area, { ...query, date: '2026-11-16' }).status, 'no');
   assert.equal(validDate('2026-02-30'), false);
@@ -59,6 +99,7 @@ test('館方公告的自由入座日期不要求借閱證或登記', () => {
 test('短期自由入座只適用公告時段內的查詢', () => {
   const study: Area = { ...area, access: 'card', walkInDates: [{ date: query.date, start: 570, end: 750 }] };
   assert.equal(evaluate(library, study, { ...query, start: 570, duration: 180 }).status, 'yes');
+  assert.equal(evaluate(library, study, { ...query, start: 570, duration: 60 }).openUntil, 750);
   assert.equal(evaluate(library, study, { ...query, start: 569, duration: 30 }).status, 'no');
   assert.equal(evaluate(library, study, { ...query, start: 720, duration: 31 }).status, 'no');
 });
@@ -76,6 +117,8 @@ test('分段休館只排除與公告時段重疊的查詢', () => {
     reason: '臨時休館', url: 'https://example.org' };
   const venue = { ...library, closures: [closure] };
   assert.equal(evaluate(venue, area, { ...query, duration: 30 }).status, 'yes');
+  assert.equal(evaluate(venue, area, { ...query, duration: 20 }).openUntil, 660);
+  assert.equal(evaluate(venue, area, { ...query, duration: 31 }).openUntil, undefined);
   assert.equal(evaluate(venue, area, { ...query, duration: 31 }).status, 'no');
   assert.equal(evaluate(venue, area, { ...query, start: 690, duration: 30 }).status, 'yes');
   assert.equal(evaluate(venue, area, { ...query, date: '2026-11-13' }).status, 'yes');

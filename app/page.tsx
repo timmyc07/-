@@ -1,7 +1,10 @@
 import Link from 'next/link';
+import NearbyOrigin from './nearby-origin.tsx';
+import { directionsUrl, distanceKm, parseCoordinates } from '../lib/distance.ts';
 import { taichungSnapshot } from '../lib/mongodb.ts';
-import { clock, evaluate, facilities, kindLabels, minutes, timePattern, validDate, weekdays } from '../lib/study.ts';
+import { backupLibraries, clock, evaluate, facilities, kindLabels, minutes, timePattern, validDate, weekdays } from '../lib/study.ts';
 import type { Area, Facility, Library, Query } from '../lib/study.ts';
+import { pilotVisit } from '../lib/taichung-visits.ts';
 
 type Params = Record<string, string | string[] | undefined>;
 const facilityKeys = Object.keys(facilities) as Facility[];
@@ -21,6 +24,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const district = get('district') ?? '';
   const keyword = (get('q') ?? '').trim().slice(0, 100);
   const original = get('original') ?? '';
+  const near = get('near');
+  const position = near === 'me' ? parseCoordinates(get('position')) : undefined;
   const view = get('view');
   const statusFilter = view && Object.hasOwn(statuses, view) ? view as keyof typeof statuses : '';
   const page = Math.max(1, Number.parseInt(get('page') ?? '1', 10) || 1);
@@ -43,21 +48,30 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const libraries = snapshot.libraries;
   const districts = [...new Set(libraries.map((library) => library.district).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
   const selected = libraries.find((library) => library.id === original);
+  const originLibrary = libraries.find((library) => library.id === near && library.coordinates);
+  const origin = position ?? originLibrary?.coordinates;
+  const originLabel = position ? '我的位置' : originLibrary?.name;
   const normalized = (value: string) => value.normalize('NFKC').replaceAll('台', '臺');
   const candidates = libraries.filter((library) => (!district || library.district === district) &&
     (!keyword || normalized(library.name + ' ' + library.address).includes(normalized(keyword))));
   const evaluateLibrary = (library: Library) => {
     const matching = kind ? library.areas.filter((area) => area.kind === kind) : library.areas;
     const areas: (Area | undefined)[] = matching.length ? matching : [undefined];
-    return areas.map((area) => ({ library, ...evaluate(library, area, query) }));
+    const distance = distanceKm(origin, library.coordinates);
+    return areas.map((area) => ({ library, distance, ...evaluate(library, area, query) }));
   };
   const rank = { yes: 0, unknown: 1, no: 2 };
-  const compareResults = (a: ReturnType<typeof evaluate>, b: ReturnType<typeof evaluate>) => rank[a.status] - rank[b.status];
+  type Result = ReturnType<typeof evaluateLibrary>[number];
+  const compareResults = (a: Result, b: Result) =>
+    rank[a.status] - rank[b.status] || (a.distance ?? Number.MAX_VALUE) - (b.distance ?? Number.MAX_VALUE);
   const results = searched && !invalid ? candidates.flatMap(evaluateLibrary).sort(compareResults) : [];
   const visible = results.filter((item) => !statusFilter || item.status === statusFilter);
   const totalPages = Math.max(1, Math.ceil(visible.length / pageSize));
   const currentPage = Math.min(totalPages, page);
-  const backups = results.filter((item) => item.status === 'yes' && item.library.id !== original).slice(0, 3);
+  const backupOrigin = origin ?? selected?.coordinates;
+  const backups = selected ? backupLibraries(origin ? results : results.map((item) => ({
+    ...item, distance: distanceKm(backupOrigin, item.library.coordinates),
+  })).sort(compareResults), original) : [];
   const originalResult = searched && !invalid && selected ? evaluateLibrary(selected).sort(compareResults)[0] : undefined;
   const checked = libraries.filter((library) => library.areas.some((area) =>
     area.kind === 'study' && area.slots?.length && (area.access === 'walk-in' || area.access === 'card')));
@@ -106,6 +120,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
             {Object.entries(kindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
           <label>館名或地址<input type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="例如 大墩分館" /></label>
         </div>
+        <NearbyOrigin key={position ? 'me:' + get('position') : originLibrary?.id}
+          libraries={libraries.filter((library) => library.coordinates).map(({ id, name }) => ({ id, name }))}
+          initialOrigin={position ? 'me' : originLibrary?.id ?? ''} position={position && get('position')} />
         <div className="filters">
           <fieldset><legend>需要的設備</legend><div className="checks">
             {facilityKeys.map((key) => <label key={key}><input type="checkbox" name={key} defaultChecked={equipment.includes(key)} />{facilities[key]}</label>)}
@@ -125,15 +142,19 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
         </>}
         {searched && !invalid && <>
           <div className="result-heading"><h2 id="results-title">查詢結果</h2><p>{date} · {start}–{clock(query.start + duration)}</p></div>
+          {originLabel && <p className="distance-note">起點 {originLabel} · 同一結果狀態內依直線距離排序</p>}
           {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult && statuses[originalResult.status]}
             {originalResult?.area && ' · ' + originalResult.area.name}
             {originalResult?.reasons.length ? ' · ' + originalResult.reasons.join('、') : ''}
             {' '}<Link href={href({ original: '' })}>清除原定館舍</Link></div>}
           {selected && <section className="backups" aria-label="備案比較">
             <h3>備案比較</h3>
-            {backups.length ? <div className="cards">{backups.map(({ library, area, status, reasons }) =>
-              <LibraryCard key={library.id + area?.name} {...{ library, area, status, reasons }} />)}</div> :
-              <p>目前條件下沒有已確認符合的備案。可調整行政區、館名或其他條件再查詢。</p>}
+            {backupOrigin && <p className="distance-note">以{originLabel ?? '原定館舍'}為起點，依直線距離排序</p>}
+            {backups.length ? <div className="cards">{backups.map((item) =>
+              <LibraryCard key={item.library.id} {...item} />)}</div> :
+              <p>目前條件下沒有已確認符合的備案。{' '}
+                {district ? <Link href={href({ district: '', page: '' })}>擴大到全臺中市</Link> : '可調整條件再查詢。'}
+              </p>}
           </section>}
           <nav className="tabs" aria-label="依查詢結果篩選">
             <Link aria-current={!statusFilter ? 'page' : undefined} href={href({ view: '', page: '' })}>全部 {results.length}</Link>
@@ -156,20 +177,38 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   </>;
 }
 
-function LibraryCard({ library, area, status, reasons, closure, originalLink }: {
+function LibraryCard({ library, area, status, reasons, closure, openUntil, distance, originalLink }: {
   library: Library;
   area?: Area;
   status?: keyof typeof statuses;
   reasons?: readonly string[];
-  closure?: { url: string };
+  closure?: { reason: string; url: string };
+  openUntil?: number;
+  distance?: number;
   originalLink?: string;
 }) {
+  const visit = area && pilotVisit(library.id, area);
   return <article className="card">
     <div className="card-top"><span>{library.district}</span>{status && <span className={'badge ' + status}>{statuses[status]}</span>}</div>
     <h3>{library.name}</h3>
     <p className="area">{area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
-    <p className="address">{library.address || '地址待確認'}</p>
-    {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul> : null}
+    <p className="address">{library.address || '地址待確認'}{distance !== undefined && ' · 直線約 ' +
+      (distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里')}</p>
+    {openUntil !== undefined && <p className="open-until">當日時段可用至 {clock(openUntil)}</p>}
+    {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>{reason}{' '}
+      {closure && reason === closure.reason && <a href={closure.url}>休館來源 ↗</a>}</li>)}</ul> : null}
+    {visit && <dl className="visit-details">
+      <div><dt>樓層</dt><dd>{visit.location}</dd></div>
+      <div><dt>入座</dt><dd>{visit.entry}</dd></div>
+      <div><dt>充電</dt><dd>{visit.power}</dd></div>
+    </dl>}
+    <div className="card-actions">
+      {library.coordinates && <a href={directionsUrl(library.coordinates)}
+        aria-label={library.name + ' Google 地圖導航'}>地圖導航 ↗</a>}
+      {!closure && area?.reservation && <a href={area.reservation}>前往館方預約 ↗</a>}
+      {visit && library.phone && <a href={'tel:' + library.phone}>電洽 {library.phone}</a>}
+    </div>
+    {visit && <div className="source-links">{visit.links.map(([label, url]) => <a key={url} href={url}>{label} ↗</a>)}</div>}
     <details>
       <summary>使用規則與來源</summary>
       <dl>
@@ -188,9 +227,7 @@ function LibraryCard({ library, area, status, reasons, closure, originalLink }: 
       </dl>
       <div className="source-links">
         {library.website && <a href={library.website}>館方網站 ↗</a>}
-        {area?.reservation && <a href={area.reservation}>官方座位預約 ↗</a>}
         {library.ruleLinks?.map((link, index) => <a key={link} href={link}>館方規則 {index + 1} ↗</a>)}
-        {closure && <a href={closure.url}>休館來源 ↗</a>}
         {[...new Set([...(area?.sources ?? []), ...library.sources, ...(library.notices ?? [])])].map((source, index) =>
           <a href={source} key={source}>來源 {index + 1} ↗</a>)}
       </div>

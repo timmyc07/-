@@ -85,21 +85,22 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
   if (area && limited && limited.from <= query.date && query.date <= limited.until) {
     area = { ...area, name: limited.name, seats: undefined, equipment: {} };
   }
-  if (area?.walkInDates?.some((opening) => typeof opening === 'string' ? opening === query.date :
-    opening.date === query.date && opening.start <= query.start && end <= opening.end)) {
+  const walkIn = area?.walkInDates?.find((opening) => typeof opening === 'string' ? opening === query.date :
+    opening.date === query.date && opening.start <= query.start && end <= opening.end);
+  if (area && walkIn) {
     area = { ...area, access: 'walk-in', reservation: undefined };
   }
   const missing: string[] = [];
   const failed: string[] = [];
-  const closure = library.closures.find(({ from, until, time }) =>
-    from <= query.date && (!until || query.date <= until) &&
-    (!time || (time.start < end && query.start < time.end)));
+  const closures = library.closures.filter(({ from, until }) => from <= query.date && (!until || query.date <= until));
+  const closure = closures.find(({ time }) => !time || (time.start < end && query.start < time.end));
   if (closure) failed.push(closure.reason);
   if (library.calendarYear !== Number(query.date.slice(0, 4)) ||
       (library.calendarFrom && query.date < library.calendarFrom)) {
     missing.push('指定日期的休館公告待確認');
   }
   const changed = library.checkDates?.includes(query.date);
+  let openUntil: number | undefined;
   if (changed) missing.push('指定日期有特殊時段或入場方式，請查館方公告');
   if (library.notices?.length) missing.push('有開館異動待核對');
   if (!area && query.kind === 'study' && library.studyRoom === false) failed.push('館舍目前無對外開放的自修室');
@@ -110,8 +111,12 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
     if (!area.slots || outsidePeriod) missing.push('空間時段待確認');
     else if (!changed) {
       const day = new Date(query.date + 'T00:00:00Z').getUTCDay();
-      if (!area.slots.some((slot) => slot.day === day && slot.start <= query.start &&
-        slot.end >= end)) failed.push('開放時段無法涵蓋整段使用時間');
+      for (const slot of area.slots) {
+        if (slot.day === day && slot.start <= query.start && slot.end >= end) {
+          openUntil = Math.max(openUntil ?? 0, slot.end);
+        }
+      }
+      if (openUntil === undefined) failed.push('開放時段無法涵蓋整段使用時間');
     }
     if (area.access === null) missing.push('入場資格或預約方式待確認');
     if (area.access === 'conditional') missing.push('依館方規則須符合訪客條件');
@@ -124,12 +129,30 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
       if (typeof available !== 'boolean') missing.push(facilities[equipment] + '待確認');
     }
   }
+  if (openUntil !== undefined) {
+    if (walkIn && typeof walkIn !== 'string') openUntil = Math.min(openUntil, walkIn.end);
+    for (const { time } of closures) {
+      if (time && time.start >= end) openUntil = Math.min(openUntil, time.start);
+    }
+  }
   return {
     area,
     status: failed.length ? 'no' : missing.length ? 'unknown' : 'yes',
     reasons: [...failed, ...missing],
     closure,
+    openUntil: failed.length || missing.length ? undefined : openUntil,
   } as const;
+}
+
+export function backupLibraries<T extends { library: Library; status: 'yes' | 'unknown' | 'no' }>(
+  results: T[], original: string,
+) {
+  const seen = new Set([original]);
+  return results.filter(({ library, status }) => {
+    if (status !== 'yes' || seen.has(library.id)) return false;
+    seen.add(library.id);
+    return true;
+  }).slice(0, 3);
 }
 
 export function coverageGaps(library: Library) {

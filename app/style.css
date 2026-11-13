@@ -27,8 +27,17 @@ h1{font-size:clamp(42px,6vw,76px);line-height:1.05;letter-spacing:-.07em;margin-
 .form-top a,.result-heading p{font-size:13px}
 .inputs{display:grid;grid-template-columns:1fr 1.13fr 1fr 1fr 1fr 1.3fr;gap:10px}
 label,legend{font-weight:650;font-size:13px}
-.inputs label{display:grid;gap:5px;min-width:0}
-.inputs input,.inputs select{height:44px;border:1px solid var(--line);border-radius:8px;padding:0 9px;background:#fbfcf8;color:var(--ink);width:100%;min-width:0}
+.inputs label,.nearby-origin label{display:grid;gap:5px;min-width:0}
+.inputs input,.inputs select,.nearby-origin select{height:44px;border:1px solid var(--line);border-radius:8px;padding:0 9px;background:#fbfcf8;color:var(--ink);width:100%;min-width:0}
+.nearby-origin{display:flex;flex-wrap:wrap;align-items:end;gap:8px 12px;margin-top:16px}
+.nearby-origin select{max-width:100%}
+.nearby-origin button{min-height:44px;margin:0;padding:8px 12px;background:var(--soft);color:var(--green);font-size:13px}
+.nearby-origin button:disabled{cursor:wait}
+.nearby-origin small,.nearby-origin [role=status]{color:var(--muted);font-size:12px}
+.nearby-origin small{flex-basis:100%}
+.nearby-origin [role=status]{flex-basis:100%}
+.nearby-origin [role=status]:empty{margin-top:-8px}
+.distance-note{color:var(--muted);font-size:13px;margin-bottom:10px}
 .filters{display:flex;gap:24px;align-items:end;margin-top:17px;flex-wrap:wrap}
 fieldset{margin:0;padding:0;border:0;min-width:0}
 legend{margin-bottom:5px}
@@ -46,6 +55,12 @@ button:hover{background:#114a3c}
 .card h3{margin:6px 0 2px;font-size:18px}
 .area{color:var(--green);font-weight:650;margin:0 0 3px}
 .address{color:var(--muted);font-size:13px;margin-bottom:9px}
+.card-actions{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;font-weight:650}
+.card-actions+.source-links{margin-top:6px}
+.open-until{color:var(--green);font-size:13px;font-weight:700;margin:0 0 8px}
+.visit-details{display:grid;gap:5px}
+.visit-details div{display:grid;grid-template-columns:2.5em 1fr;gap:6px}
+.visit-details dd{margin:0}
 .badge{padding:3px 9px;border-radius:24px;white-space:nowrap}
 .badge.yes{background:#e1f1e6;color:#115d3c}
 .badge.unknown{background:#f5ebd0;color:#694b12}

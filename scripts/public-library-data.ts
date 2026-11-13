@@ -121,6 +121,7 @@ const xinsheNotice = citySite + 'lib/Introduction/index?Parser=99,147,614';
 const xinsheGuide = citySite + 'lib/content/index?Parser=1,147,615';
 const xinsheClosed = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1483';
 const xinsheReopened = citySite + 'latestevent/Details?Parser=22,3,38,27,,,1972';
+const xinshePress = 'https://www.taichung.gov.tw/3413311/post';
 const xinsheWorks = 'https://assess-public.taichung.gov.tw/ImportantWork/Detail/114DQ00010';
 const xinsheExhibit = citySite + 'lib/active/details?Parser=51,147,613,,,,26332';
 const xinsheFloorExhibit = citySite + 'lib/active/details?Parser=51,147,613,,,,26193';
@@ -240,12 +241,14 @@ export const studyLocations: Record<string, readonly [name: string, guide: strin
 };
 
 export const verifiedCoordinates: Record<string, [address: string, latitude: number, longitude: number, source: string]> = {
+  'tc-110': ['臺中市西屯區福玄路1號', 24.175814, 120.625580, iTaiwanLocations],
   'tc-112': ['臺中市南屯區龍富路五段一號', 24.152045, 120.626405, municipalAddressLocations],
   'tc-117-a': ['臺中市豐原區市政路2號', 24.241688, 120.717513, iTaiwanLocations],
   'tc-117': ['臺中市豐原區育仁路81號', 24.241138, 120.717404,
     'https://eservices.taichung.gov.tw/LocationNew/Introduction/150/FacilityRental/525cffbf-7077-49fe-bc0f-f58e201d60d1'],
   'tc-119': ['臺中市豐原區水源路17巷2號', 24.255042, 120.744705, iTaiwanLocations],
   'tc-122': ['臺中市大里區德芳路一段229號四、五樓', 24.108108, 120.686173, municipalAddressLocations],
+  'tc-123': ['臺中市太平區太平三街20號', 24.119075, 120.721530, iTaiwanLocations],
   'tc-126': ['臺中市沙鹿區鎮南路二段488號', 24.233416, 120.564099, municipalAddressLocations],
   'tc-127': ['臺中市沙鹿區文昌街12號', 24.236289, 120.562098, municipalAddressLocations],
   'tc-131': ['臺中市梧棲區民生街15之77號', 24.251865, 120.533033, municipalAddressLocations],
@@ -451,10 +454,11 @@ export const reviewedSources: Record<string, {
       equipment: { wifi: true, outlet: false }, sources: [liming, nlpiWifi, nlpiRules, nlpiStudySeats, limingDirectory],
     }],
   },
-  新社分館: { sources: [xinsheNotice, xinsheGuide, xinsheClosed, xinsheReopened, xinsheWorks, xinsheExhibit, xinsheFloorExhibit,
-    'https://www.facebook.com/XinsheDL/posts/pfbid0SWaGcPVWuDWX37dQwQUvNjMFFC4qS3zyT532TUrRpJJMEg6jkQct64L4P1s82XtRl',
-    'https://data.gov.tw/dataset/83840', 'https://data.gov.tw/dataset/5962', seatSystem],
-    accessNote: '市府工程資料確認原館已完工。市圖公告原館（興社街四段 1 巷 1 號）於 2026 年 11 月 13 日 11:30 對外啟用。11 月 6 日至 12 日臨時服務處僅辦預約取書、還書及辦證，11 月 12 日 17:30 結束。全館常態時間為週二至週日 08:30–17:30。館方公告 11 月 13 日起於館內各樓層展出植栽。政府開放資料在原館地址列有 iTaichung 及 iTaiwan 熱點。3 樓導覽最後更新於 2025 年 8 月 19 日，整修前館方列自習室 32 席。整修後的自習室是否開放、時段、入場資格及設備待確認。市圖空間系統另列 5 席公用電腦，須現場登記。',
+  新社分館: { sources: [xinsheNotice, xinsheGuide, xinsheClosed, xinsheReopened, xinshePress, xinsheWorks, xinsheExhibit, xinsheFloorExhibit,
+    'https://www.facebook.com/XinsheDL/posts/pfbid023hbviX1it4AEdV6UnzMPzjF3pZjjPPKP3uwvzMf54ZEad5aAVN5pkPhAWbzcspmWl',
+    'https://data.gov.tw/dataset/83840', 'https://data.gov.tw/dataset/5962', seatRules + '2c9dbfe59bd50daa019bd590d6aa010f',
+    seatLocations + '2c9dbfe59bd50daa019bd585c92900bd', seatLocations + '2c9dbfe59bd50daa019bd58608b500be'],
+    accessNote: '原館（興社街四段 1 巷 1 號）已於 2026 年 11 月 13 日 11:30 重新開館。全館常態時間為週二至週日 08:30–17:30。市府復館新聞確認有青少年閱讀及開架閱覽空間，館方公告 11 月 14 日活動在 3 樓多功能活動室。政府開放資料在原館地址列有 iTaichung 及 iTaiwan 熱點。市圖空間系統列 1 樓上網區有 3 席、3 樓青少年區有 2 席公用電腦，持借閱證或身分證現場登記，每次 1 小時，閉館前 30 分鐘停止受理。2025 年 8 月 19 日的導覽列整修前 3 樓有 32 席自習座位。整修後原自習室是否開放、時段、入場資格及設備待確認。',
     closures: [
       { from: '2025-08-19', until: '2026-11-12', reason: '原館整修期間暫停開放', url: xinsheClosed },
       { from: '2026-11-13', until: '2026-11-13', time: { start: 0, end: minutes('11:30') },
@@ -462,7 +466,7 @@ export const reviewedSources: Record<string, {
     ],
     studyRoom: null,
     areaUpdates: [{ name: '3 樓自習室', kind: 'study', slots: null, access: null, equipment: {},
-      sources: [xinsheNotice, xinsheGuide, xinsheReopened] }],
+      sources: [xinsheNotice, xinsheGuide, xinsheReopened, xinshePress] }],
   },
   清水分館: { sources: [qingshuiGuide, qingshuiOldHours, qingshuiClosed, cityChronology, qingshuiFacilities,
     'https://maps.app.goo.gl/u2R7Bj7UXVWkdiuZA', 'https://maps.app.goo.gl/PBJ1v6VizFhY43cJ9',

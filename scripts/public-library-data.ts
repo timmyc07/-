@@ -125,6 +125,7 @@ const xinshePress = 'https://www.taichung.gov.tw/3413311/post';
 const xinsheWorks = 'https://assess-public.taichung.gov.tw/ImportantWork/Detail/114DQ00010';
 const xinsheExhibit = citySite + 'lib/active/details?Parser=51,147,613,,,,26332';
 const xinsheFloorExhibit = citySite + 'lib/active/details?Parser=51,147,613,,,,26193';
+const xinsheChildren = 'https://activity.culture.taichung.gov.tw/activites/index-1.asp?id=145349';
 const xitunRules = citySite + 'df_ufiles/lib08/臺中市西屯區圖書館討論室使用須知-1050301.pdf';
 const dongshiGuide = citySite + 'lib/content/index?Parser=1,149,720';
 const dongshiVisit = 'https://allison1951.pixnet.net/blog/posts/927463895613117381';
@@ -325,13 +326,14 @@ export const reviewedSources: Record<string, {
     closures: [{ from: '2026-05-26', until: '2026-12-14', reason: '原館整修後於 12 月 15 日重新開館', url: dayaClosed }],
   },
   潭子分館: { sources: [tanziClosed, tanziReopened, tanziExhibit, tanziIntro, iTaichungHotspots, iTaiwanHotspots,
+    citySite + 'lib/content/index?Parser=1,140,545',
     seatRules + '2c9dbfe59bd50daa019bd59717130145',
     'https://spaceme.library.taichung.gov.tw/rest/council/common/resourceLocations/2c9dbfe59bd50daa019bd585042a00ba',
     citySite + 'lib/active/details?Parser=51,140,543,,,,25640',
     citySite + 'active/details?Parser=9,3,39,27,,,24483'], reopening: tanziReopened,
     schedule: parseSlots(standardReadingHours),
     readingEquipment: { laptop: true },
-    accessNote: '館方公告原館於 2026 年 11 月 3 日起試營運，日常服務包括 1 樓閱覽、預約取書及還書箱，預定 11 月 17 日全面開放。週二至週六 08:30–21:00、週日 08:30–17:30。B1 多功能活動室另有 11 月 3 日至 29 日的展覽及 11 月 11 日免費電影活動。館方列有指定筆電席位，政府名錄列原館有 iTaichung 及 iTaiwan 熱點。市圖空間系統列 3 樓 5 席公用電腦，憑借閱證或身分證登記，每次 1 小時，閉館前 30 分鐘停止受理。試營運期間可用設備、指定充電位置及整修後獨立自習室待確認。',
+    accessNote: '館方公告原館於 2026 年 11 月 3 日起試營運，日常服務包括 1 樓閱覽、預約取書及還書箱，預定 11 月 17 日全面開放。週二至週六 08:30–21:00、週日 08:30–17:30。B1 多功能活動室另有 11 月 3 日至 29 日的展覽及 11 月 11 日免費電影活動。2025 年樓層導覽列 2 樓開架閱覽區、3 樓青少年閱覽區及討論室，未列獨立自習室。館方列有指定筆電席位，政府名錄列原館有 iTaichung 及 iTaiwan 熱點。市圖空間系統列 3 樓 5 席公用電腦，憑借閱證或身分證登記，每次 1 小時，閉館前 30 分鐘停止受理。試營運期間可用設備、指定充電位置及整修後獨立自習室待確認。',
     closures: [{ from: '2026-01-26', until: '2026-11-02', reason: '原館整修後於 11 月 3 日開始試營運', url: tanziReopened }],
     readingLimitedOpening: { from: '2026-11-03', until: '2026-11-16', name: '1 樓閱覽區（試營運）' },
   },
@@ -454,11 +456,11 @@ export const reviewedSources: Record<string, {
       equipment: { wifi: true, outlet: false }, sources: [liming, nlpiWifi, nlpiRules, nlpiStudySeats, limingDirectory],
     }],
   },
-  新社分館: { sources: [xinsheNotice, xinsheGuide, xinsheClosed, xinsheReopened, xinshePress, xinsheWorks, xinsheExhibit, xinsheFloorExhibit,
+  新社分館: { sources: [xinsheNotice, xinsheGuide, xinsheClosed, xinsheReopened, xinshePress, xinsheWorks, xinsheExhibit, xinsheFloorExhibit, xinsheChildren,
     'https://www.facebook.com/XinsheDL/posts/pfbid023hbviX1it4AEdV6UnzMPzjF3pZjjPPKP3uwvzMf54ZEad5aAVN5pkPhAWbzcspmWl',
     'https://data.gov.tw/dataset/83840', 'https://data.gov.tw/dataset/5962', seatRules + '2c9dbfe59bd50daa019bd590d6aa010f',
     seatLocations + '2c9dbfe59bd50daa019bd585c92900bd', seatLocations + '2c9dbfe59bd50daa019bd58608b500be'],
-    accessNote: '原館（興社街四段 1 巷 1 號）已於 2026 年 11 月 13 日 11:30 重新開館。全館常態時間為週二至週日 08:30–17:30。市府復館新聞確認有青少年閱讀及開架閱覽空間，館方公告 11 月 14 日活動在 3 樓多功能活動室。政府開放資料在原館地址列有 iTaichung 及 iTaiwan 熱點。市圖空間系統列 1 樓上網區有 3 席、3 樓青少年區有 2 席公用電腦，持借閱證或身分證現場登記，每次 1 小時，閉館前 30 分鐘停止受理。2025 年 8 月 19 日的導覽列整修前 3 樓有 32 席自習座位。整修後原自習室是否開放、時段、入場資格及設備待確認。',
+    accessNote: '原館（興社街四段 1 巷 1 號）已於 2026 年 11 月 13 日 11:30 重新開館。全館常態時間為週二至週日 08:30–17:30。市府復館新聞確認有青少年閱讀、開架閱覽空間及自助借還書設備。館方公告 11 月 14 日活動在 3 樓多功能活動室，文化局列 11 月 18 日活動在 1 樓兒童閱覽區。政府開放資料在原館地址列有 iTaichung 及 iTaiwan 熱點。市圖空間系統列 1 樓上網區有 3 席、3 樓青少年區有 2 席公用電腦，持借閱證或身分證現場登記，每次 1 小時，閉館前 30 分鐘停止受理。2025 年 8 月 19 日的樓層導覽仍列整修前 3 樓自習室，分館介紹的 32 席為舊資料。整修後原自習室是否開放、時段、入場資格及設備待確認。',
     closures: [
       { from: '2025-08-19', until: '2026-11-12', reason: '原館整修期間暫停開放', url: xinsheClosed },
       { from: '2026-11-13', until: '2026-11-13', time: { start: 0, end: minutes('11:30') },
@@ -479,13 +481,14 @@ export const reviewedSources: Record<string, {
   },
   大里大新分館: { sources: [citySite + 'lib/content/index?Parser=1,121,355', daxinClosure, daxinWorks,
     daxinFebruary, daxinBookmobile, daxinApril, 'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=153726',
+    'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000234',
     'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=154566', 'https://maps.app.goo.gl/yLDS13VQPmJzoYkT7',
     'https://maps.app.goo.gl/d73kT4ABtaTPrKfD7', daxinExtendedClosure,
     'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=156557',
     'https://activity.culture.taichung.gov.tw/hisdata/index-1.asp?id=156556',
     'https://data.gov.tw/dataset/83840', seatRules + '2c9dbfe59bd27da1019bd4dfbb44000e',
     'https://itaiwan.gov.tw/ITaiwanHotspotQuery/ConditionalQuery?KeyWord=大里大新分館&City=臺中市&Type=1'],
-    accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。更新版館門公告載明 2025 年 7 月 17 日至 2026 年 3 月 30 日因耐震補強閉館，施工期間安排館旁行動圖書車。文化局紀錄顯示 4 月 1 日起有 1 樓櫃檯及自助借書服務。1 樓一般上網區有 5 席公用電腦，憑借閱證或身分證現場登記，每次 1 小時。3 月 31 日開放情況及 B1 自習室復開日、固定時段仍待確認。市府 2026 年 6 月熱點資料列原館有 iTaichung，iTaiwan 名錄仍列該熱點暫停。',
+    accessNote: '館方樓層照片顯示 B1 自習室設有隔板，部分座位配置閱讀燈。更新版館門公告載明 2025 年 7 月 17 日至 2026 年 3 月 30 日因耐震補強閉館，施工期間安排館旁行動圖書車。文化局紀錄顯示 4 月 1 日起有 1 樓櫃檯及自助借書服務。國資圖 4 月 7 日更新的公共館名錄仍列有自習室，並列全館週二至週六 08:30–21:00、週日 08:30–17:30。1 樓一般上網區有 5 席公用電腦，憑借閱證或身分證現場登記，每次 1 小時。3 月 31 日開放情況及 B1 自習室復開日、固定時段仍待確認。市府 2026 年 6 月熱點資料列原館有 iTaichung，iTaiwan 名錄仍列該熱點暫停。',
     checkDates: ['2026-03-31'],
     closures: [{ from: '2025-07-17', until: '2026-03-30', reason: '耐震補強期間暫停閱覽及自習服務',
       url: daxinExtendedClosure }],

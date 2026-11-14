@@ -13,6 +13,13 @@ const dadunGuide = citySite + 'lib/content/index?Parser=1,105,195';
 const nlpiFloors = 'https://www.nlpi.edu.tw/StaticPage/main-floors';
 const hepingOpening = 'https://www.heping.taichung.gov.tw/4086049/post';
 const hepingRules = 'https://www.heping.taichung.gov.tw/media/1324681/臺中市和平區立圖書館閱覽使用須知.pdf';
+const xinsheGuide = citySite + 'lib/content/index?Parser=1,147,615';
+const xinsheIntro = citySite + 'lib/Introduction/index?Parser=99,147,614';
+const xinsheReopening = 'https://www.taichung.gov.tw/3413311/post';
+const tanziReopening = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1941';
+const tanziGuide = citySite + 'lib/content/index?Parser=1,140,545';
+const tanziIntro = citySite + 'lib/Introduction/index?Parser=99,140,544';
+const tanziExhibit = citySite + 'lib/active/details?Parser=51,140,543,,,,25640';
 
 const checkedOn = '2026-11-14';
 const priorityReviews = [
@@ -22,7 +29,7 @@ const priorityReviews = [
   },
   {
     libraryId: 'tc-123', area: 'B1 自習室', field: 'studyHours', value: null,
-    note: '11 月 14 日 11:58 透過市圖官方 LINE 詢問 B1 施工期間是否開放、週二至週六與週日的固定時段及臨時調整日期。已收到非一對一諮詢時段的自動回覆，待館員答覆。11 月 7 日活動在 1 樓，11 月 10 日起的展覽只列整館時間。防水修繕預計 2027 年 2 月 1 日完工。',
+    note: '11 月 14 日 11:58 透過市圖官方 LINE 詢問 B1 施工期間是否開放、週二至週六與週日的固定時段及臨時調整日期。同日複查仍只有非諮詢時段的自動回覆。11 月 7 日活動在 1 樓，11 月 10 日起的展覽只列整館時間。防水修繕預計 2027 年 2 月 1 日完工。',
     sources: [cityContact, taipingGuide, taipingEvent, taipingExhibit, taipingWork],
   },
   {
@@ -126,13 +133,18 @@ const priorityReviews = [
   },
   {
     libraryId: 'tc-147', area: '', field: 'studyRoom', value: null,
-    note: '市府確認 11 月 13 日復館，舊導覽所列 3 樓自習室是否保留或開放仍待確認。',
-    sources: ['https://www.taichung.gov.tw/3413311/post', citySite + 'lib/content/index?Parser=1,147,615'],
+    note: '市府 11 月 13 日復館新聞確認青少年閱讀與開架閱覽空間。樓層導覽最後更新於 2025 年 8 月 19 日，分館介紹仍載整修前的 32 席。3 樓獨立自習室是否保留或開放仍待確認。',
+    sources: [xinsheReopening, xinsheGuide, xinsheIntro],
+  },
+  {
+    libraryId: 'tc-147', area: '3 樓自習室', field: 'studyHours', value: null,
+    note: '復館後館方活動頁標示全館週二至週日 08:30–17:30。舊導覽所列 3 樓自習室在復館後的開放狀態及固定時段仍待確認。',
+    sources: [xinsheReopening, xinsheGuide, citySite + 'lib/active/index?Parser=51,147,613'],
   },
   {
     libraryId: 'tc-140', area: '', field: 'studyRoom', value: null,
-    note: '11 月 3 日起試營運開放 1 樓閱覽，11 月 17 日預定全面開放。復館後有無獨立自習室待確認。',
-    sources: [citySite + 'latestevent/Details?Parser=9,3,41,27,,,1941', citySite + 'lib/content/index?Parser=1,140,545'],
+    note: '11 月 14 日仍在試營運，日常閱覽開放 1 樓，11 月 17 日預定全面開放。整修前的樓層導覽列 2 樓開架閱覽、3 樓青少年閱覽及討論室，分館介紹的自習座位數為空白。B1 展覽使用多功能活動室。全面開放後有無獨立自習室待確認。',
+    sources: [tanziReopening, tanziGuide, tanziIntro, tanziExhibit],
   },
   {
     libraryId: 'tc-119', area: '', field: 'studyRoom', value: null,
@@ -158,7 +170,7 @@ const reviewedGaps = {
     'tc-120': 'B1 自習室', 'tc-122': '5 樓自習室', 'tc-107': 'B1 自習室',
     'tc-109': '3 樓自習室', 'tc-104': 'B1 自習室', 'tc-127': '3 樓自習室', 'tc-103': '3 樓自習室',
     'tc-149': '2 樓自修室（開放待確認）', 'tc-111': '自習室', 'tc-106': '4 樓自習室',
-    'tc-132': '5 樓自習室', 'tc-133': '3 樓自習室', 'tc-147': '3 樓自習室',
+    'tc-132': '5 樓自習室', 'tc-133': '3 樓自習室',
     'ncl-a37723154b3ab4dc': '自習室',
   },
   outlet: {
@@ -179,11 +191,11 @@ const reviewedAreas: Partial<Record<AuditField, Map<string, string[]>>> = {
 };
 
 const municipalCalendar = {
-  note: '臺中市立圖書館開放時間頁仍列 2026 年休館表，2027 年度表待館方公布。',
-  sources: [cityHours, cityNotices],
+  note: '複查市圖開放時間頁及開館異動，現行年度休館表仍為 2026 年，2027 年度表待館方公布。',
+  sources: [cityHours, cityNotices, citySite + 'latestevent/Details?Parser=9,3,38,27,,,1174'],
 };
 const nationalCalendarReview = {
-  note: '國資圖休館日已設 2027 年分頁，查核時分頁內沒有休館紀錄，年度表待館方公布。',
+  note: '複查國資圖總館及黎明分館適用的休館日查詢，2027 年分頁仍沒有休館紀錄。',
   sources: [nlpiCalendar],
 };
 const calendarSources: Record<string, Pick<FieldReview, 'note' | 'sources'>> = {
@@ -197,15 +209,19 @@ const calendarSources: Record<string, Pick<FieldReview, 'note' | 'sources'>> = {
     note: '原館自 2026 年 2 月 3 日起施工休館，館方預計 2027 年 3 月重新開放，確切日期及年度休館表待公布。',
     sources: [citySite + 'latestevent/Details?Parser=9,3,41,27,,,1628', cityHours],
   },
+  'tc-123': {
+    note: '防水修繕預計 2027 年 2 月 1 日完工。B1 施工期間的服務異動及 2027 年度休館表仍待館方確認。',
+    sources: [taipingWork, cityContact, cityHours, cityNotices],
+  },
   'tc-149': {
     note: '市府預告 2027 年 1 月至 7 月進行閱讀環境優化工程。施工期間的服務異動及年度休館表待館方公告。',
     sources: ['https://assess-public.taichung.gov.tw/ImportantWork/ConstructionDetail/011527293', cityHours, cityNotices],
   },
   'tc-104': {
-    note: '工程採購公告預估履約期間為 2026 年 12 月 10 日至 2027 年 7 月 7 日。施工期間的服務異動及年度休館表待館方公告。',
+    note: '工程採購公告預估履約期間為 2026 年 12 月 10 日至 2027 年 7 月 7 日。館方 2026 年 2 月發布的活動頁列 2027 年 1 月 9 日親子活動。施工期間一般閱覽、自修服務與年度休館表待館方公告。',
     sources: ['https://assess-public.taichung.gov.tw/ImportantWork/Detail/115DQ00003',
       'https://web.pcc.gov.tw/prkms/tender/common/noticeDate/redirectPublic?ds=20261110&fn=BDM-1-71327203.xml',
-      cityHours, cityNotices],
+      citySite + 'lib/active/details?Parser=51,104,183,,,,23966', cityHours, cityNotices],
   },
 };
 

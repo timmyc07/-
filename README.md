@@ -35,11 +35,12 @@ npm run dev
 ### 臺中自修室、座位插座與 2027 年休館查核
 
 - 2026-11-14 查核涵蓋 **51 筆館舍、81 個空間**。後台列出 **207 項**館舍與空間欄位，包含 51 項 2027 年度休館表。仍有 26 項座位插座、20 項自修室時段及 5 項有無自修室待確認。
-- **太平分館 B1。** 11 月 14 日 11:58 透過市圖官方 LINE 詢問施工期間是否開放、週二至週六與週日的固定時段、臨時調整日期。已收到非諮詢時段的自動回覆，待館員答覆。館方資料確認 B1 有 60 席，座位依市圖自習區規則不供充電。 [市圖官方聯絡方式](https://www.library.taichung.gov.tw/pmail/index?Parser=99,3,87,28,44) · [分館介紹](https://www.library.taichung.gov.tw/lib/Introduction/index?Parser=99,123,374) · [工程進度](https://assess-public.taichung.gov.tw/ImportantWork/Detail/115DQ00007) · [自習區規則](https://www.library.taichung.gov.tw/form/Details?Parser=2,3,48,28,,,204)
+- **太平分館 B1。** 11 月 14 日 11:58 透過市圖官方 LINE 詢問施工期間是否開放、週二至週六與週日的固定時段、臨時調整日期。同日複查仍只有非諮詢時段的自動回覆。館方資料確認 B1 有 60 席，座位依市圖自習區規則不供充電。 [市圖官方聯絡方式](https://www.library.taichung.gov.tw/pmail/index?Parser=99,3,87,28,44) · [分館介紹](https://www.library.taichung.gov.tw/lib/Introduction/index?Parser=99,123,374) · [工程進度](https://assess-public.taichung.gov.tw/ImportantWork/Detail/115DQ00007) · [自習區規則](https://www.library.taichung.gov.tw/form/Details?Parser=2,3,48,28,,,204)
+- **新社與潭子。** 新社於 11 月 13 日復館，市府確認有青少年閱讀及開架閱覽空間。整修前導覽所列的 3 樓自習室及 32 席在復館後仍待查證。潭子在 11 月 14 日仍為試營運，日常閱覽開放 1 樓，11 月 17 日預定全面開放。舊導覽及近期展覽公告均將 B1 列為多功能活動室，全面開放後是否設獨立自習室待確認。 [新社復館新聞](https://www.taichung.gov.tw/3413311/post) · [新社樓層導覽](https://www.library.taichung.gov.tw/lib/content/index?Parser=1,147,615) · [潭子開館公告](https://www.library.taichung.gov.tw/latestevent/Details?Parser=9,3,41,27,,,1941) · [潭子 B1 展覽](https://www.library.taichung.gov.tw/lib/active/details?Parser=51,140,543,,,,25640)
 - **其他館舍。** 葫蘆墩文化中心單列 4 樓自修室，週二至週六 08:30–21:00，週日 08:30–17:30。大甲、清水、霧峰以文及石岡已補核對紀錄，專室時段仍待確認。上楓 20 席、龍井 17 席可充電的閱覽座位已補官方出版品來源。大肚、大肚瑞井及和平區立的座位充電仍待確認。 [葫蘆墩館室時段](https://www.huludun.taichung.gov.tw/content/index.asp?Parser=1,3,20) · [上楓館舍資料](https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000620) · [國資圖龍井復館訪查](https://www-old.nlpi.edu.tw/JournalDetailC003313.aspx?Cond=26ca6952-6617-452f-97e6-36e7bf0bef8b)
-- **2027 年休館。** 查核時市圖官網仍列 2026 年度表，國資圖的 2027 年分頁尚無資料，和平區公所公告每週一及國定假日休館。豐原南嵩分館施工休館延續至 2027 年，館方預計 3 月復館，確切日期待公告。東勢許良宇圖書館及西區分館有跨年工程資料，服務異動待館方公告。 [市圖開放時間](https://www.library.taichung.gov.tw/content/index?Parser=1,3,72,32) · [國資圖休館日](https://www.nlpi.edu.tw/ServiceMail/feedback/Holiday) · [和平區公所公告](https://www.heping.taichung.gov.tw/4086049/post) · [南嵩分館施工休館公告](https://www.library.taichung.gov.tw/latestevent/Details?Parser=9,3,41,27,,,1628)
+- **2027 年休館。** 11 月 14 日複查，市圖官網仍列 2026 年度表，國資圖的 2027 年分頁尚無紀錄，和平區公所公告每週一及國定假日休館，逐日安排待公布。豐原南嵩分館施工休館延續至 2027 年，館方預計 3 月復館，確切日期待公告。東勢許良宇圖書館及西區分館的跨年工程服務異動仍待館方公告。西區分館舊活動頁列 2027 年 1 月 9 日親子活動，當日一般閱覽及自修安排仍待確認。 [市圖開放時間](https://www.library.taichung.gov.tw/content/index?Parser=1,3,72,32) · [國資圖休館日](https://www.nlpi.edu.tw/ServiceMail/feedback/Holiday) · [和平區公所公告](https://www.heping.taichung.gov.tw/4086049/post) · [南嵩施工休館公告](https://www.library.taichung.gov.tw/latestevent/Details?Parser=9,3,41,27,,,1628) · [西區分館活動頁](https://www.library.taichung.gov.tw/lib/active/details?Parser=51,104,183,,,,23966)
 - **後台流程。** 跑 `npm run import:taichung` 後開啟 [逐欄核對與匯入異動](http://127.0.0.1:3000/admin/fields)，可按館舍、欄位及待確認狀態篩選。已核對的欄位顯示日期、紀錄和來源。人工核對資料保存在 `scripts/taichung-field-reviews.ts`，實際查詢規則依 `scripts/public-library-data.ts` 及匯入來源更新。異動記錄同時保存欄位前後值與證據，最多保留最近 20 批有變動的匯入。資料相同時重跑不新增紀錄。
-- **本機驗收。** 匯入既有快照後執行新版匯入，在逐欄頁選太平分館核對 B1 時段、LINE 詢問紀錄和來源，再選「2027 年休館公告」與「待確認」核對 51 筆。展開匯入異動核對欄位前後值和證據，重跑同資料確認異動筆數為零。首頁查 2027-01-14 的豐原南嵩分館確認施工休館，同日查大墩確認年度公告待確認，再查 2026-11-15 的大墩自修室確認已知時段。
+- **本機驗收。** 匯入既有快照後執行新版匯入，在逐欄頁選太平、新社、潭子核對自修室欄位和來源，再篩選「2027 年休館公告」與「待確認」核對 51 筆。展開異動確認證據前後版本，重跑同資料確認異動筆數為零。首頁用 2026-11-14 查新社及潭子的閱覽與自修室，確認新社一般閱覽可查、潭子顯示 1 樓試營運、兩館獨立自修室仍待確認。用 2027-01-14 查豐原南嵩確認施工休館，並用 2027-01-09 查西區分館確認年度公告待確認。
 
 Atlas 的資料位置為 `studygo_dev.city_snapshots`，臺中快照的 `_id` 為 `taichung`。本機網站切換至 Atlas 時，只需以可存取此資料庫的 Atlas 連線字串更新本機 `.env` 的 `MONGODB_URI`，再重啟網站。 [MongoDB Atlas 連線說明](https://www.mongodb.com/docs/atlas/connect-to-database-deployment/)
 
@@ -99,6 +100,6 @@ StudyGo 讓使用者依地區、距離起點、日期、開始時間、使用時
 | 4．全臺擴充 | 按縣市擴充公立公共圖書館，涵蓋離島。每批以中央與地方官方名單對帳，報告來源漏館、可能重複、已確認不開放及資料不足的館舍，並逐批核對。 |
 | 5．維護與本機驗收 | 臺中後台已可逐欄核對自修室、時段、座位插座及 2027 年休館公告，並追蹤匯入前後的值與證據。後續加入單一來源重跑、公告更新排程、失敗重試與資料回復，再擴至其他縣市。 |
 
-下一批先追蹤太平 B1 的館員回覆，取得施工期間的開放方式、固定時段及適用日期後更新查詢規則。接著複查新社及潭子復館後的自修空間，向大甲、清水、霧峰以文及石岡確認專室時段，向大肚、大肚瑞井及和平區立確認可充電的座位。追蹤市圖、國資圖及和平區立 2027 年休館表，並核對南嵩確切復館日期及東勢、西區施工服務異動。即時空位及未來可預約時段，以有公開或授權資料的館舍試點，各自標示資料來源和更新時間。臺中驗收完成後再擴至其他縣市。
+下一批先追蹤太平 B1 的館員回覆，取得施工期間的開放方式、固定時段及適用日期後更新查詢規則。向新社確認 3 樓是否仍設獨立自習室，待 11 月 17 日潭子全面開放後複查新配置。向大甲、清水、霧峰以文及石岡確認專室時段，向大肚、大肚瑞井及和平區立確認可充電的座位。持續追蹤市圖、國資圖及和平區立 2027 年休館表，以及南嵩確切復館日期和東勢、西區施工服務異動。即時空位及未來可預約時段，以有公開或授權資料的館舍試點，各自標示資料來源和更新時間。臺中驗收完成後再擴至其他縣市。
 
 全臺覆蓋以同一版官方名冊為分母，每筆館舍須有收錄、去重或待處理結果。規則核實率另以有對外使用可能性的館舍為分母，列出仍未確認的開放資格和資料欄位。上游未收錄、無公開資料或無法核對的館舍維持缺口狀態，避免把查得到館名誤報為已確認可自修。

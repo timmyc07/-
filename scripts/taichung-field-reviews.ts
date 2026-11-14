@@ -1,15 +1,18 @@
 import { auditRows } from '../lib/field-audit.ts';
 import type { AuditField, FieldReview } from '../lib/field-audit.ts';
 import type { Library } from '../lib/study.ts';
-import { cityRules, citySite, nlpiRules } from './taichung-sources.ts';
+import { cityHours, cityNotices, cityRules, citySite, nlpiCalendar, nlpiRules } from './taichung-sources.ts';
 
 const taipingGuide = citySite + 'lib/content/index?Parser=1,123,375';
 const taipingIntro = citySite + 'lib/Introduction/index?Parser=99,123,374';
 const taipingWork = 'https://assess-public.taichung.gov.tw/ImportantWork/Detail/115DQ00007';
 const taipingExhibit = citySite + 'lib/active/details?Parser=51,123,373,,,,26653';
 const taipingEvent = citySite + 'lib/active/details?Parser=51,123,373,,,,26654';
+const cityContact = citySite + 'pmail/index?Parser=99,3,87,28,44';
 const dadunGuide = citySite + 'lib/content/index?Parser=1,105,195';
 const nlpiFloors = 'https://www.nlpi.edu.tw/StaticPage/main-floors';
+const hepingOpening = 'https://www.heping.taichung.gov.tw/4086049/post';
+const hepingRules = 'https://www.heping.taichung.gov.tw/media/1324681/臺中市和平區立圖書館閱覽使用須知.pdf';
 
 const checkedOn = '2026-11-14';
 const priorityReviews = [
@@ -19,8 +22,8 @@ const priorityReviews = [
   },
   {
     libraryId: 'tc-123', area: 'B1 自習室', field: 'studyHours', value: null,
-    note: '11 月 7 日館方活動明列在 1 樓，11 月 10 日起的展覽只列館址及整館時間。防水修繕 10 月 6 日開工，預計 2027 年 2 月 1 日完工。施工期間 B1 是否開放及常態自習時段仍須洽館方。',
-    sources: [taipingGuide, taipingEvent, taipingExhibit, taipingWork],
+    note: '11 月 14 日 11:58 透過市圖官方 LINE 詢問 B1 施工期間是否開放、週二至週六與週日的固定時段及臨時調整日期。已收到非一對一諮詢時段的自動回覆，待館員答覆。11 月 7 日活動在 1 樓，11 月 10 日起的展覽只列整館時間。防水修繕預計 2027 年 2 月 1 日完工。',
+    sources: [cityContact, taipingGuide, taipingEvent, taipingExhibit, taipingWork],
   },
   {
     libraryId: 'tc-123', area: 'B1 自習室', field: 'outlet', value: '未提供座位插座',
@@ -51,8 +54,59 @@ const priorityReviews = [
   },
   {
     libraryId: 'tc-145', area: '自習室', field: 'studyHours', value: null,
-    note: '復館後的分館介紹列 18 席自習座位。官網列的是整館時間，專室位置與時段待確認。',
-    sources: [citySite + 'lib/Introduction/index?Parser=99,145,594', 'https://www.taichung.gov.tw/3398440/post'],
+    note: '復館後的分館介紹列 18 席自習座位。10 月 28 日更新的樓層導覽列 3 樓寧靜閱讀區，未標明獨立自習室。18 席的實際位置及適用時段待確認。',
+    sources: [citySite + 'lib/Introduction/index?Parser=99,145,594', citySite + 'lib/content/index?Parser=1,145,595',
+      'https://www.taichung.gov.tw/3398440/post'],
+  },
+  {
+    libraryId: 'tc-128', area: '3 樓自習室', field: 'studyHours', value: null,
+    note: '市府場地頁列 3 樓自習室，館方介紹列 52 席及整館時段。3 樓獨立時段待確認。',
+    sources: [citySite + 'lib/Introduction/index?Parser=99,128,424',
+      'https://eservices.taichung.gov.tw/LocationNew/Introduction/150/FacilityRental/4337e051-9c3a-4014-97a8-f9403c2d9525'],
+  },
+  {
+    libraryId: 'tc-125', area: '4 樓自習室', field: 'studyHours', value: null,
+    note: '現行樓層導覽確認 4 樓自習室。市府舊刊記載 08:00，現行官網列整館自 08:30 開放。4 樓目前是否有獨立時段仍待確認。',
+    sources: [citySite + 'lib/content/index?Parser=1,125,395', citySite + 'lib/index?125',
+      'https://www.taichung.gov.tw/media/270688/512291511171.pdf'],
+  },
+  {
+    libraryId: 'tc-139', area: '2 樓自習室', field: 'studyHours', value: null,
+    note: '現行樓層導覽及分館介紹列 2 樓自習室 84 席，館方公開時間為整館時段。專室時段待確認。',
+    sources: [citySite + 'lib/content/index?Parser=1,139,535', citySite + 'lib/Introduction/index?Parser=99,139,534'],
+  },
+  {
+    libraryId: 'tc-118', area: '4 樓自習室', field: 'studyHours',
+    value: '週日 08:30–17:30；週二、三、四、五、六 08:30–21:00',
+    note: '葫蘆墩文化中心單列 4 樓自修室，週二至週六 08:30–21:00，週日 08:30–17:30。',
+    sources: ['https://www.huludun.taichung.gov.tw/content/index.asp?Parser=1,3,20'],
+  },
+  {
+    libraryId: 'tc-134', area: '一般閱覽座位', field: 'outlet', value: null,
+    note: '市府照片可辨認 3 樓靠窗筆電專用區。可供讀者使用的座位插座仍待確認。',
+    sources: ['https://www.taichung.gov.tw/3229939/post', citySite + 'lib/content/index?Parser=1,134,485'],
+  },
+  {
+    libraryId: 'tc-135', area: '一般閱覽座位', field: 'outlet', value: null,
+    note: '到館照片可見 2 樓開架閱覽區靠窗長桌旁有插座。讀者可否在該座位充電仍待確認。',
+    sources: [citySite + 'lib/Introduction/index?Parser=99,135,494', 'https://maps.app.goo.gl/ucB1Tv55J1fzQUh3A'],
+  },
+  {
+    libraryId: 'ncl-a37723154b3ab4dc', area: '館內一般閱覽', field: 'outlet', value: null,
+    note: '館方閱覽須知限在指定區域充電，禁止使用自備延長線。指定區域是否設有閱覽座位仍待確認。',
+    sources: [hepingRules, hepingOpening],
+  },
+  {
+    libraryId: 'tc-137', area: '館內筆電插座席', field: 'outlet', value: '可充電',
+    note: '臺中市文化局出版的《文化臺中》及公共圖書館名錄列出館內 20 席筆電插座席。',
+    sources: ['https://www.culture.taichung.gov.tw/media/919959/文化臺中no51_整本_細小_跨頁.pdf',
+      'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000620'],
+  },
+  {
+    libraryId: 'tc-141', area: '館內附插座閱覽座位', field: 'outlet', value: '可充電',
+    note: '國資圖出版的復館訪查記載館內有 17 席附插座的閱覽座位。',
+    sources: ['https://www-old.nlpi.edu.tw/JournalDetailC003313.aspx?Cond=26ca6952-6617-452f-97e6-36e7bf0bef8b',
+      citySite + 'latestevent/Details?Parser=9,3,37,27,,,503'],
   },
   {
     libraryId: 'tc-148', area: '2 樓筆電優先區', field: 'outlet', value: '可充電',
@@ -101,19 +155,19 @@ const priorityReviews = [
 
 const reviewedGaps = {
   studyHours: {
-    'tc-128': '3 樓自習室', 'tc-120': 'B1 自習室', 'tc-122': '5 樓自習室', 'tc-107': 'B1 自習室',
+    'tc-120': 'B1 自習室', 'tc-122': '5 樓自習室', 'tc-107': 'B1 自習室',
     'tc-109': '3 樓自習室', 'tc-104': 'B1 自習室', 'tc-127': '3 樓自習室', 'tc-103': '3 樓自習室',
     'tc-149': '2 樓自修室（開放待確認）', 'tc-111': '自習室', 'tc-106': '4 樓自習室',
-    'tc-132': '5 樓自習室', 'tc-133': '3 樓自習室', 'tc-125': '4 樓自習室', 'tc-147': '3 樓自習室',
-    'ncl-a37723154b3ab4dc': '自習室', 'tc-139': '2 樓自習室',
+    'tc-132': '5 樓自習室', 'tc-133': '3 樓自習室', 'tc-147': '3 樓自習室',
+    'ncl-a37723154b3ab4dc': '自習室',
   },
   outlet: {
-    'tc-146': ['一般閱覽座位'], 'tc-134': ['一般閱覽座位'], 'tc-135': ['一般閱覽座位'],
+    'tc-146': ['一般閱覽座位'],
     'tc-121': ['一般閱覽座位'], 'tc-136': ['一般閱覽座位'], 'tc-145': ['一般閱覽座位'],
     'tc-127': ['一般閱覽座位'], 'tc-149': ['2 樓自修室（開放待確認）'], 'tc-132': ['一般閱覽座位'],
     'tc-130': ['一般閱覽座位'], 'tc-131': ['一般閱覽座位'], 'tc-125': ['一般閱覽座位'],
     'tc-147': ['3 樓自習室', '一般閱覽座位'], 'tc-148': ['一般閱覽座位'],
-    'ncl-a37723154b3ab4dc': ['館內一般閱覽', '自習室'], 'tc-140': ['一般閱覽座位'], 'tc-143': ['一般閱覽座位'],
+    'ncl-a37723154b3ab4dc': ['自習室'], 'tc-140': ['一般閱覽座位'], 'tc-143': ['一般閱覽座位'],
     'tc-117-a': ['1 樓客家書區閱覽座位'], 'tc-117': ['1 樓一般閱覽區'], 'tc-119': ['一般閱覽座位'],
     'tc-139': ['一般閱覽座位'],
   },
@@ -124,8 +178,45 @@ const reviewedAreas: Partial<Record<AuditField, Map<string, string[]>>> = {
   outlet: new Map(Object.entries(reviewedGaps.outlet)),
 };
 
-export function taichungFieldReviews(libraries: Library[]): FieldReview[] {
-  const gaps = auditRows(libraries).flatMap(({ library, libraryId, area, field, value, sources }) => {
+const municipalCalendar = {
+  note: '臺中市立圖書館開放時間頁仍列 2026 年休館表，2027 年度表待館方公布。',
+  sources: [cityHours, cityNotices],
+};
+const nationalCalendarReview = {
+  note: '國資圖休館日已設 2027 年分頁，查核時分頁內沒有休館紀錄，年度表待館方公布。',
+  sources: [nlpiCalendar],
+};
+const calendarSources: Record<string, Pick<FieldReview, 'note' | 'sources'>> = {
+  'ncl-3aa0574ed94d0f22': nationalCalendarReview,
+  'ncl-1ba74ad50e9db0a9': nationalCalendarReview,
+  'ncl-a37723154b3ab4dc': {
+    note: '區公所公告每週一及國定假日休館。2027 年逐日休館安排待館方公布。',
+    sources: [hepingOpening],
+  },
+  'tc-119': {
+    note: '原館自 2026 年 2 月 3 日起施工休館，館方預計 2027 年 3 月重新開放，確切日期及年度休館表待公布。',
+    sources: [citySite + 'latestevent/Details?Parser=9,3,41,27,,,1628', cityHours],
+  },
+  'tc-149': {
+    note: '市府預告 2027 年 1 月至 7 月進行閱讀環境優化工程。施工期間的服務異動及年度休館表待館方公告。',
+    sources: ['https://assess-public.taichung.gov.tw/ImportantWork/ConstructionDetail/011527293', cityHours, cityNotices],
+  },
+  'tc-104': {
+    note: '工程採購公告預估履約期間為 2026 年 12 月 10 日至 2027 年 7 月 7 日。施工期間的服務異動及年度休館表待館方公告。',
+    sources: ['https://assess-public.taichung.gov.tw/ImportantWork/Detail/115DQ00003',
+      'https://web.pcc.gov.tw/prkms/tender/common/noticeDate/redirectPublic?ds=20261110&fn=BDM-1-71327203.xml',
+      cityHours, cityNotices],
+  },
+};
+
+export function taichungFieldReviews(libraries: Library[], importedAt: string): FieldReview[] {
+  const importDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', dateStyle: 'short' }).format(new Date(importedAt));
+  const gaps = auditRows(libraries).flatMap<FieldReview>(({ library, libraryId, area, field, value, sources }) => {
+    if (field === 'calendar2027') {
+      const calendar = calendarSources[libraryId] ?? municipalCalendar;
+      return [{ libraryId, area, field, value, checkedOn: value ? importDate : checkedOn, sources: calendar.sources,
+        note: value ? '已從館方公開資料匯入 2027 年度休館表。' : calendar.note }];
+    }
     if (value !== null || !reviewedAreas[field]?.get(libraryId)?.includes(area)) return [];
     const official = [...new Set([library.website, ...sources, ...library.sources]
       .filter((url): url is string => Boolean(url && /^https:\/\/(?:www\.library\.taichung\.gov\.tw\/lib\/|plisnet\.nlpi\.edu\.tw\/Frontend\/LibraryFamily\/|www\.heping\.taichung\.gov\.tw\/)/.test(url))))];

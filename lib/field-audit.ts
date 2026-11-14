@@ -1,7 +1,9 @@
-import { clock, weekdays } from './study.ts';
+import { clock, coversCalendarYear, weekdays } from './study.ts';
 import type { Library, Slot } from './study.ts';
 
-export const fieldLabels = { studyRoom: '有無自修室', studyHours: '自修室時段', outlet: '座位插座' };
+export const fieldLabels = {
+  studyRoom: '有無自修室', studyHours: '自修室時段', outlet: '座位插座', calendar2027: '2027 年休館公告',
+};
 export type AuditField = keyof typeof fieldLabels;
 type FieldKey = { libraryId: string; area: string; field: AuditField };
 export type FieldReview = FieldKey & { checkedOn: string; value: string | null; note: string; sources: string[] };
@@ -46,8 +48,11 @@ export function auditRows(libraries: Library[], reviews: FieldReview[] = []) {
     if (!library.areas.some((area) => area.kind === 'study') && library.studyRoom === true) {
       areas.unshift(row('studyHours', '', null, library.sources));
     }
-    return [row('studyRoom', '', library.studyRoom === true ? '有' : library.studyRoom === false ? '無' : null,
-      library.sources), ...areas];
+    return [
+      row('studyRoom', '', library.studyRoom === true ? '有' : library.studyRoom === false ? '無' : null, library.sources),
+      row('calendar2027', '', coversCalendarYear(library, 2027) ? '已收錄年度休館表' : null, library.sources),
+      ...areas,
+    ];
   });
 }
 

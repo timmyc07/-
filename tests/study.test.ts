@@ -6,7 +6,7 @@ import type { FieldReview } from '../lib/field-audit.ts';
 import { backupLibraries, coverageGaps, evaluate, isPublicLibrary, validDate } from '../lib/study.ts';
 import type { Area, Library, Query } from '../lib/study.ts';
 import { pilotVisit } from '../lib/taichung-visits.ts';
-import { branchHours, branchInfo, branchName, nationalCalendar, parseSlots } from '../scripts/taichung-sources.ts';
+import { branchHours, branchInfo, branchName, cityCalendar, nationalCalendar, parseSlots } from '../scripts/taichung-sources.ts';
 
 const area: Area = {
   name: '自習室', kind: 'study', slots: parseSlots('週二至週六 8:30–12:30、13:30–17:30'),
@@ -33,11 +33,11 @@ test('逐欄核對區分專室時段、整館時段、未提供插座與待確�
     areas: [{ ...area, slots: null }, { ...area, name: '一般閱覽區', kind: 'reading' as const, equipment: {} }] };
   const rows = auditRows([venue]);
   assert.deepEqual(rows.map(({ field, value }) => [field, value]), [
-    ['studyRoom', '有'], ['studyHours', null], ['outlet', '未提供座位插座'], ['outlet', null],
+    ['studyRoom', '有'], ['calendar2027', null], ['studyHours', null], ['outlet', '未提供座位插座'], ['outlet', null],
   ]);
   const absent = auditRows([{ ...venue, areas: [] }]);
   assert.equal(absent.find(({ field }) => field === 'studyHours')?.value, null);
-  assert.equal(auditRows([{ ...venue, areas: [], studyRoom: false }]).length, 1);
+  assert.equal(auditRows([{ ...venue, areas: [], studyRoom: false }]).length, 2);
 });
 
 test('逐欄異動記錄前後值與證據，重排時段或重跑同資料不製造異動', () => {
@@ -158,18 +158,44 @@ test('重開館後的休館日曆只適用於生效日起', () => {
   assert.equal(evaluate(venue, area, { ...query, date: '2026-11-13' }).status, 'yes');
 });
 
+test('2027 年只在有年度表時標示已收錄，個別跨年公告仍可判定休館', () => {
+  const date = '2027-01-14';
+  const pending = { ...library, closures: [{ from: '2026-02-03', reason: '施工休館', url: 'https://example.org' }] };
+  assert.equal(auditRows([pending]).find(({ field }) => field === 'calendar2027')?.value, null);
+  assert.equal(evaluate(pending, area, { ...query, date }).status, 'no');
+  const published = { ...library, calendarYear: undefined, calendarYears: [2026, 2027] };
+  assert.equal(auditRows([published]).find(({ field }) => field === 'calendar2027')?.value, '已收錄年度休館表');
+  assert.equal(evaluate(published, area, { ...query, date }).status, 'yes');
+});
+
+test('市圖日曆可收錄兩個年度，空的年度表不算已發布', () => {
+  const rows = Array.from({ length: 10 }, (_, day) => `<tr><td>1月${day + 1}日</td><td>休館</td><td></td></tr>`).join('');
+  const table = (year: number, body: string) => `<table><caption>${year}年臺中市立圖書館休館日一覽表</caption>${body}</table>`;
+  const current = table(2026, rows);
+  assert.deepEqual(cityCalendar(current + table(2027, '')).years, [2026]);
+  const both = cityCalendar(current + table(2027, rows));
+  assert.deepEqual(both.years, [2026, 2027]);
+  assert.equal(both.holidays.at(-1)?.date, '2027-01-10');
+});
+
 test('國資圖日曆區分總館休館與所有分館同時休館', () => {
   const row = (day: number, name: string, note = '') => `<tr>
     <td data-type="日期：">115/06/${day}</td><td data-type="休館類型：">全館休館</td>
     <td data-type="節日名稱：">${name}</td><td data-type="說明：">${note}</td>
   </tr>`;
-  const calendar = nationalCalendar('<table>' + [
+  const current = '<table>' + [
     row(17, '冷氣工程總館休館'), row(18, '冷氣工程', '黎明分館及中興分館照常開放。'),
     row(19, '端午節'), row(20, '全館整修'), row(21, '全館維護'),
-  ].join('') + '<tr><td data-type="日期：">115/02/20</td><td data-type="休館類型：">調整開館</td></tr></table>');
+  ].join('') + '<tr><td data-type="日期：">115/02/20</td><td data-type="休館類型：">調整開館</td></tr></table>';
+  const calendar = nationalCalendar(current + '<table id="holidays-2027"></table>');
+  assert.deepEqual(calendar.years, [2026]);
   assert.deepEqual(calendar.closures.map((day) => day.from), ['17', '18', '19', '20', '21'].map((day) => '2026-06-' + day));
   assert.deepEqual(calendar.limingClosures.map((day) => day.from), ['2026-06-19', '2026-06-20', '2026-06-21']);
   assert.deepEqual(calendar.adjustedDates, ['2026-02-20']);
+  const next = '<table>' + [17, 18, 19, 20, 21].map((day) => row(day, '休館').replace('115/', '116/')).join('') + '</table>';
+  const both = nationalCalendar(current + next);
+  assert.deepEqual(both.years, [2026, 2027]);
+  assert.equal(both.limingClosures.at(-1)?.from, '2027-06-21');
 });
 
 test('部分開館時只顯示開放區域與該區可確認的設備', () => {

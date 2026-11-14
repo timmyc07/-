@@ -105,7 +105,7 @@ async function importTaichung() {
       district: districtOf(address), address,
       types: ['公共圖書館'],
       sources: [...(cityContact ? [cityDirectory] : []), branch.url, cityHours, cityNotices],
-      phone: cityContact?.['市話'], website: branch.url, areas: [], closures: [...cityWeatherClosures], calendarYear: calendar.year,
+      phone: cityContact?.['市話'], website: branch.url, areas: [], closures: [...cityWeatherClosures], calendarYears: calendar.years,
       facilities: listed,
     };
 
@@ -179,7 +179,7 @@ async function importTaichung() {
       }
     }
     // shortcut: 特殊時段須核對到空間，待確認後再套用空間時段。
-    if (calendar.year === 2026) library.checkDates.push('2026-02-20', '2026-02-21');
+    if (calendar.years.includes(2026)) library.checkDates.push('2026-02-20', '2026-02-21');
     const buildingClosures = new Map<string, Library['closures']>();
     for (const notice of announcements.filter(({ label }) => label.includes(branch.name))) {
       const since = notice.label.match(/(\d{3})年(\d+)月(\d+)日/);
@@ -260,7 +260,7 @@ async function importTaichung() {
     else if (library.areas.some((area) => area.kind === 'study')) library.studyRoom = true;
     if (library.name === limingName) {
       library.closures = [...nlpiWeatherClosures, ...nlpi.limingClosures];
-      library.calendarYear = nlpi.year;
+      library.calendarYears = nlpi.years;
       library.checkDates = nlpi.adjustedDates;
       library.sources.push(nlpiCalendar);
     }
@@ -275,14 +275,14 @@ async function importTaichung() {
     from: '2026-07-21', until: '2026-07-21', reason: '國資圖總館因電力檢查休館',
     url: 'https://www.nlpi.edu.tw/Announcement/news?PageType=1&id=776f813d-013e-42b2-ba39-5ab36c8dc3e7',
   }];
-  nlpiMain.calendarYear = nlpi.year;
+  nlpiMain.calendarYears = nlpi.years;
   nlpiMain.checkDates = nlpi.adjustedDates;
   nlpiMain.sources.push(nlpiCalendar, ...nlpiArea.sources, ...nlpiQuietArea.sources);
 
   const peace = [...libraries.values()].find((library) => library.name === '臺中市和平區立圖書館');
   const peaceContact = contact.get('和平區立圖書館');
   if (peace) {
-    peace.calendarYear = 2026;
+    peace.calendarYears = [2026];
     peace.calendarFrom = '2026-11-01';
     peace.checkDates = ['2026-11-28'];
     peace.studyRoom = true;
@@ -320,11 +320,12 @@ async function importTaichung() {
   const unique = new Map([...libraries.values()].map((library) => [library.id, {
     ...library, sources: [...new Set(library.sources)],
   }]));
+  const importedAt = new Date().toISOString();
   const snapshot: Snapshot = {
-    _id: 'taichung', importedAt: new Date().toISOString(), issues,
+    _id: 'taichung', importedAt, issues,
     sourceCounts: { city: city.length, branches: branches.size, publicLibraries: publicLibraries.records.size },
     libraries: [...unique.values()].sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant')),
-    fieldReviews: taichungFieldReviews([...unique.values()]),
+    fieldReviews: taichungFieldReviews([...unique.values()], importedAt),
   };
   if (new Set(snapshot.libraries.map((library) => library.district)).size < 29 ||
       snapshot.libraries.some((library) => !library.address || !library.district) ||

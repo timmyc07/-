@@ -36,6 +36,7 @@ export type Library = {
   areas: Area[];
   closures: Closure[];
   calendarYear?: number;
+  calendarYears?: number[];
   calendarFrom?: string;
   notices?: string[];
   checkDates?: string[];
@@ -83,6 +84,10 @@ export function validDate(date: string) {
   return Number.isFinite(+parsed) && parsed.toISOString().startsWith(date);
 }
 
+export function coversCalendarYear(library: Library, year: number) {
+  return library.calendarYear === year || library.calendarYears?.includes(year) === true;
+}
+
 export function evaluate(library: Library, area: Area | undefined, query: Query) {
   const end = query.start + query.duration;
   const limited = area?.limitedOpening;
@@ -99,7 +104,7 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
   const closures = library.closures.filter(({ from, until }) => from <= query.date && (!until || query.date <= until));
   const closure = closures.find(({ time }) => !time || (time.start < end && query.start < time.end));
   if (closure) failed.push(closure.reason);
-  if (library.calendarYear !== Number(query.date.slice(0, 4)) ||
+  if (!coversCalendarYear(library, Number(query.date.slice(0, 4))) ||
       (library.calendarFrom && query.date < library.calendarFrom)) {
     missing.push('指定日期的休館公告待確認');
   }
@@ -170,7 +175,7 @@ export function coverageGaps(library: Library) {
     gaps.push('自修空間使用規則');
   }
   if (!areas && typeof library.studyRoom !== 'boolean') gaps.push('閱覽空間資料');
-  if (areas && !library.calendarYear) gaps.push('年度休館公告');
+  if (areas && !library.calendarYear && !library.calendarYears?.length) gaps.push('年度休館公告');
   for (const area of library.areas) {
     if (!area.slots) gaps.push(area.name + '時段');
     if (!area.access || area.access === 'conditional') gaps.push(area.name + '入場資格');

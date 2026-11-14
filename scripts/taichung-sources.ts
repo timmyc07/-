@@ -140,30 +140,31 @@ export function dateKey(year: number, month: string, day: string) {
 
 export function cityCalendar(html: string) {
   const $ = load(html);
-  const table = $('table').filter((_, item) => /休館日一覽表/.test($(item).find('caption').text())).first();
-  const year = Number(table.find('caption').text().match(/(20\d{2})年/)?.[1]);
-  const holidays = table.find('tbody tr').toArray().flatMap((row) => {
-    const [date, reason, note] = $(row).find('td').toArray().map((cell) => clean($(cell).text()));
-    const match = date?.match(/^(\d+)月(\d+)日/);
-    return match ? [{ date: dateKey(year, match[1], match[2]), reason, note }] : [];
+  const calendars = $('table').toArray().flatMap((table) => {
+    const caption = clean($(table).find('caption').text());
+    const year = Number(caption.match(/(20\d{2})\s*年.*休館日一覽表/)?.[1]);
+    if (!year) return [];
+    const holidays = $(table).find('tbody tr').toArray().flatMap((row) => {
+      const [date, reason, note] = $(row).find('td').toArray().map((cell) => clean($(cell).text()));
+      const match = date?.match(/^(\d+)月(\d+)日/);
+      return match ? [{ date: dateKey(year, match[1], match[2]), reason, note }] : [];
+    });
+    return [{ year, holidays }];
   });
-  if (!year || holidays.length < 10) throw new Error('臺中市圖休館日表結構有變動');
-  return { year, holidays };
+  const years = [...new Set(calendars.filter(({ holidays }) => holidays.length >= 10).map(({ year }) => year))];
+  if (!years.length) throw new Error('臺中市圖休館日表結構有變動');
+  return { years, holidays: calendars.flatMap(({ holidays }) => holidays) };
 }
 
 export function nationalCalendar(html: string) {
   const $ = load(html);
-  const year = Number($('select option[selected]').toArray()
-    .map((option) => $(option).text().trim()).find((option) => /^20\d{2}$/.test(option)));
   const closures: Closure[] = [];
   const limingClosures: Closure[] = [];
   const adjustedDates: string[] = [];
-  const calendarDates: string[] = [];
   for (const row of $('tr').toArray()) {
     const date = $(row).find('td[data-type="日期："]').text().match(/(\d{3})\/(\d{1,2})\/(\d{1,2})/);
     if (!date) continue;
     const key = dateKey(Number(date[1]) + 1911, date[2], date[3]);
-    calendarDates.push(key);
     const change = clean($(row).find('td[data-type="休館類型："]').text());
     if (change === '調整開館') adjustedDates.push(key);
     if (change === '全館休館') {
@@ -176,8 +177,12 @@ export function nationalCalendar(html: string) {
       if (!mainOnly) limingClosures.push(closure);
     }
   }
-  const years = new Set(calendarDates.map((date) => Number(date.slice(0, 4))));
-  const calendarYear = years.size === 1 ? [...years][0] : year;
-  if (!calendarYear || closures.length < 5) throw new Error('國資圖休館日表結構有變動');
-  return { year: calendarYear, closures, limingClosures, adjustedDates };
+  const closureCounts = new Map<number, number>();
+  for (const { from } of closures) {
+    const year = Number(from.slice(0, 4));
+    closureCounts.set(year, (closureCounts.get(year) ?? 0) + 1);
+  }
+  const years = [...closureCounts].filter(([, count]) => count >= 5).map(([year]) => year);
+  if (!years.length) throw new Error('國資圖休館日表結構有變動');
+  return { years, closures, limingClosures, adjustedDates };
 }

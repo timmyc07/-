@@ -460,9 +460,10 @@ export const reviewedSources: Record<string, {
   },
   新社分館: { sources: [xinsheNotice, xinsheGuide, xinsheClosed, xinsheReopened, xinshePress, xinsheWorks, xinsheExhibit, xinsheFloorExhibit, xinsheChildren,
     'https://www.facebook.com/XinsheDL/posts/pfbid023hbviX1it4AEdV6UnzMPzjF3pZjjPPKP3uwvzMf54ZEad5aAVN5pkPhAWbzcspmWl',
+    'https://www.facebook.com/photo/?fbid=1581837803982922', 'https://www.facebook.com/photo/?fbid=1582573100576059',
     'https://data.gov.tw/dataset/83840', 'https://data.gov.tw/dataset/5962', seatRules + '2c9dbfe59bd50daa019bd590d6aa010f',
     seatLocations + '2c9dbfe59bd50daa019bd585c92900bd', seatLocations + '2c9dbfe59bd50daa019bd58608b500be'],
-    accessNote: '原館（興社街四段 1 巷 1 號）已於 2026 年 11 月 13 日 11:30 重新開館。全館常態時間為週二至週日 08:30–17:30。市府復館新聞確認有青少年閱讀、開架閱覽空間及自助借還書設備。館方公告 11 月 14 日活動在 3 樓多功能活動室，文化局列 11 月 18 日活動在 1 樓兒童閱覽區。政府開放資料在原館地址列有 iTaichung 及 iTaiwan 熱點。市圖空間系統列 1 樓上網區有 3 席、3 樓青少年區有 2 席公用電腦，持借閱證或身分證現場登記，每次 1 小時，閉館前 30 分鐘停止受理。2025 年 8 月 19 日的樓層導覽仍列整修前 3 樓自習室，分館介紹的 32 席為舊資料。整修後原自習室是否開放、時段、入場資格及設備待確認。',
+    accessNote: '原館（興社街四段 1 巷 1 號）已於 2026 年 11 月 13 日 11:30 重新開館。全館常態時間為週二至週日 08:30–17:30。市府復館新聞確認有青少年閱讀、開架閱覽空間、自助借還書設備及手機借書。館方公告 11 月 14 日 14:00–16:00 講座在 3 樓多功能活動室，文化局列 11 月 18 日活動在 1 樓兒童閱覽區。政府開放資料在原館地址列有 iTaichung 及 iTaiwan 熱點。市圖空間系統列 1 樓上網區有 3 席、3 樓青少年區有 2 席公用電腦，持借閱證或身分證現場登記，每次 1 小時，閉館前 30 分鐘停止受理。2025 年 8 月 19 日的樓層導覽仍列整修前 3 樓自習室，分館介紹的 32 席為舊資料。整修後原自習室是否開放、時段、入場資格及設備待確認。',
     closures: [
       { from: '2025-08-19', until: '2026-11-12', reason: '原館整修期間暫停開放', url: xinsheClosed },
       { from: '2026-11-13', until: '2026-11-13', time: { start: 0, end: minutes('11:30') },

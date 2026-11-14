@@ -16,6 +16,7 @@ const hepingRules = 'https://www.heping.taichung.gov.tw/media/1324681/臺中市�
 const xinsheGuide = citySite + 'lib/content/index?Parser=1,147,615';
 const xinsheIntro = citySite + 'lib/Introduction/index?Parser=99,147,614';
 const xinsheReopening = 'https://www.taichung.gov.tw/3413311/post';
+const xinsheNovemberProgram = 'https://www.facebook.com/photo/?fbid=1582573100576059';
 const tanziReopening = citySite + 'latestevent/Details?Parser=9,3,41,27,,,1941';
 const tanziGuide = citySite + 'lib/content/index?Parser=1,140,545';
 const tanziIntro = citySite + 'lib/Introduction/index?Parser=99,140,544';
@@ -56,8 +57,9 @@ const priorityReviews = [
   },
   {
     libraryId: 'tc-121', area: 'B1 自習室', field: 'studyHours', value: null,
-    note: '復館後的館方介紹仍列自習室，公開時間是整館時段。專室時段待確認。',
-    sources: [citySite + 'lib/Introduction/index?Parser=99,121,354', citySite + 'lib/content/index?Parser=1,121,355'],
+    note: '館方空間導覽列 B1 自習室，整修後的到館紀錄也提到該室可使用。分館官網與公共館名錄公布全館時段，B1 常態開放時間待確認。',
+    sources: [citySite + 'lib/Introduction/index?Parser=99,121,354', citySite + 'lib/content/index?Parser=1,121,355',
+      'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000234', 'https://maps.app.goo.gl/HprEmA5EHt58yCSXA'],
   },
   {
     libraryId: 'tc-145', area: '自習室', field: 'studyHours', value: null,
@@ -138,8 +140,8 @@ const priorityReviews = [
   },
   {
     libraryId: 'tc-147', area: '3 樓自習室', field: 'studyHours', value: null,
-    note: '復館後館方活動頁標示全館週二至週日 08:30–17:30。舊導覽所列 3 樓自習室在復館後的開放狀態及固定時段仍待確認。',
-    sources: [xinsheReopening, xinsheGuide, citySite + 'lib/active/index?Parser=51,147,613'],
+    note: '11 月 14 日館方海報列 14:00–16:00 講座使用多功能活動室。當晚複查館方公告、粉專及公開到館紀錄，3 樓原自習室對一般讀者的開放狀態與固定時段仍待確認。全館週二至週日 08:30–17:30。',
+    sources: [xinsheReopening, xinsheGuide, citySite + 'lib/active/index?Parser=51,147,613', xinsheNovemberProgram],
   },
   {
     libraryId: 'tc-140', area: '', field: 'studyRoom', value: null,

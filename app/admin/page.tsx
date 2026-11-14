@@ -32,7 +32,7 @@ export default async function Admin() {
       <li><a href="https://www.library.taichung.gov.tw/">臺中市立圖書館官網</a> · {snapshot.sourceCounts.branches} 個館舍入口</li>
       <li><a href="https://data.gov.tw/dataset/99567">公共圖書館基本資料</a> · {snapshot.sourceCounts.publicLibraries} 筆臺中公立圖書館資料</li>
     </ul>
-    <p>{gaps} 筆館舍仍有待核對欄位。<a href="/admin/gaps">下載逐館缺口清單（CSV）</a></p>
+    <p>{gaps} 筆館舍仍有待核對欄位。 <Link href="/admin/fields">逐欄核對與匯入異動</Link> · <a href="/admin/gaps">下載逐館缺口清單（CSV）</a></p>
     {snapshot.issues.length > 0 && <><h2>匯入待查</h2><ul>{snapshot.issues.map((issue) => <li key={issue}>{issue}</li>)}</ul></>}
     <div className="table-wrap"><table>
       <caption>各行政區館舍與自修規則核對進度</caption>

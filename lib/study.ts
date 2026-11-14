@@ -1,3 +1,5 @@
+import type { FieldChangeBatch, FieldReview } from './field-audit.ts';
+
 export const facilities = { laptop: '筆電', wifi: 'Wi-Fi', outlet: '座位插座' };
 export type Facility = keyof typeof facilities;
 export type Slot = { day: number; start: number; end: number };
@@ -44,6 +46,8 @@ export type Snapshot = {
   sourceCounts: { city: number; branches: number; publicLibraries: number };
   issues: string[];
   libraries: Library[];
+  fieldReviews?: FieldReview[];
+  fieldHistory?: FieldChangeBatch[];
 };
 
 export function isPublicLibrary(library: Library) {

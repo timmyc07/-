@@ -1,6 +1,8 @@
 import { strict as assert } from 'node:assert';
 import { test } from 'node:test';
 import { directionsUrl, distanceKm, parseCoordinates } from '../lib/distance.ts';
+import { auditRows, diffAuditFields } from '../lib/field-audit.ts';
+import type { FieldReview } from '../lib/field-audit.ts';
 import { backupLibraries, coverageGaps, evaluate, isPublicLibrary, validDate } from '../lib/study.ts';
 import type { Area, Library, Query } from '../lib/study.ts';
 import { pilotVisit } from '../lib/taichung-visits.ts';
@@ -24,6 +26,32 @@ test('公立館清單排除學校、私立、混合館別及未分類館舍', ()
     { ...library, types: ['高中圖書館'] }, { ...library, types: ['大專校院圖書館'] },
     { ...library, types: ['私立圖書館'] }, { ...library, types: ['公共圖書館', '高中圖書館'] }, library];
   assert.deepEqual(venues.filter(isPublicLibrary), [publicLibrary]);
+});
+
+test('逐欄核對區分專室時段、整館時段、未提供插座與待確認', () => {
+  const venue = { ...library, studyRoom: true, schedule: area.slots!,
+    areas: [{ ...area, slots: null }, { ...area, name: '一般閱覽區', kind: 'reading' as const, equipment: {} }] };
+  const rows = auditRows([venue]);
+  assert.deepEqual(rows.map(({ field, value }) => [field, value]), [
+    ['studyRoom', '有'], ['studyHours', null], ['outlet', '未提供座位插座'], ['outlet', null],
+  ]);
+  const absent = auditRows([{ ...venue, areas: [] }]);
+  assert.equal(absent.find(({ field }) => field === 'studyHours')?.value, null);
+  assert.equal(auditRows([{ ...venue, areas: [], studyRoom: false }]).length, 1);
+});
+
+test('逐欄異動記錄前後值與證據，重排時段或重跑同資料不製造異動', () => {
+  const outlet = (value: boolean) => ({ ...area, equipment: { outlet: value } });
+  const after = { ...library, areas: [outlet(true)] };
+  const review: FieldReview = { libraryId: library.id, area: area.name, field: 'outlet',
+    value: '可充電', checkedOn: '2026-11-14', note: '讀者可使用', sources: ['https://example.org'] };
+  assert.equal(auditRows([library], [review]).find(({ field }) => field === 'outlet')?.review, undefined);
+  assert.deepEqual(diffAuditFields([library], [after], [], [review]).map(({ field, before, after, afterReview }) =>
+    [field, before, after, afterReview?.note]), [['outlet', '未提供座位插座', '可充電', review.note]]);
+  assert.deepEqual(diffAuditFields([after], [after], [review], [{ ...review, checkedOn: '2026-11-15' }]), []);
+  assert.equal(diffAuditFields([after], [after], [], [review]).length, 1);
+  assert.deepEqual(diffAuditFields([after], [{ ...after, areas: [{ ...outlet(true), slots: [...area.slots!].reverse() }] }]), []);
+  assert.equal(diffAuditFields([after], [{ ...after, areas: [] }]).filter((change) => !change.after).length, 2);
 });
 
 test('備案排除原定館，保留排序後每館第一個符合的空間', () => {

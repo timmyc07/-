@@ -1,10 +1,11 @@
 import { setTimeout as delay } from 'node:timers/promises';
 import { load } from 'cheerio';
-import { mongoClient, snapshots } from '../lib/mongodb.ts';
+import { mongoClient, saveTaichungSnapshot, snapshots } from '../lib/mongodb.ts';
 import type { Library, Snapshot } from '../lib/study.ts';
 import { addressKey, applyPublicEvidence, cityFacilities, laptopFaq, limingName, municipalFacilities,
   publicEvidence, readingRules, reviewedSources, studyLocations, verifiedCoordinates, wifiFaq } from './public-library-data.ts';
 import { readRuleAudit } from './crawl-taichung-rules.ts';
+import { taichungFieldReviews } from './taichung-field-reviews.ts';
 import { branchHours, branchInfo, branchName, cityCalendar, cityDirectory, cityHours,
   cityNotices, cityRules, citySite, cityWeatherClosures, clean, dateKey, nationalCalendar,
   nlpiArea, nlpiCalendar, nlpiQuietArea, nlpiWeatherClosures } from './taichung-sources.ts';
@@ -323,6 +324,7 @@ async function importTaichung() {
     _id: 'taichung', importedAt: new Date().toISOString(), issues,
     sourceCounts: { city: city.length, branches: branches.size, publicLibraries: publicLibraries.records.size },
     libraries: [...unique.values()].sort((a, b) => a.name.localeCompare(b.name, 'zh-Hant')),
+    fieldReviews: taichungFieldReviews([...unique.values()]),
   };
   if (new Set(snapshot.libraries.map((library) => library.district)).size < 29 ||
       snapshot.libraries.some((library) => !library.address || !library.district) ||
@@ -332,11 +334,11 @@ async function importTaichung() {
 
   const client = mongoClient();
   try {
-    await snapshots(client).replaceOne({ _id: snapshot._id }, snapshot, { upsert: true });
+    const fieldChanges = await saveTaichungSnapshot(snapshots(client), snapshot);
     console.log(JSON.stringify({ ...snapshot.sourceCounts, libraries: snapshot.libraries.length,
       areas: snapshot.libraries.flatMap((library) => library.areas).length,
       checkedSlots: snapshot.libraries.filter((library) => library.areas.some((area) => area.slots)).length,
-      issues }, null, 2));
+      fieldChanges, issues }, null, 2));
   } finally {
     await client.close();
   }

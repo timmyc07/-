@@ -1405,6 +1405,7 @@ const localStudyWifi: Record<string, string | undefined> = {
 };
 
 const taoyuanStudySeats: Record<string, { seats: number; url: string } | undefined> = {
+  'plis-163c307c64aa5fc02e8a': { seats: 116, url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000136' },
   'plis-369d482f8c183f32943f': { seats: 44, url: 'https://libstat.ncl.edu.tw/libraryDataDetail/L5219001' },
   'plis-01e95280aebec7eba09c': { seats: 160, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/017' },
   'plis-99799da6e29815c7da11': { seats: 90, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/030' },
@@ -1417,6 +1418,9 @@ const taoyuanWalkInStudyRooms = new Set([
 ]);
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-e1f47e046250c8795b4f') {
+    return { ...area, seats: 320 };
+  }
   if (id === 'plis-a094b0d4aa7d7722fd03') {
     return { ...area, name: '3 樓自修室', seats: 178, access: 'card', regionalCard: 'nationalTaiwan',
       entryNote: '自修席分為現場刷卡登記 92 席及線上預約 86 席，請持本人國立臺灣圖書館借閱證或悠遊卡借閱證辦理。',

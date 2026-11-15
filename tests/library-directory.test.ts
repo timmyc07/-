@@ -393,6 +393,8 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(wanluan.closures[0].until, undefined);
   assert.match(wanluan.openingHours!, /還書可至佳佐分館/);
   const fonglin = libraries.find(({ id }) => id === 'plis-96bdb053d7e967f965dc')!;
+  assert.equal(fonglin.areas.find(({ kind }) => kind === 'study')?.name, '3 樓 K 書中心');
+  assert.equal(fonglin.areas.find(({ kind }) => kind === 'study')?.slots, null);
   assert.deepEqual(fonglin.calendarYears, [2026]);
   assert(fonglin.closures.some(({ from, until }) => from === '2026-02-14' && until === '2026-02-23'));
   assert(fonglin.checkDates?.includes('2026-12-26'));

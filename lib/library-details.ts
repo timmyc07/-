@@ -59,6 +59,33 @@ const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、�
 const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O065604454792753757/金門縣公共圖書館館藏發展政策.pdf';
 const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-2efbf4bcfe8e68151f65': {
+    url: 'https://www.nlpi.edu.tw/Publications/libpub/fc93fc86-82ee-4ac2-b285-f775096e3a2e/Journal/fdae4308-f74b-4fdf-9830-caeea32a4ca0/Articles?articleId=530aec90-67ba-4eef-ba2b-e04048daee30',
+    facilities: ['無障礙電梯'],
+  },
+  'plis-fb0648ec4fff7472b345': {
+    url: 'https://kllib.klcg.gov.tw/cp.aspx?n=7935', facilities: ['開架式書櫃及閱覽空間'],
+  },
+  'plis-a76458f67d7289605250': {
+    url: 'https://kllib.klcg.gov.tw/cp.aspx?n=7939', facilities: ['在地、海洋及多元文化特色館藏架'],
+  },
+  'plis-2065ea3c3619a2597356': {
+    url: 'https://kllib.klcg.gov.tw/cp.aspx?n=7932', facilities: ['圖書閱覽室', 'K 書中心'],
+  },
+  'plis-79f7f1447d98ee4e2917': {
+    url: 'https://kllib.klcg.gov.tw/cp.aspx?n=7946',
+    facilities: ['開架閱覽室', '兒童閱覽室', '閱報區', '期刊區', '新書展示區'],
+  },
+  'plis-d5b8a42994a660f05102': {
+    url: 'https://kllib.klcg.gov.tw/cp.aspx?n=7928',
+    facilities: ['K 書中心', '開架閱覽室', '兒童室', '兒童室戶外花園'],
+  },
+  'plis-65dcee6860c52419f419': {
+    url: 'https://kllib.klcg.gov.tw/cp.aspx?n=7938', facilities: ['開放式閱覽區', '兒童區', '自修區'],
+  },
+  'plis-00259e7a928da5c62131': {
+    url: 'https://kllib.klcg.gov.tw/cp.aspx?n=7936', facilities: ['兒童閱覽區', '一般閱覽室'],
+  },
   'plis-f3080ccd8c34dad70222': {
     url: 'https://www.penghu.gov.tw/phhcc/home.jsp?id=10016',
     facilities: ['閱覽室', '書庫', '兒童室', '閱報期刊區', '資訊查詢設備', '個人視聽室'],

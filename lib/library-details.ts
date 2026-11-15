@@ -35,8 +35,8 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
     url: 'https://www.suao.gov.tw/News_Content.aspx?n=9043&s=385366&sms=13359',
   },
   'plis-5b3805f2ce866586020e': {
-    from: '2026-04-15', reason: '新竹市圖書館總館閉館重建中，復館日期以館方公告為準。',
-    url: 'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=b39fff74-7075-46ee-85c5-dee460b6f208',
+    from: '2020-03-16', reason: '新竹市圖書館總館閉館重建中，復館日期以館方公告為準。',
+    url: 'https://culture.hccg.gov.tw/ch/home.jsp?dataserno=202003030006&id=531&mcustomize=municipalnews_view.jsp&mserno=201601300215&parentpath=&t=MunicipalNews&toolsflag=Y',
   },
   'plis-eb5cc227330385ea9b00': {
     from: '2026-03-02', reason: '自 2026 年 3 月 2 日起閉館施工，復館日期以館方公告為準。',
@@ -182,7 +182,22 @@ const pudingOpening = 'https://news.tycg.gov.tw/News_Content.aspx?n=5016&s=19353
 const taoyuanOpeningHours = 'https://www.tycg.gov.tw/News_Content.aspx?n=97&s=1554331';
 const taoyuanSeatPortal = 'https://spaceme.typl.gov.tw/';
 const taoyuanSeatRules = 'https://www.typl.gov.tw/zh-tw/Reader/RegulationContent/6';
+const hsinchuNandaContact = 'https://dgservice.hccg.gov.tw/serviceNotice.do?id=1329&rule=guest';
+const hsinchuNandaOpening = 'https://www.cna.com.tw/postwrite/chi/448883';
+const hsinchuReadingOnly = new Set([
+  'plis-8ec15d072d689e24a3b1', 'plis-29ea3972b0a938ef5d16', 'plis-adffc7dba798fd30e8ad',
+  'plis-eabbc6fc8f182c08456f', 'plis-f31c4a951eb1511451a0',
+]);
+const hsinchuReadingServices = 'https://library.hccg.gov.tw/chhcml/app/artwebsite?id=42&module=artwebsite&serno=null';
 const announcedLibraries: (Library & { city: string })[] = [
+  {
+    id: 'local-hsinchu-city-nanda', name: '新竹市圖書館南大分館', city: '新竹市', district: '東區',
+    address: '新竹市東區南大路521號', phone: '03-5619962', types: ['公共圖書館'],
+    website: hsinchuNandaOpening, sources: [hsinchuNandaOpening, hsinchuNandaContact],
+    facilities: ['文獻資料專區', '兒童閱覽區', '藝文展區', '多功能室'],
+    accessNote: '2026 年 11 月 3 日正式開館，館方公布 100 席閱覽座位。',
+    areas: [], closures: [],
+  },
   {
     id: 'local-taoyuan-puding', name: '桃園市立圖書館埔頂分館', city: '桃園市', district: '大溪區',
     address: '桃園市大溪區埔仁路555號', phone: '03-3072254', types: ['公共圖書館'], website: pudingOpening,
@@ -283,6 +298,8 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const studyRoom = Boolean(study || local?.studyRoom || listed || taipeiArea || tainanArea || kaohsiungArea);
   const calendar = libraryCalendar(library);
   const serviceUpdate = serviceUpdates[library.id];
+  const readingOnly = hsinchuReadingOnly.has(library.id);
+  const noStudyRoom = local?.studyRoom === false || readingOnly;
   return {
     ...library,
     name: library.id === 'plis-e2c2e5a82e7e92aa1179' ? '新竹縣竹北市立圖書館福德分館' : library.name,
@@ -292,15 +309,16 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     checkDates: calendar?.checkDates ? [...new Set([...(library.checkDates ?? []), ...calendar.checkDates])] : library.checkDates,
     closures: [...library.closures, ...(calendar?.closures ?? []), ...(closure ? [closure] : [])],
     accessNote: serviceUpdate?.note ?? library.accessNote,
-    facilities: local?.studyRoom === false ? (library.facilities ?? detail.facilities)?.filter((facility) => !/^自[修習]室$/.test(facility))
+    facilities: noStudyRoom ? (library.facilities ?? detail.facilities)?.filter((facility) => !/^自[修習]室$/.test(facility))
       : library.facilities ?? detail.facilities,
-    studyRoom: local?.studyRoom === false ? false : library.studyRoom ?? (kaohsiungArea === null ? false : studyRoom || undefined),
-    areas: local?.studyRoom === false ? library.areas.filter(({ kind }) => kind !== 'study')
+    studyRoom: noStudyRoom ? false : library.studyRoom ?? (kaohsiungArea === null ? false : studyRoom || undefined),
+    areas: noStudyRoom ? library.areas.filter(({ kind }) => kind !== 'study')
       : studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
       ? [...library.areas, localArea] : library.areas,
     sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []),
       ...(serviceUpdate ? [serviceUpdate.url] : []),
       ...(hoursOverride ? [hoursOverride.url] : []),
+      ...(readingOnly ? [hsinchuReadingServices] : []),
       ...(kaohsiungArea === null ? [kaohsiungHoursSource] : []),
       ...(calendar?.closures.map(({ url }) => url) ?? []), ...(closure ? [closure.url] : [])])],
   };

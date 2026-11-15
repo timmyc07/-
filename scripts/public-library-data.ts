@@ -152,6 +152,7 @@ const wuriNotice = citySite + 'latestevent/Details?Parser=22,3,38,27,,,1971';
 const seatSystem = 'https://spaceme.library.taichung.gov.tw/';
 const seatRules = seatSystem + '#/rules/';
 const seatLocations = seatSystem + 'rest/council/common/resourceLocations/';
+const greenMuseumCreatorPc = seatSystem + 'rest/council/common/resourceCates/8a8a9b279918d18d0199191576ee0011';
 const huludunHours = 'https://www.huludun.taichung.gov.tw/content/index.asp?Parser=1,3,20';
 const huludunGuide = citySite + 'lib/content/index?Parser=1,118,325';
 const huludunIntro = citySite + 'lib/Introduction/index?Parser=99,118,324';
@@ -375,10 +376,10 @@ export const reviewedSources: Record<string, {
     accessNote: '分館介紹列有筆電席位。市府公告 2022 年改造後在閱覽桌面增設 22 個插座，請使用館方指定的充電座位。',
   },
   '臺中市立圖書館總館（綠美圖）': { studyRoom: false,
-    sources: [greenMuseumPlan, greenMuseumTeen, greenMuseumGuide, greenMuseumGuide + ',,,,,,,,1', greenMuseumMap, seatSystem,
+    sources: [greenMuseumPlan, greenMuseumTeen, greenMuseumGuide, greenMuseumGuide + ',,,,,,,,1', greenMuseumMap, seatSystem, greenMuseumCreatorPc,
       'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000633'],
     readingEquipment: { laptop: true, outlet: true },
-    accessNote: '市圖館舍名錄與全館樓層導覽列有一般閱覽座位及青少年閱覽靜區，未列獨立自習室。文化局資料說明閱讀桌有配置插座及檯燈，2 樓青少年閱覽區的安靜座位可使用筆電和平板。充電請使用館方指定的座位。 2 樓青少年討論區與 3 樓數位討論區供團體討論及課業研討，至少 3 人憑借閱證或身分證登記，每次原則 2 小時，無人預約可續借一次，閉館前 30 分鐘停止使用。個人自習請使用閱覽區。',
+    accessNote: '市圖館舍名錄與全館樓層導覽列有一般閱覽座位及青少年閱覽靜區，未列獨立自習室。文化局資料說明閱讀桌有配置插座及檯燈，2 樓青少年閱覽區的安靜座位可使用筆電和平板。充電請使用館方指定的座位。 2 樓青少年討論區與 3 樓數位討論區供團體討論及課業研討，至少 3 人憑借閱證或身分證登記，每次原則 2 小時，無人預約可續借一次，閉館前 30 分鐘停止使用。個人自習請使用閱覽區。 數位光境創作者電腦供影像編輯、繪圖設計等創作用途。憑借閱證或身分證登記，無借閱證請至大廳服務臺。每次 2 小時，無人預約可續借，請於 15 分鐘內報到，離席逾 15 分鐘會登出，閉館前 30 分鐘停止登記。',
     areaUpdates: [{ name: '2 樓青少年閱覽靜區', kind: 'quiet',
       slots: parseSlots(standardReadingHours), access: 'walk-in',
       equipment: { laptop: true, outlet: true, wifi: true },

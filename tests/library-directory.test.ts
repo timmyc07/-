@@ -327,6 +327,10 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   assert.equal(sanxia.access, 'walk-in');
   assert.equal(sanxia.equipment.outlet, false);
   assert.equal(get('新北市立圖書館三重東區分館').areas[0].equipment.outlet, undefined);
+  const fuying = get('新北市立圖書館新莊福營分館').areas[0];
+  assert.equal(fuying.seats, 117);
+  assert.equal(fuying.equipment.outlet, true);
+  assert.match(fuying.entryNote!, /28 席/);
 });
 
 test('年度休館按館方範圍套用，部分開放與跨年時段各自判定', () => {

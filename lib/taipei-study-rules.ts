@@ -6,13 +6,24 @@ const taipeiReservation = new Set([
   'plis-b4f11997a2a0f56cc70b', 'plis-e3287dc94a64c9288833', 'plis-c21ff2a6d5f510b7fccd',
   'plis-7decf0dff68a9e8b198d', 'plis-0ea807d14456081b105f', 'plis-d14f3a24d79c22efd2da',
 ]);
-const branchSeats: Record<string, { count: number; url: string } | undefined> = {
+const branchSeats: Record<string, { count: number; url: string; poweredSeats?: string } | undefined> = {
   'plis-0ea807d14456081b105f': { count: 93, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=92FAAE794AC2B476' },
   'plis-3c8e68ee422733123905': { count: 82, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=FB486AC6B571E022&sms=CFFFC938B352678A' },
   'plis-5ca7b8662f3ee724afdb': { count: 160, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=dc82ae43841f4a7580a7da987fe9635a' },
   'plis-2f2978ce3cdb2b79f6ef': { count: 60, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=87f7f5405b8a4695beea62e6c03d26bd' },
   'plis-4d33d19b31ac419fb05c': { count: 266, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=1b67994e4e43456aa83d84350bc3301e' },
   'plis-2a4837295385011e4ddd': { count: 200, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=745e63896b6b47ff8d4890d3e6712fdc' },
+  'plis-cb68ee849f5f2568cdd2': { count: 46, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=ca791bf6b31b4387a33de24302dab1ca' },
+  'plis-45e2769173fd5cf565ff': { count: 40, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=4165559dd5364dd597f393274d303ea1' },
+  'plis-49a9a08d63a7140714e4': { count: 48, poweredSeats: '部分座位設有筆電插座。',
+    url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=b1ae93fdc1244b80b9af364596b2b581' },
+  'plis-bb7748d0af74c7cc9180': { count: 117, poweredSeats: '3 樓前方筆電區有 28 席及插座，後方有 89 席一般自修座位。',
+    url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=aba549eae1a442e6a92fa8a13bd41110' },
+  'plis-fc879c8531bf43aae2ef': { count: 87, poweredSeats: '5 樓自修室有 37 席附插座的筆電專用席。',
+    url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=72c906c3d3d442fc97e106b9ed55317b' },
+  'plis-e752f17584f7d20990de': { count: 160, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=92d029aa58d74f8d9501e8fcef484253' },
+  'plis-11aa3de99bcc8b6d545d': { count: 200, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=9f0519c89e75453a824b949308a1ed03' },
+  'plis-b5da9bcc084818ab9965': { count: 52, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=f97aa14cccf645d29276a969bc9d8c53' },
 };
 
 export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): Area | undefined {
@@ -39,10 +50,11 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
   if ((listed || seats) && library.name.startsWith('新北市立圖書館')) {
     const conflictingOutlet = library.id === 'plis-2a4837295385011e4ddd';
     return {
-      ...withSeats, access: 'walk-in', equipment: conflictingOutlet ? {} : { outlet: false },
+      ...withSeats, access: 'walk-in',
+      equipment: seats?.poweredSeats ? { laptop: true, outlet: true } : conflictingOutlet ? {} : { outlet: false },
       entryNote: conflictingOutlet
         ? '現場入座。分館介紹與自修室管理要點的充電資訊不同，請向館方確認。'
-        : '現場入座，館方得於開館前發放號碼牌。',
+        : '現場入座，館方得於開館前發放號碼牌。' + (seats?.poweredSeats ?? ''),
       sources: [...withSeats.sources, newTaipeiRule],
     };
   }

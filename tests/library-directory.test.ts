@@ -548,6 +548,11 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   const newTaipei = libraries.find(({ name }) => name === '新北市立圖書館三峽分館')!;
   assert.equal(evaluate(newTaipei, newTaipei.areas[0], { ...taipeiQuery, date: '2026-11-28' }).status, 'no');
   assert.equal(evaluate(newTaipei, newTaipei.areas[0], { ...taipeiQuery, date: '2026-06-25' }).status, 'unknown');
+  for (const date of ['2026-02-21', '2026-06-25']) {
+    const beforeClosing = { ...taipeiQuery, date, start: minutes('16:00'), duration: 60 };
+    assert.equal(evaluate(newTaipei, newTaipei.areas[0], beforeClosing).closure, undefined);
+    assert.equal(evaluate(newTaipei, newTaipei.areas[0], { ...beforeClosing, duration: 61 }).closure?.time?.start, minutes('17:00'));
+  }
   assert.equal(coversCalendarYear(newTaipei, 2027), false);
   const electionEve = { ...taipeiQuery, date: '2026-11-27', start: minutes('11:00'), duration: 60 };
   const xindian = libraries.find(({ id }) => id === 'plis-b9568520f14810d9931a')!;

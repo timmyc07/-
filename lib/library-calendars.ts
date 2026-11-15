@@ -115,6 +115,8 @@ const taipei2027 = [
 ];
 const newTaipei2026 = [
   ...holidays(2026, newTaipeiUrl, '02-20', '06-19', '09-25'),
+  ...closureDates(2026, newTaipeiUrl, ['02-21', '06-25'], '調整開放時間，17:00 閉館')
+    .map((closure) => ({ ...closure, time: { start: minutes('17:00'), end: 24 * 60 } })),
   ...closureDates(2026, newTaipeiUrl, ['01-29', '02-26', '03-26', '04-30', '05-28', '07-30', '08-27', '09-24', '10-29', '11-26', '12-31'], '圖書整理清館日休館'),
   ...closureDates(2026, electionUrl, ['11-28'], '選舉日休館'),
 ];

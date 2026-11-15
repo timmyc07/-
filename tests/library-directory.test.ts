@@ -148,11 +148,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const puding = supplemented.find(({ id }) => id === 'local-taoyuan-puding')!;
   assert.equal(puding.areas[0].seats, 93);
   assert.equal(puding.areas[0].slots, null);
+  assert.equal(puding.closures[0].from, '2026-11-28');
   const sanhe = libraries.find(({ id }) => id === 'plis-b9b43f111c155ee7f7b1')!;
   assert.equal(sanhe.closures.find(({ from }) => from === '2026-06-29')?.url,
     'https://www.typl.gov.tw/zh-tw/News/Content/3120');
   const main = supplemented.find(({ name }) => name === '新竹縣立總圖書館')!;
   assert.equal(main.address, '新竹縣竹北市自強三路155號');
+  assert.equal(main.phone, '03-658-8139');
   assert.equal(main.areas[0].name, '地下 1 樓自修室');
   assert.equal(main.areas[0].slots, null);
   assert.equal(main.closures[0].until, '2026-12-17');
@@ -392,6 +394,7 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   const dayuan = libraries.find(({ name }) => name === '桃園市立圖書館大園分館')!;
   assert.equal(dayuan.areas[0].seats, 147);
   const taoyuanQuery = { ...taipeiQuery, regionalCards: ['taoyuan' as const] };
+  assert.equal(evaluate(dayuan, dayuan.areas[0], { ...taoyuanQuery, date: '2026-10-24' }).closure?.reason, '薔琵颱風休館');
   assert.equal(evaluate(dayuan, dayuan.areas[0], { ...taoyuanQuery, date: '2026-11-26' }).status, 'no');
   assert.equal(evaluate(dayuan, dayuan.areas[0], { ...taoyuanQuery, date: '2026-11-27' }).status, 'yes');
   const qiding = libraries.find(({ name }) => name === '桃園市立圖書館崎頂分館')!;

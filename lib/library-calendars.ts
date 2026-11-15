@@ -66,6 +66,8 @@ const keelung2026 = [
 ];
 const taoyuan2026 = [
   ...holidays(2026, taoyuanUrl, '02-21', '06-19', '09-25'),
+  ...closureDates(2026, 'https://www.typl.gov.tw/zh-tw/Closed/Content/85', ['10-23'], '薔琵颱風休館'),
+  ...closureDates(2026, 'https://www.typl.gov.tw/zh-tw/Closed/Content/88', ['10-24'], '薔琵颱風休館'),
   ...closureDates(2026, taoyuanUrl, ['01-29', '02-26', '03-26', '04-30', '05-28', '06-25', '07-30', '08-27', '09-24', '10-29', '11-26', '12-31'], '圖書整理清館日休館'),
   ...closureDates(2026, 'https://www.typl.gov.tw/zh-tw/Closed/Content/90', ['11-28'], '選舉日休館'),
 ];

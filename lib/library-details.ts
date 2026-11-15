@@ -1083,6 +1083,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-6834a05fd469c4134918': {
+    url: 'https://www.guoshing.gov.tw/Announcement/news?pageIndex=1&PageType=1&id=1f9e3a65-d85f-4250-97e4-da4d28d4bc2a',
+    hours: '搬遷期間週四至週日 08:00–17:00，開放兒童室及部分閱讀空間，提供兒童圖書、成人新書與報章雜誌借還服務。',
+    supersedesDirectory: true,
+  },
   'plis-05da96e29ca78b9de81a': {
     url: fuxingLibraryServices,
     hours: '區公所公告週二至週六 09:00–17:00，週日、週一及國定假日休館。',
@@ -1482,6 +1487,7 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-9d70717f141dbff4f2b6') return { ...area, seats: 38 };
   const newTaipei = newTaipeiStudySeats[id];
   if (newTaipei) {
     const url = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=' + newTaipei.branchId;

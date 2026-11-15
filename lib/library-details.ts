@@ -74,6 +74,7 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
 };
 
 const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A';
+const minxiongRenovation = 'https://www.cycab.gov.tw/wSite/ct?ctNode=5231&mp=1&xItem=13575';
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
 const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O065604454792753757/金門縣公共圖書館館藏發展政策.pdf';
 const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
@@ -943,6 +944,10 @@ const kinmenReadingAreas: Record<string, Area | undefined> = {
   },
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-a382f4004c63510e6b53': {
+    url: minxiongRenovation,
+    note: '整修期間 1 樓及閱報室暫停開放，請走側樓梯。借還書及領取預約書請至 3 樓櫃檯。',
+  },
   'plis-d34887b8b49b91a79656': {
     url: nantouEarlyReading,
     note: '原館重建期間，縣文化局公告臨時館設於愛國村愛國巷 114 號。到館前請致電 049-2791534 確認開放情形。',
@@ -982,6 +987,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-a382f4004c63510e6b53': {
+    url: minxiongRenovation,
+    hours: '自 2026 年 11 月 3 日起整修。2 樓自修室週二至週五 08:00–20:00、週六 08:00–17:00、週日 08:00–16:00。3 樓週二至週六 08:00–17:00、週日 08:00–16:00。4 樓週二至週六 09:00–17:00。預計 2027 年 2 月底重新開館，日期依館方公告。',
+    studyRoom: true, supersedesDirectory: true,
+  },
   'plis-7417038e0db9b35c62ea': {
     url: 'https://www.houlong.gov.tw/cp.aspx?n=4134',
     hours: '週二至週日 08:00–17:00。週一、國定假日及選舉日休館。',
@@ -1349,6 +1359,13 @@ const taoyuanWalkInStudyRooms = new Set([
 ]);
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-a382f4004c63510e6b53') {
+    return { ...area, name: '2 樓自修室',
+      slots: [0, 2, 3, 4, 5, 6].map((day) => ({
+        day, start: minutes('08:00'), end: minutes(day === 0 ? '16:00' : day === 6 ? '17:00' : '20:00'),
+      })),
+      slotPeriod: { from: '2026-11-03', until: '2027-02-28' } };
+  }
   if (id === 'plis-452d6d9aa6f6aa4a66f2') {
     return { ...area, seats: 24 };
   }

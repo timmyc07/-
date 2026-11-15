@@ -629,6 +629,15 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   const dacun = libraries.find(({ id }) => id === 'plis-e2293e37a8a158591761')!;
   assert.match(evaluate(dacun, undefined, election).closure!.reason, /選舉日休館/);
   assert.equal(evaluate(dacun, undefined, { ...election, date: '2026-11-29' }).closure, undefined);
+  for (const id of ['plis-a382f4004c63510e6b53', 'plis-3a8fa4c8db9589758aef']) {
+    const branch = libraries.find((library) => library.id === id)!;
+    assert.match(evaluate(branch, branch.areas.find(({ kind }) => kind === 'study'), election).closure!.reason, /選舉日休館/);
+  }
+  const guoxing = libraries.find(({ id }) => id === 'plis-6834a05fd469c4134918')!;
+  assert.match(guoxing.openingHours!, /還書箱/);
+  assert.equal(evaluate(guoxing, undefined, { ...election, date: '2026-10-30' }).closure, undefined);
+  assert.equal(evaluate(guoxing, undefined, { ...election, date: '2026-12-31' }).closure?.until, '2026-12-31');
+  assert.equal(evaluate(guoxing, undefined, { ...election, date: '2027-01-01' }).status, 'unknown');
   assert.equal(miaoli.filter((library) => evaluate(library, undefined, election).closure?.from === election.date).length, 18);
   const sanwan = miaoli.find(({ id }) => id === 'plis-708a19a863b754e58e04')!;
   assert.match(sanwan.openingHours!, /選舉日休館/);

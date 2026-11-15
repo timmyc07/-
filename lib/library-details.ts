@@ -10,6 +10,11 @@ import nclStudyRooms from './ncl-study-rooms.json' with { type: 'json' };
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-6834a05fd469c4134918': {
+    from: '2026-10-31', until: '2026-12-31',
+    reason: '新館工程尚未完竣，暫停開放至 2026 年 12 月 31 日。國姓鄉立圖書館館藏可投還書箱。恢復日期依館方公告。',
+    url: 'https://www.guoshing.gov.tw/Announcement/news?PageType=1&id=955b6a55-57b9-4523-a588-3ad0b6e8ac33&pageIndex=1',
+  },
   'plis-9895c2461ceb573cd713': {
     from: '2026-04-13', until: '2026-12-04', reason: '泰安鄉立圖書館因耐震補強工程暫停開放。',
     url: 'https://www.taian.gov.tw/News_Content.aspx?n=3892&s=999181',
@@ -1177,6 +1182,21 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-de863fe06ace49835a69': {
+    url: 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=003&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    hours: '館方頁面仍列原館整修。臨時借還書服務在嘉檳文化館（中埔村 128 之 8 號），週一至週五 09:00–18:00。原館復館時間待館方確認。',
+    supersedesDirectory: true,
+  },
+  'plis-24d66dc05128f8f7593d': {
+    url: 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=002&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    hours: '週二至週五 08:00–12:00、13:00–17:00，週六及週日 08:00–17:00。週一及國定假日休館，每月 20 日清館安排依館方公告。',
+    supersedesDirectory: true,
+  },
+  'plis-3a8fa4c8db9589758aef': {
+    url: 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=011&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    hours: '週二至週五 08:00–17:00，週六及週日 08:00–16:00。週一、國定假日及選舉日休館。',
+    supersedesDirectory: true,
+  },
   'plis-708a19a863b754e58e04': {
     url: sanwanLibraryHours,
     hours: '週一至週日 08:00–17:00。農曆春節及選舉日休館。',
@@ -1200,11 +1220,6 @@ const localHours: Record<string, { url: string; hours: string; studyRoom?: boole
   'plis-47d9eb53677ef9688a15': {
     url: 'https://www.nlpi.edu.tw/LibraryInfo/libraryinfo?PageType=1&id=7e95d643-5fb0-442e-96a0-f22f9b0fb151&pageIndex=1',
     hours: '週二至週六：期刊閱報室及自修室 09:00–21:00、書庫 09:00–20:00、兒童閱覽室 09:00–18:00。週日 09:00–17:00，週一及政府公告放假日休館。',
-    supersedesDirectory: true,
-  },
-  'plis-6834a05fd469c4134918': {
-    url: 'https://www.guoshing.gov.tw/Announcement/news?pageIndex=1&PageType=1&id=1f9e3a65-d85f-4250-97e4-da4d28d4bc2a',
-    hours: '搬遷期間週四至週日 08:00–17:00，開放兒童室及部分閱讀空間，提供兒童圖書、成人新書與報章雜誌借還服務。',
     supersedesDirectory: true,
   },
   'plis-05da96e29ca78b9de81a': {

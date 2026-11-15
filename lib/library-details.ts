@@ -9,6 +9,10 @@ import nclStudyRooms from './ncl-study-rooms.json' with { type: 'json' };
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-5da75c6e4e69a34999e4': {
+    from: '2025-03-25', reason: '配合大陳社區都市更新，自 2025 年 3 月 25 日起停止對外開放。',
+    url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=e5bd7a8339d842c9951bbe5233d62368',
+  },
   'plis-e65c73ff9e1179e30e89': {
     from: '2026-01-26', until: '2027-02-15',
     reason: '原館施工期間暫停開放。借還書及辦證請至東山區公所綜合大樓臨時據點（東山里 225 之 1 號）。週一 13:00–17:00、週二至週五 08:00–17:00、週末 08:00–16:00，國定假日休息。復館日期依館方公告。',
@@ -77,6 +81,14 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-ed53f27461a95b24573d': {
+    url: 'https://libstat.ncl.edu.tw/libraryDataDetail/L3351000',
+    facilities: ['1 樓報紙期刊區', '1 樓兒童書庫', '1 樓自修區', '2 樓成人書庫', '地下室活動空間'],
+  },
+  'plis-3770cd75f85a5448f57c': {
+    url: 'https://isp.ncl.edu.tw/child-tw/cityres?res=0K313034432720993533',
+    facilities: ['兒童專區'],
+  },
   'plis-3832d23bbe5146a74169': {
     url: 'https://www.nlpi.edu.tw/StaticPage/main-floors',
     facilities: ['地下 1 樓自修閱覽室', '兒童學習中心', '自助借還書區', '新書展示區', '期刊閱覽區', '樂齡閱覽區', '多元文化區', '留學資料區', '視聽區'],

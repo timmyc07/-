@@ -9,6 +9,11 @@ import nclStudyRooms from './ncl-study-rooms.json' with { type: 'json' };
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-95c10375e363b499b6fc': {
+    from: '2026-09-24', until: '2026-12-31',
+    reason: '西湖鄉立圖書館因館舍安全暫停開放，復館日期依館方公告。',
+    url: 'https://udn.com/news/amp/story/7324/9775214',
+  },
   'plis-d08bf679986d39ae195e': {
     from: '2026-08-20', until: '2027-02-28',
     reason: '坪林分館原館施工閉館。2026 年 9 月 1 日起由坪林茶業博物館 3 號展間提供臨時閱覽、預約取書、還書及辦證，復館日期依公告。',
@@ -59,6 +64,14 @@ const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、�
 const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O065604454792753757/金門縣公共圖書館館藏發展政策.pdf';
 const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-eaf18916c54c8e1fffc3': {
+    url: 'https://www.yuanli.gov.tw/News.aspx?n=7575&sms=13790',
+    facilities: ['團體討論室', '哺乳室', '公用電腦', '列印及複印設備'],
+  },
+  'plis-687f7b5047ffb263f313': {
+    url: 'https://opendata.miaoli.gov.tw/OpenDataDetail.aspx?n=9404&s=1811',
+    facilities: ['3 樓自修室'],
+  },
   'plis-8ec15d072d689e24a3b1': {
     url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000156',
     facilities: ['書區', '電腦區', '視聽區', '閱覽區', '兒童圖書區'],
@@ -238,6 +251,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-7417038e0db9b35c62ea': {
+    url: 'https://www.houlong.gov.tw/cp.aspx?n=4134',
+    hours: '週二至週日 08:00–17:00。週一、國定假日及選舉日休館。',
+    supersedesDirectory: true,
+  },
   'plis-2efbf4bcfe8e68151f65': keelungExtendedHours,
   'plis-fb0648ec4fff7472b345': keelungExtendedHours,
   'plis-a76458f67d7289605250': keelungExtendedHours,
@@ -590,6 +608,9 @@ const taoyuanWalkInStudyRooms = new Set([
 ]);
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-687f7b5047ffb263f313') {
+    return { ...area, entryNote: '縣府資料列出 4 至 9 月週二至週四 17:00–19:00 的自修時段，該時段暫停借還書。' };
+  }
   if (id === 'plis-859b54d11aaf9ac7b9be') {
     return { ...area, name: '1 樓自修室', seats: 46,
       sources: [...area.sources, 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000157',

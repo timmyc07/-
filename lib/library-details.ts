@@ -1321,6 +1321,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-62eb0222ac5626717a13': {
+    url: 'https://www.typl.gov.tw/zh-tw/Rent/Detail/9',
+    note: '3 樓研習教室為場地租借空間，29 坪，可容納 36 人。租借頁面目前標示暫停受理，恢復日期請向館方確認。',
+  },
   'plis-f37b49d54805d1b961ae': {
     url: 'https://www.beigan.gov.tw//chhtml/content/2187',
     note: '開館時可自由入館閱覽，6 歲以下兒童請由家長陪同。借還書及辦證於閉館前 10 分鐘停止受理。館內電腦須持本人借閱證到櫃檯登記，每時段 30 分鐘，每人每日最多 1 小時，預約逾 15 分鐘未到視同取消。',

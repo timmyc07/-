@@ -16,6 +16,15 @@ const newTaipeiNovemberClosures: Record<string, { day: string; branchId: string 
   'plis-039d55a9f83160fc0e08': { day: '11-24', branchId: 'e981c14a1847473c8d038b4c19656eab' },
   'plis-b5da9bcc084818ab9965': { day: '11-25', branchId: 'f97aa14cccf645d29276a969bc9d8c53' },
 };
+const xindianInventoryDates: Record<string, string[] | undefined> = {
+  'plis-b9568520f14810d9931a': ['10-29', '10-30'],
+  'plis-4d0d0cfbe3a9cd856174': ['10-27'],
+  'plis-5f86e9631601d52f3f76': ['10-26'],
+  'plis-a2efc5dfbc94ad322d3d': ['10-29'],
+  'plis-040b8aff6cd2e60cbd1e': ['10-29'],
+  'plis-b3c324c71459423ffadb': ['10-27'],
+  'plis-5c0e70dee55211b503e1': ['10-26'],
+};
 const dongshengClosure: Closure = {
   from: '2026-12-01', reason: '樹林東昇分館因都更閉館，臨時服務據點設於樹林區客家藝文館（中洲街 5-2 號）。',
   url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=90269135cd3b46ccac221df193f78e60',
@@ -247,6 +256,11 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
   if (library.name.startsWith('新北市立圖書館') || library.id === 'plis-461c4b474bd0eb749aaa') {
     const early = newTaipeiElectionEve[library.id];
     const closures = [...newTaipei2026];
+    const inventoryDates = xindianInventoryDates[library.id];
+    if (inventoryDates) {
+      closures.unshift(...closureDates(2026, 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=52dc595a0d4c4440968dd14d55b7f5c5',
+        inventoryDates, '圖書盤點休館'));
+    }
     const additional = newTaipeiNovemberClosures[library.id];
     if (additional) {
       const branchUrl = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId='

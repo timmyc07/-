@@ -481,6 +481,12 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   assert.equal(evaluate(linkou, linkou.areas[0], { ...request, date: '2026-11-14' }).closure?.until, '2026-11-14');
   assert.equal(evaluate(linkou, linkou.areas[0], { ...request, date: '2026-11-15' }).closure, undefined);
   assert.equal(evaluate(linkou, linkou.areas[0], { ...request, date: '2026-11-27' }).closure?.reason, '圖書盤點休館');
+  const xindian = get('新北市立圖書館新店分館');
+  const baoxing = get('新北市立圖書館新店寶興圖書閱覽室');
+  assert.equal(evaluate(xindian, undefined, { ...request, date: '2026-10-29' }).closure?.reason, '圖書盤點休館');
+  assert.equal(evaluate(xindian, undefined, { ...request, date: '2026-10-30' }).closure?.reason, '圖書盤點休館');
+  assert.equal(evaluate(baoxing, undefined, { ...request, date: '2026-10-27' }).closure?.reason, '圖書盤點休館');
+  assert.equal(evaluate(xindian, undefined, { ...request, date: '2026-10-27' }).closure, undefined);
 });
 
 test('年度休館按館方範圍套用，部分開放與跨年時段各自判定', () => {

@@ -121,7 +121,14 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 137);
+  assert.equal(scheduled.length, 138);
+  const luodong = libraries.find(({ id }) => id === 'plis-c45011eb98a75a2b9c10')!;
+  assert.equal(luodong.areas[0].name, '南豪館 2 樓自修室');
+  assert.equal(luodong.areas[0].seats, 100);
+  assert.equal(luodong.areas[0].slots?.length, 6);
+  const qionglin = libraries.find(({ id }) => id === 'plis-cf8f59d429a9ca2188f7')!;
+  assert.equal(qionglin.areas[0].seats, 25);
+  assert.equal(qionglin.areas[0].access, 'walk-in');
   const xinying = libraries.find(({ name }) => name === '臺南市新營文化中心圖書館')!;
   assert.equal(xinying.areas[0].name, '6 樓自修室');
   assert.deepEqual(xinying.areas[0].slots?.find(({ day }) => day === 6),

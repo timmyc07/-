@@ -1009,6 +1009,18 @@ const nationalTaiwanLaptopSeats: Area = {
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
 const localReadingAreas: Record<string, Area | undefined> = {
+  'plis-898020f5dd3a533a9ee3': {
+    name: '臨時館閱覽區', kind: 'reading', seats: 50, slots: null, access: null, equipment: {},
+    sources: ['https://library.hccc.gov.tw/ct.asp?ctNode=1051&mp=20&xItem=7450'],
+  },
+  'plis-efe674464e6fce8f380e': {
+    name: '兒童館閱覽座位', kind: 'reading', seats: 90, slots: null, access: null, equipment: {},
+    sources: ['https://library.hccc.gov.tw/sp.asp?ctNode=1025&mp=20&xItem=6890&xdurl=mp200ap%2Fbranch.asp'],
+  },
+  'plis-2b1932820682ee253f7e': {
+    name: '樂齡館閱覽座位', kind: 'reading', seats: 35, slots: null, access: null, equipment: {},
+    sources: ['https://library.hccc.gov.tw/sp.asp?ctNode=1025&mp=20&xItem=6890&xdurl=mp200ap%2Fbranch.asp'],
+  },
   'plis-4f772c9702962d95b0f8': {
     name: '閱覽區', kind: 'reading', seats: 32, slots: null, access: null, equipment: {},
     sources: ['https://www.typl.gov.tw/zh-tw/About/Introduce/029'],

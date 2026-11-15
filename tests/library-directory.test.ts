@@ -161,6 +161,16 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
   assert.equal(scheduled.length, 151);
+  for (const [id, seats] of [
+    ['plis-898020f5dd3a533a9ee3', 50],
+    ['plis-efe674464e6fce8f380e', 90],
+    ['plis-2b1932820682ee253f7e', 35],
+  ] as const) {
+    const library = libraries.find((library) => library.id === id)!;
+    const reading = library.areas.find(({ kind }) => kind === 'reading')!;
+    assert.equal(reading.seats, seats);
+    assert.equal(reading.slots, null);
+  }
   const shande = libraries.find(({ id }) => id === 'plis-4f772c9702962d95b0f8')!;
   const shandeReading = shande.areas.find(({ kind }) => kind === 'reading')!;
   assert.equal(shandeReading.seats, 32);

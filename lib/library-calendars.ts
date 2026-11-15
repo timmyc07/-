@@ -102,6 +102,14 @@ export const penghuStudyClosures = [2026, 2027].flatMap((year) =>
   monthlyClosures(year, 2, penghuMainUrl, '閱覽室每月最後一個星期二清潔休室'));
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  if (library.id === 'plis-11572b8b7a161948f5fb') {
+    return { closures: [
+      ...closureDates(2026, 'https://www.mlvillage.gov.tw/latestevent/Details.aspx?Parser=9,3,23,,,,9406',
+        ['11-28'], '選舉日休館'),
+      ...closureDates(2026, 'https://www.mlvillage.gov.tw/latestevent/Details.aspx?Parser=9,3,23,,,,9408',
+        ['12-25'], '行憲紀念日休館'),
+    ] };
+  }
   if (library.id === 'plis-f3080ccd8c34dad70222') {
     return { closures: [{ from: '2026-04-04', until: '2026-04-05', reason: '兒童節及清明節全館休館',
       url: 'https://www.phlib.nat.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=11299' }] };

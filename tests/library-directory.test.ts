@@ -121,7 +121,14 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 135);
+  assert.equal(scheduled.length, 137);
+  const xinying = libraries.find(({ name }) => name === '臺南市新營文化中心圖書館')!;
+  assert.equal(xinying.areas[0].name, '6 樓自修室');
+  assert.deepEqual(xinying.areas[0].slots?.find(({ day }) => day === 6),
+    { day: 6, start: minutes('07:00'), end: minutes('20:30') });
+  const liuying = libraries.find(({ name }) => name === '臺南市柳營區圖書館')!;
+  assert.equal(liuying.studyRoom, true);
+  assert.equal(liuying.areas[0].slots?.length, 6);
   const xinwu = libraries.find(({ name }) => name === '桃園市立圖書館新屋分館')!;
   assert.equal(xinwu.studyRoom, false);
   assert.equal(xinwu.areas.length, 0);

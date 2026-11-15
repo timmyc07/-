@@ -156,7 +156,7 @@ const studyHours: Record<string, StudyHours | undefined> = {
   },
   'plis-34ea4e3647b8191ffef9': {
     name: '普通閱覽室', ranges: [['23456', '09:00', '20:00'], ['0', '09:00', '17:00']],
-    url: 'https://www.findglocal.com/TW/Chiayi/569286603199484/嘉義市圖書館',
+    url: 'https://library.chiayi.gov.tw/wSite/sp?xdUrl=/wSite/ApBlock/Library.jsp&orgId=003&mp=1&idPath=5217_5222_5236',
   },
   'plis-24c304d8d8fc5bc58ab9': {
     name: '2 樓自修區', ranges: [],

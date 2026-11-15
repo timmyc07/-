@@ -1585,6 +1585,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-34ea4e3647b8191ffef9': {
+    supersedesDirectory: true,
+    url: 'https://library.chiayi.gov.tw/wSite/sp?xdUrl=/wSite/ApBlock/Library.jsp&orgId=003&mp=1&idPath=5217_5222_5236',
+    hours: '期刊室、普通閱覽室週二至週六 09:00–20:00，週日 09:00–17:00。兒童閱覽室、書庫週二、週三及週日 09:00–17:00，週四至週六 09:00–20:00。週一、國定假日及選舉日休館。',
+  },
   'plis-f5b5d0c2ee6ce8477832': {
     url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=012&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
     hours: '週二至週日 08:00–12:00、13:30–17:30。週一及國定假日休館。',

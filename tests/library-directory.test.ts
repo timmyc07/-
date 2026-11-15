@@ -415,6 +415,11 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   };
   const taipei = libraries.find(({ name }) => name === '臺北市立圖書館稻香分館')!;
   const taipeiQuery = { ...query, regionalCards: [...query.regionalCards] };
+  const baoshan = libraries.find(({ id }) => id === 'plis-d31d9ccdab3c7bcf9ff3')!;
+  assert.equal(evaluate(baoshan, undefined, { ...taipeiQuery, date: '2026-11-28' }).closure?.reason, '選舉日休館');
+  assert(baoshan.checkDates?.includes('2026-11-27'));
+  assert.equal(libraries.filter(({ city, closures }) => city === '新竹市' &&
+    closures.some(({ from }) => from === '2026-11-28')).length, 9);
   assert.equal(evaluate(taipei, taipei.areas[0], taipeiQuery).status, 'no');
   assert.equal(evaluate(taipei, taipei.areas[0], { ...taipeiQuery, date: '2027-02-10' }).status, 'yes');
   const newTaipei = libraries.find(({ name }) => name === '新北市立圖書館三峽分館')!;

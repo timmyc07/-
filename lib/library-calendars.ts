@@ -24,6 +24,7 @@ const taoyuanUrl = 'https://www.typl.gov.tw/zh-tw/News/Content/1067';
 const kaohsiungUrl = 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,33,,,,15495';
 export const chiayiCountyReadingRules = 'https://www.cycab.gov.tw/wSite/ct?ctNode=6267&mp=1&xItem=9895';
 const tainanMainUrl = 'https://www.tnpl.tn.edu.tw/u4914263388070917076/a1';
+const hsinchuCityHours = 'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=1031a73e-224c-4ecd-a33a-496ad144123e';
 export const yuanlinLibraryRules = 'https://files.chcg.gov.tw/files/58_20250124134738385_彰化縣員林市立圖書館圖書資料借閱規定-1140123修正.pdf';
 const electionClosureRules: Record<string, string> = {
   'plis-12a529595d2715dda629': yuanlinLibraryRules,
@@ -97,6 +98,19 @@ function songshanClosures(year: number) {
 }
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  if (library.id === 'plis-d31d9ccdab3c7bcf9ff3') {
+    const url = 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11075';
+    return {
+      closures: [
+        ...closureDates(2026, url, ['11-02', '11-09', '11-16', '11-23', '11-30'], '週一休館'),
+        ...closureDates(2026, url, ['11-28'], '選舉日休館'),
+      ],
+      checkDates: ['2026-11-27'],
+    };
+  }
+  if (/^新竹市文化局圖書館(?:鹽水分館|動物園分館|金山分館|關東分館|南寮分館|青少年館|香山分館|龍山分館|西門自修室)$/.test(library.name)) {
+    return { closures: closureDates(2026, hsinchuCityHours, ['11-28'], '依館方選舉日休館規定休館') };
+  }
   if (library.id === 'plis-57c550f79ce262c9b2d6') {
     return { closures: closureDates(2026, 'https://www.tnpl.tn.edu.tw/n15132655629462848525/n1Content',
       ['11-28'], '選舉日休館') };

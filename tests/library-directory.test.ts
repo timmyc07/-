@@ -96,7 +96,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   };
   const libraries = directory.libraries.map((library) => withLibraryDetail(library, details[library.id]));
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
-  assert.equal(scheduled.length, 67);
+  assert.equal(scheduled.length, 68);
   for (const { slots } of scheduled) {
     assert.equal(new Set(slots!.map(({ day }) => day)).size, slots!.length);
     assert(slots!.every(({ day, start, end }) => day >= 0 && day <= 6 && start < end && end <= 1440));
@@ -104,6 +104,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const pingzhen = libraries.find(({ id }) => id === 'plis-07c47313a8f5b473d2bf')!;
   assert.deepEqual(pingzhen.areas[0].slots?.find(({ day }) => day === 0),
     { day: 0, start: minutes('08:30'), end: minutes('17:00') });
+  const taitung = libraries.find(({ id }) => id === 'plis-674920ab9a5621eaf6cf')!;
+  assert.match(taitung.openingHours!, /09:00–21:00/);
+  assert.equal(taitung.areas[0].seats, 98);
+  assert.equal(taitung.areas[0].slots, null);
+  const chenggong = libraries.find(({ id }) => id === 'plis-3dc026b916c043fe287e')!;
+  assert.match(chenggong.openingHours!, /整修期間閱覽區週二至週日 08:00–17:00/);
+  assert.deepEqual(chenggong.areas[0].slots?.[0], { day: 0, start: minutes('08:00'), end: minutes('17:00') });
   const huangbin = libraries.find(({ id }) => id === 'plis-eb5cc227330385ea9b00')!;
   const result = evaluate(huangbin, undefined, {
     date: '2026-11-15', start: minutes('14:00'), duration: 120, kind: 'study', card: false, registration: false, required: [],

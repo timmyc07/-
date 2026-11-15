@@ -22,7 +22,18 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
   },
 };
 
-const localHours: Record<string, { url: string; hours: string; studyRoom?: true } | undefined> = {
+const localHours: Record<string, { url: string; hours: string; studyRoom?: true; supersedesDirectory?: true } | undefined> = {
+  'plis-674920ab9a5621eaf6cf': {
+    url: 'https://www.cna.com.tw/postwrite/chi/431519',
+    hours: '週二至週日 09:00–21:00。週末館藏區開放至 17:30。週一、國定假日及每月最後一日休館。',
+    studyRoom: true,
+    supersedesDirectory: true,
+  },
+  'plis-3dc026b916c043fe287e': {
+    url: 'https://www.changkang.gov.tw/news/news1/detail/9834',
+    hours: '自 2026 年 11 月 9 日起，整修期間閱覽區週二至週日 08:00–17:00，暫停借閱。週一及國定假日休館。每月最後一日清館，遇週一、國定假日或例假日提前或順延一日。',
+    supersedesDirectory: true,
+  },
   'plis-6c9e30dc1c6abf7a17d4': {
     url: 'https://kllib.klcg.gov.tw/cp.aspx?n=7933',
     hours: '週二至週六 09:00–21:00，週日 09:00–17:00。週一及國定假日休館。',
@@ -69,7 +80,8 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
       hours: '每日 08:00–18:00，春節及國定假日休館。' };
   }
   if (!detail?.address || comparableAddress(detail.address) !== comparableAddress(library.address)) return library;
-  const local = detail.hours ? undefined : localHours[library.id];
+  const candidate = localHours[library.id];
+  const local = !detail.hours || candidate?.supersedesDirectory ? candidate : undefined;
   const hoursOverride = ['plis-9709456f17abc6c6a512', 'plis-5929930cfc61bd687f1f'].includes(library.id)
     ? hsinchuHoursOverride : undefined;
   const closure = buildingClosures[library.id];
@@ -87,7 +99,7 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const calendar = libraryCalendar(library);
   return {
     ...library,
-    openingHours: closure?.reason ?? library.openingHours ?? hoursOverride?.hours ?? detail.hours ?? local?.hours,
+    openingHours: closure?.reason ?? library.openingHours ?? hoursOverride?.hours ?? local?.hours ?? detail.hours,
     calendarYears: calendar?.calendarYears ?? library.calendarYears,
     checkDates: calendar?.checkDates ? [...new Set([...(library.checkDates ?? []), ...calendar.checkDates])] : library.checkDates,
     closures: [...library.closures, ...(calendar?.closures ?? []), ...(closure ? [closure] : [])],
@@ -103,6 +115,10 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
 }
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-674920ab9a5621eaf6cf') {
+    return { ...area, name: '自修區', seats: 98,
+      sources: [...area.sources, 'https://culture.taitung.gov.tw/activity/臺東縣立圖書館各式活動'] };
+  }
   if (id === 'plis-5929930cfc61bd687f1f') {
     return { ...area, seats: 216, equipment: { outlet: true },
       sources: [...area.sources, 'https://library.hccg.gov.tw/chhcml/app/digital/view?id=55&module=branchLibrary&serno=15f84f6d-dc3c-4b82-8e80-df80b371c164'] };

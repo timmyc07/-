@@ -62,6 +62,10 @@ const studyHours: Record<string, StudyHours | undefined> = {
   'plis-421acf277000ebf61419': { name: '自修室', ranges: [['23456', '08:00', '22:00'], ['0', '08:00', '17:00']] },
   'plis-b8bd9cf1d6684cef5d51': { name: '自修室', ranges: [['023456', '09:00', '20:00']] },
   'plis-387900bcde6ccbe06570': { name: '自修室', ranges: [['023456', '08:10', '17:30']] },
+  'plis-3dc026b916c043fe287e': {
+    name: '1 樓閱覽區（整修期間）', ranges: [['023456', '08:00', '17:00']],
+    url: 'https://www.changkang.gov.tw/news/news1/detail/9834',
+  },
 };
 
 export function libraryStudyHours(id: string): { name: string; slots: Slot[]; url?: string } | undefined {

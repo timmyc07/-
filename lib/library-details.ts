@@ -77,6 +77,16 @@ const serviceUpdates: Record<string, { url: string; note: string } | undefined> 
   },
 };
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-3428641ec78aeb601979': {
+    url: 'https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u4903210577041037183',
+    hours: '週二至週五 08:00–20:00，週六及週日 08:00–17:00。週一及國定假日休館，月末週五清潔日 13:00–20:00 開館。',
+    supersedesDirectory: true,
+  },
+  'plis-0c2ace2641b37f2a19ac': {
+    url: 'https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u5211120801450367947',
+    hours: '週二至週五 08:00–20:00，週六及週日 08:00–17:00。週一及國定假日休館，流通櫃台提前 30 分鐘停止服務。',
+    supersedesDirectory: true,
+  },
   'plis-dd0e38aa18f750ffcade': {
     url: 'https://www.typl.gov.tw/zh-tw/News/Content/3345',
     hours: '原館自 2026 年 5 月 11 日起整修。臨時營運所自 10 月 30 日起移至 1 樓原閱報區，週二至週六 08:30–18:00、週日及週一 08:30–17:00，國定假日及每月最後一個星期四休息。',

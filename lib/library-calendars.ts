@@ -93,6 +93,10 @@ function songshanClosures(year: number) {
 }
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  if (library.id === 'plis-57c550f79ce262c9b2d6') {
+    return { closures: closureDates(2026, 'https://www.tnpl.tn.edu.tw/n15132655629462848525/n1Content',
+      ['11-28'], '選舉日休館') };
+  }
   const electionClosureRule = electionClosureRules[library.id];
   if (electionClosureRule) {
     return { closures: closureDates(2026, electionClosureRule, ['11-28'], '依館方選舉日休館規定休館') };

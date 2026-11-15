@@ -111,7 +111,11 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(gonghe.openingHours!, /08:00–12:00、13:00–17:00.*只開放一樓/);
   assert.equal(gonghe.areas.length, 0);
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
-  assert.equal(scheduled.length, 77);
+  assert.equal(scheduled.length, 79);
+  const miaoli = libraries.find(({ id }) => id === 'plis-703e62be51f0cd3f7e93')!;
+  assert.match(miaoli.areas[0].entryNote!, /08:00–20:00/);
+  const toufen = libraries.find(({ id }) => id === 'plis-8258ecedb33967785152')!;
+  assert.equal(toufen.areas[0].slots?.find(({ day }) => day === 6)?.end, minutes('17:00'));
   const magang = libraries.find(({ id }) => id === 'plis-838b908932f56e7b1d22')!;
   assert.equal(magang.areas[0].name, '1 樓自修區');
   assert.equal(magang.areas[0].slots, null);

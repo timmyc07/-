@@ -154,6 +154,10 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
 }
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-703e62be51f0cd3f7e93') {
+    return { ...area, entryNote: '自 2026 年 6 月 1 日起，國定假日 08:00–20:00 開放。',
+      sources: [...area.sources, 'https://mlc.edu.tw/System/mainedu/News/Detail.php?ID=53723'] };
+  }
   if (id === 'plis-838b908932f56e7b1d22') {
     return { ...area, name: '1 樓自修區',
       sources: [...area.sources, 'https://isp.ncl.edu.tw/files/file_pool/1/0N087443665349792009/110連江縣.pdf'] };

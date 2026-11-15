@@ -1,4 +1,4 @@
-import type { Area, Library } from './study.ts';
+import { minutes, type Area, type Library } from './study.ts';
 import { libraryStudyHours } from './library-study-hours.ts';
 import { libraryCalendar } from './library-calendars.ts';
 import { kaohsiungHoursSource, kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
@@ -165,17 +165,27 @@ const hsinchuOpening = 'https://www.hclibraryopening.com.tw/';
 const hsinchuFloorGuide = 'https://www.hclibraryopening.com.tw/%E8%AA%8D%E8%AD%98%E7%B8%BD%E5%9C%96';
 const stellarOpening = 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11078';
 const pudingOpening = 'https://news.tycg.gov.tw/News_Content.aspx?n=5016&s=1935304';
+const taoyuanOpeningHours = 'https://www.tycg.gov.tw/News_Content.aspx?n=97&s=1554331';
 const announcedLibraries: (Library & { city: string })[] = [
   {
     id: 'local-taoyuan-puding', name: '桃園市立圖書館埔頂分館', city: '桃園市', district: '大溪區',
-    address: '桃園市大溪區埔仁路557號', types: ['公共圖書館'], website: pudingOpening,
-    sources: [pudingOpening, 'https://opc.tycg.gov.tw/News_Content.aspx?n=9330&s=1787440',
-      'https://youyoutrip88.com/puding-parent/'],
+    address: '桃園市大溪區埔仁路555號', phone: '03-3072254', types: ['公共圖書館'], website: pudingOpening,
+    openingHours: '週二至週六 08:30–21:00，週日及週一 08:30–17:00。國定假日及每月最後一個星期四休館，以館方公告為準。',
+    sources: [pudingOpening, 'https://www.tycg.gov.tw/NewsPage.aspx?n=9&sms=9881',
+      'https://www.typl.gov.tw/zh-tw/Closed/Today', taoyuanOpeningHours],
     studyRoom: true, facilities: ['親子閱覽區', '一般閱覽室', '研習教室', '自修閱覽座位'],
-    areas: [{ name: '自修閱覽區', kind: 'study', slots: null, access: null, seats: 93,
-      equipment: {}, sources: [pudingOpening] }],
-    closures: [{ from: '2026-11-28', until: '2026-11-28', reason: '地方公職人員選舉日休館',
-      url: 'https://www.typl.gov.tw/zh-tw/Closed/Content/90' }],
+    areas: [{ name: '自修閱覽區', kind: 'study', access: null, seats: 93,
+      slots: Array.from({ length: 7 }, (_, day) => ({
+        day, start: minutes('08:30'), end: minutes(day <= 1 ? '17:00' : '21:00'),
+      })),
+      equipment: {}, sources: [pudingOpening, taoyuanOpeningHours] }],
+    closures: [
+      { from: '2026-11-28', until: '2026-11-28', reason: '地方公職人員選舉日休館',
+        url: 'https://www.typl.gov.tw/zh-tw/Closed/Content/90' },
+      ...['2026-11-26', '2026-12-31'].map((date) => ({
+        from: date, until: date, reason: '圖書整理清館日休館', url: taoyuanOpeningHours,
+      })),
+    ],
   },
   {
     id: 'local-hsinchu-county-main', name: '新竹縣立總圖書館', city: '新竹縣', district: '竹北市',

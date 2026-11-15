@@ -147,7 +147,9 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const supplemented = withAnnouncedLibraries(directory.libraries);
   const puding = supplemented.find(({ id }) => id === 'local-taoyuan-puding')!;
   assert.equal(puding.areas[0].seats, 93);
-  assert.equal(puding.areas[0].slots, null);
+  assert.equal(puding.phone, '03-3072254');
+  assert.equal(puding.address, '桃園市大溪區埔仁路555號');
+  assert.deepEqual(puding.areas[0].slots?.map(({ end }) => end), [1020, 1020, 1260, 1260, 1260, 1260, 1260]);
   assert.equal(puding.closures[0].from, '2026-11-28');
   const sanhe = libraries.find(({ id }) => id === 'plis-b9b43f111c155ee7f7b1')!;
   assert.equal(sanhe.closures.find(({ from }) => from === '2026-06-29')?.url,

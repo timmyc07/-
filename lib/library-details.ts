@@ -1977,7 +1977,8 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
 }
 
 const taoyuanSeatSystem: Record<string, { url?: string; seats?: number; name?: string; note?: string; onsiteOnly?: true } | undefined> = {
-  'plis-9c317ee99e20f7ec3cd3': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/014', seats: 147 },
+  'plis-9c317ee99e20f7ec3cd3': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/014', seats: 147,
+    note: '也可使用桃園市立圖書館行動 APP 報到。' },
   'plis-0d8617adcdaa013618d9': { url: 'https://www.typl.gov.tw/kids/News/Content/2017', seats: 167 },
   'plis-0670e73215c152add507': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/038', seats: 50 },
   'plis-14dcd000784259e3f26c': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/021', name: '2 樓自修室', seats: 70 },

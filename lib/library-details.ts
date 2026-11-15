@@ -1418,6 +1418,19 @@ const taoyuanWalkInStudyRooms = new Set([
 ]);
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-eaf4c3b42e1346a4f7e0') {
+    return { ...area, name: '地下 1 樓自修室', seats: 84 };
+  }
+  if (id === 'plis-e236f05575016f72b791') {
+    return { ...area, seats: 42 };
+  }
+  if (id === 'plis-f6701d622c9bbfa1dd39') {
+    return { ...area, seats: 24 };
+  }
+  if (id === 'plis-b5812bfda43fbd06e2a4') {
+    return { ...area, name: '6 樓閱覽室', seats: 108,
+      sources: [...area.sources, 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=e57e1d4b92334b029508f25dc38c4a39'] };
+  }
   if (id === 'plis-e1f47e046250c8795b4f') {
     return { ...area, seats: 320 };
   }

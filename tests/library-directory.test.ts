@@ -167,7 +167,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 154);
+  assert.equal(scheduled.length, 155);
   const dagang = libraries.find(({ id }) => id === 'plis-99799da6e29815c7da11')!;
   assert.deepEqual(dagang.areas.filter(({ kind }) => kind === 'reading')
     .map(({ name, seats, slots, access }) => [name, seats, slots, access]), [
@@ -255,6 +255,16 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(jiaoxi.areas[0].name, '2 樓右側閱覽室');
   assert.match(jiaoxi.areas[0].entryNote!, /藝文活動/);
   const sanxing = libraries.find(({ id }) => id === 'plis-9bee8536cf45c910547b')!;
+  assert(sanxing.closures.some(({ from }) => from === '2026-11-28'));
+  const wujie = libraries.find(({ id }) => id === 'plis-4b6847d140ab7464db3f')!;
+  assert.equal(wujie.areas.find(({ kind }) => kind === 'study')?.name, '2 樓自習區');
+  const erlin = libraries.find(({ id }) => id === 'plis-f0fd06a0e196d2f09357')!;
+  const erlinStudy = erlin.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(erlinStudy.name, '1 樓自修室');
+  assert.deepEqual(erlinStudy.slots?.find(({ day }) => day === 1), { day: 1, start: minutes('09:00'), end: minutes('21:00') });
+  const changhuaPuxin = libraries.find(({ id }) => id === 'plis-424ebe1541690abe5b92')!;
+  assert.equal(changhuaPuxin.areas.find(({ kind }) => kind === 'study')?.seats, 42);
+  assert.equal(changhuaPuxin.areas.find(({ kind }) => kind === 'reading')?.seats, 8);
   assert.match(sanxing.areas[0].entryNote!, /自修及研習課程/);
   assert.equal(sanxing.areas[0].slots, null);
   assert.deepEqual(jiaoxi.areas[0].slots?.find(({ day }) => day === 0),

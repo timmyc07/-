@@ -1029,6 +1029,10 @@ const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
 const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-424ebe1541690abe5b92': {
+    name: '2 樓優靜倚窗閱覽區', kind: 'reading', seats: 8, slots: null, access: null, equipment: {},
+    sources: ['https://www.chcg.gov.tw/TSO/Puxin/07other/main.aspx?main_id=12367'],
+  },
   'plis-b4d4a98c101cbfdc3b6d': {
     name: '期刊閱報區', kind: 'reading', seats: 7, slots: null, access: null, equipment: {},
     sources: [fugangLibrary],
@@ -1872,6 +1876,10 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-f0fd06a0e196d2f09357') {
+    return { ...area, entryNote: '週一只開放自修室及藝文走廊，國定假日休館。',
+      sources: [...area.sources, 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000262'] };
+  }
   if (id === 'plis-949d8708d5597baaf12e') {
     return { ...area, entryNote: '開放一般民眾閱覽及自習，請勿預占座位，離座達 30 分鐘視同放棄座位。',
       sources: [...area.sources, 'https://www.taimali.gov.tw/home/index.php/2020-04-16-07-15-03/category/31-2020-06-15-03-43-34.html?download=18%3A2020-06-15-03-50-18'] };
@@ -1971,8 +1979,7 @@ function localStudyRoom(id: string, area: Area): Area {
         'https://www.cna.com.tw/postwrite/chi/347529'] };
   }
   if (id === 'plis-4b6847d140ab7464db3f') {
-    return { ...area, entryNote: '自習區樓層與開放時段請向館方確認。',
-      sources: [...area.sources, 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000484'] };
+    return { ...area, entryNote: '自習區專用開放時段請向館方確認。' };
   }
   if (taoyuanWalkInStudyRooms.has(id)) {
     area = { ...area, access: 'walk-in', entryNote: '依現場指示入座。館方視情況於開館前發放號碼牌。',

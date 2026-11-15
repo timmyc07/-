@@ -207,6 +207,7 @@ const announcedLibraries: (Library & { city: string })[] = [
     website: stellarOpening, sources: [stellarOpening, 'https://www.openstreetmap.org/node/14355577123'],
     coordinates: { latitude: 24.8396572, longitude: 121.0036135 },
     openingHours: '試營運：週二至週四 09:00–20:30，週五至週日 09:00–24:00。週一休館，特殊日期依公告。',
+    facilities: ['嬰幼兒圖書區', '館內閱覽區'],
     accessNote: '試營運開放館內閱覽，暫停外借、預約、還書、通閱、檢索電腦及視聽設備服務。',
     areas: [], closures: [],
   },
@@ -238,7 +239,8 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
   if (library.id === 'plis-1d5bc6bb745d6ead49e9' && library.address === '苗栗縣竹南鎮大厝里真如路562號') {
     detail = { url: 'https://www.chunan.gov.tw/cp.aspx?n=11120', address: library.address,
-      hours: '每日 08:00–18:00，春節及國定假日休館。' };
+      hours: '每日 08:00–18:00，春節及國定假日休館。',
+      facilities: ['嬰幼兒親子共讀區', '兒童閱覽區', '樂齡閱覽區', '青少年閱覽區', '多功能空間', '自修室'] };
   }
   if (library.id === 'plis-5931f90c2b78f1094592' && library.address === '屏東縣新園鄉仙吉村新田路22巷21號') {
     detail = { url: xinyuanUrl, address: library.address, hours: xinyuanHours };

@@ -281,7 +281,16 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(xinwu.studyRoom, false);
   assert.equal(xinwu.areas.length, 0);
   assert.match(xinwu.openingHours!, /臨時營運所/);
-  assert.equal(libraries.find(({ name }) => name === '桃園市立圖書館楊梅分館')!.areas[0].seats, 160);
+  const yangmei = libraries.find(({ id }) => id === 'plis-01e95280aebec7eba09c')!;
+  assert.equal(yangmei.areas[0].seats, 160);
+  assert.match(yangmei.accessNote!, /期刊閱報區約 20 席、兒童閱覽區約 15 席/);
+  const puxin = libraries.find(({ id }) => id === 'plis-5f74f02b42c06b3fc9d9')!;
+  assert.equal(puxin.areas[0].seats, 172);
+  assert.match(puxin.accessNote!, /閱報區約 20 席、兒童閱覽區約 15 席/);
+  const kangzhuang = libraries.find(({ id }) => id === 'plis-9df366887a25b0673ee7')!;
+  const kangzhuangReading = kangzhuang.areas.filter(({ kind }) => kind === 'reading');
+  assert.deepEqual(kangzhuangReading.map(({ seats }) => seats), [59, 10, 5]);
+  assert.equal(kangzhuangReading[2].equipment.laptop, true);
   assert.equal(libraries.find(({ name }) => name === '桃園市立圖書館大崗分館')!.areas[0].seats, 90);
   const longgang = libraries.find(({ name }) => name === '桃園市立圖書館龍岡分館')!;
   assert.equal(longgang.areas[0].seats, 265);
@@ -298,7 +307,6 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const dongshi = libraries.find(({ name }) => name === '桃園市立圖書館東勢分館')!;
   assert.equal(dongshi.studyRoom, true);
   assert.equal(dongshi.areas[0].slots?.find(({ day }) => day === 2)?.end, minutes('21:00'));
-  const kangzhuang = libraries.find(({ name }) => name === '桃園市立圖書館康莊分館')!;
   assert.equal(kangzhuang.areas[0].seats, 24);
   assert(kangzhuang.areas[0].slots?.every(({ end }) => end === minutes('17:00')));
   const dazhu = libraries.find(({ name }) => name === '桃園市立圖書館大竹分館')!;

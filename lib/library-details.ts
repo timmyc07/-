@@ -1016,7 +1016,13 @@ const hongmeiLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/018';
 const zhongshanLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=9D5E05FD2EDBBA72';
 const dagangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/030';
 const mituoSeatDirectory = 'https://www.ksml.edu.tw/lib/content/Details.aspx?Parser=1,55,565,559,,,283';
+const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-9df366887a25b0673ee7': [
+    { name: '閱覽區', kind: 'reading', seats: 59, slots: null, access: null, equipment: {}, sources: [kangzhuangLibrary] },
+    { name: '期刊閱報區', kind: 'reading', seats: 10, slots: null, access: null, equipment: {}, sources: [kangzhuangLibrary] },
+    { name: '筆電區', kind: 'reading', seats: 5, slots: null, access: null, equipment: { laptop: true }, sources: [kangzhuangLibrary] },
+  ],
   'plis-2743e51569604910aa7d': {
     name: '閱覽座位', kind: 'reading', seats: 51, slots: null, access: null, equipment: {},
     sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,59,609,603'],
@@ -1220,6 +1226,18 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-01e95280aebec7eba09c': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/017',
+    note: '期刊閱報區約 20 席、兒童閱覽區約 15 席，另有視聽資料播放區 2 席及約可容納 18 人的研習教室。',
+  },
+  'plis-5f74f02b42c06b3fc9d9': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/016',
+    note: '閱報區約 20 席、兒童閱覽區約 15 席。',
+  },
+  'plis-9df366887a25b0673ee7': {
+    url: kangzhuangLibrary,
+    note: '館內另有上網區 10 席。',
+  },
   'plis-07432e289be30af20610': {
     url: 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,925,,,,16250',
     note: '館舍於 2026 年 9 月 1 日重新開館。',

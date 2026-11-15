@@ -59,6 +59,18 @@ const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、�
 const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O065604454792753757/金門縣公共圖書館館藏發展政策.pdf';
 const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-12cb176cd411e9d41770': {
+    url: 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_4295&mp=1&orgId=012&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    facilities: ['開架書庫', '鄉土文獻區', '兒童閱讀區', '藝文走廊'],
+  },
+  'plis-6f3ad22dfc7825bfbbe5': {
+    url: 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_4295&mp=1&orgId=011&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    facilities: ['罕用書庫', '圖書室', '報紙期刊區', '閱讀區', '資料檢索區', '好書交換區'],
+  },
+  'plis-e2c2e5a82e7e92aa1179': {
+    url: 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_4295&mp=1&orgId=016&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    facilities: ['圖書室', '兒童室（親子共讀區）', '期刊室', 'K 書室'],
+  },
   'plis-24c304d8d8fc5bc58ab9': {
     url: 'https://www.suao.gov.tw/cp.aspx?n=6676',
     facilities: ['親子閱覽區', '新書展示區', '資訊檢索區', '書報閱覽區', '書庫', '期刊雜誌區',

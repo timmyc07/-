@@ -5,6 +5,15 @@ const taipeiUrl = 'https://tpml.gov.taipei/cp.aspx?n=141EFA8D46038957&s=839324A3
 const newTaipeiUrl = 'https://www.library.ntpc.gov.tw/singlehtml/be937c4bcb74427ca3d3c8fd5b4704b9';
 const nationalTaiwanUrl = 'https://www.ntl.edu.tw/wSite/ct?ctNode=1711&mp=1&xItem=58536';
 const electionUrl = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=353f6e7dda484242820ea153ab0eb4a0';
+const newTaipeiElectionEve: Record<string, { start: number; url: string } | undefined> = {
+  'plis-a2efc5dfbc94ad322d3d': { start: 12, url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=029589630b684964945529418472ef30' },
+  'plis-b9568520f14810d9931a': { start: 12, url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=cc172c75856b4421bcfb3a655534abaf' },
+  'plis-4b5e39e13cd44319599f': { start: 13, url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=4ded2dc334a04c0cb6e638e839b18870' },
+};
+const dongshengClosure: Closure = {
+  from: '2026-12-01', reason: '樹林東昇分館因都更閉館，臨時服務據點設於樹林區客家藝文館（中洲街 5-2 號）。',
+  url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=90269135cd3b46ccac221df193f78e60',
+};
 const keelungUrl = 'https://kllib.klcg.gov.tw/News_Content.aspx?n=7789&s=16436&sms=12521';
 const taoyuanUrl = 'https://www.typl.gov.tw/zh-tw/News/Content/1067';
 const kaohsiungUrl = 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,33,,,,15495';
@@ -138,8 +147,17 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     };
   }
   if (library.name.startsWith('新北市立圖書館') || library.id === 'plis-461c4b474bd0eb749aaa') {
+    const early = newTaipeiElectionEve[library.id];
+    const closures = [...newTaipei2026];
+    if (early) {
+      closures.push({
+        from: '2026-11-27', until: '2026-11-27', time: { start: early.start * 60, end: 24 * 60 },
+        reason: '投開票所布置，提前閉館', url: early.url,
+      });
+    }
+    if (library.id === 'plis-f5672c9a38fabba9eabb') closures.push(dongshengClosure);
     return {
-      calendarYears: [2026], closures: newTaipei2026,
+      calendarYears: [2026], closures,
       checkDates: ['2026-01-04', '2026-01-11', '2026-02-21', '2026-05-03', '2026-05-10', '2026-06-25'],
     };
   }

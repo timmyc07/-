@@ -362,6 +362,14 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   assert.equal(evaluate(newTaipei, newTaipei.areas[0], { ...taipeiQuery, date: '2026-11-28' }).status, 'no');
   assert.equal(evaluate(newTaipei, newTaipei.areas[0], { ...taipeiQuery, date: '2026-06-25' }).status, 'unknown');
   assert.equal(coversCalendarYear(newTaipei, 2027), false);
+  const electionEve = { ...taipeiQuery, date: '2026-11-27', start: minutes('11:00'), duration: 60 };
+  const xindian = libraries.find(({ id }) => id === 'plis-b9568520f14810d9931a')!;
+  assert.equal(evaluate(xindian, xindian.areas[0], electionEve).closure, undefined);
+  assert.equal(evaluate(xindian, xindian.areas[0], { ...electionEve, duration: 61 }).closure?.time?.start, minutes('12:00'));
+  const luzhou = libraries.find(({ id }) => id === 'plis-4b5e39e13cd44319599f')!;
+  assert.equal(luzhou.closures.find(({ from }) => from === '2026-11-27')?.time?.start, minutes('13:00'));
+  const dongsheng = libraries.find(({ id }) => id === 'plis-f5672c9a38fabba9eabb')!;
+  assert.match(dongsheng.closures.find(({ from }) => from === '2026-12-01')!.reason, /中洲街 5-2 號/);
   const ntl = libraries.find(({ name }) => name === '國立臺灣圖書館')!;
   assert.equal(evaluate(ntl, ntl.areas[0], { ...taipeiQuery, date: '2026-02-20' }).status, 'unknown');
   assert.equal(coversCalendarYear(libraries.find(({ name }) => name === '新北市烏來區立圖書館')!, 2026), false);

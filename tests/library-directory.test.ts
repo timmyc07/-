@@ -142,6 +142,11 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const zhonglu = libraries.find(({ id }) => id === 'plis-094ed6f57775956545a2')!;
   assert.equal(zhonglu.areas[0].seats, 85);
   assert.equal(zhonglu.areas[0].equipment.wifi, true);
+  assert.equal(zhonglu.areas[0].equipment.laptop, true);
+  assert.equal(zhonglu.areas[0].access, 'walk-in');
+  const nankan = libraries.find(({ id }) => id === 'plis-369d482f8c183f32943f')!;
+  assert.equal(nankan.areas[0].seats, 44);
+  assert.equal(nankan.areas[0].access, 'walk-in');
   const changhuaCity = libraries.find(({ id }) => id === 'plis-d4bafe538b622515b304')!;
   assert.deepEqual(changhuaCity.areas[0].slots?.map(({ day }) => day).sort(), [0, 1, 3, 4, 5, 6]);
   const yuanlin = libraries.find(({ id }) => id === 'plis-016c903b9ad9d1b886d6')!;

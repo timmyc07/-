@@ -416,17 +416,29 @@ const localStudyWifi: Record<string, string | undefined> = {
 };
 
 const taoyuanStudySeats: Record<string, { seats: number; url: string } | undefined> = {
+  'plis-369d482f8c183f32943f': { seats: 44, url: 'https://libstat.ncl.edu.tw/libraryDataDetail/L5219001' },
   'plis-01e95280aebec7eba09c': { seats: 160, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/017' },
   'plis-99799da6e29815c7da11': { seats: 90, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/030' },
 };
 
+const taoyuanWalkInStudyRooms = new Set([
+  'plis-8d09da2a8c7fc2f99893', 'plis-f9aa2d362caa1f76eec4', 'plis-094ed6f57775956545a2',
+  'plis-68b3417f5a99cefe007d', 'plis-163c307c64aa5fc02e8a', 'plis-62af35b79d7d88c393d7',
+  'plis-bb87f2dc7cdcad6eca8b', 'plis-369d482f8c183f32943f',
+]);
+
 function localStudyRoom(id: string, area: Area): Area {
+  if (taoyuanWalkInStudyRooms.has(id)) {
+    area = { ...area, access: 'walk-in', entryNote: '依現場指示入座。館方視情況於開館前發放號碼牌。',
+      equipment: id === 'plis-62af35b79d7d88c393d7' ? area.equipment : { ...area.equipment, laptop: true },
+      sources: [...area.sources, 'https://www.typl.gov.tw/zh-tw/Reader/RegulationContent/20', taoyuanSeatPortal] };
+  }
   if (id === 'plis-3fb94b86e4de966ba65a') {
     return { ...area, access: 'walk-in', equipment: { ...area.equipment, outlet: true },
       entryNote: '一人限用一席，暫時離席須在 60 分鐘內返回。自修室插座可供充電。',
       sources: [...area.sources, 'https://lib.ylccb.gov.tw/wSite/ct?ctNode=5240&mp=1&xItem=11513'] };
   }
-  if (id === 'plis-094ed6f57775956545a2') return { ...area, seats: 85, equipment: { wifi: true } };
+  if (id === 'plis-094ed6f57775956545a2') return { ...area, seats: 85, equipment: { ...area.equipment, wifi: true } };
   if (id === 'plis-016c903b9ad9d1b886d6') {
     return { ...area, name: '地下 1 樓自修室', access: 'walk-in', equipment: { outlet: true, laptop: false },
       entryNote: '通常自由入座，例假日或特殊期間可能發號碼牌。使用筆電請至 1 樓期刊室無線上網區並自備電源。',

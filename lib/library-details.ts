@@ -55,6 +55,31 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
 
 const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A';
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
+const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O065604454792753757/金門縣公共圖書館館藏發展政策.pdf';
+const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
+const kinmenFacilities: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-e3c1d8e816d9e6061a7d': {
+    url: kinmenCollectionPolicy, facilities: ['南棟親子活動區', '南棟青少年閱覽室', '南棟期刊室', '南棟自修室'],
+  },
+  'plis-cbce401033404caad835': {
+    url: kinmenCollectionPolicy, facilities: ['開架式閱覽室', '兒童館', '2 樓閱覽室', '活動講座教室'],
+  },
+  'plis-722d54fbc98c7dc13cc0': {
+    url: kinmenCollectionPolicy, facilities: ['兒童館', '開放式閱讀室', '多功能親子桌遊館', '教室'],
+  },
+  'plis-387900bcde6ccbe06570': {
+    url: jinshaReopening, facilities: ['幼兒與兒童閱讀區', '無障礙及親子廁所', '哺乳室', '多功能研習教室',
+      '討論室', '讀者劇場', '閱讀自習室', '多元閱讀區', '音樂影音專區'],
+  },
+};
+const kinmenReadingAreas: Record<string, Area | undefined> = {
+  'plis-cbce401033404caad835': {
+    name: '2 樓閱覽室', kind: 'reading', slots: null, access: null, equipment: {}, sources: [kinmenCollectionPolicy],
+  },
+  'plis-722d54fbc98c7dc13cc0': {
+    name: '1 樓開放式閱讀室', kind: 'reading', slots: null, access: null, equipment: {}, sources: [kinmenCollectionPolicy],
+  },
+};
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
   'plis-645a77676fc64f962dcf': {
     url: 'https://twainews.com/chiayiCity/news/H6AVvMXtFIMXzE8zULEN',
@@ -327,6 +352,11 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const serviceUpdate = serviceUpdates[library.id];
   const readingOnly = hsinchuReadingOnly.has(library.id);
   const noStudyRoom = local?.studyRoom === false || readingOnly;
+  const localFacilities = kinmenFacilities[library.id];
+  const facilities = library.facilities ?? detail.facilities ?? localFacilities?.facilities;
+  const readingArea = kinmenReadingAreas[library.id];
+  const areas = readingArea && !library.areas.some(({ name }) => name === readingArea.name)
+    ? [...library.areas, readingArea] : library.areas;
   return {
     ...library,
     name: library.id === 'plis-e2c2e5a82e7e92aa1179' ? '新竹縣竹北市立圖書館福德分館' : library.name,
@@ -336,14 +366,14 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     checkDates: calendar?.checkDates ? [...new Set([...(library.checkDates ?? []), ...calendar.checkDates])] : library.checkDates,
     closures: [...library.closures, ...(calendar?.closures ?? []), ...(closure ? [closure] : [])],
     accessNote: serviceUpdate?.note ?? library.accessNote,
-    facilities: noStudyRoom ? (library.facilities ?? detail.facilities)?.filter((facility) => !/^自[修習]室$/.test(facility))
-      : library.facilities ?? detail.facilities,
+    facilities: noStudyRoom ? facilities?.filter((facility) => !/^自[修習]室$/.test(facility)) : facilities,
     studyRoom: noStudyRoom ? false : library.studyRoom ?? (kaohsiungArea === null ? false : studyRoom || undefined),
-    areas: noStudyRoom ? library.areas.filter(({ kind }) => kind !== 'study')
-      : studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
-      ? [...library.areas, localArea] : library.areas,
+    areas: noStudyRoom ? areas.filter(({ kind }) => kind !== 'study')
+      : studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !areas.some(({ kind }) => kind === 'study')
+      ? [...areas, localArea] : areas,
     sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []),
       ...(serviceUpdate ? [serviceUpdate.url] : []),
+      ...(localFacilities ? [localFacilities.url] : []),
       ...(hoursOverride ? [hoursOverride.url] : []),
       ...(readingOnly ? [hsinchuReadingServices] : []),
       ...(kaohsiungArea === null ? [kaohsiungHoursSource] : []),
@@ -431,7 +461,17 @@ function localStudyRoom(id: string, area: Area): Area {
   }
   if (id === 'plis-838b908932f56e7b1d22') {
     return { ...area, name: '1 樓自修區',
-      sources: [...area.sources, 'https://isp.ncl.edu.tw/files/file_pool/1/0N087443665349792009/110連江縣.pdf'] };
+      entryNote: '啟用時公告可容納 20 人，目前席數與自修區專用時段待館方確認。',
+      sources: [...area.sources, 'https://isp.ncl.edu.tw/files/file_pool/1/0N087443665349792009/110連江縣.pdf',
+        'https://www.matsu-news.gov.tw/news/article/13603'] };
+  }
+  if (id === 'plis-387900bcde6ccbe06570') {
+    return { ...area, name: '3 樓閱讀自習室',
+      entryNote: '整修後自習室位於 3 樓，所列時段來自整修前的名錄，請向館方確認。',
+      sources: [...area.sources, jinshaReopening] };
+  }
+  if (id === 'plis-ca5bd98a9d6dcfd1159b') {
+    return { ...area, name: '1 樓自修室', sources: [...area.sources, kinmenCollectionPolicy] };
   }
   if (id === 'plis-f3080ccd8c34dad70222') {
     return { ...area, name: '2 樓閱覽室（自修室）', access: 'walk-in',

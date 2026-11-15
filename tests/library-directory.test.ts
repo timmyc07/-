@@ -523,6 +523,9 @@ test('臺南溫書窩採專室入場及設備規則，其他館舍的入座方�
   assert.equal(evaluate(main, area, query).closure?.reason, '選舉日休館');
   assert.equal(evaluate(main, area, { ...query, date: '2026-11-29' }).status, 'yes');
   assert.equal(get('臺南市東區裕文圖書館').areas[0].access, 'walk-in');
+  const anding = get('臺南市安定區圖書館').areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(anding.name, '地下 1 樓自修室');
+  assert.equal(anding.slots, null);
   const xigang = get('臺南市西港區圖書館');
   assert.equal(xigang.areas.find(({ kind }) => kind === 'study')?.name, '3 樓自修室');
   const guantian = get('臺南市官田區圖書館');

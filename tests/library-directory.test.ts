@@ -321,6 +321,9 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(miaoli.areas[0].entryNote!, /08:00–20:00/);
   const toufen = libraries.find(({ id }) => id === 'plis-8258ecedb33967785152')!;
   assert.equal(toufen.areas[0].slots?.find(({ day }) => day === 6)?.end, minutes('17:00'));
+  assert.equal(toufen.areas[0].closures?.[0].from, '2026-10-16');
+  assert.equal(toufen.areas[0].closures?.[0].until, undefined);
+  assert.equal(toufen.closures.some(({ from }) => from === '2026-10-16'), false);
   const magang = libraries.find(({ id }) => id === 'plis-838b908932f56e7b1d22')!;
   assert.equal(magang.areas[0].name, '1 樓自修區');
   assert.equal(magang.areas[0].slots, null);
@@ -352,7 +355,9 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
     assert.equal(library.studyRoom, id === 'plis-722d54fbc98c7dc13cc0' ? false : undefined);
   }
   const nantou = libraries.find(({ id }) => id === 'plis-8e698a4770cf01e3875e')!;
-  assert.equal(nantou.areas.find(({ kind }) => kind === 'study')?.seats, 147);
+  const nantouStudy = nantou.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(nantouStudy.seats, 147);
+  assert.match(nantouStudy.entryNote!, /借閱證或身分證.*離座逾 1 小時/);
   const periodicals = nantou.areas.find(({ kind }) => kind === 'reading')!;
   assert.equal(periodicals.seats, 80);
   assert.equal(periodicals.access, 'conditional');

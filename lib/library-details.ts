@@ -1707,6 +1707,12 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-8258ecedb33967785152') {
+    const url = 'https://www.tch.gov.tw/News_Content.aspx?n=10075&s=1005364';
+    return { ...area, closures: [...(area.closures ?? []), {
+      from: '2026-10-16', reason: '信東路 90 號自修室因耐震評估未通過，自 2026 年 10 月 16 日起閉館。館方規劃於新館提供自修服務。', url,
+    }], sources: [...area.sources, url] };
+  }
   if (id === 'plis-9bee8536cf45c910547b') {
     return { ...area, entryNote: '研習教室供自修及研習課程使用。' };
   }
@@ -1881,7 +1887,8 @@ function localStudyRoom(id: string, area: Area): Area {
   }
   if (id === 'plis-8e698a4770cf01e3875e') {
     return { ...area, seats: 147, access: 'conditional',
-      entryNote: '供一般讀者自修。館方請 12 歲以下讀者使用兒童閱覽室。' };
+      entryNote: '持借閱證或身分證使用座位管理系統，自由選位後對號入座，請勿預占其他座位。離座逾 1 小時未歸，館方得取消座位使用權。館方請 12 歲以下讀者使用兒童閱覽室。',
+      sources: [...area.sources, 'https://glrs.nantou.gov.tw/LawContent.aspx?id=GL000630'] };
   }
   if (id === 'plis-d4bafe538b622515b304') {
     return { ...area, name: '3 樓自習室', seats: 100,

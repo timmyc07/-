@@ -1058,6 +1058,11 @@ const lanzhouLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F3880
 const kaohsiungMainReadingRules = 'https://www.ksml.edu.tw/form/Details.aspx?Parser=2%2C8%2C872%2C%2C%2C%2C688';
 const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=099812be491c45e59238adcaf69d3443';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-be5bfb0404539bf8903f': {
+    name: '閱覽室', kind: 'reading', slots: null, access: null, equipment: {},
+    entryNote: '館方介紹此室供閱讀及自修。',
+    sources: ['https://www.shlin.gov.tw/cp.aspx?n=40784'],
+  },
   'plis-8616f8eb019058a7080c': {
     name: '2 樓書庫閱覽區', kind: 'reading', seats: 14, slots: null, access: null, equipment: {},
     sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=7ce26c583dfd45f896e4f02548c888f5'],
@@ -1361,6 +1366,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-be5bfb0404539bf8903f': {
+    url: 'https://www.shlin.gov.tw/cp.aspx?n=40784',
+    note: '使用數位視聽區電腦須憑閱覽證登記，每次 1 小時。無其他讀者登記時，可再登記下一時段。',
+  },
   'plis-f5b5d0c2ee6ce8477832': {
     url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000286',
     note: '館內提供 Wi-Fi。2 樓參考室及研討室兼供自修，專室時段待館方確認。',

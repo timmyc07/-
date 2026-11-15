@@ -1058,6 +1058,11 @@ const lanzhouLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F3880
 const kaohsiungMainReadingRules = 'https://www.ksml.edu.tw/form/Details.aspx?Parser=2%2C8%2C872%2C%2C%2C%2C688';
 const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=099812be491c45e59238adcaf69d3443';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-f17aae2dc318faaa5ad4': {
+    name: '2 樓個人閱讀區', kind: 'reading', slots: null, access: null, equipment: {},
+    entryNote: '供民眾閱讀館藏及自修。',
+    sources: ['https://www.phlib.nat.gov.tw/wSite/sp?ctNode=6223&mp=1&orgId=009&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp'],
+  },
   'plis-be5bfb0404539bf8903f': {
     name: '閱覽室', kind: 'reading', slots: null, access: null, equipment: {},
     entryNote: '館方介紹此室供閱讀及自修。',

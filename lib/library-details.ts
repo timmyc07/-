@@ -1165,6 +1165,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-bfff639f154e1c065ad1': {
+    url: 'https://www.cna.com.tw/postwrite/chi/448992',
+    note: '館舍完成整修，於 2026 年 11 月 4 日重新開館，設有親子共讀區及多元閱讀空間。',
+  },
   'plis-b208b8b3efcd2c80cbaa': {
     url: hongmeiLibrary,
     note: '上網電腦區有 12 席，視聽資料播放區有 6 席，可透過觸控式座位管理系統登記及報到。',
@@ -1255,6 +1259,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-bfff639f154e1c065ad1': {
+    url: 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=016&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    hours: '週二至週六 08:00–17:00。週日 08:00–17:00，縣府各館時段表列週日 12:00–13:00 休息，午間到館前請先確認。',
+    supersedesDirectory: true,
+  },
   'plis-c9c0fe185180d1def859': {
     url: 'https://www.guanshan.gov.tw/about/about4',
     hours: '週二至週日 08:00–12:00、13:00–17:00，週一休館。特殊日期依館方公告。',

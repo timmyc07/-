@@ -13,6 +13,12 @@ const studyRoomLocations = new Set([
 export function tainanStudyRoom(id: string, area: Area): Area | undefined {
   if (!studyRoomLocations.has(id)) return;
   const sources = [...new Set([...area.sources, locations])];
+  if (id === 'plis-c4b5b81b4108ecfd45e8') {
+    return { ...area, name: '3 樓自修室', sources: [...sources, 'https://www.tnpl.tn.edu.tw/u5753245549129514290/a1'] };
+  }
+  if (id === 'plis-285a909321403c65e3d5') {
+    return { ...area, name: '1 樓閱覽自修室', sources: [...sources, 'https://www.tnpl.tn.edu.tw/u4909335216747021521/a1'] };
+  }
   if (id === 'plis-c9599dab12b05bf49162') {
     return {
       ...area, name: '2 樓多功能研習教室', access: 'conditional',

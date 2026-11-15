@@ -1117,6 +1117,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-285a909321403c65e3d5': {
+    url: 'https://www.tnpl.tn.edu.tw/u5364522661977750278/a1',
+    note: '館內提供免費無線網路，也可自備筆電上網。自修室內的網路與筆電使用規定請向館方確認。',
+  },
   'plis-0d8617adcdaa013618d9': {
     url: 'https://www.typl.gov.tw/zh-tw/News/Content/3366',
     note: '館方 2026 年 11 月 14 日公告因漏水檢修，2 樓 B 側及該區廁所、1 樓無障礙廁所暫停開放。恢復日期依館方公告，無障礙廁所使用需求可洽服務臺。',

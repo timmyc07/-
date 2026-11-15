@@ -1042,6 +1042,10 @@ const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
 const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-bd1ae9a8fe9b769cd7e7': {
+    name: '2 樓一般閱覽及書報期刊區', kind: 'reading', seats: 8, slots: null, access: null, equipment: {},
+    sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=a0aa6231771f4746b8523c02ee652977'],
+  },
   'plis-9cc6fe4291e642996d87': {
     name: '3 樓筆電使用區', kind: 'reading', slots: null, access: null,
     equipment: { laptop: true },
@@ -1326,6 +1330,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-bd1ae9a8fe9b769cd7e7': {
+    url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=a0aa6231771f4746b8523c02ee652977',
+    note: '資訊檢索區有 1 台館藏查詢電腦及 2 台可依館方規定憑證借用的電腦。',
+  },
   'plis-62eb0222ac5626717a13': {
     url: 'https://www.typl.gov.tw/zh-tw/Rent/Detail/9',
     note: '3 樓研習教室為場地租借空間，29 坪，可容納 36 人。租借頁面目前標示暫停受理，恢復日期請向館方確認。',

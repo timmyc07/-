@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import type { Library } from '../lib/study.ts';
 import { withLibraryDetail, type LibraryDetail } from '../lib/library-details.ts';
-import { evaluate, minutes } from '../lib/study.ts';
+import { coversCalendarYear, evaluate, minutes, validDate } from '../lib/study.ts';
 
 const root = new URL('../public/datasets/', import.meta.url);
 const directory = JSON.parse(readFileSync(new URL('library-directory.json', root), 'utf8')) as {
@@ -101,7 +101,7 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
     kind: 'study' as const, card: true, registration: true, required: [],
   };
   assert(evaluate(daoxiang, area, query).reasons.includes('需持臺北市圖個人借閱證'));
-  assert.equal(evaluate(daoxiang, area, { ...query, regionalCards: ['taipei'] }).status, 'unknown');
+  assert.equal(evaluate(daoxiang, area, { ...query, regionalCards: ['taipei'] }).status, 'yes');
   const main = get('新北市立圖書館');
   assert(evaluate(main, main.areas[0], { ...query, registration: false, regionalCards: ['newTaipei'] })
     .reasons.includes('需現場登記'));
@@ -109,4 +109,30 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   assert.equal(sanxia.access, 'walk-in');
   assert.equal(sanxia.equipment.outlet, false);
   assert.equal(get('新北市立圖書館三重東區分館').areas[0].equipment.outlet, undefined);
+});
+
+test('年度休館按館方範圍套用，部分開放與跨年時段各自判定', () => {
+  const { libraries: details } = JSON.parse(readFileSync(new URL('library-details.json', root), 'utf8')) as {
+    libraries: Record<string, LibraryDetail>;
+  };
+  const libraries = directory.libraries.map((library) => withLibraryDetail(library, details[library.id]));
+  for (const { closures } of libraries) {
+    assert(closures.every(({ from, until }) => validDate(from) && (!until || validDate(until) && until >= from)));
+  }
+  const query = {
+    date: '2027-02-09', start: minutes('14:00'), duration: 120,
+    kind: 'study' as const, card: false, registration: true, required: [],
+    regionalCards: ['taipei'] as const,
+  };
+  const taipei = libraries.find(({ name }) => name === '臺北市立圖書館稻香分館')!;
+  const taipeiQuery = { ...query, regionalCards: [...query.regionalCards] };
+  assert.equal(evaluate(taipei, taipei.areas[0], taipeiQuery).status, 'no');
+  assert.equal(evaluate(taipei, taipei.areas[0], { ...taipeiQuery, date: '2027-02-10' }).status, 'yes');
+  const newTaipei = libraries.find(({ name }) => name === '新北市立圖書館三峽分館')!;
+  assert.equal(evaluate(newTaipei, newTaipei.areas[0], { ...taipeiQuery, date: '2026-11-28' }).status, 'no');
+  assert.equal(evaluate(newTaipei, newTaipei.areas[0], { ...taipeiQuery, date: '2026-06-25' }).status, 'unknown');
+  assert.equal(coversCalendarYear(newTaipei, 2027), false);
+  const ntl = libraries.find(({ name }) => name === '國立臺灣圖書館')!;
+  assert.equal(evaluate(ntl, ntl.areas[0], { ...taipeiQuery, date: '2026-02-20' }).status, 'unknown');
+  assert.equal(coversCalendarYear(libraries.find(({ name }) => name === '新北市烏來區立圖書館')!, 2026), false);
 });

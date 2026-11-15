@@ -1,5 +1,6 @@
 import type { Area, Library } from './study.ts';
 import { libraryStudyHours } from './library-study-hours.ts';
+import { libraryCalendar } from './library-calendars.ts';
 import { taipeiStudyRoom } from './taipei-study-rules.ts';
 
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
@@ -44,14 +45,18 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   };
   const taipeiArea = taipeiStudyRoom(library, area, listed);
   const studyRoom = Boolean(study || local?.studyRoom || listed || taipeiArea);
+  const calendar = libraryCalendar(library);
   return {
     ...library,
     openingHours: closure?.reason ?? library.openingHours ?? detail.hours ?? local?.hours,
-    closures: closure ? [...library.closures, closure] : library.closures,
+    calendarYears: calendar?.calendarYears ?? library.calendarYears,
+    checkDates: calendar?.checkDates ? [...new Set([...(library.checkDates ?? []), ...calendar.checkDates])] : library.checkDates,
+    closures: [...library.closures, ...(calendar?.closures ?? []), ...(closure ? [closure] : [])],
     facilities: library.facilities ?? detail.facilities,
     studyRoom: library.studyRoom ?? (studyRoom || undefined),
     areas: studyRoom && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
       ? [...library.areas, taipeiArea ?? area] : library.areas,
-    sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []), ...(closure ? [closure.url] : [])])],
+    sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []),
+      ...(calendar?.closures.map(({ url }) => url) ?? []), ...(closure ? [closure.url] : [])])],
   };
 }

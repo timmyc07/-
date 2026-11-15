@@ -1417,7 +1417,22 @@ const taoyuanWalkInStudyRooms = new Set([
   'plis-bb87f2dc7cdcad6eca8b', 'plis-369d482f8c183f32943f',
 ]);
 
+const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; name?: string } | undefined> = {
+  'plis-8616f8eb019058a7080c': { branchId: '7ce26c583dfd45f896e4f02548c888f5', seats: 48, name: '2 樓自修閱覽區' },
+  'plis-7f3cdf1da9a944e5be08': { branchId: '0770f83e977c4c0997b0b467783e314c', seats: 52 },
+  'plis-2f3bedb51e2b23a23a59': { branchId: 'f421a1684d454905b28688325bf5815f', seats: 38, name: '自修區' },
+  'plis-058be989d22b992c5b8a': { branchId: '099812be491c45e59238adcaf69d3443', seats: 16 },
+  'plis-aadc3dc00e5a64262aae': { branchId: '74b66aa193f04492b1b9732e5a1b733b', seats: 78 },
+  'plis-328bb20a01970d84f947': { branchId: '2ba325ce4a9a497faf1090779e598b2f', seats: 28, name: '7 樓個人 K 書座位' },
+  'plis-150e321d181fa2d97261': { branchId: 'a3b061cbb80f4cbb92a2d75c60741d88', seats: 45, name: '3 樓自修室' },
+};
+
 function localStudyRoom(id: string, area: Area): Area {
+  const newTaipei = newTaipeiStudySeats[id];
+  if (newTaipei) {
+    const url = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=' + newTaipei.branchId;
+    return { ...area, name: newTaipei.name ?? area.name, seats: newTaipei.seats, sources: [...area.sources, url] };
+  }
   if (id === 'plis-1ed4208570aa338878bc') {
     return { ...area, name: '4 樓自修閱覽室', seats: 40, equipment: { ...area.equipment, wifi: true },
       entryNote: '館內提供充電設備，座位是否設有插座待確認。本站僅提供自修與館內閱報。',

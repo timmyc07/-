@@ -561,6 +561,11 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
     assert.equal(library.areas.find(({ kind }) => kind === 'reading')?.seats, readingSeats);
     assert.equal(library.areas.find(({ kind }) => kind === 'study')?.seats, studySeats);
   }
+  for (const [id, seats] of [['plis-515c0f5154d80f9e4043', 71], ['plis-7d5b8a2a5cd7961f1a5d', 148]] as const) {
+    const library = libraries.find((library) => library.id === id)!;
+    assert.equal(library.areas.find(({ kind }) => kind === 'reading')?.seats, seats);
+    assert(library.areas.every(({ kind, seats }) => kind !== 'study' || seats !== 56));
+  }
   const cuiping = libraries.find(({ id }) => id === 'plis-793de43144ebd1a7578c')!;
   const cuipingReading = cuiping.areas.find(({ kind }) => kind === 'reading')!;
   assert.equal(cuipingReading.seats, 36);

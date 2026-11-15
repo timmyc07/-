@@ -122,7 +122,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 138);
+  assert.equal(scheduled.length, 139);
   const luodong = libraries.find(({ id }) => id === 'plis-c45011eb98a75a2b9c10')!;
   assert.equal(luodong.areas[0].name, '南豪館 2 樓自修室');
   assert.equal(luodong.areas[0].seats, 100);
@@ -254,6 +254,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   });
   assert.equal(result.status, 'no');
   assert.equal(result.closure?.from, '2026-03-02');
+  const culture = libraries.find(({ id }) => id === 'plis-645a77676fc64f962dcf')!;
+  assert(culture.closures.some(({ from }) => from === '2026-04-11'));
+  assert.match(culture.accessNote!, /湖內里活動中心.*嘉義大學林森校區/);
+  const shixian = libraries.find(({ id }) => id === 'plis-34ea4e3647b8191ffef9')!;
+  assert.deepEqual(shixian.areas[0].slots?.find(({ day }) => day === 6),
+    { day: 6, start: minutes('09:00'), end: minutes('20:00') });
+  assert(shixian.closures.some(({ from }) => from === '2026-11-28'));
 });
 
 test('竹南新館依最新地址與自修室時段查詢，新竹依最新版自修室規定', () => {

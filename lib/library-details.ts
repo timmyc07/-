@@ -42,6 +42,11 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
     from: '2026-03-02', reason: '自 2026 年 3 月 2 日起閉館施工，復館日期以館方公告為準。',
     url: 'https://www.cna.com.tw/postwrite/chi/425420',
   },
+  'plis-645a77676fc64f962dcf': {
+    from: '2026-04-11',
+    reason: '文化局圖書館自 2026 年 3 月 2 日起整修，普通閱覽室服務至 4 月 10 日。預計 2027 年 2 月底完成整修，復館日期以館方公告為準。',
+    url: 'https://twainews.com/chiayiCity/news/H6AVvMXtFIMXzE8zULEN',
+  },
   'plis-79f43b2ba26bb9afade0': {
     from: '2026-01-01', reason: '崎頂分館自 2026 年 1 月 1 日起因搬遷至埔頂分館停止開放。',
     url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/02',
@@ -51,6 +56,10 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
 const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A';
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-645a77676fc64f962dcf': {
+    url: 'https://twainews.com/chiayiCity/news/H6AVvMXtFIMXzE8zULEN',
+    note: '臨時閱覽室：湖內里活動中心 A 棟 2 樓（湖子內路 172 號）週二至週日 09:00–17:00。嘉義大學林森校區 CE104、CE105（林森東路 151 號）週二至週六 09:00–20:00、週日 09:00–17:00。兩處週一及國定假日休息。',
+  },
   'plis-66fa0a939c2eddc2cbeb': {
     url: 'https://web.tainan.gov.tw/ysdo/News_Content.aspx?n=8385&s=8846323&sms=11449',
     note: '2026 年 11 月 17 日至 20 日搬遷期間全館暫停服務，11 月 21 日回到月津路 14 之 1 號原館。',

@@ -178,7 +178,19 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 154);
+  assert.equal(scheduled.length, 156);
+  for (const [id, seats] of [
+    ['plis-d4a372e3044256cc569b', 4], ['plis-235cf5117c19f3df0087', undefined],
+  ] as const) {
+    const area = libraries.find((library) => library.id === id)!.areas.find(({ kind }) => kind === 'study')!;
+    assert.equal(area.seats, seats);
+    assert.equal(area.access, null);
+    assert.equal(area.slots?.length, 7);
+    assert.deepEqual(area.slots?.find(({ day }) => day === 2),
+      { day: 2, start: minutes('08:30'), end: minutes('21:00') });
+  }
+  const taipeiChenggong = libraries.find(({ id }) => id === 'plis-d0180382c4d32a0bef38')!;
+  assert.equal(taipeiChenggong.areas.find(({ kind }) => kind === 'study')?.slots, null);
   const dagang = libraries.find(({ id }) => id === 'plis-99799da6e29815c7da11')!;
   assert.deepEqual(dagang.areas.filter(({ kind }) => kind === 'reading')
     .map(({ name, seats, slots, access }) => [name, seats, slots, access]), [

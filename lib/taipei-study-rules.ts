@@ -166,6 +166,11 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
       sources: [...withSeats.sources, taipeiRule],
     };
   }
+  if (library.id === 'plis-d4a372e3044256cc569b' || library.id === 'plis-235cf5117c19f3df0087') {
+    return { ...withSeats, name: '自修區', slots: standardSlots,
+      ...(library.id === 'plis-d4a372e3044256cc569b' ? { seats: 4 } : {}),
+      sources: [...withSeats.sources, ...(library.website ? [library.website] : []), taipeiManualRule] };
+  }
   const taipeiListed = ['plis-2795b0ebc2c7f0ecfff2', 'plis-edeec13b64c0ca4d0965',
     'plis-744dd53a547fde48cb19'].includes(library.id);
   if (library.name.startsWith('臺北市立圖書館') && (listed || seats || taipeiListed)

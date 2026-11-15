@@ -988,6 +988,13 @@ const nationalTaiwanLaptopSeats: Area = {
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
 const localReadingAreas: Record<string, Area | undefined> = {
+  'plis-a908448b0b36ed1715ce': {
+    name: '5 樓書庫閱覽區', kind: 'reading', seats: 24,
+    slots: [0, 2, 3, 4, 5, 6].map((day) => ({ day, start: minutes('09:00'), end: minutes('17:00') })),
+    access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,41,411,405',
+      'https://youth.ksml.edu.tw/content/index?Parser=1,4,45,26'],
+  },
   'plis-fe9c622fb1bdd5279ec1': {
     name: '2 樓閱覽區', kind: 'reading', seats: 20,
     slots: [0, 3, 4, 5, 6].flatMap((day) => [

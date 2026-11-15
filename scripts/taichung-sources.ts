@@ -109,7 +109,9 @@ export function roomHours(text: string) {
 }
 
 export function taichungFax(value: string | undefined) {
-  const number = clean(value ?? '').match(/^(?:\(04\)|04[- ])\s*(\d{4})-?(\d{4})$/);
+  const fax = clean(value ?? '');
+  if (fax === '無') return fax;
+  const number = fax.match(/^(?:\(04\)|04[- ])\s*(\d{4})-?(\d{4})$/);
   return number ? '04-' + number[1] + number[2] : undefined;
 }
 

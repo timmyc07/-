@@ -156,7 +156,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 149);
+  assert.equal(scheduled.length, 150);
   const yunlin = libraries.find(({ id }) => id === 'plis-3fb94b86e4de966ba65a')!;
   assert.equal(yunlin.areas[0].access, 'walk-in');
   assert.equal(yunlin.areas[0].equipment.outlet, true);
@@ -466,6 +466,13 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
   assert.equal(cijin.areas[0].seats, 38);
   assert.equal(cijin.areas[0].access, 'walk-in');
   assert.deepEqual(cijin.areas[0].equipment, { laptop: false, wifi: false, outlet: false });
+  const lingya = libraries.find(({ id }) => id === 'plis-a908448b0b36ed1715ce')!;
+  const reading = lingya.areas.find(({ kind }) => kind === 'reading')!;
+  const study = lingya.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(reading.seats, 24);
+  assert.equal(reading.slots?.find(({ day }) => day === 2)?.end, minutes('17:00'));
+  assert.equal(study.seats, 163);
+  assert.equal(study.slots?.find(({ day }) => day === 2)?.end, minutes('21:00'));
   const query = {
     date: '2026-11-28', start: minutes('14:00'), duration: 120,
     kind: 'study' as const, card: false, registration: false, required: [],

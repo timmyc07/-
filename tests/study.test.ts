@@ -220,7 +220,8 @@ test('解析器保留空間和館舍不同時段，地址以官網欄位為準',
   const info = branchInfo('<div class="sub_info"><strong>地址：407011臺中市西屯區中科路2201號</strong><strong>傳真：（04）2635-3059</strong><strong>自習室座位：32席</strong></div>');
   assert.equal(info.address, '臺中市西屯區中科路2201號');
   assert.equal(info.fax, '04-26353059');
-  assert.equal(branchInfo('<div class="sub_info"><strong>傳真：無</strong></div>').fax, undefined);
+  assert.equal(branchInfo('<div class="sub_info"><strong>傳真：無</strong></div>').fax, '無');
+  assert.equal(branchInfo('<div class="sub_info"><strong>傳真：</strong></div>').fax, undefined);
 });
 
 test('有明確證據的無自修室可以排除，訪客換證需求保留待確認', () => {

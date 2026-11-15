@@ -63,7 +63,26 @@ const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C6
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
 const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O065604454792753757/金門縣公共圖書館館藏發展政策.pdf';
 const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
+const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-8e698a4770cf01e3875e': {
+    url: 'https://www.nthcc.gov.tw/A2_4',
+    facilities: ['期刊室', '親子幼兒區', '喜閱兒童區', '影音視聽區', '一般圖書區', '南投縣文學資料館', '陳千武文庫', '4 樓自由閱讀區'],
+  },
+  'plis-7b95877ab74c89a1e379': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000242',
+    facilities: ['兒童閱覽區', '視聽簡報室', '報紙閱讀區', '期刊閱讀區', '巫永福文庫', '社區研習教室', '網路資源教室'],
+  },
+  'plis-deb1ef0655457767967c': {
+    url: nantouEarlyReading, facilities: ['嬰幼兒閱讀專區／書櫃'],
+  },
+  'plis-3dc56ee3bc5b96de674c': {
+    url: 'https://www.nthcc.gov.tw/A7_6/content/211',
+    facilities: ['1 樓兒童閱覽室', '1 樓報紙期刊室', '1 樓電腦檢索區', '2 樓視聽室', '2 樓書庫'],
+  },
+  'plis-886db9d10796c91fe608': {
+    url: nantouEarlyReading, facilities: ['嬰幼兒閱讀專區／書櫃'],
+  },
   'plis-85a3abe63d4ba7d005b7': {
     url: 'https://www.tungshiau.gov.tw/cp.aspx?n=5679',
     facilities: ['閱覽室', '視聽室', '演講廳'],
@@ -240,6 +259,10 @@ const kinmenReadingAreas: Record<string, Area | undefined> = {
   },
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-d34887b8b49b91a79656': {
+    url: nantouEarlyReading,
+    note: '原館重建期間，縣文化局公告臨時館設於愛國村愛國巷 114 號。到館前請致電 049-2791534 確認開放情形。',
+  },
   'plis-645a77676fc64f962dcf': {
     url: 'https://twainews.com/chiayiCity/news/H6AVvMXtFIMXzE8zULEN',
     note: '臨時閱覽室：湖內里活動中心 A 棟 2 樓（湖子內路 172 號）週二至週日 09:00–17:00。嘉義大學林森校區 CE104、CE105（林森東路 151 號）週二至週六 09:00–20:00、週日 09:00–17:00。兩處週一及國定假日休息。',

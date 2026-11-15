@@ -216,7 +216,22 @@ const serviceUpdates: Record<string, { url: string; note: string } | undefined> 
     note: '北棟自 2026 年 9 月 15 日起整修暫停開放，南棟持續服務。',
   },
 };
+const keelungExtendedHours = {
+  url: 'https://kllib.klcg.gov.tw/News_Content.aspx?n=8243&s=16436',
+  hours: '週二至週六 09:00–21:00，週日 09:00–17:00。週一及國定假日休館，閉館前 30 分鐘停止辦證及借還書。',
+  supersedesDirectory: true,
+} as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-2efbf4bcfe8e68151f65': keelungExtendedHours,
+  'plis-fb0648ec4fff7472b345': keelungExtendedHours,
+  'plis-a76458f67d7289605250': keelungExtendedHours,
+  'plis-2065ea3c3619a2597356': keelungExtendedHours,
+  'plis-79f7f1447d98ee4e2917': keelungExtendedHours,
+  'plis-00259e7a928da5c62131': {
+    url: 'https://kllib.klcg.gov.tw/News_Content.aspx?n=8243&s=18229&sms=12762',
+    hours: '自 2026 年 8 月 16 日起，週二至週六 09:00–17:00，週日及週一休館。國定假日休館，閉館前 30 分鐘停止借還書。',
+    supersedesDirectory: true,
+  },
   'plis-0f495639312343ec173e': {
     url: 'https://www.jw.gov.tw/cp.aspx?n=15005',
     hours: '週二至週日 08:30–17:00。週一及國定假日休館。每月最後一日為清潔日，遇週六、週日或週一則提前至週五休館。',

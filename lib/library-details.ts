@@ -226,8 +226,8 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
     facilities: ['2 樓數位機會中心'],
   },
   'plis-740c2304a9a259e92df2': {
-    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000501',
-    facilities: ['期刊閱報區', '圖書參考區', '親子共讀區', '網路查詢電腦區', '書庫', '閱覽區', '小型會議室', '視聽電腦教室'],
+    url: 'https://library.hccc.gov.tw/sp.asp?ctNode=1025&mp=20&xItem=6902&xdurl=mp200ap%2Fbranch.asp',
+    facilities: ['期刊閱報區', '圖書參考區', '親子共讀區', '網路查詢電腦區', '書庫', '2 樓閱覽區', '小型會議室', '視聽電腦教室'],
   },
   'plis-6475285c674791ca9696': {
     url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000503',
@@ -1396,6 +1396,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-740c2304a9a259e92df2': {
+    url: 'https://www.fuli.gov.tw/News_Content.aspx?n=1444&s=7484',
+    hours: '週二、週四至週日 08:00–12:00、13:30–17:30。週三 08:00–17:00（中午不休息），週一及國定假日休館。',
+    supersedesDirectory: true,
+  },
   'plis-a619dc2bf2c66d2c8d4b': {
     url: 'https://bggov.yunlin.gov.tw/cp.aspx?n=3316',
     hours: '週二至週五 08:00–18:00，週六及週日 08:30–17:00。週一及國定假日休館。',

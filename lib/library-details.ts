@@ -42,6 +42,10 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
 const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A';
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-ccd76885634412ccaa4a': {
+    url: 'https://www.ntpc.gov.tw/ch/home.jsp?dataserno=aa076d144bbfd6d2d0821e90527ecc28&id=e8ca970cde5c00e1',
+    note: '三芝分館「自然書室」於 2026 年 11 月 3 日在淡金路一段 37 號原址正式啟用。',
+  },
   'plis-f5672c9a38fabba9eabb': {
     url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=90269135cd3b46ccac221df193f78e60',
     note: '2026 年 11 月 16 日起原館停止館藏外借，保留預約取書、還書、辦證及期刊報紙閱覽。',

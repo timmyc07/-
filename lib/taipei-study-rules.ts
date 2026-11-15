@@ -1,7 +1,24 @@
-import { minutes, type Area, type Library } from './study.ts';
+import { minutes, type Area, type Closure, type Library } from './study.ts';
 
 const taipeiRule = 'https://tpml.gov.taipei/News_Content.aspx?n=CD4793DE89132E89&s=9C9863C2224D9B5A';
 const newTaipeiRule = 'https://www.library.ntpc.gov.tw/singlehtml/e81f432c17614ea4b732e114c365e29b?cntId=26b1530a3e724f44892b6cb0c7c7c5ed';
+const studyConstruction: Record<string, { name: string; closure: Closure; sources?: string[] } | undefined> = {
+  'plis-6178fec7a54e55fdd3ff': {
+    name: '3 樓自修室',
+    closure: {
+      from: '2026-08-17', until: '2026-12-10', reason: '3 樓自修室空調汰換暫停開放，5 樓閱覽區正常開放。',
+      url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=4b6ca6a6c78b4023b544f4c5e8b69b2d',
+    },
+  },
+  'plis-e1f47e046250c8795b4f': {
+    name: '5 樓自修室',
+    closure: {
+      from: '2026-10-12', until: '2026-11-14', reason: '5 樓空調汰換暫停開放，11 月 15 日提前恢復。',
+      url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=b47b17fa993d4cd29cc8d73f72d5d085',
+    },
+    sources: ['https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=8a5229ac1d3f453a8d50b87469c3fba8'],
+  },
+};
 const taipeiReservation = new Set([
   'plis-b4f11997a2a0f56cc70b', 'plis-e3287dc94a64c9288833', 'plis-c21ff2a6d5f510b7fccd',
   'plis-7decf0dff68a9e8b198d', 'plis-0ea807d14456081b105f', 'plis-d14f3a24d79c22efd2da',
@@ -61,19 +78,16 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
   }
   if ((listed || seats) && library.name.startsWith('新北市立圖書館')) {
     const conflictingOutlet = library.id === 'plis-2a4837295385011e4ddd';
-    const taishan = library.id === 'plis-6178fec7a54e55fdd3ff';
-    const construction = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=4b6ca6a6c78b4023b544f4c5e8b69b2d';
+    const construction = studyConstruction[library.id];
     return {
       ...withSeats, access: 'walk-in',
-      ...(taishan ? { name: '3 樓自修室', closures: [{
-        from: '2026-08-17', until: '2026-12-10', reason: '3 樓自修室空調汰換暫停開放，5 樓閱覽區正常開放。',
-        url: construction,
-      }] } : {}),
+      ...(construction ? { name: construction.name, closures: [construction.closure] } : {}),
       equipment: seats?.poweredSeats ? { laptop: true, outlet: true, wifi: seats.wifi } : conflictingOutlet ? {} : { outlet: false },
       entryNote: conflictingOutlet
         ? '現場入座。分館介紹與自修室管理要點的充電資訊不同，請向館方確認。'
         : '現場入座，館方得於開館前發放號碼牌。' + (seats?.poweredSeats ?? ''),
-      sources: [...withSeats.sources, newTaipeiRule, ...(taishan ? [construction] : [])],
+      sources: [...withSeats.sources, newTaipeiRule,
+        ...(construction ? [construction.closure.url, ...(construction.sources ?? [])] : [])],
     };
   }
   return seats ? withSeats : undefined;

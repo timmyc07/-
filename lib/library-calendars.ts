@@ -70,6 +70,10 @@ function songshanClosures(year: number) {
 }
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  if (['plis-838b908932f56e7b1d22', 'plis-cceeef12e0bfff59593f'].includes(library.id)) {
+    return { closures: [{ from: '2026-02-14', until: '2026-02-22', reason: '春節休館',
+      url: 'https://www.nankan.gov.tw/chhtml/Detail/2221?mcid=107952' }] };
+  }
   if (library.id === 'plis-3762599f4dcfd24804ba') {
     return { closures: [
       { from: '2025-10-06', until: '2026-06-30', reason: '耐震補強工程閉館',

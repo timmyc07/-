@@ -33,6 +33,12 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
 const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A';
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
 const localHours: Record<string, { url: string; hours: string; studyRoom?: true; supersedesDirectory?: true } | undefined> = {
+  'plis-838b908932f56e7b1d22': {
+    url: 'https://www.nankan.gov.tw/chhtml/Detail/2221?mcid=92857',
+    hours: '週一及週三至週日 09:00–17:00。週二休館。',
+    supersedesDirectory: true,
+    studyRoom: true,
+  },
   'plis-f3080ccd8c34dad70222': {
     url: 'https://www.penghu.gov.tw/phhcc/home.jsp?id=67',
     hours: '書庫、兒童室、期刊區及視聽室週三至週日 09:00–21:00。讀者自修室週一、週二 08:30–17:30，週三至週日 08:30–21:00。自修室於國定假日及每月最後一個星期二休館。',
@@ -148,6 +154,10 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
 }
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-838b908932f56e7b1d22') {
+    return { ...area, name: '1 樓自修區',
+      sources: [...area.sources, 'https://isp.ncl.edu.tw/files/file_pool/1/0N087443665349792009/110連江縣.pdf'] };
+  }
   if (id === 'plis-f3080ccd8c34dad70222') {
     return { ...area, equipment: { laptop: true },
       entryNote: '筆電等電子設備請保持靜音。請勿預佔座位，考季期間可能不定時清場。' };

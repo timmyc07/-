@@ -79,6 +79,11 @@ for (const { 縣市: city, 圖書館資訊: records } of regions) {
       library.sources.push('https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A',
         'https://data.moenv.gov.tw/dataset/detail/FAC_P_07');
     }
+    if (name === '連江縣政府文化處馬祖圖書館' && library.address === '連江縣南竿鄉馬祖村5號' &&
+        library.coordinates?.latitude === 26.1564 && library.coordinates.longitude === 119.9505) {
+      library.coordinates = { latitude: 26.159619, longitude: 119.919897 };
+      library.sources.push('https://itaiwan.gov.tw/ITaiwanHotspotQuery/ConditionalQuery?City=%E9%80%A3%E6%B1%9F%E7%B8%A3&Type=1');
+    }
     libraries.push(library);
   }
 }

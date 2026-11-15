@@ -41,6 +41,10 @@ test('全臺名錄的電話與網址齊全，搬遷館舍不帶入舊址座標',
   assert(directory.libraries.every(({ phone, website }) => phone && website));
   assert.deepEqual(directory.libraries.filter(({ coordinates }) => !coordinates).map(({ name }) => name),
     ['苗栗縣竹南鎮立圖書館']);
+  const magang = directory.libraries.find(({ id }) => id === 'plis-838b908932f56e7b1d22')!;
+  assert.deepEqual(magang.coordinates, { latitude: 26.159619, longitude: 119.919897 });
+  const shanlong = directory.libraries.find(({ id }) => id === 'plis-cceeef12e0bfff59593f')!;
+  assert.notDeepEqual(shanlong.coordinates, magang.coordinates);
   const alishan = directory.libraries.find(({ id }) => id === 'plis-e1773325972df453b6c4');
   assert(alishan?.website && alishan.sources.includes(alishan.website));
   const yancheng = directory.libraries.find(({ id }) => id === 'plis-4818cd57388587303882');
@@ -104,6 +108,10 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(gonghe.areas.length, 0);
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
   assert.equal(scheduled.length, 77);
+  const magang = libraries.find(({ id }) => id === 'plis-838b908932f56e7b1d22')!;
+  assert.equal(magang.areas[0].name, '1 樓自修區');
+  assert.equal(magang.areas[0].slots, null);
+  assert.equal(magang.closures[0].until, '2026-02-22');
   const penghu = libraries.find(({ id }) => id === 'plis-f3080ccd8c34dad70222')!;
   assert.equal(penghu.areas[0].slots?.length, 7);
   assert.equal(penghu.areas[0].equipment.laptop, true);

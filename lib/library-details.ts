@@ -77,6 +77,26 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-66e53f44f93b7f476b11': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000267',
+    facilities: ['無障礙電梯'],
+  },
+  'plis-1fc4f3afa8489d59630b': {
+    url: 'https://isp.ncl.edu.tw/infant-tw/cityres?res=0K291754204183172606',
+    facilities: ['嬰幼兒專區'],
+  },
+  'plis-6c7f064db2438bb7406f': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000277',
+    facilities: ['開架閱覽區', '兒童書房', '銀髮族區', '報紙閱讀區', '期刊區', '動漫區', '小團體觀賞區', '青少年電腦網路區', '青少年專區', '自修與閱讀區', '新書展示區'],
+  },
+  'plis-b087f747f24f38293e86': {
+    url: 'https://dsh.yunlin.gov.tw/News2.aspx?n=7063&sms=14636',
+    facilities: ['閱覽區', '公用電腦區'],
+  },
+  'plis-d31d9ccdab3c7bcf9ff3': {
+    url: 'https://twpowernews.com/news_pagein.php?n_id=282117',
+    facilities: ['1 樓臨時服務櫃檯'],
+  },
   'plis-96bdb053d7e967f965dc': {
     url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000493',
     facilities: ['兒童閱讀區', '親子閱讀區', '書報閱讀區', '期刊區', '網路區', '參考書區', '書庫', '一般閱讀區', '視聽會議室', '數位中心', '3 樓 K 書中心'],

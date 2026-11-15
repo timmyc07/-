@@ -17,7 +17,7 @@ const studyHours: Record<string, StudyHours | undefined> = {
     name: '2 樓閱覽室', ranges: [['023456', '09:00', '18:00']], url: 'https://jiaosi.e-land.gov.tw/cp.aspx?n=7777',
   },
   'plis-4b6847d140ab7464db3f': {
-    name: '2 樓自習區', ranges: [], url: 'https://ilwct.e-land.gov.tw/cp.aspx?n=6620',
+    name: '自習區', ranges: [], url: 'https://ilwct.e-land.gov.tw/cp.aspx?n=6620',
   },
   'plis-9bee8536cf45c910547b': {
     name: '2 樓研習教室', ranges: [], url: 'https://www.sanshing.gov.tw/cp.aspx?n=5799&s=2587',

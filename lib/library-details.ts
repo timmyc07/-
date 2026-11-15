@@ -59,6 +59,31 @@ const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、�
 const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O065604454792753757/金門縣公共圖書館館藏發展政策.pdf';
 const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-24c304d8d8fc5bc58ab9': {
+    url: 'https://www.suao.gov.tw/cp.aspx?n=6676',
+    facilities: ['親子閱覽區', '新書展示區', '資訊檢索區', '書報閱覽區', '書庫', '期刊雜誌區',
+      '一般閱覽及活動研習區', '藝文展覽區', '海事專區'],
+  },
+  'plis-5c096392579b74bd371a': {
+    url: 'https://jiaosi.e-land.gov.tw/cp.aspx?n=7777',
+    facilities: ['報刊室', '兒童室', '新書展示區', '資訊檢索區', '書庫', '閱覽室', '特色館藏區', '參考室'],
+  },
+  'plis-4b6847d140ab7464db3f': {
+    url: 'https://ilwct.e-land.gov.tw/cp.aspx?n=6620',
+    facilities: ['兒童閱覽區', '報刊閱讀區', '青少年閱覽區', '開放式書庫', '自習區', 'DVD 視聽設備'],
+  },
+  'plis-9bee8536cf45c910547b': {
+    url: 'https://www.sanshing.gov.tw/cp.aspx?n=5799&s=2587',
+    facilities: ['兒童閱覽室', '書庫', '多功能教室', '研習教室', '電腦教室'],
+  },
+  'plis-cfc0b248219632f264c7': {
+    url: 'https://www.e-land.gov.tw/cp.aspx?n=19023',
+    facilities: ['兒童閱覽室', '2 樓多功能閱讀空間'],
+  },
+  'plis-462b4877085902245ddb': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000489',
+    facilities: ['電腦上網專用席', '無線上網wifi'],
+  },
   'plis-0f495639312343ec173e': {
     url: 'https://www.jw.gov.tw/cp.aspx?n=15005',
     facilities: ['書庫', '期刊區', '館藏特色區', '縣籍作家專區', '藝文教室', '兒童室', '親子共讀區'],
@@ -445,6 +470,10 @@ const taoyuanWalkInStudyRooms = new Set([
 ]);
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-4b6847d140ab7464db3f') {
+    return { ...area, entryNote: '自習區樓層與開放時段請向館方確認。',
+      sources: [...area.sources, 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000484'] };
+  }
   if (taoyuanWalkInStudyRooms.has(id)) {
     area = { ...area, access: 'walk-in', entryNote: '依現場指示入座。館方視情況於開館前發放號碼牌。',
       equipment: id === 'plis-62af35b79d7d88c393d7' ? area.equipment : { ...area.equipment, laptop: true },

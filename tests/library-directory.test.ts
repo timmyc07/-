@@ -61,6 +61,12 @@ test('全臺名錄的電話與網址齊全，搬遷館舍不帶入舊址座標',
   assert.deepEqual(temporary.coordinates, { latitude: 22.8351230, longitude: 120.2360251 });
   assert.notDeepEqual(temporary.coordinates, yongan.coordinates);
   assert(temporary.sources.includes('https://data.gov.tw/dataset/177859'));
+  const xinyi = directory.libraries.find(({ id }) => id === 'plis-d34887b8b49b91a79656')!;
+  const aiguo = withLibraryDetail(xinyi, undefined);
+  assert.equal(aiguo.address, '南投縣信義鄉愛國村愛國巷114號');
+  assert.equal(aiguo.phone, '049-2791534');
+  assert.deepEqual(aiguo.coordinates, { latitude: 23.7060107, longitude: 120.8332703 });
+  assert.notDeepEqual(aiguo.coordinates, xinyi.coordinates);
 });
 
 test('傳真補錄保留來源，原始名錄明載無傳真的欄位持續有效', () => {

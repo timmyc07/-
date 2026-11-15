@@ -980,7 +980,11 @@ const serviceUpdates: Record<string, { url: string; note: string } | undefined> 
   },
   'plis-d34887b8b49b91a79656': {
     url: nantouEarlyReading,
-    note: '原館重建期間，縣文化局公告臨時館設於愛國村愛國巷 114 號。到館前請致電 049-2791534 確認開放情形。',
+    note: '原館拆除後，臨時館設於愛國社區活動中心。地圖標示活動中心位置。到館前請致電 049-2791534 確認開放情形。',
+  },
+  'plis-71debe76739635a0cacc': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000450',
+    note: '原館拆除重建期間，請前往箕湖臨時圖書館（民眾路 39-1 號）。臨時館自 2026 年 1 月 3 日起營運。',
   },
   'plis-645a77676fc64f962dcf': {
     url: 'https://twainews.com/chiayiCity/news/H6AVvMXtFIMXzE8zULEN',
@@ -1263,6 +1267,14 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
 }
 
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
+  if (library.id === 'plis-d34887b8b49b91a79656' && library.address === '南投縣信義鄉明德村玉山路47號') {
+    const address = '南投縣信義鄉愛國村愛國巷114號';
+    library = { ...library, address, phone: '049-2791534',
+      coordinates: { latitude: 23.7060107, longitude: 120.8332703 },
+      sources: [...library.sources, 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000252',
+        'https://data.nantou.gov.tw/da_DK/dataset/d4d03a54-582b-4a5a-b7b8-f0ca56d2775b/resource/bf17428a-8756-4f85-875d-19a8bdf202b5/preview'] };
+    detail = { address, url: nantouEarlyReading, hours: '臨時館開放時間請致電 049-2791534 確認。' };
+  }
   if (library.id === 'plis-a2b6c71763cc26d5bc25' && library.address === '高雄市永安區永華路49號') {
     const address = '高雄市永安區保寧里保安路16巷5號';
     library = { ...library, address, coordinates: { latitude: 22.8351230, longitude: 120.2360251 },

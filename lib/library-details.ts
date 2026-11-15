@@ -1009,6 +1009,12 @@ const nationalTaiwanLaptopSeats: Area = {
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
 const localReadingAreas: Record<string, Area | undefined> = {
+  'plis-793de43144ebd1a7578c': {
+    name: '閱覽區', kind: 'reading', seats: 36,
+    slots: [0, 2, 3, 4, 5, 6].map((day) => ({ day, start: minutes('09:00'), end: minutes('17:00') })),
+    access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,42,422,416'],
+  },
   'plis-3d9a951164210abf4cb8': {
     name: '期刊區', kind: 'reading', seats: 18, slots: null, access: null,
     equipment: {}, entryNote: '期刊區為沙發座位。電腦使用區另有 4 席，幼兒閱覽區可供 30 人以上親子共讀。',

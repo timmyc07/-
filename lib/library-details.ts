@@ -64,7 +64,40 @@ const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、�
 const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O065604454792753757/金門縣公共圖書館館藏發展政策.pdf';
 const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
 const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
+const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-accfa2ef1b61329335bb': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,36,357,350',
+    facilities: ['地下 1 樓自修室', '1 樓兒童閱覽室', '研習室', '親子活動區'],
+  },
+  'plis-b62491efa4f22c150828': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,82,909,902',
+    facilities: ['地下 1 樓兒童區', '多功能研習室', '臺灣文史專區', '資訊檢索區', '期刊區', '閱報區', '視聽資料區', '書庫'],
+  },
+  'plis-07432e289be30af20610': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,47,478,471',
+    facilities: ['上網區', '新書展示區', '海報藝廊', '藝術圖書室', '幸福家庭閱讀專區', '列印設備'],
+  },
+  'plis-ee0d8a411a3c1654c1fa': {
+    url: dashuFloors,
+    facilities: ['電腦資訊查詢區', '期刊區', '書庫', '閱報區', '兒童閱覽區', '2 樓讀者自修參考區', '戶外休閒閱讀區'],
+  },
+  'plis-9f200d6bbcb863c3920a': {
+    url: dashuFloors,
+    facilities: ['多功能活動室', '兒童閱覽區', '資訊檢索區', '期刊區', '閱報區', '樂齡專區', '書庫', '地方文獻區', '青少年專區', '漫畫區', '3 樓自修區', '無線上網區', '多功能研習室'],
+  },
+  'plis-8486d4a3c8ec9b23b8e9': {
+    url: dashuFloors,
+    facilities: ['網路資訊查詢區', '兒童閱覽區', '期刊閱報區', '自修區', '主題書展區', '書庫'],
+  },
+  'plis-10ddca249245164caff7': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,66,687,680',
+    facilities: ['兒童閱覽室', '期刊區', '書庫', '臺灣文史專區', '青少年文學專櫃', '電腦資訊檢索區', '自修室', '閱報區'],
+  },
+  'plis-539f7d3d76b9f2ee658a': {
+    url: 'https://www.cna.com.tw/postwrite/chi/444234',
+    facilities: ['2 樓兒童圖書區', '4 至 6 樓館藏及閱覽區', '7 樓竹塹講堂', '7 樓討論室'],
+  },
   'plis-8e698a4770cf01e3875e': {
     url: 'https://www.nthcc.gov.tw/A2_4',
     facilities: ['期刊室', '親子幼兒區', '喜閱兒童區', '影音視聽區', '一般圖書區', '南投縣文學資料館', '陳千武文庫', '4 樓自由閱讀區'],

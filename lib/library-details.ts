@@ -1347,6 +1347,14 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-09b55d87247eb8201b76': {
+    url: 'https://kmfinance.kinmen.gov.tw/news.aspx?Create=1&PageSize=999&n=55FDE4EAE7CDA1E6&page=10&sms=4FEFD09995C4BB81',
+    note: '鄉公所原公告 2025 年 12 月至 2026 年 6 月整修休館。大埔 49 之 1 號自 2026 年 4 月起另作鄉公所辦公地點，圖書館目前的開放狀態請先向館方確認。',
+  },
+  'plis-f4ef2b6827f2374ad985': {
+    url: 'https://libstat.ncl.edu.tw/libraryDataDetail/L5170000',
+    note: '順安館週末服務及專用自修室資訊各名錄記載不同，出發前請洽館方 03-9580384 確認。',
+  },
   'plis-3f6ed064ed62a36e4b9b': {
     url: kaohsiungMainReadingRules,
     note: '3 至 7 樓閱覽區自由入座，請勿預占座位。館方張貼離席提醒後逾 60 分鐘未回座，座位可讓其他讀者使用。5 樓行動裝置座位區提供電源，其餘區域請勿自行接電。',
@@ -1521,6 +1529,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-f4ef2b6827f2374ad985': {
+    url: 'https://www.dongshan.gov.tw/cp.aspx?n=17769',
+    hours: '鄉公所列週二至週五 08:30–17:00。週一、國定假日及月底清潔日休館，週末服務請向順安館確認。',
+    supersedesDirectory: true,
+  },
   'plis-43bc851b4926b0b037f2': {
     url: 'https://huwei.yunlin.gov.tw/cp.aspx?n=20442',
     hours: '週二至週六 08:00–20:00，週日 08:00–17:00。週一及國定假日休館。2 樓自修室週二至週日 08:30–17:00。',

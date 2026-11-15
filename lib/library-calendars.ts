@@ -372,6 +372,12 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     return { calendarYears: [2026], closures: nationalTaiwan2026, checkDates: ['2026-02-20', '2026-02-21'] };
   }
   if (library.name.startsWith('基隆市公共圖書館')) {
+    if (library.id === 'plis-6c9e30dc1c6abf7a17d4' || library.id === 'plis-79f7f1447d98ee4e2917') {
+      return { calendarYears: [2026], closures: [...keelung2026, {
+        from: '2026-08-26', time: { start: minutes('16:00'), end: 24 * 60 },
+        reason: '雞籠中元祭 16:00 提前閉館', url: 'https://kllib.klcg.gov.tw/News_Content.aspx?n=8243&s=18291',
+      }] };
+    }
     if (library.id === 'plis-d5b8a42994a660f05102') {
       return { calendarYears: [2026], closures: [...keelung2026,
         ...closureDates(2026, 'https://kllib.klcg.gov.tw/Default.aspx', ['05-23'], '仁愛分館停電休館')] };

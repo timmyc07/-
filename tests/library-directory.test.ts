@@ -646,4 +646,11 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   const outage = { ...taipeiQuery, date: '2026-05-23' };
   assert.equal(evaluate(renai, undefined, outage).closure?.reason, '仁愛分館停電休館');
   assert.equal(evaluate(keelung, keelung.areas[0], outage).closure, undefined);
+  const xinyi = libraries.find(({ id }) => id === 'plis-79f7f1447d98ee4e2917')!;
+  const festival = { ...taipeiQuery, date: '2026-08-26', duration: 60 };
+  for (const library of [keelung, xinyi]) {
+    assert.equal(evaluate(library, undefined, { ...festival, start: 15 * 60 }).closure, undefined);
+    assert.equal(evaluate(library, undefined, { ...festival, start: 16 * 60 }).closure?.time?.start, 16 * 60);
+  }
+  assert.equal(evaluate(renai, undefined, { ...festival, start: 16 * 60 }).closure, undefined);
 });

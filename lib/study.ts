@@ -18,7 +18,7 @@ export type Area = {
   kind: 'study' | 'quiet' | 'reading';
   slots: Slot[] | null;
   slotPeriod?: { from: string; until: string };
-  limitedOpening?: { from: string; until: string; name: string };
+  limitedOpening?: { from: string; until: string; name: string; entryNote?: string };
   access: 'walk-in' | 'card' | 'restricted' | 'conditional' | null;
   regionalCard?: keyof typeof regionalCards;
   entryNote?: string;
@@ -107,7 +107,7 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
   const end = query.start + query.duration;
   const limited = area?.limitedOpening;
   if (area && limited && limited.from <= query.date && query.date <= limited.until) {
-    area = { ...area, name: limited.name, seats: undefined, equipment: {} };
+    area = { ...area, name: limited.name, seats: undefined, equipment: {}, entryNote: limited.entryNote ?? area.entryNote };
   }
   const walkIn = area?.walkInDates?.find((opening) => typeof opening === 'string' ? opening === query.date :
     opening.date === query.date && opening.start <= query.start && end <= opening.end);

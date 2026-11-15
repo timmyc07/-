@@ -1521,6 +1521,15 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-4d33d19b31ac419fb05c') {
+    return { ...area, name: '8 樓自修室',
+      limitedOpening: {
+        from: '2026-11-02', until: '2026-11-14', name: '8 樓自修室（部分開放）',
+        entryNote: '11 月 2 日至 7 日木桌區施工，11 月 8 日至 14 日鋁桌區施工。請依現場指示使用開放區域。',
+      },
+      sources: [...area.sources, 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=931dcf222e9d45cd9b0a06c62b55d18c'],
+    };
+  }
   if (id === 'plis-9d70717f141dbff4f2b6') return { ...area, seats: 38 };
   const newTaipei = newTaipeiStudySeats[id];
   if (newTaipei) {

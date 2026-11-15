@@ -493,6 +493,16 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   assert.match(get('新北市立圖書館三重分館').accessNote!, /5 月 27 日/);
   const request = { date: '2026-12-10', start: minutes('14:00'), duration: 60,
     kind: 'study' as const, card: false, registration: false, required: [] };
+  const zhonggang = get('新北市立圖書館新莊中港分館');
+  const zhonggangStudy = zhonggang.areas.find(({ kind }) => kind === 'study')!;
+  for (const date of ['2026-11-02', '2026-11-14']) {
+    const result = evaluate(zhonggang, zhonggangStudy, { ...request, date });
+    assert.equal(result.closure, undefined);
+    assert.equal(result.area?.seats, undefined);
+    assert.equal(result.area?.equipment.outlet, undefined);
+    assert.match(result.area?.entryNote ?? '', /鋁桌區施工/);
+  }
+  assert.equal(evaluate(zhonggang, zhonggangStudy, { ...request, date: '2026-11-15' }).area?.seats, 266);
   assert.equal(taishan.areas[0].seats, 170);
   assert.equal(evaluate(taishan, taishan.areas[0], request).closure?.until, '2026-12-10');
   assert.equal(evaluate(taishan, undefined, { ...request, kind: 'reading' }).closure, undefined);

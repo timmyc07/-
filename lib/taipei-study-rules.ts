@@ -179,7 +179,8 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
   if (library.id === 'plis-ebb42497618c005f1223') {
     return {
       ...withSeats, access: 'card', regionalCard: 'newTaipei', equipment: { outlet: false },
-      entryNote: '持新北市圖個人借閱證在館內機台登記，並於 15 分鐘內刷證入場。157 席一般座位及 2 席身障專用座位。',
+      entryNote: '持新北市圖個人借閱證在館內機台登記，並於 15 分鐘內刷證入場。157 席一般座位及 2 席身障專用座位。'
+        + '離座逾 1 小時會取消原登記。週一至週五 08:30–20:30 為安靜閱讀區時段，禁止使用筆電、計算機及會發出干擾聲響的設備。',
       sources: [...withSeats.sources, newTaipeiRule],
     };
   }

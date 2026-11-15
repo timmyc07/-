@@ -39,9 +39,11 @@ const electionClosureRules: Record<string, string> = {
   'plis-645a77676fc64f962dcf': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000306',
   'plis-34ea4e3647b8191ffef9': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000307',
 };
-const pingtungHolidayRules: Record<string, string | undefined> = {
+const yearEndHolidayRules: Record<string, string | undefined> = {
   'plis-e641450483afbb290910': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000442',
   'plis-71debe76739635a0cacc': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000450',
+  'plis-24d66dc05128f8f7593d': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000311',
+  'plis-271e4d234a01bec2a0b0': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000326',
 };
 
 function closureDates(year: number, url: string, dates: string[], reason: string): Closure[] {
@@ -117,11 +119,11 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
       ...closureDates(2027, url, ['01-01'], '依館方國定假日休館規定，開國紀念日休館'),
     ] };
   }
-  const pingtungHolidayRule = pingtungHolidayRules[library.id];
-  if (pingtungHolidayRule) {
+  const yearEndHolidayRule = yearEndHolidayRules[library.id];
+  if (yearEndHolidayRule) {
     return { closures: [
-      ...closureDates(2026, pingtungHolidayRule, ['12-25'], '依館方國定假日休館規定，行憲紀念日休館'),
-      ...closureDates(2027, pingtungHolidayRule, ['01-01'], '依館方國定假日休館規定，開國紀念日休館'),
+      ...closureDates(2026, yearEndHolidayRule, ['12-25'], '依館方國定假日休館規定，行憲紀念日休館'),
+      ...closureDates(2027, yearEndHolidayRule, ['01-01'], '依館方國定假日休館規定，開國紀念日休館'),
     ] };
   }
   if (library.id === 'plis-11572b8b7a161948f5fb') {

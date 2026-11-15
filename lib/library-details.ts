@@ -1266,6 +1266,14 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-a619dc2bf2c66d2c8d4b': {
+    url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=010&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    note: '自修請前往北港鎮文仁路 10 號學習中心（北港分局親民空間）。學習中心週二至週五 08:30–21:00、週六及週日 08:30–17:00，週一時段請依館方公告。國定假日休館。',
+  },
+  'plis-a84767f448c8fd5408a7': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000285',
+    note: '3 樓自習及閱報區週二至週五 08:30–12:00、13:30–21:00，週六 08:30–21:00。週日公告列借閱及一般閱覽服務，自習區時段待確認。',
+  },
   'plis-b4d4a98c101cbfdc3b6d': {
     url: fugangLibrary,
     note: '兒童閱覽區約 12 席，視聽資料播放區有 9 席。',
@@ -1388,6 +1396,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-a619dc2bf2c66d2c8d4b': {
+    url: 'https://bggov.yunlin.gov.tw/cp.aspx?n=3316',
+    hours: '週二至週五 08:00–18:00，週六及週日 08:30–17:00。週一及國定假日休館。',
+    studyRoom: false, supersedesDirectory: true,
+  },
   'plis-87f04e883855455685fd': {
     url: 'https://www.nthcc.gov.tw/A7_6/content/212',
     hours: '週二至週日 09:00–17:00（中午不休息），週一及國定假日休館。',

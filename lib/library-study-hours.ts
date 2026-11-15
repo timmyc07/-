@@ -10,6 +10,14 @@ const hsinchuLate: WeeklyRange[] = [['2345', '09:00', '21:00'], ['06', '09:00', 
 
 // 館舍詳情明列的專室時段。各範圍以 0 至 6 代表週日至週六。
 const studyHours: Record<string, StudyHours | undefined> = {
+  'plis-a84767f448c8fd5408a7': {
+    name: '3 樓自習及閱報區', ranges: [],
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000285',
+  },
+  'plis-271e4d234a01bec2a0b0': {
+    name: '2 樓自修閱覽區', ranges: [],
+    url: 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=004&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+  },
   'plis-6937f16a63ea043f0527': {
     name: '3 樓自修教室', ranges: [],
     url: 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_4295&mp=1&orgId=005&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',

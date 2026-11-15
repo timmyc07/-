@@ -43,6 +43,11 @@ const serviceUpdates: Record<string, { url: string; note: string } | undefined> 
   },
 };
 const localHours: Record<string, { url: string; hours: string; studyRoom?: true; supersedesDirectory?: true } | undefined> = {
+  'plis-e2c2e5a82e7e92aa1179': {
+    url: 'https://hcplibrary.hchcc.gov.tw/wSite/sp?orgId=016&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    hours: '福德分館週二至週五 09:00–20:30，週末 09:00–17:00，週一及國定假日休館。',
+    supersedesDirectory: true,
+  },
   'plis-838b908932f56e7b1d22': {
     url: 'https://www.nankan.gov.tw/chhtml/Detail/2221?mcid=92857',
     hours: '週一及週三至週日 09:00–17:00。週二休館。',
@@ -122,9 +127,10 @@ const announcedLibraries: (Library & { city: string })[] = [
   {
     id: 'local-zhubei-stellar', name: '竹北星際圖書館', city: '新竹縣', district: '竹北市',
     address: '新竹縣竹北市中正西路52號', types: ['公共圖書館'],
-    website: stellarOpening, sources: [stellarOpening],
+    website: stellarOpening, sources: [stellarOpening, 'https://www.openstreetmap.org/node/14355577123'],
+    coordinates: { latitude: 24.8396572, longitude: 121.0036135 },
     openingHours: '試營運：週二至週四 09:00–20:30，週五至週日 09:00–24:00。週一休館，特殊日期依公告。',
-    accessNote: '試營運期間開放館內閱覽，暫停圖書外借及預約。',
+    accessNote: '試營運開放館內閱覽，暫停外借、預約、還書、通閱、檢索電腦及視聽設備服務。',
     areas: [], closures: [],
   },
 ];
@@ -177,6 +183,7 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const serviceUpdate = serviceUpdates[library.id];
   return {
     ...library,
+    name: library.id === 'plis-e2c2e5a82e7e92aa1179' ? '新竹縣竹北市立圖書館福德分館' : library.name,
     openingHours: closure?.reason ?? library.openingHours ?? hoursOverride?.hours ?? local?.hours ?? detail.hours,
     calendarYears: calendar?.calendarYears ?? library.calendarYears,
     checkDates: calendar?.checkDates ? [...new Set([...(library.checkDates ?? []), ...calendar.checkDates])] : library.checkDates,
@@ -195,6 +202,10 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
 }
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-e94c48945a092b5818d8') {
+    return { ...area, access: 'walk-in', entryNote: '自由入座，請勿預佔座位。',
+      sources: [...area.sources, 'https://hcplibrary.hchcc.gov.tw/wSite/public/Attachment/f1766106527415.pdf'] };
+  }
   if (id === 'plis-703e62be51f0cd3f7e93') {
     return { ...area, entryNote: '自 2026 年 6 月 1 日起，國定假日 08:00–20:00 開放。',
       sources: [...area.sources, 'https://mlc.edu.tw/System/mainedu/News/Detail.php?ID=53723'] };

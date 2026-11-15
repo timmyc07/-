@@ -42,6 +42,21 @@ const xindianInventoryDates: Record<string, string[] | undefined> = {
   'plis-b3c324c71459423ffadb': ['10-27'],
   'plis-5c0e70dee55211b503e1': ['10-26'],
 };
+const sanzhiTransitionUrl = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=6818c805a79440a193f8c5c43cf823d2';
+const newTaipeiServiceClosures: Record<string, Closure[] | undefined> = {
+  'plis-ccd76885634412ccaa4a': [
+    { from: '2026-07-13', until: '2026-08-23', reason: '配合新館啟用整備，原臨時館暫停開放。', url: sanzhiTransitionUrl },
+    { from: '2026-08-24', until: '2026-11-02', reason: '新館閱覽及自修暫停開放，兒童室臨時服務臺提供還書及預約取書。', url: sanzhiTransitionUrl },
+  ],
+  'plis-dce1cb93599d11a23eb5': [
+    { from: '2026-09-21', until: '2026-10-28', reason: '防水改善工程期間暫停館內閱覽與自修，服務櫃臺提供還書及預約取書。',
+      url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=d78033ac1e274e718e609fe51ed8d490' },
+  ],
+  'plis-35fd0d403d4fe15ada5e': [
+    { from: '2026-09-21', until: '2026-10-02', reason: '公安改善工程期間暫停館內閱覽，1 樓服務櫃臺提供借還書及預約取書。',
+      url: 'https://www.library.ntpc.gov.tw/multiplehtml/Info%3Bjsessionid%3D89DB92A64B859424AE9C82E43ED8E36E?categoryCode=007' },
+  ],
+};
 const dongshengClosure: Closure = {
   from: '2026-12-01', reason: '樹林東昇分館因都更閉館，臨時服務據點設於樹林區客家藝文館（中洲街 5-2 號）。',
   url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=90269135cd3b46ccac221df193f78e60',
@@ -272,7 +287,7 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
   }
   if (library.name.startsWith('新北市立圖書館') || library.id === 'plis-461c4b474bd0eb749aaa') {
     const early = newTaipeiElectionEve[library.id];
-    const closures = [...newTaipei2026];
+    const closures = [...(newTaipeiServiceClosures[library.id] ?? []), ...newTaipei2026];
     const inventoryDates = xindianInventoryDates[library.id];
     if (inventoryDates) {
       closures.unshift(...closureDates(2026, 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=52dc595a0d4c4440968dd14d55b7f5c5',

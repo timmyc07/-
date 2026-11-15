@@ -510,6 +510,12 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   assert.equal(evaluate(jiangbei, undefined, { ...request, date: '2026-10-30' }).closure, undefined);
   assert.equal(evaluate(jiangbei, undefined, { ...request, date: '2026-10-23' }).closure?.reason, '館方行事曆公告休館');
   const zutian = get('新北市立圖書館土城祖田圖書閱覽室');
+  const sanzhi = get('新北市立圖書館三芝分館');
+  assert.match(evaluate(sanzhi, undefined, { ...request, date: '2026-11-02' }).closure!.reason, /還書及預約取書/);
+  assert.equal(evaluate(sanzhi, undefined, { ...request, date: '2026-11-03' }).closure, undefined);
+  const sanchongSouth = get('新北市立圖書館三重南區分館');
+  assert.match(evaluate(sanchongSouth, sanchongSouth.areas[0], { ...request, date: '2026-10-28' }).closure!.reason, /防水改善/);
+  assert.equal(evaluate(sanchongSouth, sanchongSouth.areas[0], { ...request, date: '2026-10-30' }).closure, undefined);
   assert.equal(evaluate(zutian, undefined, { ...request, date: '2026-10-29' }).closure?.reason, '空調設備汰換施工休館');
   assert.equal(evaluate(xindian, undefined, { ...request, date: '2026-10-29' }).closure?.reason, '圖書盤點休館');
   assert.equal(evaluate(xindian, undefined, { ...request, date: '2026-10-30' }).closure?.reason, '圖書盤點休館');

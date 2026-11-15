@@ -1051,6 +1051,7 @@ const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser
 const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const lanzhouLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=A3B82F4BECD6CD1C&sms=CFFFC938B352678A';
 const kaohsiungMainReadingRules = 'https://www.ksml.edu.tw/form/Details.aspx?Parser=2%2C8%2C872%2C%2C%2C%2C688';
+const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=099812be491c45e59238adcaf69d3443';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
   'plis-8616f8eb019058a7080c': {
     name: '2 樓書庫閱覽區', kind: 'reading', seats: 14, slots: null, access: null, equipment: {},
@@ -1338,11 +1339,11 @@ const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
     equipment: { laptop: true, wifi: true, outlet: true },
     sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=1096d82768304ebf8d5a14a403a535e0'],
   },
-  'plis-058be989d22b992c5b8a': {
-    name: '1 樓資訊檢索與數位資源區筆電席', kind: 'reading', seats: 8, slots: null, access: null,
-    equipment: { laptop: true, outlet: true },
-    sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=099812be491c45e59238adcaf69d3443'],
-  },
+  'plis-058be989d22b992c5b8a': [
+    { name: '1 樓閱覽區', kind: 'reading', seats: 56, slots: null, access: null, equipment: {}, sources: [jinshanLibrary] },
+    { name: '1 樓資訊檢索與數位資源區筆電席', kind: 'reading', seats: 8, slots: null, access: null,
+      equipment: { laptop: true, outlet: true }, sources: [jinshanLibrary] },
+  ],
   'plis-cbce401033404caad835': {
     name: '2 樓閱覽室', kind: 'reading', slots: null, access: null, equipment: {}, sources: [kinmenCollectionPolicy],
   },
@@ -1355,6 +1356,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-058be989d22b992c5b8a': {
+    url: jinshanLibrary,
+    note: '館方列有 Wi-Fi。1 樓資訊檢索與數位資源區有 8 部桌上型電腦須登記使用，另有 8 席附插座的筆電席，可自備筆電或平板。',
+  },
   'plis-898020f5dd3a533a9ee3': {
     url: 'https://library.hccc.gov.tw/ct.asp?ctNode=1051&mp=20&xItem=7450',
     note: '文化局臨時館公告列有 24 小時預約取書櫃及還書箱，館內設自助借書機，並提供縣內 13 鄉鎮市跨館預約取書服務。',

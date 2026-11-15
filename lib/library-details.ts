@@ -77,6 +77,38 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-96bdb053d7e967f965dc': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000493',
+    facilities: ['兒童閱讀區', '親子閱讀區', '書報閱讀區', '期刊區', '網路區', '參考書區', '書庫', '一般閱讀區', '視聽會議室', '數位中心', '3 樓 K 書中心'],
+  },
+  'plis-c601d6fcc4e455f93f93': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000497',
+    facilities: ['資訊檢索設備', '兒童閱覽區'],
+  },
+  'plis-2495b652916c263fa25f': {
+    url: 'https://itaiwan.moe.gov.tw/doc/about-list.php?doc=292',
+    facilities: ['2 樓數位機會中心'],
+  },
+  'plis-740c2304a9a259e92df2': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000501',
+    facilities: ['期刊閱報區', '圖書參考區', '親子共讀區', '網路查詢電腦區', '書庫', '閱覽區', '小型會議室', '視聽電腦教室'],
+  },
+  'plis-6475285c674791ca9696': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000503',
+    facilities: ['地下室視聽室', '親子閱讀區', '電腦資訊區', '閱讀區', '交誼廳'],
+  },
+  'plis-d6eefd9316cdacfd6e67': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000504',
+    facilities: ['期刊閱報區', '圖書參考區', '親子共讀區', '網路查詢電腦區', '書庫', '閱覽區', '視聽室', '小型會議室', '文物展示區'],
+  },
+  'plis-efe674464e6fce8f380e': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000505',
+    facilities: ['兒童圖書館藏區', '英文繪本區', '中文繪本區', '視聽區', '多功能活動空間', '交流分享區', '戶外閱讀樹屋'],
+  },
+  'plis-2b1932820682ee253f7e': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000506',
+    facilities: ['圖書閱覽區', '兒童閱覽區', '網路電腦區'],
+  },
   'plis-fd6e00ddec2e11b087ad': {
     url: 'https://library-dl.yunlin.gov.tw/cp.aspx?n=9679',
     facilities: ['傑克與仙豆主題區', '綠野叢林區', '海底世界區', '白雲城堡區'],

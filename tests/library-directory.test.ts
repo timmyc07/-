@@ -160,7 +160,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 153);
+  assert.equal(scheduled.length, 154);
   const miaoliCity = libraries.find(({ id }) => id === 'plis-5214bc11151c1cde5bf4')!;
   const miaoliRenovation = miaoliCity.closures.find(({ from }) => from === '2025-08-01')!;
   assert.match(miaoliRenovation.reason, /借書與通閱暫停/);
@@ -279,6 +279,15 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const longgang = libraries.find(({ name }) => name === '桃園市立圖書館龍岡分館')!;
   assert.equal(longgang.areas[0].seats, 265);
   assert.equal(longgang.areas[0].slots?.find(({ day }) => day === 1)?.end, minutes('17:00'));
+  const changan = libraries.find(({ id }) => id === 'plis-1ce0f598d0b6a3cce1c1')!;
+  const [standardStudy, laptopStudy] = changan.areas.filter(({ kind }) => kind === 'study');
+  assert.equal(standardStudy.seats, 64);
+  assert.equal(standardStudy.equipment.outlet, undefined);
+  assert.equal(standardStudy.equipment.laptop, undefined);
+  assert.equal(laptopStudy.seats, 16);
+  assert.deepEqual(laptopStudy.equipment, { laptop: true, outlet: true, wifi: true });
+  assert.deepEqual(laptopStudy.slots, standardStudy.slots);
+  assert.equal(laptopStudy.access, standardStudy.access);
   const dongshi = libraries.find(({ name }) => name === '桃園市立圖書館東勢分館')!;
   assert.equal(dongshi.studyRoom, true);
   assert.equal(dongshi.areas[0].slots?.find(({ day }) => day === 2)?.end, minutes('21:00'));

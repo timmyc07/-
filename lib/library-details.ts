@@ -1691,6 +1691,11 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const tainanArea = tainanStudyRoom(library.id, area);
   const kaohsiungArea = kaohsiungStudyRoom(library.id);
   const localArea = kaohsiungArea ?? tainanArea ?? localStudyRoom(library.id, taipeiArea ?? area);
+  const studyAreas = library.id === 'plis-1ce0f598d0b6a3cce1c1' ? [
+    { ...localArea, name: '4 樓自修室一般座位', seats: 64 },
+    { ...localArea, name: '4 樓自修室筆電區', seats: 16,
+      equipment: { ...localArea.equipment, laptop: true, outlet: true, wifi: true } },
+  ] : [localArea];
   const studyRoom = Boolean(study || local?.studyRoom || listed || taipeiArea || tainanArea || kaohsiungArea || nclReport?.studyRoom);
   const calendar = libraryCalendar(library);
   const serviceUpdate = serviceUpdates[library.id];
@@ -1717,7 +1722,7 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     studyRoom: noStudyRoom ? false : library.studyRoom ?? (kaohsiungArea === null ? false : studyRoom || nclReport?.studyRoom),
     areas: noStudyRoom ? areas.filter(({ kind }) => kind !== 'study')
       : studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
-      ? [...library.areas, localArea, ...additionalAreas] : areas,
+      ? [...library.areas, ...studyAreas, ...additionalAreas] : areas,
     sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []),
       ...(serviceUpdate ? [serviceUpdate.url] : []),
       ...(localFacilities ? [localFacilities.url] : []),

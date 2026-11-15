@@ -1034,6 +1034,10 @@ const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
 const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-bffc737f45f33bf2784f': {
+    name: '開放閱覽區', kind: 'reading', seats: 74, slots: null, access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,61,631,625'],
+  },
   'plis-424ebe1541690abe5b92': {
     name: '2 樓優靜倚窗閱覽區', kind: 'reading', seats: 8, slots: null, access: null, equipment: {},
     sources: ['https://www.chcg.gov.tw/TSO/Puxin/07other/main.aspx?main_id=12367'],
@@ -1370,8 +1374,8 @@ const serviceUpdates: Record<string, { url: string; note: string } | undefined> 
     note: '2026 年 11 月 17 日至 20 日搬遷期間全館暫停服務，11 月 21 日回到月津路 14 之 1 號原館。',
   },
   'plis-ccd76885634412ccaa4a': {
-    url: 'https://www.ntpc.gov.tw/ch/home.jsp?dataserno=aa076d144bbfd6d2d0821e90527ecc28&id=e8ca970cde5c00e1',
-    note: '三芝分館「自然書室」於 2026 年 11 月 3 日在淡金路一段 37 號原址正式啟用。',
+    url: 'https://wedid.ntpc.gov.tw/Governance/Detail/EGqPZzAEPOZd',
+    note: '三芝分館「自然書室」於 2026 年 11 月 3 日在淡金路一段 37 號原址正式啟用。全館共有 152 席閱覽座位，1 樓設兒童、樂齡及期刊閱報區，2 樓設一般及青少年閱覽區。',
   },
   'plis-f5672c9a38fabba9eabb': {
     url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=90269135cd3b46ccac221df193f78e60',

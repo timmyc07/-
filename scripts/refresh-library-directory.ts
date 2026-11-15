@@ -68,9 +68,10 @@ for (const { 縣市: city, 圖書館資訊: records } of regions) {
       library.address = '苗栗縣竹南鎮大厝里真如路562號';
       library.phone = '037-463813';
       library.website = 'https://www.chunan.gov.tw/cp.aspx?n=11120';
-      library.coordinates = undefined;
+      library.coordinates = { latitude: 24.6784234, longitude: 120.8719453 };
       library.fax = undefined;
-      library.sources.push(library.website, 'https://www.miaoli.gov.tw/News_Content2.aspx?n=285&s=1005335');
+      library.sources.push(library.website, 'https://www.miaoli.gov.tw/News_Content2.aspx?n=285&s=1005335',
+        'https://www.openstreetmap.org/node/14292705352');
     }
     if (name === '屏東縣新園鄉立圖書館' && library.address === '屏東縣新園鄉仙吉村仙吉路93號') {
       library.address = '屏東縣新園鄉仙吉村新田路22巷21號';

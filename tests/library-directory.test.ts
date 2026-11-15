@@ -39,8 +39,9 @@ test('全臺名錄可追溯到原檔，保留 22 縣市且不填入未核對的�
 
 test('全臺名錄的電話與網址齊全，搬遷館舍不帶入舊址座標', () => {
   assert(directory.libraries.every(({ phone, website }) => phone && website));
-  assert.deepEqual(directory.libraries.filter(({ coordinates }) => !coordinates).map(({ name }) => name),
-    ['苗栗縣竹南鎮立圖書館']);
+  assert(directory.libraries.every(({ coordinates }) => coordinates));
+  const zhunan = directory.libraries.find(({ id }) => id === 'plis-1d5bc6bb745d6ead49e9')!;
+  assert.deepEqual(zhunan.coordinates, { latitude: 24.6784234, longitude: 120.8719453 });
   const magang = directory.libraries.find(({ id }) => id === 'plis-838b908932f56e7b1d22')!;
   assert.deepEqual(magang.coordinates, { latitude: 26.159619, longitude: 119.919897 });
   const shanlong = directory.libraries.find(({ id }) => id === 'plis-cceeef12e0bfff59593f')!;

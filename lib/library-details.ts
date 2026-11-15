@@ -225,9 +225,10 @@ const announcedLibraries: (Library & { city: string })[] = [
   {
     id: 'local-hsinchu-county-main', name: '新竹縣立總圖書館', city: '新竹縣', district: '竹北市',
     address: '新竹縣竹北市自強三路155號', types: ['公共圖書館'],
+    coordinates: { latitude: 24.81503, longitude: 121.01758 },
     phone: '03-658-8139',
     website: hsinchuOpening, sources: [hsinchuOpening, hsinchuFloorGuide,
-      'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11074'],
+      'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11074', 'https://www.openstreetmap.org/relation/17509614'],
     openingHours: '試營運至 2026 年 11 月 15 日，09:00–21:00，週一休館。12 月 18 日預定正式開館。',
     studyRoom: true,
     facilities: ['地下 1 樓自修室', '閱報區', '兒童閱覽區', '視障服務區', '資訊檢索區', '討論小間', '汽機車停車場'],

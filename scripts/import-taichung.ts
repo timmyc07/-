@@ -8,7 +8,7 @@ import { readRuleAudit } from './crawl-taichung-rules.ts';
 import { taichungFieldReviews } from './taichung-field-reviews.ts';
 import { branchHours, branchInfo, branchName, cityCalendar, cityDirectory, cityHours,
   cityNotices, cityRules, citySite, cityWeatherClosures, clean, dateKey, nationalCalendar,
-  nlpiArea, nlpiCalendar, nlpiQuietArea, nlpiWeatherClosures } from './taichung-sources.ts';
+  nlpiArea, nlpiCalendar, nlpiQuietArea, nlpiWeatherClosures, taichungFax } from './taichung-sources.ts';
 
 const cityJson = 'https://newdatacenter.taichung.gov.tw/api/v1/no-auth/resource.download?rid=654159e4-05e9-427c-bf0c-7facbd66e777';
 type Row = Record<string, string>;
@@ -130,6 +130,7 @@ async function importTaichung() {
       if (info.address && districtOf(info.address)) {
         library.address = info.address;
         library.district = districtOf(info.address);
+        if (!buildings.length) library.fax = info.fax;
       }
       library.phone = info.phone ?? library.phone;
       library.sources.push(intro.href);
@@ -218,6 +219,11 @@ async function importTaichung() {
   }
 
   for (const library of libraries.values()) {
+    const row = contact.get(branchName(library.name.replace(/[A-Z]棟$/, '')));
+    if (!library.fax && row?.['地址'] && addressKey(row['地址']) === addressKey(library.address)) {
+      library.fax = taichungFax(row['傳真']);
+      if (library.fax) library.sources.push(cityDirectory);
+    }
     const site = verifiedCoordinates[library.id];
     if (site && addressKey(site[0]) === addressKey(library.address)) {
       const [, latitude, longitude, source] = site;

@@ -108,6 +108,11 @@ export function roomHours(text: string) {
   return { regular: parseSlots(text), study: [], label: '' };
 }
 
+export function taichungFax(value: string | undefined) {
+  const number = clean(value ?? '').match(/^(?:\(04\)|04[- ])\s*(\d{4})-?(\d{4})$/);
+  return number ? '04-' + number[1] + number[2] : undefined;
+}
+
 export function branchInfo(html: string) {
   const $ = load(html);
   const fields = $('.sub_info strong').toArray().map((field) => clean($(field).text()));
@@ -124,7 +129,7 @@ export function branchInfo(html: string) {
   const seats = (value: string) => Number(value.replace(/,/g, '').match(/^\d+/)?.[0]) || undefined;
   return {
     address: address?.startsWith('臺中市') ? address : undefined,
-    phone, buildingAddresses,
+    phone, fax: taichungFax(field('傳真')), buildingAddresses,
     study: /自[修習]室/.test(listed) || Boolean(seats(studySeats)),
     noStudy: /^(?:無|0席?)$/.test(studySeats),
     studySeats: seats(studySeats),

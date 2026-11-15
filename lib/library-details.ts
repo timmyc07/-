@@ -791,7 +791,8 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
   },
   'plis-539f7d3d76b9f2ee658a': {
     url: 'https://www.cna.com.tw/postwrite/chi/444234',
-    facilities: ['2 樓兒童圖書區', '4 至 6 樓館藏及閱覽區', '7 樓竹塹講堂', '7 樓討論室'],
+    facilities: ['2 樓兒童圖書區', '4 至 6 樓館藏及閱覽區', '7 樓竹塹講堂',
+      '7 樓迎曦會議室', '7 樓拱辰會議室', '7 樓歌薰會議室', '7 樓挹爽會議室'],
   },
   'plis-8e698a4770cf01e3875e': {
     url: 'https://www.nthcc.gov.tw/A2_4',
@@ -986,6 +987,16 @@ const nationalTaiwanLaptopSeats: Area = {
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
 const localReadingAreas: Record<string, Area | undefined> = {
+  'plis-e9169e5ae78a7cac791b': {
+    name: '3 樓一般閱覽區', kind: 'reading', seats: 49, slots: null, access: null,
+    equipment: {}, entryNote: '同樓層另有期刊區 24 席、兒童室 21 席。',
+    sources: ['https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=E00BDD309B7F8D33&sms=CFFFC938B352678A'],
+  },
+  'plis-372455894f315cbbad48': {
+    name: '5 樓一般閱覽區', kind: 'reading', seats: 80, slots: null, access: null,
+    equipment: {}, entryNote: '4 樓兒童閱覽區另有 39 席。',
+    sources: ['https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=6B2D15D39F90119B&sms=CFFFC938B352678A'],
+  },
   'plis-52b31760b5c01701738f': {
     name: '3 樓一般閱覽區', kind: 'reading', seats: 94, slots: null, access: null,
     equipment: { laptop: true, outlet: true, wifi: true },
@@ -1179,6 +1190,11 @@ const localHours: Record<string, { url: string; hours: string; studyRoom?: boole
   'plis-851a10bc58bf5f5c6fcb': {
     url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=2ac534a25d4f41e292b4db4f43b8197e',
     hours: '原館自 2026 年 6 月 1 日起閉館重建。文化路一段 18 號 1 樓臨時據點提供預約取書、還書及辦證。',
+    studyRoom: false, supersedesDirectory: true,
+  },
+  'plis-b7a50b9284256d36bef0': {
+    url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=14E9915FB92D566E',
+    hours: '臨時替代服務處提供還書、預約取書、繳費及辦證。週二至週六 10:00–19:30，週日及週一 10:00–17:00。每月第一個星期四、最後一個星期一及國定假日休館。',
     studyRoom: false, supersedesDirectory: true,
   },
   'plis-6340f6e59e0e98e1adb1': {

@@ -36,6 +36,10 @@ const electionClosureRules: Record<string, string> = {
   'plis-645a77676fc64f962dcf': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000306',
   'plis-34ea4e3647b8191ffef9': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000307',
 };
+const pingtungHolidayRules: Record<string, string | undefined> = {
+  'plis-e641450483afbb290910': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000442',
+  'plis-71debe76739635a0cacc': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000450',
+};
 
 function closureDates(year: number, url: string, dates: string[], reason: string): Closure[] {
   return dates.map((date) => ({ from: year + '-' + date, until: year + '-' + date, reason, url }));
@@ -102,6 +106,13 @@ export const penghuStudyClosures = [2026, 2027].flatMap((year) =>
   monthlyClosures(year, 2, penghuMainUrl, '閱覽室每月最後一個星期二清潔休室'));
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  const pingtungHolidayRule = pingtungHolidayRules[library.id];
+  if (pingtungHolidayRule) {
+    return { closures: [
+      ...closureDates(2026, pingtungHolidayRule, ['12-25'], '依館方國定假日休館規定，行憲紀念日休館'),
+      ...closureDates(2027, pingtungHolidayRule, ['01-01'], '依館方國定假日休館規定，開國紀念日休館'),
+    ] };
+  }
   if (library.id === 'plis-11572b8b7a161948f5fb') {
     return { closures: [
       ...closureDates(2026, 'https://www.mlvillage.gov.tw/latestevent/Details.aspx?Parser=9,3,23,,,,9406',

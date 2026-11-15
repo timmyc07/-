@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import NearbyOrigin from './nearby-origin.tsx';
 import { directionsUrl, distanceKm, parseCoordinates } from '../lib/distance.ts';
@@ -90,10 +91,14 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   return <>
     <header className="header">
       <div className="shell bar">
-        <Link className="brand" href="/" aria-label="StudyGo 首頁">
-          <span className="brand-icon" aria-hidden="true">S</span>
-          <span className="brand-copy">StudyGo<small>臺中市公立圖書館自修查詢</small></span>
-        </Link>
+        <div className="brand-group">
+          <a className="library-brand" href="https://www.library.taichung.gov.tw/">
+            <Image src="/taichung-library-logo.svg" alt="臺中市立圖書館官網" width={180} height={34} />
+          </a>
+          <Link className="brand" href="/" aria-label="StudyGo 首頁">
+            StudyGo<small>公立圖書館自修查詢</small>
+          </Link>
+        </div>
         <nav className="site-nav" aria-label="主要導覽">
           <a href="#search">空間查詢</a>
           <a href="#results">{searched ? '查詢結果' : '已核對館舍'}</a>

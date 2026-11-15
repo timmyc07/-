@@ -136,6 +136,7 @@ const electionClosureRules: Record<string, string> = {
   'plis-0f447bbe2c470b97e41a': 'https://matsucc.gov.tw/莒光鄉圖書館-東莒分館/',
   'plis-a382f4004c63510e6b53': 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=007&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
   'plis-3a8fa4c8db9589758aef': 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=011&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+  'plis-f80327d8216f938267ac': 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=018&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
   'plis-e94c48945a092b5818d8': 'https://www.hchcc.gov.tw/Tw/Common/SinglePage?filter=55A4FB62-998F-4818-BDE2-08AF8B3245C2',
   'plis-0a0cb9e669998c949020': 'https://hcplibrary.hchcc.gov.tw/wSite/sp?orgId=003&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
   'plis-e2c2e5a82e7e92aa1179': 'https://hcplibrary.hchcc.gov.tw/wSite/sp?orgId=016&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',

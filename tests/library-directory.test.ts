@@ -166,6 +166,11 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
     { day: 0, start: minutes('09:00'), end: minutes('18:00') });
   const yilanCity = libraries.find(({ id }) => id === 'plis-9f7edd85cf79ea635049')!;
   assert.deepEqual(yilanCity.areas[0].equipment, { laptop: true, outlet: true });
+  const zhuangwei = libraries.find(({ id }) => id === 'plis-0f495639312343ec173e')!;
+  assert.match(zhuangwei.openingHours!, /08:30–17:00/);
+  assert(zhuangwei.facilities?.includes('電梯') && zhuangwei.facilities.includes('親子共讀區'));
+  const yuanshan = libraries.find(({ id }) => id === 'plis-44d1777aefba3d40891b')!;
+  assert(yuanshan.facilities?.includes('地下 1 樓民眾閱覽室'));
   const qionglin = libraries.find(({ id }) => id === 'plis-cf8f59d429a9ca2188f7')!;
   assert.equal(qionglin.areas[0].seats, 25);
   assert.equal(qionglin.areas[0].access, 'walk-in');

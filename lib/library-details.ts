@@ -58,7 +58,15 @@ const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C6
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
 const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O065604454792753757/金門縣公共圖書館館藏發展政策.pdf';
 const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
-const kinmenFacilities: Record<string, { url: string; facilities: string[] } | undefined> = {
+const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-0f495639312343ec173e': {
+    url: 'https://www.jw.gov.tw/cp.aspx?n=15005',
+    facilities: ['書庫', '期刊區', '館藏特色區', '縣籍作家專區', '藝文教室', '兒童室', '親子共讀區'],
+  },
+  'plis-44d1777aefba3d40891b': {
+    url: 'https://www.yuanshan.gov.tw/cp.aspx?n=5787',
+    facilities: ['地下 1 樓民眾閱覽室', '期刊雜誌區', '兒童閱覽室', '視聽室', '書庫', '資訊研討室', '無障礙廁所'],
+  },
   'plis-e3c1d8e816d9e6061a7d': {
     url: kinmenCollectionPolicy, facilities: ['南棟親子活動區', '南棟青少年閱覽室', '南棟期刊室', '南棟自修室'],
   },
@@ -112,6 +120,11 @@ const serviceUpdates: Record<string, { url: string; note: string } | undefined> 
   },
 };
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-0f495639312343ec173e': {
+    url: 'https://www.jw.gov.tw/cp.aspx?n=15005',
+    hours: '週二至週日 08:30–17:00。週一及國定假日休館。每月最後一日為清潔日，遇週六、週日或週一則提前至週五休館。',
+    supersedesDirectory: true,
+  },
   'plis-3428641ec78aeb601979': {
     url: 'https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u4903210577041037183',
     hours: '週二至週五 08:00–20:00，週六及週日 08:00–17:00。週一及國定假日休館，月末週五清潔日 13:00–20:00 開館。',
@@ -358,8 +371,10 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const serviceUpdate = serviceUpdates[library.id];
   const readingOnly = hsinchuReadingOnly.has(library.id);
   const noStudyRoom = local?.studyRoom === false || readingOnly;
-  const localFacilities = kinmenFacilities[library.id];
-  const facilities = library.facilities ?? detail.facilities ?? localFacilities?.facilities;
+  const localFacilities = localFacilityLists[library.id];
+  const baseFacilities = library.facilities ?? detail.facilities;
+  const facilities = localFacilities
+    ? [...new Set([...(baseFacilities ?? []), ...localFacilities.facilities])] : baseFacilities;
   const readingArea = kinmenReadingAreas[library.id];
   const areas = readingArea && !library.areas.some(({ name }) => name === readingArea.name)
     ? [...library.areas, readingArea] : library.areas;

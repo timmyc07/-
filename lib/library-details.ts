@@ -1,6 +1,6 @@
 import { minutes, type Area, type Library } from './study.ts';
 import { libraryStudyHours } from './library-study-hours.ts';
-import { chiayiCountyReadingRules, libraryCalendar, yuanlinLibraryRules } from './library-calendars.ts';
+import { chiayiCountyReadingRules, libraryCalendar, penghuMainUrl, penghuStudyClosures, yuanlinLibraryRules } from './library-calendars.ts';
 import { kaohsiungHoursSource, kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 import { tainanStudyRoom } from './tainan-study-rules.ts';
 import { taipeiStudyRoom } from './taipei-study-rules.ts';
@@ -434,8 +434,10 @@ function localStudyRoom(id: string, area: Area): Area {
       sources: [...area.sources, 'https://isp.ncl.edu.tw/files/file_pool/1/0N087443665349792009/110連江縣.pdf'] };
   }
   if (id === 'plis-f3080ccd8c34dad70222') {
-    return { ...area, equipment: { laptop: true },
-      entryNote: '筆電等電子設備請保持靜音。請勿預佔座位，考季期間可能不定時清場。' };
+    return { ...area, name: '2 樓閱覽室（自修室）', access: 'walk-in',
+      closures: penghuStudyClosures, equipment: { laptop: true, wifi: true },
+      entryNote: '筆電等電子設備請保持靜音。請勿預佔座位，考季期間可能不定時清場。',
+      sources: [...area.sources, penghuMainUrl] };
   }
   if (id === 'plis-8e698a4770cf01e3875e') {
     return { ...area, seats: 147, access: 'conditional',

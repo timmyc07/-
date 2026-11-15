@@ -2,6 +2,7 @@ import { minutes, type Closure, type Library } from './study.ts';
 import { kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 
 const taipeiUrl = 'https://tpml.gov.taipei/cp.aspx?n=141EFA8D46038957&s=839324A30786DF77';
+export const penghuMainUrl = 'https://www.phlib.nat.gov.tw/wSite/sp?ctNode=5236&mp=1&orgId=001&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp';
 const newTaipeiUrl = 'https://www.library.ntpc.gov.tw/singlehtml/be937c4bcb74427ca3d3c8fd5b4704b9';
 const nationalTaiwanUrl = 'https://www.ntl.edu.tw/wSite/ct?ctNode=1711&mp=1&xItem=58536';
 const electionUrl = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=353f6e7dda484242820ea153ab0eb4a0';
@@ -88,16 +89,32 @@ const kaohsiung2026 = [
   ...closureDates(2026, kaohsiungUrl, ['11-28'], '選舉日休館'),
 ];
 
-function songshanClosures(year: number) {
+function monthlyClosures(year: number, weekday: number, url: string, reason: string) {
   const dates = Array.from({ length: 12 }, (_, month) => {
     const last = new Date(Date.UTC(year, month + 1, 0));
-    last.setUTCDate(last.getUTCDate() - (last.getUTCDay() + 6) % 7);
+    last.setUTCDate(last.getUTCDate() - (last.getUTCDay() + 7 - weekday) % 7);
     return last.toISOString().slice(5, 10);
   });
-  return closureDates(year, taipeiUrl, dates, '松山分館臨時服務處每月最後一個星期一休館');
+  return closureDates(year, url, dates, reason);
 }
 
+export const penghuStudyClosures = [2026, 2027].flatMap((year) =>
+  monthlyClosures(year, 2, penghuMainUrl, '閱覽室每月最後一個星期二清潔休室'));
+
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  if (library.id === 'plis-f3080ccd8c34dad70222') {
+    return { closures: [{ from: '2026-04-04', until: '2026-04-05', reason: '兒童節及清明節全館休館',
+      url: 'https://www.phlib.nat.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=11299' }] };
+  }
+  if (library.id === 'plis-9c4e98f5a888073fdc0c') {
+    return { closures: [{ from: '2026-10-27', until: '2026-10-27', reason: '館員選務講習，下午休館',
+      time: { start: minutes('13:30'), end: minutes('17:30') },
+      url: 'https://www.phlib.nat.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=11382' }] };
+  }
+  if (library.id === 'plis-8edd8ad4e311a6907f92') {
+    return { closures: [{ from: '2026-02-14', until: '2026-02-19', reason: '春節休館',
+      url: 'https://www.phlib.nat.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=11266' }] };
+  }
   if (library.id === 'plis-d31d9ccdab3c7bcf9ff3') {
     const url = 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11075';
     return {
@@ -185,7 +202,8 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     const songshan = library.id === 'plis-b7a50b9284256d36bef0';
     return {
       calendarYears: [2026, 2027],
-      closures: [...taipei2026, ...taipei2027, ...(songshan ? [...songshanClosures(2026), ...songshanClosures(2027)] : [])],
+      closures: [...taipei2026, ...taipei2027, ...(songshan ? [2026, 2027].flatMap((year) =>
+        monthlyClosures(year, 1, taipeiUrl, '松山分館臨時服務處每月最後一個星期一休館')) : [])],
     };
   }
   if (library.name.startsWith('新北市立圖書館') || library.id === 'plis-461c4b474bd0eb749aaa') {

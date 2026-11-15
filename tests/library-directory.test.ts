@@ -217,6 +217,15 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const penghu = libraries.find(({ id }) => id === 'plis-f3080ccd8c34dad70222')!;
   assert.equal(penghu.areas[0].slots?.length, 7);
   assert.equal(penghu.areas[0].equipment.laptop, true);
+  assert.equal(penghu.areas[0].equipment.wifi, true);
+  assert.equal(penghu.areas[0].access, 'walk-in');
+  assert(penghu.areas[0].closures?.some(({ from }) => from === '2026-11-24'));
+  assert(penghu.areas[0].closures?.some(({ from }) => from === '2027-02-23'));
+  assert(!penghu.closures.some(({ from }) => from === '2026-11-24'));
+  assert(penghu.closures.some(({ from, until }) => from === '2026-04-04' && until === '2026-04-05'));
+  const baisha = libraries.find(({ id }) => id === 'plis-7d5f6b4a8aae37204a84')!;
+  assert.equal(baisha.studyRoom, true);
+  assert.equal(baisha.areas[0].slots, null);
   const kinmen = libraries.find(({ id }) => id === 'plis-e3c1d8e816d9e6061a7d')!;
   assert.equal(kinmen.areas[0].slots?.length, 6);
   assert(!kinmen.areas[0].slots?.some(({ day }) => day === 1));

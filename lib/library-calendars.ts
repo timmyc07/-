@@ -11,10 +11,27 @@ const newTaipeiElectionEve: Record<string, { start: number; url: string } | unde
   'plis-b9568520f14810d9931a': { start: 12, url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=cc172c75856b4421bcfb3a655534abaf' },
   'plis-4b5e39e13cd44319599f': { start: 13, url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=4ded2dc334a04c0cb6e638e839b18870' },
 };
-const newTaipeiNovemberClosures: Record<string, { day: string; branchId: string } | undefined> = {
-  'plis-e560724330a3485ec121': { day: '11-23', branchId: '7ab6eefb8a0542c591c242c79fb36989' },
-  'plis-039d55a9f83160fc0e08': { day: '11-24', branchId: 'e981c14a1847473c8d038b4c19656eab' },
-  'plis-b5da9bcc084818ab9965': { day: '11-25', branchId: 'f97aa14cccf645d29276a969bc9d8c53' },
+const newTaipeiBranchClosures: Record<string, { dates: string[]; branchId: string } | undefined> = {
+  'plis-e560724330a3485ec121': { dates: ['11-23'], branchId: '7ab6eefb8a0542c591c242c79fb36989' },
+  'plis-039d55a9f83160fc0e08': { dates: ['11-24'], branchId: 'e981c14a1847473c8d038b4c19656eab' },
+  'plis-b5da9bcc084818ab9965': { dates: ['11-25'], branchId: 'f97aa14cccf645d29276a969bc9d8c53' },
+  'plis-fbaad21dca36d8e7e69b': { branchId: '75c9e134b56247d1be0b12771f4c958c', dates: ['05-18'] },
+  'plis-a40a9a0b96d74b54147e': { branchId: '3b882237569f42d3a610b8ccca388ae1', dates: ['09-07'] },
+  'plis-980d010f6445faec01ae': { branchId: '2cbb91b2f45849a0948f082ecd02d71a', dates: ['04-13'] },
+  'plis-c770870780f2e3994cd2': { branchId: '5cbaf24850354822b32b7907ef7945b3', dates: ['04-29'] },
+  'plis-49a9a08d63a7140714e4': { branchId: 'b1ae93fdc1244b80b9af364596b2b581', dates: ['04-21'] },
+  'plis-c919871190687b80121b': { branchId: 'c5ce4004327d4cc6b186029af9f34309', dates: ['01-17', '02-01', '09-05', '10-30'] },
+  'plis-b80a3d048342d8ee000b': { branchId: '733f9cf3e7014b5d8539266c0a4841b3', dates: ['10-23'] },
+  'plis-2d54a2fbad4e1969f16d': { branchId: '194d0fedaca34b6b8d425d9bf0d6e405', dates: ['10-28'] },
+  'plis-5946ac04ea837232b6f2': { branchId: '05bf4bb286764b73a497592be0c58b96', dates: ['07-26', '10-27'] },
+  'plis-4c6f0d21ba83e97a256f': { branchId: 'c5ad611b99bf4d9eb9e613cbde6dfa2d', dates: ['09-21', '09-22', '09-23'] },
+  'plis-86ecd986295f288ae207': { branchId: '3b471135eea9495cb54e933a109758dc', dates: ['05-04'] },
+  'plis-e2ead3dfd0dc3c336fa2': { branchId: 'f6228a8566af4f7ab5c5276941dd6265', dates: ['01-12'] },
+  'plis-6ce77ef085504435e7e7': { branchId: '1c60b08acab0482dafdef8a34ae50281', dates: ['01-05'] },
+  'plis-85f7a6ce9e0a4091966e': { branchId: '6f4d0b6a06ea4e1dab0224428eaf4052', dates: ['04-20'] },
+  'plis-5e3e0d107165abbc64e5': { branchId: 'bfc1b820203c4aae9ea7cf4d99827c87', dates: ['05-29'] },
+  'plis-4b5e39e13cd44319599f': { branchId: '38856979fb6240dab5705b60f0daf36d', dates: ['05-11'] },
+  'plis-c488aeda8f5a5cec86b1': { branchId: '60713de7e75a4a6dbdd45deaf4d5c44e', dates: ['09-07'] },
 };
 const xindianInventoryDates: Record<string, string[] | undefined> = {
   'plis-b9568520f14810d9931a': ['10-29', '10-30'],
@@ -261,11 +278,15 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
       closures.unshift(...closureDates(2026, 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=52dc595a0d4c4440968dd14d55b7f5c5',
         inventoryDates, '圖書盤點休館'));
     }
-    const additional = newTaipeiNovemberClosures[library.id];
+    const additional = newTaipeiBranchClosures[library.id];
     if (additional) {
       const branchUrl = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId='
         + additional.branchId;
-      closures.push(...closureDates(2026, branchUrl, [additional.day], '館方行事曆公告休館'));
+      closures.push(...closureDates(2026, branchUrl, additional.dates, '館方行事曆公告休館'));
+    }
+    if (library.id === 'plis-45e2769173fd5cf565ff') {
+      closures.unshift({ from: '2026-10-28', until: '2026-10-30', reason: '空調設備汰換施工休館',
+        url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=b85cbfd959194f1db5d4e5ab37ed8248' });
     }
     if (early) {
       closures.push({

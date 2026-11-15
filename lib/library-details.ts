@@ -1351,6 +1351,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-898020f5dd3a533a9ee3': {
+    url: 'https://library.hccc.gov.tw/ct.asp?ctNode=1051&mp=20&xItem=7450',
+    note: '文化局臨時館公告列有 24 小時預約取書櫃及還書箱，館內設自助借書機，並提供縣內 13 鄉鎮市跨館預約取書服務。',
+  },
   'plis-c45011eb98a75a2b9c10': {
     url: 'https://www.lotong.gov.tw/News_Content.aspx?_CSN=4895&n=17722&s=339113&sms=16265',
     note: '館內飲品限白開水，請勿攜帶食物或其他飲料。使用筆電或其他行動裝置請勿影響他人；個人筆電以外的私人電器須自備電源。',

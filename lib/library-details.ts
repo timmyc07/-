@@ -81,6 +81,7 @@ const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA73
 const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
+const qionglinLibrary = 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_4295&mp=1&orgId=007&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp';
 const fuxingLibraryServices = 'https://www.fuxing.tycg.gov.tw/cp.aspx?n=7100';
 const yuminCleaning = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=05b04bc605814183badfe83e28bd8af1';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
@@ -987,6 +988,16 @@ const nationalTaiwanLaptopSeats: Area = {
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
 const localReadingAreas: Record<string, Area | undefined> = {
+  'plis-cf8f59d429a9ca2188f7': {
+    name: '1 樓閱覽區', kind: 'reading', seats: 36, slots: null, access: null,
+    equipment: {}, sources: [qionglinLibrary],
+  },
+  'plis-0d08a9f889b9abeca093': {
+    name: '2 至 3 樓閱覽區', kind: 'reading', seats: 240,
+    slots: [0, 2, 3, 4, 5, 6].map((day) => ({ day, start: minutes('08:00'), end: minutes('17:00') })),
+    access: null, equipment: {},
+    sources: ['https://hcplibrary.hchcc.gov.tw/wSite/sp?orgId=006&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp'],
+  },
   'plis-e9169e5ae78a7cac791b': {
     name: '3 樓一般閱覽區', kind: 'reading', seats: 49, slots: null, access: null,
     equipment: {}, entryNote: '同樓層另有期刊區 24 席、兒童室 21 席。',
@@ -1669,7 +1680,7 @@ function localStudyRoom(id: string, area: Area): Area {
   }
   if (id === 'plis-cf8f59d429a9ca2188f7') {
     return { ...area, name: '地下室自修室', seats: 25,
-      sources: [...area.sources, 'https://hcplibrary.hchcc.gov.tw/wSite/sp?orgId=007&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp'] };
+      sources: [...area.sources, qionglinLibrary] };
   }
   if (id === 'plis-9f7edd85cf79ea635049') {
     return { ...area, equipment: { laptop: true, outlet: true }, entryNote: '自修區指定區域可用電，其餘座位請自備電力。' };

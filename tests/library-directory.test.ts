@@ -156,7 +156,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 145);
+  assert.equal(scheduled.length, 146);
   const yunlin = libraries.find(({ id }) => id === 'plis-3fb94b86e4de966ba65a')!;
   assert.equal(yunlin.areas[0].access, 'walk-in');
   assert.equal(yunlin.areas[0].equipment.outlet, true);
@@ -209,8 +209,16 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const yuanshan = libraries.find(({ id }) => id === 'plis-44d1777aefba3d40891b')!;
   assert(yuanshan.facilities?.includes('地下 1 樓民眾閱覽室'));
   const qionglin = libraries.find(({ id }) => id === 'plis-cf8f59d429a9ca2188f7')!;
-  assert.equal(qionglin.areas[0].seats, 25);
-  assert.equal(qionglin.areas[0].access, 'walk-in');
+  assert.equal(qionglin.areas.find(({ kind }) => kind === 'reading')?.seats, 36);
+  assert.equal(qionglin.areas.find(({ kind }) => kind === 'study')?.seats, 25);
+  assert.equal(qionglin.areas.find(({ kind }) => kind === 'study')?.access, 'walk-in');
+  const hukou = libraries.find(({ id }) => id === 'plis-0d08a9f889b9abeca093')!;
+  const hukouReading = hukou.areas.find(({ kind }) => kind === 'reading')!;
+  const hukouStudy = hukou.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(hukouReading.seats, 240);
+  assert.equal(hukouStudy.seats, undefined);
+  assert.equal(hukouReading.slots?.find(({ day }) => day === 2)?.end, minutes('17:00'));
+  assert.equal(hukouStudy.slots?.find(({ day }) => day === 2)?.end, minutes('20:00'));
   const xinying = libraries.find(({ name }) => name === '臺南市新營文化中心圖書館')!;
   assert.equal(xinying.areas[0].name, '6 樓自修室');
   assert.deepEqual(xinying.areas[0].slots?.find(({ day }) => day === 6),

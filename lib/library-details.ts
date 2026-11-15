@@ -2049,7 +2049,7 @@ function localStudyRoom(id: string, area: Area): Area {
   const hsinchuCountyRules = 'https://hcplibrary.hchcc.gov.tw/wSite/ct?CPType=&ctNode=4303&mp=1&xItem=10646';
   if (['plis-946f82daf9ca97d241ba', 'plis-2bbbdcd83068ffcf8f4f', 'plis-24ed27c19953ccb5f0c4',
     'plis-0d08a9f889b9abeca093', 'plis-bda0333882d76e416b20', 'plis-6937f16a63ea043f0527',
-    'plis-cf8f59d429a9ca2188f7', 'plis-12cb176cd411e9d41770'].includes(id)) {
+    'plis-cf8f59d429a9ca2188f7', 'plis-12cb176cd411e9d41770', 'plis-e2c2e5a82e7e92aa1179'].includes(id)) {
     area = { ...area, access: 'walk-in', sources: [...area.sources, hsinchuCountyRules] };
   }
   if (id === 'plis-24ed27c19953ccb5f0c4') {

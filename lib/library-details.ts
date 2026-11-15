@@ -1307,6 +1307,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-942c78ab15d304c768e8': {
+    url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=003&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    note: '全館共有 132 席閱覽座位。2 樓設自修室，專室席數待確認。',
+  },
   'plis-24c304d8d8fc5bc58ab9': {
     url: 'https://www.suao.gov.tw/cp.aspx?n=12220',
     note: '開館時間可自由入館閱覽，6 歲以下兒童須由家長陪同。使用個人筆電請勿影響他人，其他私人電器須自備電池。',
@@ -1457,6 +1461,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-43bc851b4926b0b037f2': {
+    url: 'https://huwei.yunlin.gov.tw/cp.aspx?n=20442',
+    hours: '週二至週六 08:00–20:00，週日 08:00–17:00。週一及國定假日休館。2 樓自修室週二至週日 08:30–17:00。',
+    supersedesDirectory: true,
+  },
   'plis-24c304d8d8fc5bc58ab9': {
     url: 'https://www.suao.gov.tw/cp.aspx?n=6675',
     hours: '週二至週五 09:00–20:00，週六及週日 08:30–17:00。週一、每月最後一天（清潔日）及國定假日休館。',

@@ -188,4 +188,16 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     return { closures: closureDates(2026, 'https://tkcc.tnc.gov.tw/ActivityInfoDetailC002100.aspx?Cond=a6b19fec-3a2a-4f47-b4c1-81a93d742595',
       ['11-28'], '選舉日休館') };
   }
+  if (library.id === 'plis-f84b77b25e9ffc2013e9') {
+    return { closures: [
+      { from: '2025-12-01', until: '2026-11-29', reason: '永康區圖書館施工，原館暫停開放',
+        url: 'https://lib.tnml.tn.edu.tw/webpac/bulletin_detail.cfm?LibproclaimID=175' },
+      { from: '2026-11-30', until: '2027-01-25', reason: '永康區圖書館施工延長，原館暫停開放',
+        url: 'https://www.tnpl.tn.edu.tw/n15459485893940237436/n1Content' },
+    ] };
+  }
+  if (library.id === 'plis-898454ce1e74dac77083') {
+    return { closures: closureDates(2026, 'https://www.tnpl.tn.edu.tw/u4940839700334178966/a1',
+      ['11-28'], '選舉日休館') };
+  }
 }

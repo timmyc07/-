@@ -246,6 +246,12 @@ test('臺南溫書窩採專室入場及設備規則，其他館舍的入座方�
   assert.equal(evaluate(main, area, { ...query, date: '2026-11-29' }).status, 'yes');
   assert.equal(get('臺南市東區裕文圖書館').areas[0].access, 'walk-in');
   assert.equal(get('臺南市安南區土城圖書館').areas[0].slots, null);
+  const yongkang = get('臺南市永康區圖書館');
+  assert.equal(yongkang.areas[0].name, '5 樓自修室');
+  assert.match(yongkang.accessNote!, /A 棟 1 樓臨時櫃檯/);
+  assert.equal(evaluate(yongkang, yongkang.areas[0], query).closure?.until, '2026-11-29');
+  assert.equal(evaluate(yongkang, yongkang.areas[0], { ...query, date: '2027-01-25' }).closure?.until, '2027-01-25');
+  assert.equal(evaluate(yongkang, yongkang.areas[0], { ...query, date: '2027-01-26' }).status, 'unknown');
 });
 
 test('高雄以館方自修室欄決定席次與時段，總館和分館依公告區別假日', () => {

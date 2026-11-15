@@ -33,6 +33,10 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
 const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A';
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-f84b77b25e9ffc2013e9': {
+    url: 'https://www.tnpl.tn.edu.tw/n15459485893940237436/n1Content',
+    note: '原館施工延長至 2027 年 1 月 25 日。社教中心 A 棟 1 樓臨時櫃檯提供預約取書、還書、續借及辦證。週二至週五 08:30–20:30、週六至週日 09:00–16:30，週一及國定假日休息。',
+  },
   'plis-e94c48945a092b5818d8': {
     url: 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11048',
     note: '縣政九路館各樓層已恢復開放。自 9 月 12 日起暫停館內調閱、超商借書、贈書及好書交換，自 10 月 20 日起暫停受理指定本館為取書館的新預約。',

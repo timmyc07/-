@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
+import type { Library } from '../lib/study.ts';
 
 const root = new URL('../public/datasets/', import.meta.url);
 const directory = JSON.parse(readFileSync(new URL('library-directory.json', root), 'utf8')) as {
@@ -11,7 +12,7 @@ const directory = JSON.parse(readFileSync(new URL('library-directory.json', root
   rawCount: number;
   exclusions: { city: string; name: string }[];
   cityCounts: Record<string, number>;
-  libraries: { id: string; city: string; name: string; areas: unknown[]; closures: unknown[] }[];
+  libraries: (Library & { city: string })[];
 };
 
 test('全臺名錄可追溯到原檔，保留 22 縣市且不填入未核對的空間規則', () => {
@@ -31,4 +32,13 @@ test('全臺名錄可追溯到原檔，保留 22 縣市且不填入未核對的�
       .filter((name) => !excluded.includes(name)));
     assert(records.every(({ areas, closures }) => areas.length === 0 && closures.length === 0));
   }
+});
+
+test('全臺名錄的電話、館方網址與座標齊全，補錄資料保留來源', () => {
+  assert(directory.libraries.every(({ phone, website, coordinates }) => phone && website && coordinates));
+  const alishan = directory.libraries.find(({ id }) => id === 'plis-e1773325972df453b6c4');
+  assert(alishan?.website && alishan.sources.includes(alishan.website));
+  const yancheng = directory.libraries.find(({ id }) => id === 'plis-4818cd57388587303882');
+  assert.deepEqual(yancheng?.coordinates, { latitude: 22.626505, longitude: 120.286221 });
+  assert(yancheng.sources.some((source) => new URL(source).hostname === 'www.tbkc.gov.tw'));
 });

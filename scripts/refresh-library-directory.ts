@@ -36,7 +36,7 @@ for (const { 縣市: city, 圖書館資訊: records } of regions) {
     ids.add(id);
     const latitude = Number(row.Latitude);
     const longitude = Number(row.Longitude);
-    libraries.push({
+    const library: Library & { city: string } = {
       id, name, city, district: row.Area.trim(), address: row.Address.trim(),
       types: ['公共圖書館'], sources: [source],
       phone: row.TEL?.trim() || undefined,
@@ -44,7 +44,19 @@ for (const { 縣市: city, 圖書館資訊: records } of regions) {
       coordinates: latitude >= 21 && latitude <= 27 && longitude >= 117 && longitude <= 123
         ? { latitude, longitude } : undefined,
       areas: [], closures: [],
-    });
+    };
+    if (city === '嘉義縣' && name === '嘉義縣阿里山鄉立圖書館' && !library.website) {
+      library.website = 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=012&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp';
+      library.sources.push(library.website);
+    }
+    if (city === '高雄市' && name === '高雄市立圖書館鹽埕分館' &&
+        library.address === '高雄市鹽埕區府北里中正四路274號1樓' && !library.coordinates) {
+      // 交通局公布的是同址會議中心的座標。
+      library.coordinates = { latitude: 22.626505, longitude: 120.286221 };
+      library.sources.push('https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000402',
+        'https://www.tbkc.gov.tw/FileOutput/Page/高雄市政府交通局路外停車場一覽表.pdf?id=3dff30f4-b62e-4a4a-8e01-d8d0a5ff55c1');
+    }
+    libraries.push(library);
   }
 }
 if (new Set(libraries.map(({ city }) => city)).size !== 22 || libraries.length < 500) {

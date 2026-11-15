@@ -77,6 +77,11 @@ const serviceUpdates: Record<string, { url: string; note: string } | undefined> 
   },
 };
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-dd0e38aa18f750ffcade': {
+    url: 'https://www.typl.gov.tw/zh-tw/News/Content/3345',
+    hours: '原館自 2026 年 5 月 11 日起整修。臨時營運所自 10 月 30 日起移至 1 樓原閱報區，週二至週六 08:30–18:00、週日及週一 08:30–17:00，國定假日及每月最後一個星期四休息。',
+    studyRoom: false, supersedesDirectory: true,
+  },
   'plis-d9870072fabe0dbffb74': {
     url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=5e4f32adbc9247199415370f12f3326a',
     hours: '原館自 2026 年 6 月 25 日起閉館整修。復興綜合大樓 1 樓臨時服務據點週二至週六 09:00–21:00，週日及週一 09:00–17:00，國定假日休息。',
@@ -327,9 +332,16 @@ const localStudyWifi: Record<string, string | undefined> = {
   'plis-112e55434de56841e873': 'https://culture.tycg.gov.tw/News_Content.aspx?n=11129&s=1470563',
 };
 
+const taoyuanStudySeats: Record<string, { seats: number; url: string } | undefined> = {
+  'plis-01e95280aebec7eba09c': { seats: 160, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/017' },
+  'plis-99799da6e29815c7da11': { seats: 90, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/030' },
+};
+
 function localStudyRoom(id: string, area: Area): Area {
   const wifi = localStudyWifi[id];
   if (wifi) area = { ...area, equipment: { ...area.equipment, wifi: true }, sources: [...area.sources, wifi] };
+  const taoyuanSeats = taoyuanStudySeats[id];
+  if (taoyuanSeats) return { ...area, seats: taoyuanSeats.seats, sources: [...area.sources, taoyuanSeats.url] };
   if (id === 'plis-2bbbdcd83068ffcf8f4f') {
     return { ...area, name: '2 樓多功能自修室', seats: 54,
       entryNote: '改造後於 2026 年 11 月 1 日開始試營運。',

@@ -82,6 +82,10 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-5b3805f2ce866586020e': {
+    url: 'https://www.hccg.gov.tw/uploaddowndoc?file=LifemonthlyEpaper%2F201911291351490.pdf&flag=doc',
+    facilities: ['地下 1 樓兒童閱覽室及密集書庫', '1 樓一般閱覽室', '2 樓視聽室及數位檢索區', '3 樓竹塹文獻室'],
+  },
   'plis-5da75c6e4e69a34999e4': {
     url: buildingClosures['plis-5da75c6e4e69a34999e4']!.url,
     facilities: ['童書區', '繪本區', '幼兒書區', '外文區', '期刊區', '視聽區', '漫畫區', '資訊檢索區'],
@@ -1246,9 +1250,10 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
   if (library.id === 'plis-a2b6c71763cc26d5bc25' && library.address === '高雄市永安區永華路49號') {
     const address = '高雄市永安區保寧里保安路16巷5號';
-    library = { ...library, address, coordinates: undefined,
+    library = { ...library, address, coordinates: { latitude: 22.8351230, longitude: 120.2360251 },
       accessNote: '新館施工期間，請前往原永安國小保寧分校臨時館。',
-      sources: [...library.sources, 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,33,,,,15337'] };
+      sources: [...library.sources, 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,33,,,,15337',
+        'https://data.gov.tw/dataset/177859'] };
     detail = { address, url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,56,576,570',
       hours: '臨時館週二至週日 09:00–17:00，週一及國定假日休館。',
       facilities: ['研習教室', '一般閱覽席'] };

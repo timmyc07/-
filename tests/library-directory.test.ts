@@ -55,6 +55,12 @@ test('全臺名錄的電話與網址齊全，搬遷館舍不帶入舊址座標',
   const yancheng = directory.libraries.find(({ id }) => id === 'plis-4818cd57388587303882');
   assert.deepEqual(yancheng?.coordinates, { latitude: 22.626505, longitude: 120.286221 });
   assert(yancheng.sources.some((source) => new URL(source).hostname === 'www.tbkc.gov.tw'));
+  const yongan = directory.libraries.find(({ id }) => id === 'plis-a2b6c71763cc26d5bc25')!;
+  const temporary = withLibraryDetail(yongan, undefined);
+  assert.equal(temporary.address, '高雄市永安區保寧里保安路16巷5號');
+  assert.deepEqual(temporary.coordinates, { latitude: 22.8351230, longitude: 120.2360251 });
+  assert.notDeepEqual(temporary.coordinates, yongan.coordinates);
+  assert(temporary.sources.includes('https://data.gov.tw/dataset/177859'));
 });
 
 test('傳真補錄保留來源，原始名錄明載無傳真的欄位持續有效', () => {

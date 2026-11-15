@@ -90,6 +90,10 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
     url: 'https://isp.ncl.edu.tw/teen-tw/cityres?res=0K313038146963811602',
     facilities: ['青少年專區', '原住民文學專櫃'],
   },
+  'plis-7271fb9a7171b6c1464f': {
+    url: 'https://tauyuan.kcg.gov.tw/Content_List.aspx?n=ED1FBAA2576B235E',
+    facilities: ['書庫', '閱覽室'],
+  },
   'plis-accfa2ef1b61329335bb': {
     url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,36,357,350',
     facilities: ['地下 1 樓自修室', '1 樓兒童閱覽室', '研習室', '親子活動區'],
@@ -725,6 +729,15 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
 }
 
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
+  if (library.id === 'plis-a2b6c71763cc26d5bc25' && library.address === '高雄市永安區永華路49號') {
+    const address = '高雄市永安區保寧里保安路16巷5號';
+    library = { ...library, address, coordinates: undefined,
+      accessNote: '新館施工期間，請前往原永安國小保寧分校臨時館。',
+      sources: [...library.sources, 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,33,,,,15337'] };
+    detail = { address, url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,56,576,570',
+      hours: '臨時館週二至週日 09:00–17:00，週一及國定假日休館。',
+      facilities: ['研習教室', '一般閱覽席'] };
+  }
   if (library.id === 'plis-0a0cb9e669998c949020' && library.address === '新竹縣尖石鄉嘉樂村2鄰70號') {
     const address = '新竹縣尖石鄉嘉樂村2鄰64號';
     library = { ...library, address, coordinates: { latitude: 24.70548, longitude: 121.20295 },

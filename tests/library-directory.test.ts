@@ -115,6 +115,8 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const supplemented = withAnnouncedLibraries(directory.libraries);
   const main = supplemented.find(({ name }) => name === '新竹縣立總圖書館')!;
   assert.equal(main.address, '新竹縣竹北市自強三路155號');
+  assert.equal(main.areas[0].name, '地下 1 樓自修室');
+  assert.equal(main.areas[0].slots, null);
   assert.equal(main.closures[0].until, '2026-12-17');
   assert(supplemented.some(({ name, openingHours }) => name === '竹北星際圖書館' && openingHours?.includes('24:00')));
   const stellar = supplemented.find(({ name }) => name === '竹北星際圖書館')!;
@@ -127,6 +129,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const oldHsinchuCounty = libraries.find(({ id }) => id === 'plis-e94c48945a092b5818d8')!;
   assert.match(oldHsinchuCounty.accessNote!, /各樓層已恢復開放/);
   assert.equal(oldHsinchuCounty.areas[0].access, 'walk-in');
+  assert.equal(oldHsinchuCounty.areas[0].seats, 141);
   assert(oldHsinchuCounty.closures.some(({ from }) => from === '2026-11-28'));
   const kinmenUpdate = libraries.find(({ id }) => id === 'plis-e3c1d8e816d9e6061a7d')!;
   assert.match(kinmenUpdate.accessNote!, /南棟持續服務/);

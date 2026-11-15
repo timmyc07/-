@@ -112,15 +112,19 @@ const comparableAddress = (value: string) => value.normalize('NFKC').replaceAll(
   .trim().replace(/^\d{3,6}(?=\s*\D)/, '').replace(/\s/g, '');
 
 const hsinchuOpening = 'https://www.hclibraryopening.com.tw/';
+const hsinchuFloorGuide = 'https://www.hclibraryopening.com.tw/%E8%AA%8D%E8%AD%98%E7%B8%BD%E5%9C%96';
 const stellarOpening = 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11078';
 const announcedLibraries: (Library & { city: string })[] = [
   {
     id: 'local-hsinchu-county-main', name: '新竹縣立總圖書館', city: '新竹縣', district: '竹北市',
     address: '新竹縣竹北市自強三路155號', types: ['公共圖書館'],
-    website: hsinchuOpening, sources: [hsinchuOpening,
+    website: hsinchuOpening, sources: [hsinchuOpening, hsinchuFloorGuide,
       'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11074'],
     openingHours: '試營運至 2026 年 11 月 15 日，09:00–21:00，週一休館。12 月 18 日預定正式開館。',
-    areas: [],
+    studyRoom: true,
+    facilities: ['地下 1 樓自修室', '閱報區', '兒童閱覽區', '視障服務區', '資訊檢索區', '討論小間', '汽機車停車場'],
+    areas: [{ name: '地下 1 樓自修室', kind: 'study', slots: null, access: null,
+      equipment: {}, sources: [hsinchuFloorGuide] }],
     closures: [{ from: '2026-11-16', until: '2026-12-17', reason: '試營運結束，12 月 18 日預定正式開館',
       url: hsinchuOpening }],
   },
@@ -203,8 +207,10 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
 
 function localStudyRoom(id: string, area: Area): Area {
   if (id === 'plis-e94c48945a092b5818d8') {
-    return { ...area, access: 'walk-in', entryNote: '自由入座，請勿預佔座位。',
-      sources: [...area.sources, 'https://hcplibrary.hchcc.gov.tw/wSite/public/Attachment/f1766106527415.pdf'] };
+    return { ...area, seats: 141, access: 'walk-in',
+      entryNote: '自由入座，請勿預佔座位。一般閱覽座位 138 席，另有身心障礙人士專用席 3 席。',
+      sources: [...area.sources, 'https://hcplibrary.hchcc.gov.tw/wSite/public/Attachment/f1766106527415.pdf',
+        'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4302&mp=1&xItem=8085'] };
   }
   if (id === 'plis-703e62be51f0cd3f7e93') {
     return { ...area, entryNote: '自 2026 年 6 月 1 日起，國定假日 08:00–20:00 開放。',

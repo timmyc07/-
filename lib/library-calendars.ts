@@ -130,6 +130,8 @@ const electionClosureRules: Record<string, string> = {
   'plis-016c903b9ad9d1b886d6': yuanlinLibraryRules,
   'plis-e2293e37a8a158591761': 'https://lib.bocach.gov.tw/cp.aspx?n=1206',
   'plis-674920ab9a5621eaf6cf': 'https://culture.taitung.gov.tw/news/【休館公告】11-28-日休館一日',
+  'plis-fe9c622fb1bdd5279ec1': 'https://matsucc.gov.tw/莒光鄉圖書館/',
+  'plis-0f447bbe2c470b97e41a': 'https://matsucc.gov.tw/莒光鄉圖書館-東莒分館/',
   'plis-a382f4004c63510e6b53': 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=007&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
   'plis-3a8fa4c8db9589758aef': 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=011&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
   'plis-e94c48945a092b5818d8': 'https://www.hchcc.gov.tw/Tw/Common/SinglePage?filter=55A4FB62-998F-4818-BDE2-08AF8B3245C2',

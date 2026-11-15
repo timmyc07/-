@@ -64,6 +64,30 @@ const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、�
 const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O065604454792753757/金門縣公共圖書館館藏發展政策.pdf';
 const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-85a3abe63d4ba7d005b7': {
+    url: 'https://www.tungshiau.gov.tw/cp.aspx?n=5679',
+    facilities: ['閱覽室', '視聽室', '演講廳'],
+  },
+  'plis-cb71eb01e4c6590c8846': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/SubsidyProgram/PlanInfo/MF00000010?tab=2',
+    facilities: ['期刊展示櫃', '書架'],
+  },
+  'plis-1c304ff42dd5276d9acf': {
+    url: 'https://isp.ncl.edu.tw/child-tw/cityres?res=0K134647632978782512',
+    facilities: ['兒童閱讀區'],
+  },
+  'plis-189e26aab70c5cb51cdd': {
+    url: 'https://www.ctmanga.com/a/zheng-jian-you-shan-duo-yuan-yue-du-huan-jing-nan-zhuang-tu-shu-guan-qi-yong.html',
+    facilities: ['嬰幼兒閱讀專區', '青少年閱讀專區', '閱報與期刊雜誌區', '新書展示區', '多元文化區', '無障礙電梯'],
+  },
+  'plis-95c10375e363b499b6fc': {
+    url: 'https://www.xihu.gov.tw/News_Content.aspx?n=3622&s=706157',
+    facilities: ['閱覽室', '兒童室', '書庫', '期刊室', '視聽教室', '研習教室'],
+  },
+  'plis-4ee8f2321103a6f17ad7': {
+    url: 'https://www.hakka.gov.tw/chhakka/app/data/view?id=21&module=epaper&serno=b829d46a-3e85-43d5-a09b-bff3a6ba324d',
+    facilities: ['銀髮族閱讀區', '兒童閱覽室', '地方文史館'],
+  },
   'plis-eaf18916c54c8e1fffc3': {
     url: 'https://www.yuanli.gov.tw/News.aspx?n=7575&sms=13790',
     facilities: ['團體討論室', '哺乳室', '公用電腦', '列印及複印設備'],

@@ -1028,6 +1028,10 @@ const localReadingAreas: Record<string, Area | undefined> = {
   },
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-50a85fd5bd2678f089ba': {
+    url: 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=E90637FFE06B2379',
+    note: '縣府館舍頁列有一樓自修室，國家圖書館館別統計列為無自修室。現況與使用時段請洽館方。',
+  },
   'plis-38c1c05b0d447cb39563': {
     url: 'https://www.library.ntpc.gov.tw/Kids/singlehtml/2282e79138184d328d2e70de42f23318?cntId=-1534781038',
     note: '2026 年 11 月 17 日視聽資料區木作地板範圍暫停開放，其餘空間照常開放。',
@@ -1187,7 +1191,7 @@ const localHours: Record<string, { url: string; hours: string; studyRoom?: boole
   },
   'plis-f115f1f71be7cccd30e1': {
     url: xinyuanUrl,
-    hours: xinyuanHours + ' 縣府館舍頁註明二樓樓梯有安全疑慮，目前只開放一樓。',
+    hours: xinyuanHours + ' 縣府館舍頁註明二樓樓梯有安全疑慮，目前只開放一樓，二樓自修閱讀區暫停使用。',
     supersedesDirectory: true,
   },
   'plis-674920ab9a5621eaf6cf': {

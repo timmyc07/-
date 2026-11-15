@@ -396,6 +396,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert(!penghu.closures.some(({ from }) => from === '2026-11-24'));
   assert(penghu.closures.some(({ from, until }) => from === '2026-04-04' && until === '2026-04-05'));
   const baisha = libraries.find(({ id }) => id === 'plis-7d5f6b4a8aae37204a84')!;
+  assert(baisha.facilities?.includes('3 樓閱讀區'));
   assert.equal(baisha.studyRoom, true);
   assert.equal(baisha.areas[0].slots, null);
   const kinmen = libraries.find(({ id }) => id === 'plis-e3c1d8e816d9e6061a7d')!;
@@ -471,6 +472,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
     { day: 3, start: minutes('13:30'), end: minutes('17:00') },
   ]);
   const xiyu = libraries.find(({ id }) => id === 'plis-9c4e98f5a888073fdc0c')!;
+  assert(xiyu.facilities?.includes('1 樓一般閱讀區'));
   assert.equal(xiyu.closures.find(({ from }) => from === '2026-10-25')?.reason, '光復節休館');
   const qiaotou = libraries.find(({ id }) => id === 'plis-3d9a951164210abf4cb8')!;
   assert.equal(qiaotou.areas.find(({ kind }) => kind === 'reading')?.seats, 18);

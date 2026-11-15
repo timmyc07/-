@@ -110,6 +110,15 @@ const qionglinLibrary = 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_42
 const fuxingLibraryServices = 'https://www.fuxing.tycg.gov.tw/cp.aspx?n=7100';
 const yuminCleaning = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=05b04bc605814183badfe83e28bd8af1';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-7d5f6b4a8aae37204a84': {
+    url: 'https://www.phlib.nat.gov.tw/wSite/sp?ctNode=6220&mp=1&orgId=006&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    facilities: ['1 樓閱讀區', '1 樓網路資訊區', '2 樓兒童室', '2 樓期刊雜誌區', '2 樓漫畫休閒區', '3 樓閱讀區', '3 樓視聽中心'],
+  },
+  'plis-9c4e98f5a888073fdc0c': {
+    url: 'https://www.phlib.nat.gov.tw/wSite/sp?ctNode=5236&mp=1&orgId=007&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    facilities: ['1 樓一般閱讀區', '1 樓兒童閱讀區', '1 樓閱報區', '1 樓期刊區', '1 樓文史資料室', '1 樓資訊區',
+      '2 樓電腦教室', '2 樓新住民交流中心', '2 樓西嶼文物展示區', '2 樓多功能研習中心'],
+  },
   'plis-d34887b8b49b91a79656': {
     url: nantouEarlyReading,
     facilities: ['嬰幼兒閱讀專區／書櫃'],

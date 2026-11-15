@@ -23,8 +23,9 @@ export function tainanStudyRoom(id: string, area: Area): Area | undefined {
   if (id === 'plis-f84b77b25e9ffc2013e9') {
     return {
       ...area, name: '5 樓自修室',
-      entryNote: '整修前的館方規定為自由入座，離座以 1 小時為限，筆電須至 1 樓無線上網區使用，自修室插座禁止使用。更新後的規定以復館公告為準。',
-      sources: [...sources, 'https://www.tnpl.tn.edu.tw/u5288044517355135248/a1'],
+      entryNote: '整修前為 103 席、自由入座，離座以 1 小時為限，筆電須至 1 樓無線上網區使用，自修室插座禁止使用。更新後的規定以復館公告為準。',
+      sources: [...sources, 'https://www.tnpl.tn.edu.tw/u5288044517355135248/a1',
+        'https://www.yongkangcity.gov.tw/download/news/6962'],
     };
   }
   if (id === 'plis-1b4fab4fae6901d46c23') {
@@ -35,9 +36,18 @@ export function tainanStudyRoom(id: string, area: Area): Area | undefined {
       sources,
     };
   }
+  if (id === 'plis-0c2ace2641b37f2a19ac') {
+    return {
+      ...area, name: '3 樓多功能室（自修室）', access: 'conditional',
+      equipment: { ...area.equipment, laptop: true },
+      entryNote: '空間也供館方舉辦活動，使用前請確認是否開放自修。筆電使用以不影響他人為原則。',
+      sources: [...sources, 'https://www.tnpl.tn.edu.tw/u5564135435474870361/a1',
+        'https://www.tnpl.tn.edu.tw/u5047520811397999671/a1'],
+    };
+  }
   if (id === 'plis-57c550f79ce262c9b2d6') {
     return {
-      ...area, access: 'walk-in', entryNote: '自由入座，離座逾 30 分鐘館方得清空座位。',
+      ...area, access: 'walk-in', entryNote: '自由入座，離座逾 30 分鐘館方得清空座位。館方規定不得私接電源。',
       sources: [...sources, 'https://www.tnpl.tn.edu.tw/u5707633211863852557/a1'],
     };
   }

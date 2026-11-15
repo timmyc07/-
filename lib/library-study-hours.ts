@@ -146,7 +146,10 @@ const studyHours: Record<string, StudyHours | undefined> = {
   'plis-66e53f44f93b7f476b11': { name: '自習室', ranges: [['023456', '08:00', '21:00']] },
   'plis-016c903b9ad9d1b886d6': { name: '讀者自修室', ranges: [['023456', '08:00', '21:00']] },
   'plis-e7aaecf3515c7452935c': { name: '自修室', ranges: [['2345', '08:30', '20:00'], ['06', '08:30', '17:00']] },
-  'plis-57c550f79ce262c9b2d6': { name: '自修室', ranges: [['2', '09:00', '17:00'], ['03456', '08:00', '21:00']] },
+  'plis-57c550f79ce262c9b2d6': {
+    name: '自修室', ranges: [['2', '09:00', '17:00'], ['03456', '08:00', '21:00']],
+    url: 'https://www.tnpl.tn.edu.tw/u5023614168192137398/a1',
+  },
   'plis-518cafd6d62c58eabe4d': {
     name: '3 樓自修室', ranges: [['2', '09:00', '17:00'], ['03456', '08:00', '21:00']],
     url: 'https://www.tnpl.tn.edu.tw/page/EachPavilionList.aspx',

@@ -1276,7 +1276,22 @@ const hsinchuReadingOnly = new Set([
   'plis-eabbc6fc8f182c08456f', 'plis-f31c4a951eb1511451a0',
 ]);
 const hsinchuReadingServices = 'https://library.hccg.gov.tw/chhcml/app/artwebsite?id=42&module=artwebsite&serno=null';
+const hengchunFolkLibrary = 'https://www.cna.com.tw/postwrite/chi/374040';
 const announcedLibraries: (Library & { city: string })[] = [
+  {
+    id: 'local-pingtung-hengchun-folk-library', name: '恆春文化中心民謠館圖書館', city: '屏東縣', district: '恆春鎮',
+    address: '屏東縣恆春鎮東門路一巷6號', phone: '08-8891688', types: ['公共圖書館'],
+    website: 'https://www.cultural.pthg.gov.tw/cp.aspx?n=258BE29D0243BCF6',
+    sources: [hengchunFolkLibrary, 'https://spotlightaward.taiwan.net.tw/tourpage.php?id=13271014-c010-486d-9889-56308c2558c1&tag=3',
+      'https://www.i-pingtung.com/pingtung/view/恆春文化中心民謠館', 'https://maps.app.goo.gl/Q5M61DnPKbuShK1Y7'],
+    coordinates: { latitude: 22.0035682, longitude: 120.7494557 },
+    openingHours: '民謠館週二至週四及週日 09:00–18:00，週五至週六 09:00–21:00，週一休館。',
+    facilities: ['主題圖書館', '親子閱讀區', '自修空間'],
+    accessNote: '主題圖書館位於民謠館 2、3 樓，親子閱讀與自修空間合計近 100 席。',
+    studyRoom: true,
+    areas: [{ name: '自修空間', kind: 'study', slots: null, access: null, equipment: {}, sources: [hengchunFolkLibrary] }],
+    closures: [],
+  },
   {
     id: 'local-hsinchu-city-nanda', name: '新竹市圖書館南大分館', city: '新竹市', district: '東區',
     address: '新竹市東區南大路521號', phone: '03-5619962', types: ['公共圖書館'],

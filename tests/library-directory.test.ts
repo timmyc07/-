@@ -247,6 +247,11 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const xinpu = libraries.find(({ id }) => id === 'plis-2bbbdcd83068ffcf8f4f')!;
   assert.equal(xinpu.areas[0].seats, 54);
   const supplemented = withAnnouncedLibraries(directory.libraries);
+  const folkLibrary = supplemented.find(({ id }) => id === 'local-pingtung-hengchun-folk-library')!;
+  assert.equal(folkLibrary.address, '屏東縣恆春鎮東門路一巷6號');
+  assert.equal(folkLibrary.areas[0].kind, 'study');
+  assert.equal(folkLibrary.areas[0].seats, undefined);
+  assert(supplemented.some(({ id }) => id === 'plis-c57afed8fc6cac37fad4'));
   const puding = supplemented.find(({ id }) => id === 'local-taoyuan-puding')!;
   assert.equal(puding.areas[0].seats, 93);
   assert.equal(puding.phone, '03-3072254');

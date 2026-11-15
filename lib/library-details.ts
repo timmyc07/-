@@ -11,6 +11,10 @@ export type LibraryDetail = { url: string; address: string; hours?: string; faci
 
 const wanluanTemporaryClosure = 'https://www.globgov.com/TW/Wanluan/1414151405576012/萬巒圖書館-暨萬巒Doc';
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-5214bc11151c1cde5bf4': {
+    from: '2025-08-01', reason: '大同路館舍因閱讀環境改善工程閉館，借書與通閱暫停。市公所規劃 2027 年 7 月恢復營運，實際日期依公告。',
+    url: 'https://webws.miaoli.gov.tw/Download.ashx?n=MTE0RTAwMDQyNzUtMDEuUERG&u=LzAwMS9VcGxvYWQvNDY2L3JlbGZpbGUvMTQ5MTMvODcxNTc5LzlhMTA2YWExLTIwZmUtNGJhNS1hY2ViLTAwZDQ0NjNkNDYxZS5wZGY%3D',
+  },
   'plis-4ae824a05d3504931b4e': {
     from: '2026-11-03',
     reason: '萬金臨時館因搬遷停館，借書、還書及館內閱覽暫停。還書可至佳佐分館，新館啟用日期另行公告。',
@@ -1190,6 +1194,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-5214bc11151c1cde5bf4': {
+    url: 'https://www.mlcg.gov.tw/News_Content.aspx?n=2546&s=1004067',
+    note: '市公所公告工程預計 2027 年 5 月竣工、7 月正式開館，實際復館日期依後續公告。',
+  },
   'plis-ae1d09fa9a4aa5086830': {
     url: 'https://www.ksml.edu.tw/mainlibrary/Latestevent/Details.aspx?Parser=9,23,212,157,,,15337,,,,4',
     note: '耐震補強工程完成，已於 2026 年 11 月 7 日重新開館。',

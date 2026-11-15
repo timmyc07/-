@@ -161,6 +161,11 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
   assert.equal(scheduled.length, 153);
+  const miaoliCity = libraries.find(({ id }) => id === 'plis-5214bc11151c1cde5bf4')!;
+  const miaoliRenovation = miaoliCity.closures.find(({ from }) => from === '2025-08-01')!;
+  assert.match(miaoliRenovation.reason, /借書與通閱暫停/);
+  assert.equal(miaoliRenovation.until, undefined);
+  assert.match(miaoliCity.accessNote!, /2027 年 5 月竣工、7 月正式開館/);
   const longshan = libraries.find(({ id }) => id === 'plis-539f7d3d76b9f2ee658a')!;
   const longshanReading = longshan.areas.find(({ kind }) => kind === 'reading')!;
   assert.equal(longshanReading.seats, 250);

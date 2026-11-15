@@ -81,7 +81,16 @@ const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA73
 const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
+const fuxingLibraryServices = 'https://www.fuxing.tycg.gov.tw/cp.aspx?n=7100';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-05da96e29ca78b9de81a': {
+    url: fuxingLibraryServices,
+    facilities: ['1 樓親子讀書區', '1 樓親子視聽間', '1 樓公用電腦', '2 樓 K 書中心', '3 樓館藏書冊區'],
+  },
+  'plis-d6ac06f6cad9dfaa9dfa': {
+    url: 'https://www.lotong.gov.tw/UploadDir/Announcement/5%E8%87%AA%E6%B2%BB%E6%A2%9D%E4%BE%8B.pdf',
+    facilities: ['圖書閱覽室'],
+  },
   'plis-5b3805f2ce866586020e': {
     url: 'https://www.hccg.gov.tw/uploaddowndoc?file=LifemonthlyEpaper%2F201911291351490.pdf&flag=doc',
     facilities: ['地下 1 樓兒童閱覽室及密集書庫', '1 樓一般閱覽室', '2 樓視聽室及數位檢索區', '3 樓竹塹文獻室'],
@@ -1008,6 +1017,12 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-05da96e29ca78b9de81a': {
+    url: fuxingLibraryServices,
+    hours: '區公所公告週二至週六 09:00–17:00，週日、週一及國定假日休館。',
+    studyRoom: true,
+    supersedesDirectory: true,
+  },
   'plis-a382f4004c63510e6b53': {
     url: minxiongRenovation,
     hours: '自 2026 年 11 月 3 日起整修。2 樓自修室週二至週五 08:00–20:00、週六 08:00–17:00、週日 08:00–16:00。3 樓週二至週六 08:00–17:00、週日 08:00–16:00。4 樓週二至週六 09:00–17:00。預計 2027 年 2 月底重新開館，日期依館方公告。',
@@ -1381,6 +1396,9 @@ const taoyuanWalkInStudyRooms = new Set([
 ]);
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-05da96e29ca78b9de81a') {
+    return { ...area, name: '2 樓 K 書中心' };
+  }
   if (id === 'plis-a382f4004c63510e6b53') {
     return { ...area, name: '2 樓自修室',
       slots: [0, 2, 3, 4, 5, 6].map((day) => ({

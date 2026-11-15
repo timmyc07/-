@@ -1010,6 +1010,10 @@ const nationalTaiwanLaptopSeats: Area = {
 };
 const hongmeiLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/018';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-ae1d09fa9a4aa5086830': {
+    name: '一般閱覽區', kind: 'reading', seats: 37, slots: null, access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,64,664,658'],
+  },
   'plis-515c0f5154d80f9e4043': {
     name: '1 至 3 樓書庫閱覽區', kind: 'reading', seats: 71, slots: null, access: null, equipment: {},
     sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,74,775,768'],
@@ -1173,6 +1177,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-ae1d09fa9a4aa5086830': {
+    url: 'https://www.ksml.edu.tw/mainlibrary/Latestevent/Details.aspx?Parser=9,23,212,157,,,15337,,,,4',
+    note: '耐震補強工程完成，已於 2026 年 11 月 7 日重新開館。',
+  },
   'plis-bfff639f154e1c065ad1': {
     url: 'https://www.cna.com.tw/postwrite/chi/448992',
     note: '館舍完成整修，於 2026 年 11 月 4 日重新開館，設有親子共讀區及多元閱讀空間。',

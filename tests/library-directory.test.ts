@@ -486,6 +486,11 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(taitung.areas[0].slots, null);
   assert.equal(taitung.areas[0].access, 'card');
   assert.equal(taitung.areas[0].regionalCard, 'taitung');
+  const taimali = libraries.find(({ id }) => id === 'plis-949d8708d5597baaf12e')!;
+  const taimaliStudy = taimali.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(taimaliStudy.name, '1 樓閱覽室');
+  assert.match(taimaliStudy.entryNote!, /閱覽及自習.*30 分鐘/);
+  assert.equal(taimaliStudy.slots, null);
   const guanshan = libraries.find(({ id }) => id === 'plis-c9c0fe185180d1def859')!;
   assert.match(guanshan.openingHours!, /週二至週日 08:00–12:00、13:00–17:00/);
   assert.equal(guanshan.areas[0].slots, null);

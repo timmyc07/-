@@ -1872,6 +1872,10 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-949d8708d5597baaf12e') {
+    return { ...area, entryNote: '開放一般民眾閱覽及自習，請勿預占座位，離座達 30 分鐘視同放棄座位。',
+      sources: [...area.sources, 'https://www.taimali.gov.tw/home/index.php/2020-04-16-07-15-03/category/31-2020-06-15-03-43-34.html?download=18%3A2020-06-15-03-50-18'] };
+  }
   if (id === 'plis-8258ecedb33967785152') {
     const url = 'https://www.tch.gov.tw/News_Content.aspx?n=10075&s=1005364';
     return { ...area, closures: [...(area.closures ?? []), {

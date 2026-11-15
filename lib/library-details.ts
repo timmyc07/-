@@ -8,6 +8,10 @@ import { taipeiStudyRoom } from './taipei-study-rules.ts';
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-37cd73be99573999d94d': {
+    from: '2026-03-05', reason: '瑞穗原館耐震補強暫停開放。借閱服務移至溫泉路一段 1 號臨時圖書館（瑞穗站後站對面）。',
+    url: 'https://www.juisui.gov.tw/News_Content.aspx?n=3419&s=204355',
+  },
   'plis-2fcff6be9344e712594c': {
     from: '2022-03-01', reason: '宜蘭縣文化局圖書館因縣級圖書館總館工程閉館，復館日期以館方公告為準。',
     url: 'https://www.suao.gov.tw/News_Content.aspx?n=9043&s=385366&sms=13359',
@@ -29,6 +33,11 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
 const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A';
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
 const localHours: Record<string, { url: string; hours: string; studyRoom?: true; supersedesDirectory?: true } | undefined> = {
+  'plis-1d71cbf4cd1d410256ad': {
+    url: 'https://www.ji-an.gov.tw/library/data/5?cate=14',
+    hours: '依吉安鄉立圖書館官網，週三至週五 08:30–20:30，週二、週六及週日 08:30–17:00。週一及國定紀念日休館。',
+    supersedesDirectory: true,
+  },
   'plis-898020f5dd3a533a9ee3': {
     url: 'https://library.hccc.gov.tw/sp.asp?ctNode=930&mp=20&xItem=6889&xdurl=mp200ap%2Fbranch.asp',
     hours: '臨時館位於文化局園區演藝堂地下 1 樓。週二至週五 09:00–20:00，週末 09:00–18:00。週一及國定假日休館。',

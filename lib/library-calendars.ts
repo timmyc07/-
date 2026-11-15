@@ -70,6 +70,26 @@ function songshanClosures(year: number) {
 }
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  if (library.id === 'plis-96bdb053d7e967f965dc') {
+    const url = 'https://www.fonglin.gov.tw/News_Content.aspx?n=3794&s=199254&sms=9966';
+    const ranges = [
+      ['02-14', '02-23', '春節'], ['02-27', '03-02', '和平紀念日'], ['04-03', '04-06', '清明節'],
+      ['05-01', '05-04', '勞動節'], ['06-19', '06-22', '端午節'], ['09-25', '09-27', '中秋節'],
+      ['10-09', '10-12', '國慶日'], ['10-24', '10-26', '光復節'],
+    ];
+    return {
+      calendarYears: [2026],
+      closures: [
+        ...closureDates(2026, url, ['01-01', '09-28', '12-25'], '國定假日休館'),
+        ...ranges.map(([from, until, holiday]) => ({ from: '2026-' + from, until: '2026-' + until, reason: holiday + '休館', url })),
+      ],
+      checkDates: ['2026-11-28', '2026-12-26', '2026-12-27'],
+    };
+  }
+  if (library.id === 'plis-1d71cbf4cd1d410256ad') {
+    return { closures: [{ from: '2026-02-07', until: '2026-10-08', reason: '本館耐震補強閉館，10 月 9 日復館',
+      url: 'https://www.ji-an.gov.tw/library/news/v0umkckZlZEA' }] };
+  }
   if (library.id === 'plis-c601d6fcc4e455f93f93') {
     return { closures: [{ from: '2026-10-20', until: '2026-12-08', reason: '外牆改善工程暫停服務，預計 12 月 9 日重新開館',
       url: 'https://library.hccc.gov.tw/ct.asp?ctNode=925&mp=20&xItem=8738' }] };

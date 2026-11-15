@@ -108,6 +108,14 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(nantou.areas[0].seats, 147);
   const shoufeng = libraries.find(({ id }) => id === 'plis-c601d6fcc4e455f93f93')!;
   assert.equal(shoufeng.closures[0].until, '2026-12-08');
+  const fonglin = libraries.find(({ id }) => id === 'plis-96bdb053d7e967f965dc')!;
+  assert.deepEqual(fonglin.calendarYears, [2026]);
+  assert(fonglin.closures.some(({ from, until }) => from === '2026-02-14' && until === '2026-02-23'));
+  assert(fonglin.checkDates?.includes('2026-12-26'));
+  const ruisi = libraries.find(({ id }) => id === 'plis-37cd73be99573999d94d')!;
+  assert.match(ruisi.openingHours!, /溫泉路一段 1 號/);
+  const jian = libraries.find(({ id }) => id === 'plis-1d71cbf4cd1d410256ad')!;
+  assert.equal(jian.closures[0].until, '2026-10-08');
   const changhua = libraries.find(({ id }) => id === 'plis-b19f4a632868ac1ed335')!;
   assert.equal(changhua.areas[0].regionalCard, 'changhua');
   assert.equal(changhua.areas[0].seats, 70);

@@ -1008,7 +1008,13 @@ const nationalTaiwanLaptopSeats: Area = {
   entryNote: '館方公布一樓 21 席、二樓 44 席、三樓 10 席、五樓 16 席、六樓 10 席。各區依樓層開放時間使用。',
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
-const localReadingAreas: Record<string, Area | undefined> = {
+const localAdditionalAreas: Record<string, Area | undefined> = {
+  'plis-06504d756c4ec047d449': {
+    name: '1 樓報紙期刊區（夜間自修區）', kind: 'study',
+    slots: [0, 2, 3, 4, 5, 6].map((day) => ({ day, start: minutes('09:00'), end: minutes('19:00') })),
+    access: null, equipment: {},
+    sources: ['https://lib.bocach.gov.tw/cp.aspx?n=1218'],
+  },
   'plis-946f82daf9ca97d241ba': {
     name: '地下室閱覽區', kind: 'reading', seats: 40, slots: null, access: null, equipment: {},
     sources: ['https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_4295&mp=1&orgId=010&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp'],
@@ -1618,10 +1624,10 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const baseFacilities = library.facilities ?? detail.facilities;
   const facilities = localFacilities
     ? [...new Set([...(baseFacilities ?? []), ...localFacilities.facilities])] : baseFacilities;
-  const readingArea = localReadingAreas[library.id];
-  const readingAreas = [readingArea, library.id === 'plis-a094b0d4aa7d7722fd03' ? nationalTaiwanLaptopSeats : undefined]
+  const additionalArea = localAdditionalAreas[library.id];
+  const additionalAreas = [additionalArea, library.id === 'plis-a094b0d4aa7d7722fd03' ? nationalTaiwanLaptopSeats : undefined]
     .filter((area): area is Area => Boolean(area && !library.areas.some(({ name }) => name === area.name)));
-  const areas = [...library.areas, ...readingAreas];
+  const areas = [...library.areas, ...additionalAreas];
   return {
     ...library,
     name: library.id === 'plis-e2c2e5a82e7e92aa1179' ? '新竹縣竹北市立圖書館福德分館' : library.name,
@@ -1634,8 +1640,8 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     facilities: noStudyRoom ? facilities?.filter((facility) => !/^自[修習]室$/.test(facility)) : facilities,
     studyRoom: noStudyRoom ? false : library.studyRoom ?? (kaohsiungArea === null ? false : studyRoom || nclReport?.studyRoom),
     areas: noStudyRoom ? areas.filter(({ kind }) => kind !== 'study')
-      : studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !areas.some(({ kind }) => kind === 'study')
-      ? [...areas, localArea] : areas,
+      : studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
+      ? [...library.areas, localArea, ...additionalAreas] : areas,
     sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []),
       ...(serviceUpdate ? [serviceUpdate.url] : []),
       ...(localFacilities ? [localFacilities.url] : []),
@@ -1701,9 +1707,6 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
-  if (id === 'plis-06504d756c4ec047d449') {
-    return { ...area, entryNote: '公圖名錄列自習室 09:00–18:00，3 至 8 月延長至 21:00，週一及國定假日休館。' };
-  }
   if (id === 'plis-9bee8536cf45c910547b') {
     return { ...area, entryNote: '研習教室供自修及研習課程使用。' };
   }

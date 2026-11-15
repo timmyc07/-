@@ -160,7 +160,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 151);
+  assert.equal(scheduled.length, 153);
   for (const [id, seats] of [
     ['plis-898020f5dd3a533a9ee3', 50],
     ['plis-efe674464e6fce8f380e', 90],
@@ -433,7 +433,11 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(guanxi.areas.find(({ kind }) => kind === 'reading')?.seats, 40);
   assert.equal(guanxi.areas.find(({ kind }) => kind === 'study')?.seats, undefined);
   const beidou = libraries.find(({ id }) => id === 'plis-06504d756c4ec047d449')!;
-  assert.match(beidou.areas.find(({ kind }) => kind === 'study')?.entryNote ?? '', /3 至 8 月延長至 21:00/);
+  assert.deepEqual(beidou.areas.map(({ name, slots }) => [name, slots?.find(({ day }) => day === 0)?.end]), [
+    ['3 樓讀者自修室', minutes('18:00')],
+    ['1 樓報紙期刊區（夜間自修區）', minutes('19:00')],
+  ]);
+  assert.equal(beidou.closures.find(({ from }) => from === '2026-11-28')?.reason, '依館方選舉日休館規定休館');
   const chenggong = libraries.find(({ id }) => id === 'plis-3dc026b916c043fe287e')!;
   assert.match(chenggong.openingHours!, /整修期間閱覽區週二至週日 08:00–17:00/);
   assert.deepEqual(chenggong.areas[0].slots?.[0], { day: 0, start: minutes('08:00'), end: minutes('17:00') });

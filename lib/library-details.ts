@@ -288,7 +288,9 @@ const announcedLibraries: (Library & { city: string })[] = [
   {
     id: 'local-zhubei-stellar', name: '竹北星際圖書館', city: '新竹縣', district: '竹北市',
     address: '新竹縣竹北市中正西路52號', types: ['公共圖書館'],
+    phone: '03-5518663',
     website: stellarOpening, sources: [stellarOpening, stellarSpace, 'https://www.openstreetmap.org/node/14355577123',
+      'https://www.govserv.org/TW/Hsinchuhsien/151121962189874/竹北市立圖書館',
       'https://www.hsinchu.gov.tw/cp.aspx?n=1647'],
     coordinates: { latitude: 24.8396572, longitude: 121.0036135 },
     openingHours: '試營運：週二至週四 09:00–20:30，週五至週日 09:00–24:00。週一休館，特殊日期依公告。',

@@ -1,6 +1,6 @@
 import { minutes, type Area, type Library } from './study.ts';
 import { libraryStudyHours } from './library-study-hours.ts';
-import { chiayiCountyReadingRules, libraryCalendar, penghuMainUrl, penghuStudyClosures, yuanlinLibraryRules } from './library-calendars.ts';
+import { chiayiCountyReadingRules, libraryCalendar, penghuMainUrl, penghuStudyClosures, tainanTuchengUrl, yuanlinLibraryRules } from './library-calendars.ts';
 import { kaohsiungHoursSource, kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 import { tainanStudyRoom } from './tainan-study-rules.ts';
 import { taipeiStudyRoom } from './taipei-study-rules.ts';
@@ -1085,6 +1085,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-0d8617adcdaa013618d9': {
+    url: 'https://www.typl.gov.tw/zh-tw/News/Content/3366',
+    note: '館方 2026 年 11 月 14 日公告因漏水檢修，2 樓 B 側及該區廁所、1 樓無障礙廁所暫停開放。恢復日期依館方公告，無障礙廁所使用需求可洽服務臺。',
+  },
   'plis-114080cf8fa32977d08a': {
     url: 'https://doit.gov.taipei/News_Content.aspx?n=E3D88B653EACBF6E&s=4A1259C6B21F2AA5&sms=78D644F2755ACCAA',
     note: '整修期間至 2026 年 12 月 14 日，3 樓圖書與閱覽區、4 樓視聽室及樂齡學習中心暫停開放。3 樓館藏可線上預約到館取書。',
@@ -1163,6 +1167,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-27e5ed75c8013b01c228': {
+    url: tainanTuchengUrl,
+    hours: '週三至週日 09:00–20:00。週二及每月最後一個週五 09:00–17:00 僅提供預約書取書。週一及國定假日休館。',
+    supersedesDirectory: true,
+  },
   'plis-ca5bd98a9d6dcfd1159b': {
     url: 'https://cabkc.kinmen.gov.tw/information?pid=22&uid=9',
     hours: '週一至週日 08:00–12:00、13:30–17:30。四大民俗節日休館。',

@@ -444,7 +444,17 @@ test('臺南溫書窩採專室入場及設備規則，其他館舍的入座方�
   assert.equal(evaluate(main, area, query).closure?.reason, '選舉日休館');
   assert.equal(evaluate(main, area, { ...query, date: '2026-11-29' }).status, 'yes');
   assert.equal(get('臺南市東區裕文圖書館').areas[0].access, 'walk-in');
-  assert.equal(get('臺南市安南區土城圖書館').areas[0].slots, null);
+  const tucheng = get('臺南市安南區土城圖書館');
+  const tuchengStudy = tucheng.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(tuchengStudy.slots, null);
+  for (const date of ['2026-11-17', '2026-11-27', '2027-01-26', '2027-01-29']) {
+    const result = evaluate(tucheng, tuchengStudy, { ...query, date });
+    assert.equal(result.status, 'no');
+    assert.match(result.closure!.reason, /僅提供預約書取書/);
+  }
+  assert.equal(evaluate(tucheng, tuchengStudy, { ...query, date: '2026-11-20' }).status, 'unknown');
+  assert.equal(evaluate(tucheng, undefined, { ...query, kind: 'reading', date: '2026-11-17' }).status, 'no');
+  assert.match(tucheng.openingHours!, /09:00–17:00 僅提供預約書取書/);
   const yongkang = get('臺南市永康區圖書館');
   assert.equal(yongkang.areas[0].name, '5 樓自修室');
   assert.match(yongkang.accessNote!, /A 棟 1 樓臨時櫃檯/);

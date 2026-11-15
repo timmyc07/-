@@ -104,6 +104,7 @@ const taoyuanUrl = 'https://www.typl.gov.tw/zh-tw/News/Content/1067';
 const kaohsiungUrl = 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,33,,,,15495';
 export const chiayiCountyReadingRules = 'https://www.cycab.gov.tw/wSite/ct?ctNode=6267&mp=1&xItem=9895';
 const tainanMainUrl = 'https://www.tnpl.tn.edu.tw/u4914263388070917076/a1';
+export const tainanTuchengUrl = 'https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u5069505906890802294';
 const hsinchuCityHours = 'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=1031a73e-224c-4ecd-a33a-496ad144123e';
 export const yuanlinLibraryRules = 'https://files.chcg.gov.tw/files/58_20250124134738385_彰化縣員林市立圖書館圖書資料借閱規定-1140123修正.pdf';
 const electionClosureRules: Record<string, string> = {
@@ -194,6 +195,19 @@ export const penghuStudyClosures = [2026, 2027].flatMap((year) =>
   monthlyClosures(year, 2, penghuMainUrl, '閱覽室每月最後一個星期二清潔休室'));
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  if (library.id === 'plis-27e5ed75c8013b01c228') {
+    const reason = '閱覽及自修空間不開放。非國定假日僅提供預約書取書。';
+    return {
+      closures: [2026, 2027].flatMap((year) => {
+        const january = new Date(Date.UTC(year, 0, 1));
+        const firstTuesday = 1 + (2 - january.getUTCDay() + 7) % 7;
+        const tuesdays = Array.from({ length: 52 }, (_, week) =>
+          new Date(Date.UTC(year, 0, firstTuesday + 7 * week)).toISOString().slice(5, 10));
+        return [...closureDates(year, tainanTuchengUrl, tuesdays, reason),
+          ...monthlyClosures(year, 5, tainanTuchengUrl, reason)];
+      }),
+    };
+  }
   if (['plis-c45011eb98a75a2b9c10', 'plis-cc40d48dc090e913387c', 'plis-462b4877085902245ddb'].includes(library.id)) {
     const url = 'https://www.lotong.gov.tw/cp.aspx?n=17720';
     return { closures: [

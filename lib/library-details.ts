@@ -966,7 +966,22 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
       '討論室', '讀者劇場', '閱讀自習室', '多元閱讀區', '音樂影音專區'],
   },
 };
-const kinmenReadingAreas: Record<string, Area | undefined> = {
+const localReadingAreas: Record<string, Area | undefined> = {
+  'plis-328bb20a01970d84f947': {
+    name: '7 樓筆電區', kind: 'reading', seats: 8, slots: null, access: null,
+    equipment: { laptop: true, wifi: true, outlet: true },
+    sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=2ba325ce4a9a497faf1090779e598b2f'],
+  },
+  'plis-5b5fc3a61599de8068a6': {
+    name: '吧檯筆電區', kind: 'reading', seats: 14, slots: null, access: null,
+    equipment: { laptop: true, wifi: true, outlet: true },
+    sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=1096d82768304ebf8d5a14a403a535e0'],
+  },
+  'plis-058be989d22b992c5b8a': {
+    name: '1 樓資訊檢索與數位資源區筆電席', kind: 'reading', seats: 8, slots: null, access: null,
+    equipment: { laptop: true, outlet: true },
+    sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=099812be491c45e59238adcaf69d3443'],
+  },
   'plis-cbce401033404caad835': {
     name: '2 樓閱覽室', kind: 'reading', slots: null, access: null, equipment: {}, sources: [kinmenCollectionPolicy],
   },
@@ -1347,7 +1362,7 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const baseFacilities = library.facilities ?? detail.facilities;
   const facilities = localFacilities
     ? [...new Set([...(baseFacilities ?? []), ...localFacilities.facilities])] : baseFacilities;
-  const readingArea = kinmenReadingAreas[library.id];
+  const readingArea = localReadingAreas[library.id];
   const areas = readingArea && !library.areas.some(({ name }) => name === readingArea.name)
     ? [...library.areas, readingArea] : library.areas;
   return {

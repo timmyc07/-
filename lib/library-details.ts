@@ -1274,6 +1274,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-65e63bfdbf5ce145d999': {
+    url: 'https://library.hsichou.gov.tw/news_content.aspx?nid=732',
+    note: '3 樓「鹿港學」特色館藏自 2026 年 10 月 21 日起因搬遷暫停對外閱覽，恢復日期待館方公告。',
+  },
   'plis-07c47313a8f5b473d2bf': {
     url: 'https://www.typl.gov.tw/zh-tw/Rent/Detail/11',
     note: '演藝廳因修繕於 2027 年 1 月至 7 月暫停對外開放及租借，重新開放日期由館方另行公告。',
@@ -1408,6 +1412,13 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-65e63bfdbf5ce145d999': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000256',
+    hours: '地下室書庫週二至週六 09:00–12:00、13:00–21:00，週日 09:00–12:00、13:00–17:00。'
+      + '1 樓閱覽區及 3 樓自修室、筆電區、討論區週二至週六 09:00–21:00，週日 09:00–17:00。'
+      + '2 樓兒童室週二至週日 09:00–12:00、13:00–17:00。週一、國定假日及選舉日休館。',
+    supersedesDirectory: true,
+  },
   'plis-740c2304a9a259e92df2': {
     url: 'https://www.fuli.gov.tw/News_Content.aspx?n=1444&s=7484',
     hours: '週二、週四至週日 08:00–12:00、13:30–17:30。週三 08:00–17:00（中午不休息），週一及國定假日休館。',

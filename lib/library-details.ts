@@ -1908,9 +1908,29 @@ const announcedLibraries: (Library & { city: string })[] = [
   },
 ];
 
+const taoyuanReadingRules = 'https://www.typl.gov.tw/zh-tw/Reader/RegulationContent/20';
+// These branches distinguish a laptop zone or publish separate study-room rules.
+const taoyuanStudyRulesToVerify = new Set([
+  'plis-62eb0222ac5626717a13', 'plis-07c47313a8f5b473d2bf', 'plis-5f74f02b42c06b3fc9d9',
+  'plis-62af35b79d7d88c393d7', 'plis-6a9da03cdd3715adb30c', 'plis-bb78c5df4d9aa277ab1c',
+]);
+
 export function withAnnouncedLibraries(libraries: (Library & { city: string })[]) {
-  return [...libraries, ...announcedLibraries.filter((announced) => !libraries.some((library) =>
-    comparableAddress(library.address) === comparableAddress(announced.address)))];
+  const announced = announcedLibraries.filter((record) => !libraries.some((library) =>
+    comparableAddress(library.address) === comparableAddress(record.address)));
+  return [...libraries, ...announced].map((library) => {
+    if (library.city !== '桃園市' || !library.name.startsWith('桃園市立圖書館')) return library;
+    const areas = library.areas.map((area): Area => {
+      const applies = area.kind === 'reading' || (area.kind === 'study' && !taoyuanStudyRulesToVerify.has(library.id));
+      if (!applies || area.equipment.laptop !== undefined || /極靜|研習教室/.test(area.name)) return area;
+      return { ...area, equipment: { ...area.equipment, laptop: true },
+        sources: [...new Set([...area.sources, taoyuanReadingRules])] };
+    });
+    if (areas.every((area, index) => area === library.areas[index])) return library;
+    return { ...library, areas,
+      accessNote: [library.accessNote, '閱覽及自修空間使用筆電請勿影響他人，並依館內公告。'].filter(Boolean).join(' '),
+      sources: [...new Set([...library.sources, taoyuanReadingRules])] };
+  });
 }
 
 const faxLocation = (value: string) => comparableAddress(value).replace(/-(?=\d)/g, '之');

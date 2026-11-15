@@ -1418,6 +1418,11 @@ const taoyuanWalkInStudyRooms = new Set([
 ]);
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-1ed4208570aa338878bc') {
+    return { ...area, name: '4 樓自修閱覽室', seats: 40, equipment: { ...area.equipment, wifi: true },
+      entryNote: '館內提供充電設備，座位是否設有插座待確認。本站僅提供自修與館內閱報。',
+      sources: [...area.sources, 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000602'] };
+  }
   if (id === 'plis-eaf4c3b42e1346a4f7e0') {
     return { ...area, name: '地下 1 樓自修室', seats: 84 };
   }

@@ -1014,7 +1014,12 @@ const nationalTaiwanLaptopSeats: Area = {
 };
 const hongmeiLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/018';
 const zhongshanLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=9D5E05FD2EDBBA72';
+const dagangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/030';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-99799da6e29815c7da11': [
+    { name: '1 樓一般閱覽區', kind: 'reading', seats: 12, slots: null, access: null, equipment: {}, sources: [dagangLibrary] },
+    { name: '2 樓閱報區', kind: 'reading', seats: 8, slots: null, access: null, equipment: {}, sources: [dagangLibrary] },
+  ],
   'plis-4a5392763b505085c4b0': [
     { name: '8 樓閱覽區', kind: 'reading', seats: 16, slots: null, access: null,
       equipment: {}, sources: [zhongshanLibrary] },

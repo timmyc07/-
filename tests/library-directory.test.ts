@@ -161,6 +161,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
   assert.equal(scheduled.length, 154);
+  const dagang = libraries.find(({ id }) => id === 'plis-99799da6e29815c7da11')!;
+  assert.deepEqual(dagang.areas.filter(({ kind }) => kind === 'reading')
+    .map(({ name, seats, slots, access }) => [name, seats, slots, access]), [
+    ['1 樓一般閱覽區', 12, null, null],
+    ['2 樓閱報區', 8, null, null],
+  ]);
+  assert.equal(dagang.areas.find(({ kind }) => kind === 'study')?.seats, 90);
   const miaoliCity = libraries.find(({ id }) => id === 'plis-5214bc11151c1cde5bf4')!;
   const miaoliRenovation = miaoliCity.closures.find(({ from }) => from === '2025-08-01')!;
   assert.match(miaoliRenovation.reason, /借書與通閱暫停/);

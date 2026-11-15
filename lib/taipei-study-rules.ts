@@ -41,7 +41,7 @@ const taipeiReservation = new Set([
   'plis-b4f11997a2a0f56cc70b', 'plis-e3287dc94a64c9288833', 'plis-c21ff2a6d5f510b7fccd',
   'plis-7decf0dff68a9e8b198d', 'plis-0ea807d14456081b105f', 'plis-d14f3a24d79c22efd2da',
 ]);
-const branchSeats: Record<string, { count: number; url: string; poweredSeats?: string; wifi?: true } | undefined> = {
+const branchSeats: Record<string, { count?: number; url: string; poweredSeats?: string; laptopSeats?: string; wifi?: true } | undefined> = {
   'plis-fbb1ce331b5c4abb48de': { count: 71, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=ddbda146780e487ca541d6611329c3b2' },
   'plis-12e793940725863678f5': { count: 32, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=a259391449d441c1afd5a9417a92f83d' },
   'plis-f4c982bf00e091bcc667': { count: 24, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=cd2a297d0eb643d8a4457e00a49e507e' },
@@ -51,7 +51,7 @@ const branchSeats: Record<string, { count: number; url: string; poweredSeats?: s
   'plis-4d0d0cfbe3a9cd856174': { count: 29, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=41e3b0e869974d39a3f9b5251bacc94b' },
   'plis-fbaad21dca36d8e7e69b': { count: 91, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=75c9e134b56247d1be0b12771f4c958c' },
   'plis-e560724330a3485ec121': { count: 127, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=7ab6eefb8a0542c591c242c79fb36989' },
-  'plis-ec1367a16695c5bd68b2': { count: 144, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=33f18ef4a9ae47908a4d55bb0a2c6dc0' },
+  'plis-ec1367a16695c5bd68b2': { count: 144, laptopSeats: '6 樓自修室有 18 席筆電使用區。', url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=33f18ef4a9ae47908a4d55bb0a2c6dc0' },
   'plis-dce1cb93599d11a23eb5': { count: 90, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=e1b1790a484745859ac130f5cdd37390' },
   'plis-28504a6154ab9f4b992f': { count: 132, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=ebe088bf10034b7b9ae840ce7495e4fd' },
   'plis-c770870780f2e3994cd2': { count: 104, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=5cbaf24850354822b32b7907ef7945b3' },
@@ -120,7 +120,11 @@ const branchSeats: Record<string, { count: number; url: string; poweredSeats?: s
   'plis-a40a9a0b96d74b54147e': { count: 69, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=3b882237569f42d3a610b8ccca388ae1' },
   'plis-6a5fcd9a247ae993c036': { count: 288, poweredSeats: '3 樓自修及閱覽區合計約 288 席，設有 3C 優先席、插座及無線網路。', wifi: true,
     url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=88af75ac838f4c518e0b46e351323e78' },
-  'plis-5946ac04ea837232b6f2': { count: 38, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=05bf4bb286764b73a497592be0c58b96' },
+  'plis-c91fb11bd56bbbfda65a': { laptopSeats: '自修區設有筆電使用區。館方簡介與樓層表的自修座位數不同。',
+    url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=37914dcbf04f454e91bad2aa085ef688' },
+  'plis-49c73b57188489998e49': { poweredSeats: '4 樓景觀閱覽區的電腦及自修座位合計 26 席，提供插座供自備設備使用。',
+    url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=707cf3fbd7b549aab651bee868612fb1' },
+  'plis-5946ac04ea837232b6f2': { count: 38, laptopSeats: '4 樓自修室可自備筆電。', url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=05bf4bb286764b73a497592be0c58b96' },
   'plis-9de55bfc56b18ae1f99a': { count: 53, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=ed45e89a66b64e40aa16299a33c86710' },
   'plis-2b5fb60dcc3812c8a2a4': { count: 12, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=4baa16dffd7c409db3b920fc352548d0' },
   'plis-039d55a9f83160fc0e08': { count: 140, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=e981c14a1847473c8d038b4c19656eab' },
@@ -131,7 +135,7 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
   const hotspot = taipeiStudyWifi.has(library.id);
   const withSeats = {
     ...area,
-    ...(seats ? { seats: seats.count } : {}),
+    ...(seats?.count !== undefined ? { seats: seats.count } : {}),
     equipment: hotspot || seats?.wifi ? { ...area.equipment, wifi: true } : area.equipment,
     sources: [...area.sources, ...(seats ? [seats.url] : []), ...(hotspot ? [taipeiWifiSource] : [])],
   };
@@ -171,10 +175,11 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
       ...withSeats, access: 'walk-in',
       ...(construction ? { name: construction.name, closures: [construction.closure] } : {}),
       equipment: { ...withSeats.equipment,
-        ...(seats?.poweredSeats ? { laptop: true, outlet: true } : conflictingOutlet ? {} : { outlet: false }) },
+        ...(seats?.poweredSeats || seats?.laptopSeats ? { laptop: true } : {}),
+        ...(conflictingOutlet ? {} : { outlet: Boolean(seats?.poweredSeats) }) },
       entryNote: conflictingOutlet
         ? '現場入座。分館介紹與自修室管理要點的充電資訊不同，請向館方確認。'
-        : '現場入座，館方得於開館前發放號碼牌。' + (seats?.poweredSeats ?? ''),
+        : '現場入座，館方得於開館前發放號碼牌。' + (seats?.poweredSeats ?? seats?.laptopSeats ?? ''),
       sources: [...withSeats.sources, newTaipeiRule,
         ...(construction ? [construction.closure.url, ...(construction.sources ?? [])] : [])],
     };

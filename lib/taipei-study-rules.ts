@@ -1,6 +1,8 @@
 import { minutes, type Area, type Closure, type Library } from './study.ts';
 
 const taipeiRule = 'https://tpml.gov.taipei/News_Content.aspx?n=CD4793DE89132E89&s=9C9863C2224D9B5A';
+const taipeiManualRule = 'https://tpml.gov.taipei/News_toggle.aspx?n=B64082F5678B94B1&sms=D0034AF4F8239B65';
+const taipeiDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const newTaipeiRule = 'https://www.library.ntpc.gov.tw/singlehtml/e81f432c17614ea4b732e114c365e29b?cntId=26b1530a3e724f44892b6cb0c7c7c5ed';
 const studyConstruction: Record<string, { name: string; closure: Closure; sources?: string[] } | undefined> = {
   'plis-6178fec7a54e55fdd3ff': {
@@ -24,6 +26,34 @@ const taipeiReservation = new Set([
   'plis-7decf0dff68a9e8b198d', 'plis-0ea807d14456081b105f', 'plis-d14f3a24d79c22efd2da',
 ]);
 const branchSeats: Record<string, { count: number; url: string; poweredSeats?: string; wifi?: true } | undefined> = {
+  'plis-e3287dc94a64c9288833': { count: 82, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=E9D3E1E398ACCE44' },
+  'plis-79c8541a02a760d57156': { count: 24, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=9B5CA23B4B7D3E6E' },
+  'plis-89ca1a138e029a9ff0be': { count: 96, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=868FFBF7DB389D6E' },
+  'plis-686aaa6ffb77e85fd5ad': { count: 72, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=26CFD64C53EF0B8A' },
+  'plis-4235a1e69db7bb767466': { count: 93, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=10C7F7FA14863BD4' },
+  'plis-f5eea69421838b246a98': { count: 49, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=139B11B3FE27F959' },
+  'plis-7decf0dff68a9e8b198d': { count: 195, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=8FF5DB94BBB09AA3' },
+  'plis-d14f3a24d79c22efd2da': { count: 78, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=3CC8123A170A9E1A' },
+  'plis-8b76b5bd5da364ef7614': { count: 148, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=1E9530A402DE3FE4' },
+  'plis-ea82498c00171d923cac': { count: 128, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=C0D0D7D8512FBA69' },
+  'plis-114080cf8fa32977d08a': { count: 216, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=4643DE8A8785BFD0' },
+  'plis-bb2ad3509d4bb274ef1e': { count: 112, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=D3079BF04FC7C57E' },
+  'plis-c1eecc7328938e1f8113': { count: 108, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=C74FF235C1C51515' },
+  'plis-5ecb8740b96ead296d21': { count: 60, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=30079DE895A0CE6A' },
+  'plis-c5ebd4287161428dd45e': { count: 90, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=F0D10AC6B9A2034F' },
+  'plis-8630492d73ce2487cd52': { count: 50, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=9705A783EC7DAA93' },
+  'plis-c21ff2a6d5f510b7fccd': { count: 194, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=DF81EFDE49CD311A' },
+  'plis-556af005b3614de06ca7': { count: 100, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=C6F658AB460A6821' },
+  'plis-4a5392763b505085c4b0': { count: 82, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=9D5E05FD2EDBBA72' },
+  'plis-0978ad84e2f92b807a42': { count: 24, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=1DAF842352008AB0' },
+  'plis-963484c045b604f1e7cd': { count: 100, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=3E701CBF09B9DE91' },
+  'plis-6405f5727f01d0619cd9': { count: 84, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=91DF3FAE1633F461' },
+  'plis-1ce0f598d0b6a3cce1c1': { count: 80, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=2F9356134BAA10BC' },
+  'plis-e32d363e2994cce524f7': { count: 56, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=9653DABCE4761B8E' },
+  'plis-e0e7f601f41ffc98e2aa': { count: 82, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=BCC8C69F6DCC9602' },
+  'plis-5d716f3883555860336b': { count: 102, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=C574D9996116CFA1' },
+  'plis-9f8e62981180e7c9a7d3': { count: 48, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=6CE4E65B3438B4F7' },
+  'plis-072a27cd0400a9041fe1': { count: 36, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=50DF61E26C3A0BFA' },
   'plis-ae4afb661db999589383': { count: 56, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=4B8B65E4D1706DE2' },
   'plis-a146c2d061529bbf111d': { count: 120, wifi: true, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=832D048C62A0F697' },
   'plis-a670c69b2a2a96a3d9fa': { count: 196, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=AEF69C260CB4B876' },
@@ -68,15 +98,26 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
   const withSeats = seats ? { ...area, seats: seats.count,
     equipment: seats.wifi ? { ...area.equipment, wifi: true } : area.equipment,
     sources: [...area.sources, seats.url] } : area;
+  const standardSlots = area.slots ?? Array.from({ length: 7 }, (_, day) => ({
+    day, start: minutes(day <= 1 ? '09:00' : '08:30'), end: minutes(day <= 1 ? '17:00' : '21:00'),
+  }));
   if (taipeiReservation.has(library.id)) {
     return {
       ...withSeats, access: 'card', regionalCard: 'taipei',
       reservation: 'https://seat.tpml.edu.tw/sm/home_web.do#',
       entryNote: '持臺北市圖個人借閱證。當日席現場登記，次日起 7 日內可線上預約。國定假日及每月第一個星期四休館。',
-      slots: Array.from({ length: 7 }, (_, day) => ({
-        day, start: minutes(day <= 1 ? '09:00' : '08:30'), end: minutes(day <= 1 ? '17:00' : '21:00'),
-      })),
+      slots: standardSlots,
       sources: [...withSeats.sources, taipeiRule],
+    };
+  }
+  const taipeiListed = ['plis-2795b0ebc2c7f0ecfff2', 'plis-edeec13b64c0ca4d0965',
+    'plis-744dd53a547fde48cb19'].includes(library.id);
+  if (library.name.startsWith('臺北市立圖書館') && (listed || seats || taipeiListed)
+    && !['plis-0a7bdfab9e0c217b4951', 'plis-a52a74385fa7b184d15f'].includes(library.id)) {
+    return {
+      ...withSeats, slots: standardSlots, access: 'walk-in',
+      entryNote: '平日自由入座。例假日、寒暑假或考季，館方得於開館前發放號碼牌，並可能查驗借閱證。',
+      sources: [...withSeats.sources, taipeiManualRule, ...(taipeiListed ? [taipeiDirectory] : [])],
     };
   }
   if (library.id === 'plis-ebb42497618c005f1223') {

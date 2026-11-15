@@ -8,6 +8,10 @@ import { taipeiStudyRoom } from './taipei-study-rules.ts';
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-114080cf8fa32977d08a': {
+    from: '2026-11-16', until: '2026-11-16', reason: '東湖分館地板更新工程閉館一日。',
+    url: 'https://reading.tpml.gov.taipei/News_Content.aspx?n=B3B7F57C7B16FDE6&s=009F3A24D6536E3E',
+  },
   'plis-5700fc946f2296c185af': {
     from: '2026-08-27', until: '2027-01-06',
     reason: '貢寮分館設備升級施工，館內閱覽、自修及資訊檢索暫停，3 樓門口另設臨時櫃檯。',
@@ -267,7 +271,8 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   return {
     ...library,
     name: library.id === 'plis-e2c2e5a82e7e92aa1179' ? '新竹縣竹北市立圖書館福德分館' : library.name,
-    openingHours: closure?.reason ?? library.openingHours ?? hoursOverride?.hours ?? local?.hours ?? detail.hours,
+    openingHours: (closure && closure.from !== closure.until ? closure.reason : undefined)
+      ?? library.openingHours ?? hoursOverride?.hours ?? local?.hours ?? detail.hours,
     calendarYears: calendar?.calendarYears ?? library.calendarYears,
     checkDates: calendar?.checkDates ? [...new Set([...(library.checkDates ?? []), ...calendar.checkDates])] : library.checkDates,
     closures: [...library.closures, ...(calendar?.closures ?? []), ...(closure ? [closure] : [])],

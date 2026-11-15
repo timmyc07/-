@@ -121,7 +121,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 99);
+  assert.equal(scheduled.length, 136);
   const longgang = libraries.find(({ name }) => name === '桃園市立圖書館龍岡分館')!;
   assert.equal(longgang.areas[0].seats, 265);
   assert.equal(longgang.areas[0].slots?.find(({ day }) => day === 1)?.end, minutes('17:00'));
@@ -318,6 +318,14 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   const daoxiang = get('臺北市立圖書館稻香分館');
   const area = daoxiang.areas[0];
   assert.equal(area.seats, 93);
+  const qingjiang = get('臺北市立圖書館清江分館');
+  assert.equal(qingjiang.studyRoom, true);
+  assert.equal(qingjiang.areas[0].seats, 96);
+  assert.equal(qingjiang.areas[0].access, 'walk-in');
+  assert.deepEqual(qingjiang.areas[0].slots?.[1], { day: 1, start: minutes('09:00'), end: minutes('17:00') });
+  const donghu = get('臺北市立圖書館東湖分館');
+  assert.equal(donghu.areas[0].seats, 216);
+  assert(donghu.closures.some(({ from, until }) => from === '2026-11-16' && until === from));
   const query = {
     date: '2026-11-15', start: minutes('14:00'), duration: 120,
     kind: 'study' as const, card: true, registration: true, required: [],

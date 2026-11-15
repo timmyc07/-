@@ -542,6 +542,16 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
   assert.equal(cijin.areas[0].seats, 38);
   assert.equal(cijin.areas[0].access, 'walk-in');
   assert.deepEqual(cijin.areas[0].equipment, { laptop: false, wifi: false, outlet: false });
+  for (const [id, readingSeats, studySeats] of [
+    ['plis-722fa1747d59f1487f9a', 114, 122],
+    ['plis-88c4b0b28fd9dc888207', 15, 74],
+    ['plis-d624fdace694450c004a', 26, 38],
+    ['plis-746d36c88f898d0e8c07', 134, 116],
+  ] as const) {
+    const library = libraries.find((library) => library.id === id)!;
+    assert.equal(library.areas.find(({ kind }) => kind === 'reading')?.seats, readingSeats);
+    assert.equal(library.areas.find(({ kind }) => kind === 'study')?.seats, studySeats);
+  }
   const cuiping = libraries.find(({ id }) => id === 'plis-793de43144ebd1a7578c')!;
   const cuipingReading = cuiping.areas.find(({ kind }) => kind === 'reading')!;
   assert.equal(cuipingReading.seats, 36);

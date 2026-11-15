@@ -1009,6 +1009,22 @@ const nationalTaiwanLaptopSeats: Area = {
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
 const localAdditionalAreas: Record<string, Area | undefined> = {
+  'plis-722fa1747d59f1487f9a': {
+    name: '書庫閱覽座位', kind: 'reading', seats: 114, slots: null, access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,39,389,383'],
+  },
+  'plis-88c4b0b28fd9dc888207': {
+    name: '書庫閱覽座位', kind: 'reading', seats: 15, slots: null, access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,70,730,724'],
+  },
+  'plis-d624fdace694450c004a': {
+    name: '1 樓閱覽座位', kind: 'reading', seats: 26, slots: null, access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,32,313,306'],
+  },
+  'plis-746d36c88f898d0e8c07': {
+    name: '3 樓書庫區', kind: 'reading', seats: 134, slots: null, access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,43,434,427'],
+  },
   'plis-06504d756c4ec047d449': {
     name: '1 樓報紙期刊區（夜間自修區）', kind: 'study',
     slots: [0, 2, 3, 4, 5, 6].map((day) => ({ day, start: minutes('09:00'), end: minutes('19:00') })),

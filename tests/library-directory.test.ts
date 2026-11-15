@@ -475,7 +475,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(result.closure?.from, '2026-03-02');
   const culture = libraries.find(({ id }) => id === 'plis-645a77676fc64f962dcf')!;
   assert(culture.closures.some(({ from }) => from === '2026-04-11'));
-  assert.match(culture.accessNote!, /湖內里活動中心.*嘉義大學林森校區/);
+  assert.match(culture.accessNote!, /湖內里活動中心.*嘉義大學林森校區 E 棟 1 樓 E103、E105.*週二至週六 09:00–20:00、週日 09:00–17:00/);
   const shixian = libraries.find(({ id }) => id === 'plis-34ea4e3647b8191ffef9')!;
   assert.deepEqual(shixian.areas[0].slots?.find(({ day }) => day === 6),
     { day: 6, start: minutes('09:00'), end: minutes('20:00') });

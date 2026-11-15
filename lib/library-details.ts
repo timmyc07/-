@@ -1262,8 +1262,8 @@ const serviceUpdates: Record<string, { url: string; note: string } | undefined> 
     note: '原館拆除重建期間，請前往箕湖臨時圖書館（民眾路 39-1 號）。臨時館自 2026 年 1 月 3 日起營運。',
   },
   'plis-645a77676fc64f962dcf': {
-    url: 'https://twainews.com/chiayiCity/news/H6AVvMXtFIMXzE8zULEN',
-    note: '臨時閱覽室：湖內里活動中心 A 棟 2 樓（湖子內路 172 號）週二至週日 09:00–17:00。嘉義大學林森校區 CE104、CE105（林森東路 151 號）週二至週六 09:00–20:00、週日 09:00–17:00。兩處週一及國定假日休息。',
+    url: 'https://www.ncyu.edu.tw/ncyu/Subject/Detail/239895?nodeId=835',
+    note: '臨時閱覽室：湖內里活動中心 A 棟 2 樓（湖子內路 172 號）週二至週日 09:00–17:00。嘉義大學林森校區 E 棟 1 樓 E103、E105（林森東路 151 號）週二至週六 09:00–20:00、週日 09:00–17:00。兩處週一及國定假日休息。',
   },
   'plis-66fa0a939c2eddc2cbeb': {
     url: 'https://web.tainan.gov.tw/ysdo/News_Content.aspx?n=8385&s=8846323&sms=11449',

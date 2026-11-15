@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import type { Library } from '../lib/study.ts';
-import { withLibraryDetail, type LibraryDetail } from '../lib/library-details.ts';
+import { withLibraryDetail, withTaichungFax, type LibraryDetail } from '../lib/library-details.ts';
 import { coversCalendarYear, evaluate, minutes, validDate } from '../lib/study.ts';
 
 const root = new URL('../public/datasets/', import.meta.url);
@@ -53,6 +53,20 @@ test('傳真補錄保留來源，原始名錄明載無傳真的欄位持續有�
   assert.equal(byName('基隆市公共圖書館信義分館').fax, '02-24236174');
   assert.equal(byName('新北市立圖書館三峽分館').fax, '無');
   assert.equal(byName('高雄市立圖書館鹽埕分館').fax, undefined);
+});
+
+test('臺中快照採用同名同址的名錄傳真，搬遷或新增館舍保留待查', () => {
+  const record = directory.libraries.find(({ name }) => name === '臺中市立圖書館大里大新分館')!;
+  const branch = {
+    ...record, id: 'taichung-daxin', name: '大里大新分館', address: '臺中市大里區大新街36之1號',
+    fax: undefined, sources: ['https://www.library.taichung.gov.tw/'],
+  };
+  const result = withTaichungFax(branch, [record]);
+  assert.equal(result.fax, '04-24965917');
+  assert(result.sources.includes('https://data.gov.tw/dataset/99567'));
+  const relocated = { ...branch, address: '臺中市大里區大新街38號' };
+  assert.equal(withTaichungFax(relocated, [record]), relocated);
+  assert.equal(withTaichungFax(branch, [record, record]), branch);
 });
 
 test('館舍詳情須同址，館舍開館及設備資料不當成自修室規則', () => {

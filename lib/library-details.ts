@@ -39,6 +39,20 @@ const localHours: Record<string, { url: string; hours: string; studyRoom?: true 
 const comparableAddress = (value: string) => value.normalize('NFKC').replaceAll('台', '臺')
   .trim().replace(/^\d{3,6}(?=\s*\D)/, '').replace(/\s/g, '');
 
+const faxLocation = (value: string) => comparableAddress(value).replace(/-(?=\d)/g, '之');
+const taichungFaxName = (value: string) => value.normalize('NFKC').replace(/\s/g, '')
+  .replace(/^臺中市立圖書館/, '').replace(/(?:國立公共資訊圖書館精武分館|^精武圖書館$)/, '精武圖書館');
+
+export function withTaichungFax(library: Library, directory: Library[]): Library {
+  if (library.fax) return library;
+  const name = taichungFaxName(library.name);
+  const address = faxLocation(library.address);
+  const [match, duplicate] = directory.filter((candidate) =>
+    taichungFaxName(candidate.name) === name && faxLocation(candidate.address) === address);
+  if (!match?.fax || duplicate || !address) return library;
+  return { ...library, fax: match.fax, sources: [...new Set([...library.sources, ...match.sources])] };
+}
+
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
   if (!detail?.address || comparableAddress(detail.address) !== comparableAddress(library.address)) return library;
   const local = detail.hours ? undefined : localHours[library.id];

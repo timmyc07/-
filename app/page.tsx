@@ -6,7 +6,7 @@ import RegionFilters from './region-filters.tsx';
 import { BlurFade } from './site-motion.tsx';
 import directory from '../public/datasets/library-directory.json';
 import details from '../public/datasets/library-details.json';
-import { withLibraryDetail, type LibraryDetail } from '../lib/library-details.ts';
+import { withLibraryDetail, withTaichungFax, type LibraryDetail } from '../lib/library-details.ts';
 import { directionsUrl, distanceKm, parseCoordinates } from '../lib/distance.ts';
 import { taichungSnapshot } from '../lib/mongodb.ts';
 import { backupLibraries, clock, evaluate, facilities, kindLabels, minutes, regionalCards, timePattern, validDate, weekdays } from '../lib/study.ts';
@@ -49,9 +49,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const snapshot = await taichungSnapshot().catch(() => null);
   const nationalLibraries = directory.libraries.map((library) =>
     withLibraryDetail(library, (details.libraries as Record<string, LibraryDetail | undefined>)[library.id]));
+  const taichungDirectory = directory.libraries.filter((library) => library.city === '臺中市');
   const libraries: RegionalLibrary[] = snapshot?.libraries.length
     ? [...nationalLibraries.filter((library) => library.city !== '臺中市'),
-      ...snapshot.libraries.map((library) => ({ ...library, city: '臺中市' }))]
+      ...snapshot.libraries.map((library) => ({ ...withTaichungFax(library, taichungDirectory), city: '臺中市' }))]
     : nationalLibraries;
   const regions = new Map(Object.keys(directory.cityCounts).map((name) => [name, new Set<string>()]));
   for (const library of libraries) if (library.district) regions.get(library.city)!.add(library.district);

@@ -178,7 +178,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 155);
+  assert.equal(scheduled.length, 154);
   const dagang = libraries.find(({ id }) => id === 'plis-99799da6e29815c7da11')!;
   assert.deepEqual(dagang.areas.filter(({ kind }) => kind === 'reading')
     .map(({ name, seats, slots, access }) => [name, seats, slots, access]), [
@@ -425,6 +425,8 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert(!kinmen.areas[0].slots?.some(({ day }) => day === 1));
   const jinsha = libraries.find(({ id }) => id === 'plis-387900bcde6ccbe06570')!;
   assert.equal(jinsha.areas[0].name, '3 樓閱讀自習室');
+  assert.equal(jinsha.areas[0].slots, null);
+  assert.match(jinsha.openingHours!, /08:00–17:30/);
   assert(jinsha.facilities?.includes('讀者劇場'));
   assert.equal(libraries.filter(({ city, facilities }) => city === '金門縣' && facilities?.length).length, 5);
   assert.equal(libraries.find(({ id }) => id === 'plis-ca5bd98a9d6dcfd1159b')?.areas[0].name, '1 樓自修室');

@@ -1274,6 +1274,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-ae39026bfbebe222706a': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000449',
+    note: '竹田國小內的臨時圖書館（公正路 35 號）因空間有限，展閱近 3 年的新書，其餘館藏暫時封存。',
+  },
   'plis-65e63bfdbf5ce145d999': {
     url: 'https://library.hsichou.gov.tw/news_content.aspx?nid=732',
     note: '3 樓「鹿港學」特色館藏自 2026 年 10 月 21 日起因搬遷暫停對外閱覽，恢復日期待館方公告。',
@@ -1412,6 +1416,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-387900bcde6ccbe06570': {
+    url: 'https://cabkc.kinmen.gov.tw/information?uid=9&pid=25',
+    hours: '週二至週日 08:00–17:30（中午不休息），週一休館。',
+    supersedesDirectory: true,
+  },
   'plis-65e63bfdbf5ce145d999': {
     url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000256',
     hours: '地下室書庫週二至週六 09:00–12:00、13:00–21:00，週日 09:00–12:00、13:00–17:00。'
@@ -2107,8 +2116,7 @@ function localStudyRoom(id: string, area: Area): Area {
         'https://www.matsu-news.gov.tw/news/article/13603'] };
   }
   if (id === 'plis-387900bcde6ccbe06570') {
-    return { ...area, name: '3 樓閱讀自習室',
-      entryNote: '整修後自習室位於 3 樓，所列時段來自整修前的名錄，請向館方確認。',
+    return { ...area, entryNote: '整修後自習室位於 3 樓，專室開放時段請向館方確認。',
       sources: [...area.sources, jinshaReopening] };
   }
   if (id === 'plis-ca5bd98a9d6dcfd1159b') {

@@ -96,7 +96,7 @@ const branchSeats: Record<string, { count: number; url: string; poweredSeats?: s
   'plis-11aa3de99bcc8b6d545d': { count: 200, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=9f0519c89e75453a824b949308a1ed03' },
   'plis-b5da9bcc084818ab9965': { count: 52, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=f97aa14cccf645d29276a969bc9d8c53' },
   'plis-ebb42497618c005f1223': { count: 159, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=dc88121272914791be0c19deef10053b' },
-  'plis-6178fec7a54e55fdd3ff': { count: 170, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=12a6af39e58141d48e4af250720ba636' },
+  'plis-6178fec7a54e55fdd3ff': { count: 170, wifi: true, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=12a6af39e58141d48e4af250720ba636' },
   'plis-b096b4bf57169ce03390': { count: 84, poweredSeats: '自修閱覽區設有筆電優先席、插座和無線網路。', wifi: true,
     url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=d08f04bf0cb34b41a12cdacb223b468f' },
   'plis-b3c324c71459423ffadb': { count: 22, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=c159de7c56fb4a028afc2074e681cc4f' },
@@ -153,7 +153,8 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
     return {
       ...withSeats, access: 'walk-in',
       ...(construction ? { name: construction.name, closures: [construction.closure] } : {}),
-      equipment: seats?.poweredSeats ? { laptop: true, outlet: true, wifi: seats.wifi } : conflictingOutlet ? {} : { outlet: false },
+      equipment: { ...withSeats.equipment,
+        ...(seats?.poweredSeats ? { laptop: true, outlet: true } : conflictingOutlet ? {} : { outlet: false }) },
       entryNote: conflictingOutlet
         ? '現場入座。分館介紹與自修室管理要點的充電資訊不同，請向館方確認。'
         : '現場入座，館方得於開館前發放號碼牌。' + (seats?.poweredSeats ?? ''),

@@ -309,7 +309,16 @@ const taoyuanSeatSystem: Record<string, { url?: string; seats?: number; name?: s
   'plis-5f74f02b42c06b3fc9d9': { seats: 172, note: '另設 8 席筆電區。' },
 };
 
+const localStudyWifi: Record<string, string | undefined> = {
+  'plis-62eb0222ac5626717a13': 'https://itaiwan.gov.tw/ftp/upload/HotspotData/hotspotlist_tw.csv',
+  'plis-eec71326733024bf68f9': 'https://itaiwan.gov.tw/ftp/upload/HotspotData/hotspotlist_tw.csv',
+  'plis-5929930cfc61bd687f1f': 'https://itaiwan.gov.tw/ftp/upload/HotspotData/hotspotlist_tw.csv',
+  'plis-112e55434de56841e873': 'https://culture.tycg.gov.tw/News_Content.aspx?n=11129&s=1470563',
+};
+
 function localStudyRoom(id: string, area: Area): Area {
+  const wifi = localStudyWifi[id];
+  if (wifi) area = { ...area, equipment: { ...area.equipment, wifi: true }, sources: [...area.sources, wifi] };
   if (id === 'plis-2bbbdcd83068ffcf8f4f') {
     return { ...area, name: '2 樓多功能自修室', seats: 54,
       entryNote: '改造後於 2026 年 11 月 1 日開始試營運。',
@@ -370,7 +379,7 @@ function localStudyRoom(id: string, area: Area): Area {
       sources: [...area.sources, 'https://culture.taitung.gov.tw/activity/臺東縣立圖書館各式活動'] };
   }
   if (id === 'plis-5929930cfc61bd687f1f') {
-    return { ...area, seats: 216, equipment: { outlet: true },
+    return { ...area, seats: 216, equipment: { ...area.equipment, outlet: true },
       sources: [...area.sources, 'https://library.hccg.gov.tw/chhcml/app/digital/view?id=55&module=branchLibrary&serno=15f84f6d-dc3c-4b82-8e80-df80b371c164'] };
   }
   if (id === 'plis-6c9e30dc1c6abf7a17d4') {

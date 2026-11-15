@@ -1027,7 +1027,14 @@ const localReadingAreas: Record<string, Area | undefined> = {
     name: '1 樓開放式閱讀室', kind: 'reading', slots: null, access: null, equipment: {}, sources: [kinmenCollectionPolicy],
   },
 };
+const newTaipeiEquipmentWork = {
+  url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=1543977c02c848e185486a90c2104f2d',
+  note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
+};
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-5ca7b8662f3ee724afdb': newTaipeiEquipmentWork,
+  'plis-b3b132289aafe42b7431': newTaipeiEquipmentWork,
+  'plis-45e2769173fd5cf565ff': newTaipeiEquipmentWork,
   'plis-2fcff6be9344e712594c': {
     url: 'https://www.cna.com.tw/news/aloc/202609210263.aspx',
     note: '依文化局公布的搬遷安排，化龍一村兒少書房自 2026 年 10 月 12 日閉館，樂齡書房自 11 月 16 日閉館。新總館 B 館預計 12 月 20 日試營運，實際開放時間依館方公告。',

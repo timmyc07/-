@@ -103,7 +103,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(gonghe.openingHours!, /08:00–12:00、13:00–17:00.*只開放一樓/);
   assert.equal(gonghe.areas.length, 0);
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
-  assert.equal(scheduled.length, 75);
+  assert.equal(scheduled.length, 77);
+  const penghu = libraries.find(({ id }) => id === 'plis-f3080ccd8c34dad70222')!;
+  assert.equal(penghu.areas[0].slots?.length, 7);
+  assert.equal(penghu.areas[0].equipment.laptop, true);
+  const kinmen = libraries.find(({ id }) => id === 'plis-e3c1d8e816d9e6061a7d')!;
+  assert.equal(kinmen.areas[0].slots?.length, 6);
+  assert(!kinmen.areas[0].slots?.some(({ day }) => day === 1));
   const nantou = libraries.find(({ id }) => id === 'plis-8e698a4770cf01e3875e')!;
   assert.equal(nantou.areas[0].seats, 147);
   const shoufeng = libraries.find(({ id }) => id === 'plis-c601d6fcc4e455f93f93')!;

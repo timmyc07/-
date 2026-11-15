@@ -70,6 +70,16 @@ function songshanClosures(year: number) {
 }
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  if (library.id === 'plis-3762599f4dcfd24804ba') {
+    return { closures: [
+      { from: '2025-10-06', until: '2026-06-30', reason: '耐震補強工程閉館',
+        url: 'https://www.penghu.gov.tw/erdai/home.jsp?act=view&dataserno=202509250001&id=10027' },
+      { from: '2026-07-01', until: '2026-08-02', reason: '耐震補強工程延長閉館',
+        url: 'https://www.penghu.gov.tw/erdai/home.jsp?act=view&dataserno=202606240012&id=10027' },
+      ...closureDates(2026, 'https://www.phlib.nat.gov.tw/wSite/ct?ctNode=5239&idPath=5217_5223_5239&mp=1&xItem=11376',
+        ['10-10'], '國慶日休館'),
+    ] };
+  }
   if (library.id === 'plis-96bdb053d7e967f965dc') {
     const url = 'https://www.fonglin.gov.tw/News_Content.aspx?n=3794&s=199254&sms=9966';
     const ranges = [

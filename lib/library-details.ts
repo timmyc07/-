@@ -33,6 +33,11 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
 const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A';
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
 const localHours: Record<string, { url: string; hours: string; studyRoom?: true; supersedesDirectory?: true } | undefined> = {
+  'plis-f3080ccd8c34dad70222': {
+    url: 'https://www.penghu.gov.tw/phhcc/home.jsp?id=67',
+    hours: '書庫、兒童室、期刊區及視聽室週三至週日 09:00–21:00。讀者自修室週一、週二 08:30–17:30，週三至週日 08:30–21:00。自修室於國定假日及每月最後一個星期二休館。',
+    supersedesDirectory: true,
+  },
   'plis-1d71cbf4cd1d410256ad': {
     url: 'https://www.ji-an.gov.tw/library/data/5?cate=14',
     hours: '依吉安鄉立圖書館官網，週三至週五 08:30–20:30，週二、週六及週日 08:30–17:00。週一及國定紀念日休館。',
@@ -143,6 +148,10 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
 }
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-f3080ccd8c34dad70222') {
+    return { ...area, equipment: { laptop: true },
+      entryNote: '筆電等電子設備請保持靜音。請勿預佔座位，考季期間可能不定時清場。' };
+  }
   if (id === 'plis-8e698a4770cf01e3875e') {
     return { ...area, seats: 147, access: 'conditional',
       entryNote: '供一般讀者自修。館方請 12 歲以下讀者使用兒童閱覽室。' };

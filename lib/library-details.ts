@@ -32,6 +32,16 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
 
 const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A';
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
+const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-e94c48945a092b5818d8': {
+    url: 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11048',
+    note: '縣政九路館各樓層已恢復開放。自 9 月 12 日起暫停館內調閱、超商借書、贈書及好書交換，自 10 月 20 日起暫停受理指定本館為取書館的新預約。',
+  },
+  'plis-e3c1d8e816d9e6061a7d': {
+    url: 'https://www.kmdn.gov.tw/1117/1271/1272/590112/',
+    note: '北棟自 2026 年 9 月 15 日起整修暫停開放，南棟持續服務。',
+  },
+};
 const localHours: Record<string, { url: string; hours: string; studyRoom?: true; supersedesDirectory?: true } | undefined> = {
   'plis-838b908932f56e7b1d22': {
     url: 'https://www.nankan.gov.tw/chhtml/Detail/2221?mcid=92857',
@@ -136,17 +146,20 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const localArea = kaohsiungArea ?? tainanArea ?? localStudyRoom(library.id, taipeiArea ?? area);
   const studyRoom = Boolean(study || local?.studyRoom || listed || taipeiArea || tainanArea || kaohsiungArea);
   const calendar = libraryCalendar(library);
+  const serviceUpdate = serviceUpdates[library.id];
   return {
     ...library,
     openingHours: closure?.reason ?? library.openingHours ?? hoursOverride?.hours ?? local?.hours ?? detail.hours,
     calendarYears: calendar?.calendarYears ?? library.calendarYears,
     checkDates: calendar?.checkDates ? [...new Set([...(library.checkDates ?? []), ...calendar.checkDates])] : library.checkDates,
     closures: [...library.closures, ...(calendar?.closures ?? []), ...(closure ? [closure] : [])],
+    accessNote: serviceUpdate?.note ?? library.accessNote,
     facilities: library.facilities ?? detail.facilities,
     studyRoom: library.studyRoom ?? (kaohsiungArea === null ? false : studyRoom || undefined),
     areas: studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
       ? [...library.areas, localArea] : library.areas,
     sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []),
+      ...(serviceUpdate ? [serviceUpdate.url] : []),
       ...(hoursOverride ? [hoursOverride.url] : []),
       ...(kaohsiungArea === null ? [kaohsiungHoursSource] : []),
       ...(calendar?.closures.map(({ url }) => url) ?? []), ...(closure ? [closure.url] : [])])],

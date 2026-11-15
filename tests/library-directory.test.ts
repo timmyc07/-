@@ -112,6 +112,11 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(gonghe.areas.length, 0);
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
   assert.equal(scheduled.length, 79);
+  const oldHsinchuCounty = libraries.find(({ id }) => id === 'plis-e94c48945a092b5818d8')!;
+  assert.match(oldHsinchuCounty.accessNote!, /各樓層已恢復開放/);
+  assert(oldHsinchuCounty.closures.some(({ from }) => from === '2026-11-28'));
+  const kinmenUpdate = libraries.find(({ id }) => id === 'plis-e3c1d8e816d9e6061a7d')!;
+  assert.match(kinmenUpdate.accessNote!, /南棟持續服務/);
   const miaoli = libraries.find(({ id }) => id === 'plis-703e62be51f0cd3f7e93')!;
   assert.match(miaoli.areas[0].entryNote!, /08:00–20:00/);
   const toufen = libraries.find(({ id }) => id === 'plis-8258ecedb33967785152')!;

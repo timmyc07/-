@@ -9,6 +9,12 @@ const keelungUrl = 'https://kllib.klcg.gov.tw/News_Content.aspx?n=7789&s=16436&s
 const taoyuanUrl = 'https://www.typl.gov.tw/zh-tw/News/Content/1067';
 const kaohsiungUrl = 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,33,,,,15495';
 const tainanMainUrl = 'https://www.tnpl.tn.edu.tw/u4914263388070917076/a1';
+const electionClosureRules: Record<string, string> = {
+  'plis-e94c48945a092b5818d8': 'https://www.hchcc.gov.tw/Tw/Common/SinglePage?filter=55A4FB62-998F-4818-BDE2-08AF8B3245C2',
+  'plis-24ed27c19953ccb5f0c4': 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_4295&mp=1&orgId=004&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+  'plis-bda0333882d76e416b20': 'https://hcplibrary.hchcc.gov.tw/wSite/sp?orgId=009&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+  'plis-645a77676fc64f962dcf': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000306',
+};
 
 function closureDates(year: number, url: string, dates: string[], reason: string): Closure[] {
   return dates.map((date) => ({ from: year + '-' + date, until: year + '-' + date, reason, url }));
@@ -70,6 +76,10 @@ function songshanClosures(year: number) {
 }
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  const electionClosureRule = electionClosureRules[library.id];
+  if (electionClosureRule) {
+    return { closures: closureDates(2026, electionClosureRule, ['11-28'], '依館方選舉日休館規定休館') };
+  }
   if (['plis-838b908932f56e7b1d22', 'plis-cceeef12e0bfff59593f'].includes(library.id)) {
     return { closures: [{ from: '2026-02-14', until: '2026-02-22', reason: '春節休館',
       url: 'https://www.nankan.gov.tw/chhtml/Detail/2221?mcid=107952' }] };

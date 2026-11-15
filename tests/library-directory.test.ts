@@ -619,6 +619,7 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
   assert.equal(caogong.closures.find(({ from }) => from === '2026-01-12')?.until, '2026-11-06');
   assert.match(caogong.accessNote!, /11 月 7 日重新開館/);
   for (const [id, seats] of [
+    ['plis-3e5d2c6ce6577c063ff7', 242],
     ['plis-2743e51569604910aa7d', 51],
     ['plis-a0dd6959841927ca7597', 44],
     ['plis-3b604bb555eaf744251d', 50],

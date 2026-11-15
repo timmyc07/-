@@ -1018,6 +1018,10 @@ const dagangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/030';
 const mituoSeatDirectory = 'https://www.ksml.edu.tw/lib/content/Details.aspx?Parser=1,55,565,559,,,283';
 const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-3e5d2c6ce6577c063ff7': {
+    name: '閱覽座位', kind: 'reading', seats: 242, slots: null, access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,51,521,515'],
+  },
   'plis-9df366887a25b0673ee7': [
     { name: '閱覽區', kind: 'reading', seats: 59, slots: null, access: null, equipment: {}, sources: [kangzhuangLibrary] },
     { name: '期刊閱報區', kind: 'reading', seats: 10, slots: null, access: null, equipment: {}, sources: [kangzhuangLibrary] },

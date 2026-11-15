@@ -1013,7 +1013,15 @@ const nationalTaiwanLaptopSeats: Area = {
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
 const hongmeiLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/018';
+const zhongshanLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=9D5E05FD2EDBBA72';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-4a5392763b505085c4b0': [
+    { name: '8 樓閱覽區', kind: 'reading', seats: 16, slots: null, access: null,
+      equipment: {}, sources: [zhongshanLibrary] },
+    { name: '8 樓筆記型電腦區', kind: 'reading', seats: 6, slots: null, access: null,
+      equipment: { laptop: true, outlet: true }, sources: [zhongshanLibrary,
+        'https://tpml.gov.taipei/News_toggle.aspx?n=B64082F5678B94B1&sms=D0034AF4F8239B65'] },
+  ],
   'plis-f837393150c2835dca29': {
     name: '書刊閱覽座位', kind: 'reading', seats: 95, slots: null, access: null, equipment: {},
     sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,34,335,328'],

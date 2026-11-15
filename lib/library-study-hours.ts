@@ -49,6 +49,36 @@ const studyHours: Record<string, StudyHours | undefined> = {
   'plis-0670e73215c152add507': {
     name: 'B1 自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/038',
   },
+  'plis-62eb0222ac5626717a13': {
+    name: 'B1 自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/044',
+  },
+  'plis-77084e202fe916823f9a': {
+    name: '3 樓自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/032',
+  },
+  'plis-34e3306f3ab833c97a42': {
+    name: '3 樓自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/043',
+  },
+  'plis-6a9da03cdd3715adb30c': {
+    name: '4 樓自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/042',
+  },
+  'plis-3fe72b1ccca37949b0a8': {
+    name: '2 樓自修閱覽室', ranges: [], url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/039',
+  },
+  'plis-163c307c64aa5fc02e8a': {
+    name: '2 樓自修區', ranges: [], url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/048',
+  },
+  'plis-ab3dfbc049455a84068e': {
+    name: '自修室', ranges: [], url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/047',
+  },
+  'plis-e13b542aa05bf70e234a': {
+    name: '自修室', ranges: [], url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/011',
+  },
+  'plis-62af35b79d7d88c393d7': {
+    name: '3 樓自修室', ranges: [], url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/027',
+  },
+  'plis-67ab5e6b0d8d6c9a2e25': {
+    name: '6 樓極靜自修區', ranges: [], url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/025',
+  },
   'plis-dd0e38aa18f750ffcade': { name: 'B1 自修室', ranges: [['123456', '08:30', '21:00'], ['0', '08:30', '17:00']] },
   'plis-07c47313a8f5b473d2bf': {
     name: '3 樓自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/028',
@@ -122,11 +152,11 @@ const studyHours: Record<string, StudyHours | undefined> = {
   },
 };
 
-export function libraryStudyHours(id: string): { name: string; slots: Slot[]; url?: string } | undefined {
+export function libraryStudyHours(id: string): { name: string; slots: Slot[] | null; url?: string } | undefined {
   const hours = studyHours[id];
   if (!hours) return;
   const slots = hours.ranges.flatMap(([days, start, end]) =>
     [...days].map((day) => ({ day: Number(day), start: minutes(start), end: minutes(end) })))
     .sort((first, second) => first.day - second.day || first.start - second.start);
-  return { name: hours.name, slots, url: hours.url };
+  return { name: hours.name, slots: slots.length ? slots : null, url: hours.url };
 }

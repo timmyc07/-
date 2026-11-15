@@ -115,7 +115,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(gonghe.openingHours!, /08:00–12:00、13:00–17:00.*只開放一樓/);
   assert.equal(gonghe.areas.length, 0);
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
-  assert.equal(scheduled.length, 82);
+  assert.equal(scheduled.length, 86);
+  const longgang = libraries.find(({ name }) => name === '桃園市立圖書館龍岡分館')!;
+  assert.equal(longgang.areas[0].seats, 265);
+  assert.equal(longgang.areas[0].slots?.find(({ day }) => day === 1)?.end, minutes('17:00'));
+  const dongshi = libraries.find(({ name }) => name === '桃園市立圖書館東勢分館')!;
+  assert.equal(dongshi.studyRoom, true);
+  assert.equal(dongshi.areas[0].slots, null);
   const dazhu = libraries.find(({ name }) => name === '桃園市立圖書館大竹分館')!;
   assert.equal(dazhu.areas[0].regionalCard, 'taoyuan');
   assert.equal(dazhu.areas[0].seats, 50);

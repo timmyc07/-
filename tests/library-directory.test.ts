@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import type { Library } from '../lib/study.ts';
-import { withLibraryDetail, withTaichungFax, type LibraryDetail } from '../lib/library-details.ts';
+import { withAnnouncedLibraries, withLibraryDetail, withTaichungFax, type LibraryDetail } from '../lib/library-details.ts';
 import { coversCalendarYear, evaluate, minutes, validDate } from '../lib/study.ts';
 import { directionsUrl } from '../lib/distance.ts';
 
@@ -112,6 +112,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(gonghe.areas.length, 0);
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
   assert.equal(scheduled.length, 79);
+  const supplemented = withAnnouncedLibraries(directory.libraries);
+  const main = supplemented.find(({ name }) => name === '新竹縣立總圖書館')!;
+  assert.equal(main.address, '新竹縣竹北市自強三路155號');
+  assert.equal(main.closures[0].until, '2026-12-17');
+  assert(supplemented.some(({ name, openingHours }) => name === '竹北星際圖書館' && openingHours?.includes('24:00')));
+  assert.equal(withAnnouncedLibraries([...directory.libraries, { ...main, id: 'plis-from-directory' }])
+    .filter(({ address }) => address === main.address).length, 1);
   const oldHsinchuCounty = libraries.find(({ id }) => id === 'plis-e94c48945a092b5818d8')!;
   assert.match(oldHsinchuCounty.accessNote!, /各樓層已恢復開放/);
   assert(oldHsinchuCounty.closures.some(({ from }) => from === '2026-11-28'));

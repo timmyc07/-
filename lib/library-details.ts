@@ -106,6 +106,34 @@ const hsinchuHoursOverride = {
 const comparableAddress = (value: string) => value.normalize('NFKC').replaceAll('台', '臺')
   .trim().replace(/^\d{3,6}(?=\s*\D)/, '').replace(/\s/g, '');
 
+const hsinchuOpening = 'https://www.hclibraryopening.com.tw/';
+const stellarOpening = 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11078';
+const announcedLibraries: (Library & { city: string })[] = [
+  {
+    id: 'local-hsinchu-county-main', name: '新竹縣立總圖書館', city: '新竹縣', district: '竹北市',
+    address: '新竹縣竹北市自強三路155號', types: ['公共圖書館'],
+    website: hsinchuOpening, sources: [hsinchuOpening,
+      'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11074'],
+    openingHours: '試營運至 2026 年 11 月 15 日，09:00–21:00，週一休館。12 月 18 日預定正式開館。',
+    areas: [],
+    closures: [{ from: '2026-11-16', until: '2026-12-17', reason: '試營運結束，12 月 18 日預定正式開館',
+      url: hsinchuOpening }],
+  },
+  {
+    id: 'local-zhubei-stellar', name: '竹北星際圖書館', city: '新竹縣', district: '竹北市',
+    address: '新竹縣竹北市中正西路52號', types: ['公共圖書館'],
+    website: stellarOpening, sources: [stellarOpening],
+    openingHours: '試營運：週二至週四 09:00–20:30，週五至週日 09:00–24:00。週一休館，特殊日期依公告。',
+    accessNote: '試營運期間開放館內閱覽，暫停圖書外借及預約。',
+    areas: [], closures: [],
+  },
+];
+
+export function withAnnouncedLibraries(libraries: (Library & { city: string })[]) {
+  return [...libraries, ...announcedLibraries.filter((announced) => !libraries.some((library) =>
+    comparableAddress(library.address) === comparableAddress(announced.address)))];
+}
+
 const faxLocation = (value: string) => comparableAddress(value).replace(/-(?=\d)/g, '之');
 const taichungFaxName = (value: string) => value.normalize('NFKC').replace(/\s/g, '')
   .replace(/^臺中市立圖書館/, '').replace(/(?:國立公共資訊圖書館精武分館|^精武圖書館$)/, '精武圖書館');

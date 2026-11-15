@@ -3,6 +3,22 @@ import { minutes, type Area, type Closure, type Library } from './study.ts';
 const taipeiRule = 'https://tpml.gov.taipei/News_Content.aspx?n=CD4793DE89132E89&s=9C9863C2224D9B5A';
 const taipeiManualRule = 'https://tpml.gov.taipei/News_toggle.aspx?n=B64082F5678B94B1&sms=D0034AF4F8239B65';
 const taipeiDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
+const taipeiWifiSource = 'https://data.taipei/dataset/detail?id=6aa6532d-652f-4c1b-814a-4646b75407af';
+// Taipei Free 熱點名稱須指向館內自修空間，並與館舍地址相符。
+const taipeiStudyWifi = new Set([
+  'plis-b4f11997a2a0f56cc70b', 'plis-2795b0ebc2c7f0ecfff2', 'plis-8630492d73ce2487cd52',
+  'plis-f5eea69421838b246a98', 'plis-1ce0f598d0b6a3cce1c1', 'plis-fc32748ba52020cb1222',
+  'plis-ea82498c00171d923cac', 'plis-ae4afb661db999589383', 'plis-5d716f3883555860336b',
+  'plis-c1eecc7328938e1f8113', 'plis-d14f3a24d79c22efd2da', 'plis-072a27cd0400a9041fe1',
+  'plis-0ea807d14456081b105f', 'plis-89ca1a138e029a9ff0be', 'plis-6405f5727f01d0619cd9',
+  'plis-4235a1e69db7bb767466', 'plis-114080cf8fa32977d08a', 'plis-7decf0dff68a9e8b198d',
+  'plis-bdd0485b3b3e5b926023', 'plis-a41c03305803788dff81', 'plis-686aaa6ffb77e85fd5ad',
+  'plis-c21ff2a6d5f510b7fccd', 'plis-a670c69b2a2a96a3d9fa', 'plis-c815a0be3c424a669f14',
+  'plis-bb2ad3509d4bb274ef1e', 'plis-c5ebd4287161428dd45e', 'plis-963484c045b604f1e7cd',
+  'plis-79c8541a02a760d57156', 'plis-edeec13b64c0ca4d0965', 'plis-744dd53a547fde48cb19',
+  'plis-556af005b3614de06ca7', 'plis-0978ad84e2f92b807a42', 'plis-5ecb8740b96ead296d21',
+  'plis-e0e7f601f41ffc98e2aa', 'plis-9f8e62981180e7c9a7d3', 'plis-e3287dc94a64c9288833',
+]);
 const newTaipeiRule = 'https://www.library.ntpc.gov.tw/singlehtml/e81f432c17614ea4b732e114c365e29b?cntId=26b1530a3e724f44892b6cb0c7c7c5ed';
 const studyConstruction: Record<string, { name: string; closure: Closure; sources?: string[] } | undefined> = {
   'plis-6178fec7a54e55fdd3ff': {
@@ -95,9 +111,13 @@ const branchSeats: Record<string, { count: number; url: string; poweredSeats?: s
 
 export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): Area | undefined {
   const seats = branchSeats[library.id];
-  const withSeats = seats ? { ...area, seats: seats.count,
-    equipment: seats.wifi ? { ...area.equipment, wifi: true } : area.equipment,
-    sources: [...area.sources, seats.url] } : area;
+  const hotspot = taipeiStudyWifi.has(library.id);
+  const withSeats = {
+    ...area,
+    ...(seats ? { seats: seats.count } : {}),
+    equipment: hotspot || seats?.wifi ? { ...area.equipment, wifi: true } : area.equipment,
+    sources: [...area.sources, ...(seats ? [seats.url] : []), ...(hotspot ? [taipeiWifiSource] : [])],
+  };
   const standardSlots = area.slots ?? Array.from({ length: 7 }, (_, day) => ({
     day, start: minutes(day <= 1 ? '09:00' : '08:30'), end: minutes(day <= 1 ? '17:00' : '21:00'),
   }));

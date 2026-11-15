@@ -318,10 +318,14 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   const daoxiang = get('臺北市立圖書館稻香分館');
   const area = daoxiang.areas[0];
   assert.equal(area.seats, 93);
+  assert.equal(area.equipment.wifi, true);
+  assert.equal(area.equipment.outlet, undefined);
+  assert.equal(get('臺北市立圖書館葫蘆堵分館').areas[0].equipment.wifi, undefined);
   const qingjiang = get('臺北市立圖書館清江分館');
   assert.equal(qingjiang.studyRoom, true);
   assert.equal(qingjiang.areas[0].seats, 96);
   assert.equal(qingjiang.areas[0].access, 'walk-in');
+  assert.equal(qingjiang.areas[0].equipment.wifi, true);
   assert.deepEqual(qingjiang.areas[0].slots?.[1], { day: 1, start: minutes('09:00'), end: minutes('17:00') });
   const donghu = get('臺北市立圖書館東湖分館');
   assert.equal(donghu.areas[0].seats, 216);

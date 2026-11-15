@@ -67,6 +67,54 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-674920ab9a5621eaf6cf': {
+    url: 'https://tour.taitung.gov.tw/zh-tw/news/details/6328',
+    facilities: ['縱谷館藏閱讀區', '多媒體視聽室', '自修室', '自修室自動預約機', '預約書自助取書機', '自助借書機', '檢索電腦'],
+  },
+  'plis-3dc026b916c043fe287e': {
+    url: 'https://www.changkang.gov.tw/news/news1/detail/9834',
+    facilities: ['1 樓閱覽區（整修期間）'],
+  },
+  'plis-c9c0fe185180d1def859': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000509',
+    facilities: ['2 樓展覽室', '閱讀室'],
+  },
+  'plis-93dad88977ecbd6b5773': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000511',
+    facilities: ['電腦教室', '開架書庫', '兒童室', '閱覽室'],
+  },
+  'plis-949d8708d5597baaf12e': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000512',
+    facilities: ['1 樓查詢電腦'],
+  },
+  'plis-32d35bec732d1fecb62d': {
+    url: 'https://isp.ncl.edu.tw/teen-tw/cityres?res=0K313038577850072241',
+    facilities: ['青少年專區'],
+  },
+  'plis-09b55d87247eb8201b76': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000516',
+    facilities: ['閱覽室', '兒童讀書區', '育嬰室', '資訊查詢區', '書庫', '電腦教室', '投影設備'],
+  },
+  'plis-55fd79be7a9db6bbe14d': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000517',
+    facilities: ['兒童室', '開架閱覽室', '期刊區', '多功能研習室'],
+  },
+  'plis-c8a5384b2a5dff72b0e6': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000518',
+    facilities: ['視聽室', '兒童室', '閱覽室', '原住民族文物陳列室', '期刊室', '書庫', '資訊閱覽室', '室外閱覽室'],
+  },
+  'plis-41bce5bf027121bcb9e9': {
+    url: 'https://isp.ncl.edu.tw/teen-tw/cityres?res=0K313038577850072241',
+    facilities: ['青少年專區'],
+  },
+  'plis-10d0648b79179b027642': {
+    url: 'https://travelss.net/2026/10/22/lanyu-round2-alley-stroll-2026/',
+    facilities: ['閱覽區'],
+  },
+  'plis-58986cb17ea455f49a96': {
+    url: 'https://isp.ncl.edu.tw/teen-tw/cityres?res=0K313038577850072241',
+    facilities: ['青少年專區'],
+  },
   'plis-e60fc801b70b3694e168': {
     url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000437',
     facilities: ['兒童區', '期刊雜誌區', '多功能教室', '公用電腦'],

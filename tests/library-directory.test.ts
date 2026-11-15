@@ -18,6 +18,19 @@ const directory = JSON.parse(readFileSync(new URL('library-directory.json', root
   libraries: (Library & { city: string })[];
 };
 
+test('國資圖中興分館依專室時段及全館 Wi-Fi 公告建檔', () => {
+  const library = directory.libraries.find(({ id }) => id === 'plis-47d9eb53677ef9688a15')!;
+  const detail = JSON.parse(readFileSync(new URL('library-details.json', root), 'utf8')).libraries[library.id];
+  const enriched = withLibraryDetail(library, detail);
+  const area = enriched.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(area.name, '地下 1 樓自修室');
+  assert.deepEqual(area.slots?.map(({ day, end }) => [day, end]), [
+    [0, minutes('17:00')], ...[2, 3, 4, 5, 6].map((day) => [day, minutes('21:00')]),
+  ]);
+  assert.equal(area.equipment.wifi, true);
+  assert.match(enriched.openingHours!, /兒童閱覽室 09:00–18:00/);
+});
+
 test('全臺名錄可追溯到原檔，保留 22 縣市且不填入未核對的空間規則', () => {
   const raw = readFileSync(new URL(directory.rawFile, root));
   const regions = JSON.parse(raw.toString('utf8')) as { 縣市: string; 圖書館資訊: { Name: string }[] }[];
@@ -140,7 +153,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 144);
+  assert.equal(scheduled.length, 145);
   const yunlin = libraries.find(({ id }) => id === 'plis-3fb94b86e4de966ba65a')!;
   assert.equal(yunlin.areas[0].access, 'walk-in');
   assert.equal(yunlin.areas[0].equipment.outlet, true);

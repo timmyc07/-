@@ -1102,6 +1102,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-47d9eb53677ef9688a15': {
+    url: 'https://www.nlpi.edu.tw/LibraryInfo/libraryinfo?PageType=1&id=7e95d643-5fb0-442e-96a0-f22f9b0fb151&pageIndex=1',
+    hours: '週二至週六：期刊閱報室及自修室 09:00–21:00、書庫 09:00–20:00、兒童閱覽室 09:00–18:00。週日 09:00–17:00，週一及政府公告放假日休館。',
+    supersedesDirectory: true,
+  },
   'plis-6834a05fd469c4134918': {
     url: 'https://www.guoshing.gov.tw/Announcement/news?pageIndex=1&PageType=1&id=1f9e3a65-d85f-4250-97e4-da4d28d4bc2a',
     hours: '搬遷期間週四至週日 08:00–17:00，開放兒童室及部分閱讀空間，提供兒童圖書、成人新書與報章雜誌借還服務。',
@@ -1474,6 +1479,7 @@ const taoyuanSeatSystem: Record<string, { url?: string; seats?: number; name?: s
 };
 
 const localStudyWifi: Record<string, string | undefined> = {
+  'plis-47d9eb53677ef9688a15': 'https://www.nlpi.edu.tw/StaticPage/internet-access',
   'plis-62eb0222ac5626717a13': iTaiwanHotspots,
   'plis-eec71326733024bf68f9': iTaiwanHotspots,
   'plis-5929930cfc61bd687f1f': iTaiwanHotspots,

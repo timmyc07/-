@@ -65,7 +65,72 @@ const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O06560
 const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
 const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
+const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-b4f11997a2a0f56cc70b': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '哺乳室', '無障礙電梯', '筆電區', '預約書自助取書區', '學習 E 樂園', '臺灣原住民族資料專區／書櫃', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-2795b0ebc2c7f0ecfff2': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '哺乳室', '無障礙電梯', '筆電區', '預約書自助取書區', '新住民閱讀專區／書櫃', '青少年閱覽區', '除菌箱'],
+  },
+  'plis-43a6f9462110b6734cd6': {
+    url: taipeiBranchDirectory,
+    facilities: ['還書箱', '哺乳室', '無障礙電梯', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-ae4afb661db999589383': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '哺乳室', '預約書自助取書區', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-5beb89d3a189941fdc17': {
+    url: taipeiBranchDirectory,
+    facilities: ['還書箱', '哺乳室', '無障礙電梯', '預約書自助取書區', '學習 E 樂園', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-89ca1a138e029a9ff0be': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '哺乳室', '無障礙電梯', '筆電區', '預約書自助取書區', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-7decf0dff68a9e8b198d': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '哺乳室', '無障礙電梯', '預約書自助取書區', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-c21ff2a6d5f510b7fccd': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '哺乳室', '無障礙電梯', '筆電區', '預約書自助取書區', '學習 E 樂園', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-a670c69b2a2a96a3d9fa': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '哺乳室', '無障礙電梯', '筆電區', '預約書自助取書區', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-8b76b5bd5da364ef7614': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '哺乳室', '無障礙電梯', '筆電區', '預約書自助取書區', '臺灣原住民族資料專區／書櫃', '除菌箱'],
+  },
+  'plis-c5ebd4287161428dd45e': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '哺乳室', '無障礙電梯', '筆電區', '預約書自助取書區', '臺灣原住民族資料專區／書櫃', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-edeec13b64c0ca4d0965': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '哺乳室', '無障礙電梯', '筆電區', '預約書自助取書區', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-d4a372e3044256cc569b': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '無障礙電梯', '預約書自助取書區', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-556af005b3614de06ca7': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '哺乳室', '無障礙電梯', '筆電區', '預約書自助取書區', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-0978ad84e2f92b807a42': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '無障礙電梯', '筆電區', '預約書自助取書區', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
+  'plis-9f8e62981180e7c9a7d3': {
+    url: taipeiBranchDirectory,
+    facilities: ['自修室', '還書箱', '哺乳室', '無障礙電梯', '筆電區', '預約書自助取書區', '新住民閱讀專區／書櫃', '除菌箱'],
+  },
   'plis-3f6ed064ed62a36e4b9b': {
     url: 'https://www.ksml.edu.tw/mainlibrary/tour/index.aspx?Parser=13,23,937,158',
     facilities: ['地下 1 樓國際繪本中心', '1 樓廣場', '3 樓階梯閣樓', '4 樓公共藝術空間'],

@@ -147,6 +147,10 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert(libraries.every(({ openingHours }) => openingHours));
   const pongnan = libraries.find(({ id }) => id === 'plis-a842920d380a52665656')!;
   assert.match(pongnan.openingHours!, /週三至週五加開 19:00–21:00，2、7、8 月晚間加開擴及週六及週日/);
+  const xinfeng = libraries.find(({ id }) => id === 'plis-6937f16a63ea043f0527')!;
+  const xinfengStudy = xinfeng.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(xinfengStudy.name, '3 樓自修教室');
+  assert.equal(xinfengStudy.slots, null);
   const shuili = libraries.find(({ id }) => id === 'plis-87f04e883855455685fd')!;
   assert.match(shuili.openingHours!, /週二至週日 09:00–17:00（中午不休息）/);
   const jiji = libraries.find(({ id }) => id === 'plis-5587a95889a363b4a4d6')!;

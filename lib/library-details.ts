@@ -988,6 +988,16 @@ const nationalTaiwanLaptopSeats: Area = {
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
 const localReadingAreas: Record<string, Area | undefined> = {
+  'plis-fe9c622fb1bdd5279ec1': {
+    name: '2 樓閱覽區', kind: 'reading', seats: 20,
+    slots: [0, 3, 4, 5, 6].flatMap((day) => [
+      { day, start: minutes('08:30'), end: minutes('12:00') },
+      { day, start: minutes('13:30'), end: minutes('17:00') },
+    ]),
+    access: 'walk-in', equipment: {},
+    entryNote: '開館時可自由入館閱覽，未滿 6 歲須由家長陪同。1 樓期刊區另有 10 個沙發座位，視聽區另設座位。',
+    sources: ['https://matsucc.gov.tw/莒光鄉圖書館/'],
+  },
   'plis-8e698a4770cf01e3875e': {
     name: '1 樓期刊閱報區', kind: 'reading', seats: 80,
     slots: [0, 2, 3, 4, 5, 6].map((day) => ({
@@ -1146,6 +1156,16 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-ca5bd98a9d6dcfd1159b': {
+    url: 'https://cabkc.kinmen.gov.tw/information?pid=22&uid=9',
+    hours: '週一至週日 08:00–12:00、13:30–17:30。四大民俗節日休館。',
+    supersedesDirectory: true,
+  },
+  'plis-7ef0c1dc2c3fc0c85b29': {
+    url: 'https://www.dongyin.gov.tw/Chhtml/Detail/2618?mcid=114292',
+    hours: '館舍開放時間待確認。2026 年 11 月鄉公所刊載的質詢報導提及建議恢復週六及週日服務。',
+    supersedesDirectory: true,
+  },
   'plis-47d9eb53677ef9688a15': {
     url: 'https://www.nlpi.edu.tw/LibraryInfo/libraryinfo?PageType=1&id=7e95d643-5fb0-442e-96a0-f22f9b0fb151&pageIndex=1',
     hours: '週二至週六：期刊閱報室及自修室 09:00–21:00、書庫 09:00–20:00、兒童閱覽室 09:00–18:00。週日 09:00–17:00，週一及政府公告放假日休館。',

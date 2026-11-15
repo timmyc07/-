@@ -226,9 +226,13 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
       url: 'https://www.phlib.nat.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=11299' }] };
   }
   if (library.id === 'plis-9c4e98f5a888073fdc0c') {
-    return { closures: [{ from: '2026-10-27', until: '2026-10-27', reason: '館員選務講習，下午休館',
-      time: { start: minutes('13:30'), end: minutes('17:30') },
-      url: 'https://www.phlib.nat.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=11382' }] };
+    return { closures: [
+      ...closureDates(2026, 'https://www.phlib.nat.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=11355',
+        ['10-25'], '光復節休館'),
+      { from: '2026-10-27', until: '2026-10-27', reason: '館員選務講習，下午休館',
+        time: { start: minutes('13:30'), end: minutes('17:30') },
+        url: 'https://www.phlib.nat.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=11382' },
+    ] };
   }
   if (library.id === 'plis-8edd8ad4e311a6907f92') {
     return { closures: [{ from: '2026-02-14', until: '2026-02-19', reason: '春節休館',

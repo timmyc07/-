@@ -156,7 +156,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 148);
+  assert.equal(scheduled.length, 149);
   const yunlin = libraries.find(({ id }) => id === 'plis-3fb94b86e4de966ba65a')!;
   assert.equal(yunlin.areas[0].access, 'walk-in');
   assert.equal(yunlin.areas[0].equipment.outlet, true);
@@ -357,9 +357,20 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const yilan = libraries.find(({ id }) => id === 'plis-2fcff6be9344e712594c')!;
   assert.equal(yilan.closures[0].from, '2022-03-01');
   for (const { slots } of scheduled) {
-    assert.equal(new Set(slots!.map(({ day }) => day)).size, slots!.length);
     assert(slots!.every(({ day, start, end }) => day >= 0 && day <= 6 && start < end && end <= 1440));
+    assert(slots!.every(({ day, start, end }, index) =>
+      !slots!.slice(index + 1).some((other) => other.day === day && start < other.end && other.start < end)));
   }
+  const xiju = libraries.find(({ id }) => id === 'plis-fe9c622fb1bdd5279ec1')!;
+  const xijuReading = xiju.areas.find(({ kind }) => kind === 'reading')!;
+  assert.equal(xijuReading.seats, 20);
+  assert.equal(xijuReading.access, 'walk-in');
+  assert.deepEqual(xijuReading.slots?.filter(({ day }) => day === 3), [
+    { day: 3, start: minutes('08:30'), end: minutes('12:00') },
+    { day: 3, start: minutes('13:30'), end: minutes('17:00') },
+  ]);
+  const xiyu = libraries.find(({ id }) => id === 'plis-9c4e98f5a888073fdc0c')!;
+  assert.equal(xiyu.closures.find(({ from }) => from === '2026-10-25')?.reason, '光復節休館');
   const pingzhen = libraries.find(({ id }) => id === 'plis-07c47313a8f5b473d2bf')!;
   assert.deepEqual(pingzhen.areas[0].slots?.find(({ day }) => day === 0),
     { day: 0, start: minutes('08:30'), end: minutes('17:00') });

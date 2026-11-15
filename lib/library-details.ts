@@ -8,6 +8,11 @@ import { taipeiStudyRoom } from './taipei-study-rules.ts';
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-d08bf679986d39ae195e': {
+    from: '2026-08-20', until: '2027-02-28',
+    reason: '坪林分館原館施工閉館。2026 年 9 月 1 日起由坪林茶業博物館 3 號展間提供臨時閱覽、預約取書、還書及辦證，復館日期依公告。',
+    url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=f1a94fd6b5b541aa89d0702989c33d77',
+  },
   'plis-114080cf8fa32977d08a': {
     from: '2026-11-16', until: '2026-11-16', reason: '東湖分館地板更新工程閉館一日。',
     url: 'https://reading.tpml.gov.taipei/News_Content.aspx?n=B3B7F57C7B16FDE6&s=009F3A24D6536E3E',

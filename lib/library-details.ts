@@ -1042,6 +1042,20 @@ const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
 const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-e3287dc94a64c9288833': {
+    name: '3 樓筆記型電腦區', kind: 'reading', seats: 71, slots: null, access: 'card', regionalCard: 'taipei',
+    reservation: 'https://seat.tpml.edu.tw/sm/home_web.do#',
+    entryNote: '持臺北市立圖書館個人借閱證，透過空間座位管理系統預約或到館登記。請自備筆電。',
+    equipment: { laptop: true, outlet: true },
+    sources: ['https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=E9D3E1E398ACCE44',
+      'https://tpml.gov.taipei/News_toggle.aspx?n=B64082F5678B94B1&sms=D0034AF4F8239B65'],
+  },
+  'plis-c1eecc7328938e1f8113': {
+    name: '3 樓筆記型電腦區', kind: 'reading', seats: 14, slots: null, access: null,
+    equipment: { laptop: true, outlet: true },
+    sources: ['https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=C74FF235C1C51515',
+      'https://tpml.gov.taipei/News_toggle.aspx?n=B64082F5678B94B1&sms=D0034AF4F8239B65'],
+  },
   'plis-7d0a942d6021349d56dd': {
     name: '4 樓一般閱覽區', kind: 'reading', slots: null, access: null,
     equipment: { laptop: true, outlet: true },
@@ -1307,6 +1321,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-f37b49d54805d1b961ae': {
+    url: 'https://www.beigan.gov.tw//chhtml/content/2187',
+    note: '開館時可自由入館閱覽，6 歲以下兒童請由家長陪同。借還書及辦證於閉館前 10 分鐘停止受理。館內電腦須持本人借閱證到櫃檯登記，每時段 30 分鐘，每人每日最多 1 小時，預約逾 15 分鐘未到視同取消。',
+  },
   'plis-942c78ab15d304c768e8': {
     url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=003&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
     note: '全館共有 132 席閱覽座位。2 樓設自修室，專室席數待確認。',

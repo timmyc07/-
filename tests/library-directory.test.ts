@@ -336,6 +336,11 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
     [0, 2, 3, 4, 5, 6].map((day) => ({ day, start: minutes('08:00'), end: minutes('17:00') })));
   const shoufeng = libraries.find(({ id }) => id === 'plis-c601d6fcc4e455f93f93')!;
   assert.equal(shoufeng.closures[0].until, '2026-12-08');
+  assert.match(shoufeng.closures[0].reason, /館外還書箱/);
+  const wanrong = libraries.find(({ id }) => id === 'plis-d6eefd9316cdacfd6e67')!;
+  assert.equal(wanrong.closures[0].from, '2026-05-20');
+  assert.equal(wanrong.closures[0].until, '2026-12-31');
+  assert.match(wanrong.openingHours!, /萬榮鄉公所 2 樓/);
   const fonglin = libraries.find(({ id }) => id === 'plis-96bdb053d7e967f965dc')!;
   assert.deepEqual(fonglin.calendarYears, [2026]);
   assert(fonglin.closures.some(({ from, until }) => from === '2026-02-14' && until === '2026-02-23'));

@@ -340,8 +340,9 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
       url: 'https://www.ji-an.gov.tw/library/news/v0umkckZlZEA' }] };
   }
   if (library.id === 'plis-c601d6fcc4e455f93f93') {
-    return { closures: [{ from: '2026-10-20', until: '2026-12-08', reason: '外牆改善工程暫停服務，預計 12 月 9 日重新開館',
-      url: 'https://library.hccc.gov.tw/ct.asp?ctNode=925&mp=20&xItem=8738' }] };
+    return { closures: [{ from: '2026-10-20', until: '2026-12-08',
+      reason: '外牆改善工程期間暫停館內服務，還書請使用館外還書箱。預計 12 月 9 日重新開館。',
+      url: 'https://library.hccc.gov.tw/ct.asp?ctNode=1051&mp=20&xItem=8738' }] };
   }
   if (library.id === 'plis-b19f4a632868ac1ed335') {
     const url = 'https://lib.bocach.gov.tw/News_Content.aspx?n=887&s=54813&sms=10437';

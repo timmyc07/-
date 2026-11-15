@@ -10,6 +10,11 @@ import nclStudyRooms from './ncl-study-rooms.json' with { type: 'json' };
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-d6eefd9316cdacfd6e67': {
+    from: '2026-05-20', until: '2026-12-31',
+    reason: '耐震補強工程期間暫停開館。萬榮鄉公所 2 樓文化暨觀光課提供現場還書及取書。恢復日期依館方公告。',
+    url: 'https://www.wanrung.gov.tw/News_Content.aspx?n=11750&s=209430',
+  },
   'plis-6834a05fd469c4134918': {
     from: '2026-10-31', until: '2026-12-31',
     reason: '新館工程尚未完竣，暫停開放至 2026 年 12 月 31 日。國姓鄉立圖書館館藏可投還書箱。恢復日期依館方公告。',

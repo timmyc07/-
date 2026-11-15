@@ -283,6 +283,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(xinwu.studyRoom, false);
   assert.equal(xinwu.areas.length, 0);
   assert.match(xinwu.openingHours!, /臨時營運所/);
+  const fugang = libraries.find(({ id }) => id === 'plis-b4d4a98c101cbfdc3b6d')!;
+  const fugangReading = fugang.areas.find(({ kind }) => kind === 'reading')!;
+  assert.equal(fugangReading.seats, 7);
+  assert.equal(fugangReading.slots, null);
+  assert.equal(fugangReading.access, null);
+  assert.equal(fugang.areas.find(({ kind }) => kind === 'study')?.seats, 38);
+  assert.match(fugang.accessNote!, /兒童閱覽區約 12 席.*9 席/);
   const yangmei = libraries.find(({ id }) => id === 'plis-01e95280aebec7eba09c')!;
   assert.equal(yangmei.areas[0].seats, 160);
   assert.match(yangmei.accessNote!, /期刊閱報區約 20 席、兒童閱覽區約 15 席/);

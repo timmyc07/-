@@ -1018,7 +1018,12 @@ const dagangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/030';
 const mituoSeatDirectory = 'https://www.ksml.edu.tw/lib/content/Details.aspx?Parser=1,55,565,559,,,283';
 const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
+const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-b4d4a98c101cbfdc3b6d': {
+    name: '期刊閱報區', kind: 'reading', seats: 7, slots: null, access: null, equipment: {},
+    sources: [fugangLibrary],
+  },
   'plis-f1eea7fcf8a4cde646ee': {
     name: '閱覽座位', kind: 'reading', seats: 136, slots: null, access: null, equipment: {},
     sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,73,763,757'],
@@ -1243,6 +1248,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-b4d4a98c101cbfdc3b6d': {
+    url: fugangLibrary,
+    note: '兒童閱覽區約 12 席，視聽資料播放區有 9 席。',
+  },
   'plis-01e95280aebec7eba09c': {
     url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/017',
     note: '期刊閱報區約 20 席、兒童閱覽區約 15 席，另有視聽資料播放區 2 席及約可容納 18 人的研習教室。',

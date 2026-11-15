@@ -67,6 +67,122 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-dd0e38aa18f750ffcade': {
+    url: 'https://www.typl.gov.tw/zh-tw/News/Content/3345',
+    facilities: ['1 樓臨時服務櫃檯', '1 樓還書箱'],
+  },
+  'plis-62eb0222ac5626717a13': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/044',
+    facilities: ['期刊閱覽區', '報紙閱覽區', '上網區', '兒童閱覽室', '圖書閱覽區', '英文分級讀物專區', '研習教室', '藝文展覽區', '地下 1 樓自修室'],
+  },
+  'plis-8d09da2a8c7fc2f99893': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/010',
+    facilities: ['閱報區', '開放閱覽室', '書庫'],
+  },
+  'plis-01e95280aebec7eba09c': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/017',
+    facilities: ['自修室', '期刊閱報區', '兒童閱覽區', '視聽資料播放區', '研習教室'],
+  },
+  'plis-3fe72b1ccca37949b0a8': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/039',
+    facilities: ['資訊檢索區', '期刊閱報區', '故事坊', '青少年漫畫區', '2 樓自修閱覽室', '書庫', '兒童室'],
+  },
+  'plis-9c317ee99e20f7ec3cd3': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/014',
+    facilities: ['館藏區', '兒童區', '閱報區', '上網區', '研習教室', '6 樓自修室'],
+  },
+  'plis-77084e202fe916823f9a': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/032',
+    facilities: ['一般閱覽區', '期刊區', '兒童閱覽區', '資訊檢索區', '主題書展區', '3 樓自修室'],
+  },
+  'plis-07c47313a8f5b473d2bf': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/028',
+    facilities: ['兒童圖書室', '期刊閱報區', '個人視聽室', '書庫', '上網區', '無線上網筆電區', '3 樓自修閱覽室', '研習教室'],
+  },
+  'plis-094ed6f57775956545a2': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/046',
+    facilities: ['期刊閱報區', '兒童閱覽室', '親子共讀區', '網路資源檢索區', '閱覽室', '文化教室', '3 樓自修室'],
+  },
+  'plis-68b3417f5a99cefe007d': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/049',
+    facilities: ['期刊閱報區', '親子閱讀區', '閱覽區', '參考區', '網路資源檢索區', '1 樓自修室', '書庫'],
+  },
+  'plis-163c307c64aa5fc02e8a': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/048',
+    facilities: ['兒童室', '閱覽室', '閱報區', '2 樓自修區', '期刊區', '網路檢索區', '無線上網區'],
+  },
+  'plis-ab3dfbc049455a84068e': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/047',
+    facilities: ['兒童閱覽室', '自修室', '文化教室', '閱覽室', '網路資源檢索區'],
+  },
+  'plis-34e3306f3ab833c97a42': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/043',
+    facilities: ['書庫', '特色館藏區', '期刊區', '上網區', '兒童室', '3 樓自修室', '筆電區'],
+  },
+  'plis-5f74f02b42c06b3fc9d9': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/016',
+    facilities: ['自修室', '閱報區', '筆電區', '兒童閱覽區', '研習教室', '木地板教室'],
+  },
+  'plis-b4d4a98c101cbfdc3b6d': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/015',
+    facilities: ['視聽資料播放區', '兒童閱覽區', '期刊閱報區', '自修室', '討論室'],
+  },
+  'plis-0670e73215c152add507': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/038',
+    facilities: ['地下 1 樓自修室', '兒童親子閱讀區', '期刊報紙閱讀區', '青少年區', '館藏特色區'],
+  },
+  'plis-917334d7cea0e59828e0': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/031',
+    facilities: ['一般閱覽區', '期刊區', '兒童閱覽區', '資訊檢索區'],
+  },
+  'plis-99799da6e29815c7da11': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/030',
+    facilities: ['一般閱覽區', '期刊區', '兒童閱覽區', '資訊檢索區', '2 樓自修室', '閱報區'],
+  },
+  'plis-4f772c9702962d95b0f8': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/029',
+    facilities: ['閱覽區', '期刊區', '兒童閱覽區', '資訊檢索區'],
+  },
+  'plis-e13b542aa05bf70e234a': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/011',
+    facilities: ['兒童區', '期刊閱報區', '上網區', '自修室'],
+  },
+  'plis-62af35b79d7d88c393d7': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/027',
+    facilities: ['書庫', '兒童閱讀區', '閱報期刊區', '參考區', '電腦網路區', '3 樓自修室', '筆電區'],
+  },
+  'plis-bb87f2dc7cdcad6eca8b': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/036',
+    facilities: ['期刊閱覽室', '兒童室', '視聽教室', '自修閱覽室', '查詢用電腦室'],
+  },
+  'plis-b9b43f111c155ee7f7b1': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/013',
+    facilities: ['閱報區', '閱讀區', '書庫'],
+  },
+  'plis-369d482f8c183f32943f': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/037',
+    facilities: ['書庫', '期刊及閱報區', '2 樓自修室'],
+  },
+  'plis-6a9da03cdd3715adb30c': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/042',
+    facilities: ['閱報區', '網路資訊區', '期刊區', '兒童室', '無線上網筆電區', '書庫', '參考室', '地方文獻室', '4 樓自修閱覽室', '多功能教室'],
+  },
+  'plis-112e55434de56841e873': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/051',
+    facilities: ['閱覽室', '書庫', '兒童區', '期刊區', '視聽區', '5 樓自修室'],
+  },
+  'plis-b208b8b3efcd2c80cbaa': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/018',
+    facilities: ['閱覽區', '期刊閱報區', '筆電區', '上網區', '視聽資料播放區', '會議室', '討論室'],
+  },
+  'plis-9df366887a25b0673ee7': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/04',
+    facilities: ['閱覽區', '期刊閱報區', '筆電區', '上網區', '多功能研習教室'],
+  },
+  'plis-a38508dd33caf0cfefdc': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/034',
+    facilities: ['1 樓自習室', '開架閱覽區', '多元音樂區', '兒童閱覽區', '樂齡閱覽區', '圖書館藝廊', '影音專區', '上網區', '研習室', '多功能教室'],
+  },
   'plis-b4f11997a2a0f56cc70b': {
     url: taipeiBranchDirectory,
     facilities: ['自修室', '還書箱', '哺乳室', '無障礙電梯', '筆電區', '預約書自助取書區', '學習 E 樂園', '臺灣原住民族資料專區／書櫃', '新住民閱讀專區／書櫃', '除菌箱'],

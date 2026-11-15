@@ -3,6 +3,7 @@ import type { Area, Slot } from './study.ts';
 
 export const kaohsiungHoursSource = 'https://www.ksml.edu.tw/content/index.aspx?Parser=1,3,45,27';
 const rules = 'https://www.ksml.edu.tw/content/index.aspx?Parser=1,8,899,50';
+const equipmentFaq = 'https://www.ksml.edu.tw/faq/index.aspx?Parser=27,8,64,,,,,,,,5';
 const entries: Record<string, { seats: number; slots: Slot[] } | null | undefined> = rooms;
 const publishedRoomNames: Record<string, string | undefined> = {
   'plis-38b264704ba919b0a591': '3 樓自修室',
@@ -17,8 +18,8 @@ export function kaohsiungStudyRoom(id: string): Area | null | undefined {
     name: publishedRoomNames[id] ?? '自修室',
     kind: 'study',
     access: 'walk-in',
-    entryNote: '現場入座，館方得於開館前發放號碼牌。',
-    equipment: {},
-    sources: [kaohsiungHoursSource, rules],
+    entryNote: '現場入座，館方得於開館前發放號碼牌。筆電、無線網路及插座請使用館內無線上網服務區。',
+    equipment: { laptop: false, wifi: false, outlet: false },
+    sources: [kaohsiungHoursSource, rules, equipmentFaq],
   };
 }

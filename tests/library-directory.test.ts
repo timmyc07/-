@@ -310,6 +310,7 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
   const cijin = libraries.find(({ name }) => name === '高雄市立圖書館旗津分館')!;
   assert.equal(cijin.areas[0].seats, 38);
   assert.equal(cijin.areas[0].access, 'walk-in');
+  assert.deepEqual(cijin.areas[0].equipment, { laptop: false, wifi: false, outlet: false });
   const query = {
     date: '2026-11-28', start: minutes('14:00'), duration: 120,
     kind: 'study' as const, card: false, registration: false, required: [],

@@ -331,6 +331,14 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   assert.equal(fuying.seats, 117);
   assert.equal(fuying.equipment.outlet, true);
   assert.match(fuying.entryNote!, /28 席/);
+  assert.equal(get('新北市立圖書館中和分館').studyRoom, false);
+  const taishan = get('新北市立圖書館泰山分館');
+  const request = { date: '2026-12-10', start: minutes('14:00'), duration: 60,
+    kind: 'study' as const, card: false, registration: false, required: [] };
+  assert.equal(taishan.areas[0].seats, 170);
+  assert.equal(evaluate(taishan, taishan.areas[0], request).closure?.until, '2026-12-10');
+  assert.equal(evaluate(taishan, undefined, { ...request, kind: 'reading' }).closure, undefined);
+  assert.equal(evaluate(taishan, taishan.areas[0], { ...request, date: '2026-12-11' }).closure, undefined);
 });
 
 test('年度休館按館方範圍套用，部分開放與跨年時段各自判定', () => {

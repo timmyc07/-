@@ -10,6 +10,7 @@ export const regionalCards = {
 export type Facility = keyof typeof facilities;
 export type Slot = { day: number; start: number; end: number };
 export type Area = {
+  closures?: Closure[];
   name: string;
   kind: 'study' | 'quiet' | 'reading';
   slots: Slot[] | null;
@@ -112,7 +113,8 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
   }
   const missing: string[] = [];
   const failed: string[] = [];
-  const closures = library.closures.filter(({ from, until }) => from <= query.date && (!until || query.date <= until));
+  const closures = [...library.closures, ...(area?.closures ?? [])]
+    .filter(({ from, until }) => from <= query.date && (!until || query.date <= until));
   const closure = closures.find(({ time }) => !time || (time.start < end && query.start < time.end));
   if (closure) failed.push(closure.reason);
   if (!coversCalendarYear(library, Number(query.date.slice(0, 4))) ||

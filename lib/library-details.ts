@@ -56,6 +56,11 @@ const serviceUpdates: Record<string, { url: string; note: string } | undefined> 
   },
 };
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-d9870072fabe0dbffb74': {
+    url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=5e4f32adbc9247199415370f12f3326a',
+    hours: '原館自 2026 年 6 月 25 日起閉館整修。復興綜合大樓 1 樓臨時服務據點週二至週六 09:00–21:00，週日及週一 09:00–17:00，國定假日休息。',
+    studyRoom: false, supersedesDirectory: true,
+  },
   'plis-851a10bc58bf5f5c6fcb': {
     url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=2ac534a25d4f41e292b4db4f43b8197e',
     hours: '原館自 2026 年 6 月 1 日起閉館重建。文化路一段 18 號 1 樓臨時據點提供預約取書、還書及辦證。',

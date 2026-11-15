@@ -1347,6 +1347,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-9f7edd85cf79ea635049': {
+    url: 'https://yilan.e-land.gov.tw/News.aspx?n=18708&sms=16140',
+    note: '使用筆電請勿影響他人。筆電、平板、手機等個人電子設備須自備電力，館內供電限緊急充電站與 2 樓自修區指定範圍。',
+  },
   'plis-09b55d87247eb8201b76': {
     url: 'https://kmfinance.kinmen.gov.tw/news.aspx?Create=1&PageSize=999&n=55FDE4EAE7CDA1E6&page=10&sms=4FEFD09995C4BB81',
     note: '鄉公所原公告 2025 年 12 月至 2026 年 6 月整修休館。大埔 49 之 1 號自 2026 年 4 月起另作鄉公所辦公地點，圖書館目前的開放狀態請先向館方確認。',

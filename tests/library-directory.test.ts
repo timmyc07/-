@@ -626,6 +626,9 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
     closures.some(({ from }) => from === '2026-11-28')).length, 9);
   const miaoli = libraries.filter(({ city }) => city === '苗栗縣');
   const election = { ...taipeiQuery, date: '2026-11-28' };
+  const dacun = libraries.find(({ id }) => id === 'plis-e2293e37a8a158591761')!;
+  assert.match(evaluate(dacun, undefined, election).closure!.reason, /選舉日休館/);
+  assert.equal(evaluate(dacun, undefined, { ...election, date: '2026-11-29' }).closure, undefined);
   assert.equal(miaoli.filter((library) => evaluate(library, undefined, election).closure?.from === election.date).length, 18);
   const sanwan = miaoli.find(({ id }) => id === 'plis-708a19a863b754e58e04')!;
   assert.match(sanwan.openingHours!, /選舉日休館/);

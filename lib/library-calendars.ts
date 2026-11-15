@@ -128,6 +128,7 @@ const electionClosureRules: Record<string, string> = {
   'plis-7417038e0db9b35c62ea': 'https://www.houlong.gov.tw/cp.aspx?n=4134',
   'plis-12a529595d2715dda629': yuanlinLibraryRules,
   'plis-016c903b9ad9d1b886d6': yuanlinLibraryRules,
+  'plis-e2293e37a8a158591761': 'https://lib.bocach.gov.tw/cp.aspx?n=1206',
   'plis-e94c48945a092b5818d8': 'https://www.hchcc.gov.tw/Tw/Common/SinglePage?filter=55A4FB62-998F-4818-BDE2-08AF8B3245C2',
   'plis-24ed27c19953ccb5f0c4': 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_4295&mp=1&orgId=004&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
   'plis-bda0333882d76e416b20': 'https://hcplibrary.hchcc.gov.tw/wSite/sp?orgId=009&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',

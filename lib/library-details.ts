@@ -82,6 +82,23 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-5da75c6e4e69a34999e4': {
+    url: buildingClosures['plis-5da75c6e4e69a34999e4']!.url,
+    facilities: ['童書區', '繪本區', '幼兒書區', '外文區', '期刊區', '視聽區', '漫畫區', '資訊檢索區'],
+  },
+  'plis-79f43b2ba26bb9afade0': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/02',
+    facilities: ['閱報區', '服務諮詢處', '開放閱覽室', '書庫'],
+  },
+  'plis-eb5cc227330385ea9b00': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000308',
+    facilities: ['1 樓期刊室', '2、3 樓普通閱覽室'],
+  },
+  'plis-27e42cf8f073cee7c04f': {
+    url: 'https://www.library.taichung.gov.tw/lib/Introduction/index?Parser=99,108,224',
+    facilities: ['兒童區', '樂齡區', '文學區', '青少年區', '戶外閱讀區', '一般圖書區', '臺中作家圖書區', '大講堂',
+      '多媒體區', '討論室', '筆電席位', '電梯', '資訊檢索區', '哺集乳室', '親子廁所', '自動借還書機'],
+  },
   'plis-ed53f27461a95b24573d': {
     url: 'https://libstat.ncl.edu.tw/libraryDataDetail/L3351000',
     facilities: ['1 樓報紙期刊區', '1 樓兒童書庫', '1 樓自修區', '2 樓成人書庫', '地下室活動空間'],

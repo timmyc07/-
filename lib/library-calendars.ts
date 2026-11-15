@@ -8,6 +8,7 @@ const electionUrl = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=353f6
 const keelungUrl = 'https://kllib.klcg.gov.tw/News_Content.aspx?n=7789&s=16436&sms=12521';
 const taoyuanUrl = 'https://www.typl.gov.tw/zh-tw/News/Content/1067';
 const kaohsiungUrl = 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,33,,,,15495';
+const tainanMainUrl = 'https://www.tnpl.tn.edu.tw/u4914263388070917076/a1';
 
 function closureDates(year: number, url: string, dates: string[], reason: string): Closure[] {
   return dates.map((date) => ({ from: year + '-' + date, until: year + '-' + date, reason, url }));
@@ -100,4 +101,12 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     };
   }
   if (kaohsiungStudyRoom(library.id) !== undefined) return { calendarYears: [2026], closures: kaohsiung2026 };
+  if (library.id === 'plis-1b4fab4fae6901d46c23') {
+    return {
+      calendarYears: [2026],
+      closures: [...holidays(2026, tainanMainUrl, '02-19', '06-19', '09-25'),
+        ...closureDates(2026, tainanMainUrl, ['11-28'], '選舉日休館')],
+      checkDates: ['2026-02-20', '2026-02-21'],
+    };
+  }
 }

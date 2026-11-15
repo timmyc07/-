@@ -2,6 +2,7 @@ import type { Area, Library } from './study.ts';
 import { libraryStudyHours } from './library-study-hours.ts';
 import { libraryCalendar } from './library-calendars.ts';
 import { kaohsiungHoursSource, kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
+import { tainanStudyRoom } from './tainan-study-rules.ts';
 import { taipeiStudyRoom } from './taipei-study-rules.ts';
 
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
@@ -58,16 +59,17 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   if (!detail?.address || comparableAddress(detail.address) !== comparableAddress(library.address)) return library;
   const local = detail.hours ? undefined : localHours[library.id];
   const closure = buildingClosures[library.id];
-  const study = detail.hours ? libraryStudyHours(library.id) : undefined;
+  const study = libraryStudyHours(library.id);
   const listed = Boolean(detail.facilities?.some((facility) => /^自[修習]室$/.test(facility)));
   const area: Area = {
     name: study?.name ?? '自修室', kind: 'study', slots: study?.slots ?? null, access: null, equipment: {},
     sources: [study?.url ?? (local?.studyRoom ? local.url : detail.url)],
   };
   const taipeiArea = taipeiStudyRoom(library, area, listed);
+  const tainanArea = tainanStudyRoom(library.id, area);
   const kaohsiungArea = kaohsiungStudyRoom(library.id);
-  const localArea = kaohsiungArea ?? localStudyRoom(library.id, taipeiArea ?? area);
-  const studyRoom = Boolean(study || local?.studyRoom || listed || taipeiArea || kaohsiungArea);
+  const localArea = kaohsiungArea ?? tainanArea ?? localStudyRoom(library.id, taipeiArea ?? area);
+  const studyRoom = Boolean(study || local?.studyRoom || listed || taipeiArea || tainanArea || kaohsiungArea);
   const calendar = libraryCalendar(library);
   return {
     ...library,

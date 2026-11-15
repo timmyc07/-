@@ -93,7 +93,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   };
   const libraries = directory.libraries.map((library) => withLibraryDetail(library, details[library.id]));
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
-  assert.equal(scheduled.length, 59);
+  assert.equal(scheduled.length, 62);
   for (const { slots } of scheduled) {
     assert.equal(new Set(slots!.map(({ day }) => day)).size, slots!.length);
     assert(slots!.every(({ day, start, end }) => day >= 0 && day <= 6 && start < end && end <= 1440));
@@ -107,6 +107,29 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   });
   assert.equal(result.status, 'no');
   assert.equal(result.closure?.from, '2026-03-02');
+});
+
+test('臺南溫書窩採專室入場及設備規則，其他館舍的入座方式依個別證據', () => {
+  const { libraries: details } = JSON.parse(readFileSync(new URL('library-details.json', root), 'utf8')) as {
+    libraries: Record<string, LibraryDetail>;
+  };
+  const get = (name: string) => {
+    const library = directory.libraries.find((record) => record.name === name)!;
+    return withLibraryDetail(library, details[library.id]);
+  };
+  const main = get('臺南市立圖書館(新總館)');
+  const area = main.areas[0];
+  assert.equal(area.name, 'B1 溫書窩');
+  assert.equal(area.seats, 130);
+  assert.equal(area.equipment.laptop, false);
+  const query = {
+    date: '2026-11-28', start: minutes('14:00'), duration: 120, registration: true, card: false,
+    kind: 'study' as const, required: [], regionalCards: ['tainan' as const],
+  };
+  assert.equal(evaluate(main, area, query).closure?.reason, '選舉日休館');
+  assert.equal(evaluate(main, area, { ...query, date: '2026-11-29' }).status, 'yes');
+  assert.equal(get('臺南市東區裕文圖書館').areas[0].access, 'walk-in');
+  assert.equal(get('臺南市安南區土城圖書館').areas[0].slots, null);
 });
 
 test('高雄以館方自修室欄決定席次與時段，總館和分館依公告區別假日', () => {

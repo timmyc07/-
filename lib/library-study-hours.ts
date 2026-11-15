@@ -36,6 +36,18 @@ const studyHours: Record<string, StudyHours | undefined> = {
   'plis-016c903b9ad9d1b886d6': { name: '讀者自修室', ranges: [['023456', '08:00', '21:00']] },
   'plis-e7aaecf3515c7452935c': { name: '自修室', ranges: [['2345', '08:30', '20:00'], ['06', '08:30', '17:00']] },
   'plis-57c550f79ce262c9b2d6': { name: '自修室', ranges: [['2', '09:00', '17:00'], ['03456', '08:00', '21:00']] },
+  'plis-518cafd6d62c58eabe4d': {
+    name: '3 樓自修室', ranges: [['2', '09:00', '17:00'], ['03456', '08:00', '21:00']],
+    url: 'https://www.tnpl.tn.edu.tw/page/EachPavilionList.aspx',
+  },
+  'plis-e1e2bc4b4c8213751baa': {
+    name: '自修室', ranges: [['2', '09:00', '17:00'], ['03456', '08:00', '21:00']],
+    url: 'https://www.tnpl.tn.edu.tw/page/EachPavilionList.aspx',
+  },
+  'plis-1b4fab4fae6901d46c23': {
+    name: 'B1 溫書窩', ranges: [['23456', '08:30', '21:00'], ['0', '08:30', '17:30']],
+    url: 'https://www.tnpl.tn.edu.tw/n14721285094990013329/n1Content',
+  },
   'plis-421acf277000ebf61419': { name: '自修室', ranges: [['23456', '08:00', '22:00'], ['0', '08:00', '17:00']] },
   'plis-b8bd9cf1d6684cef5d51': { name: '自修室', ranges: [['023456', '09:00', '20:00']] },
   'plis-387900bcde6ccbe06570': { name: '自修室', ranges: [['023456', '08:10', '17:30']] },

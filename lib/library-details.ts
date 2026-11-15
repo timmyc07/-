@@ -1028,6 +1028,10 @@ const localReadingAreas: Record<string, Area | undefined> = {
   },
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-e05db638ff1f09f7be82': {
+    url: 'https://files.chcg.gov.tw/files/68_20250407115710143_彰化縣福興鄉立圖書館借閱規定.pdf',
+    note: '館方借閱規定指出，館內座位供閱覽館藏使用，請勿佔位自修。',
+  },
   'plis-50a85fd5bd2678f089ba': {
     url: 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=E90637FFE06B2379',
     note: '縣府館舍頁列有一樓自修室，國家圖書館館別統計列為無自修室。現況與使用時段請洽館方。',

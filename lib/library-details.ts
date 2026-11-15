@@ -8,6 +8,10 @@ import { taipeiStudyRoom } from './taipei-study-rules.ts';
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-5b3805f2ce866586020e': {
+    from: '2026-04-15', reason: '新竹市圖書館總館閉館重建中，復館日期以館方公告為準。',
+    url: 'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=b39fff74-7075-46ee-85c5-dee460b6f208',
+  },
   'plis-eb5cc227330385ea9b00': {
     from: '2026-03-02', reason: '自 2026 年 3 月 2 日起閉館施工，復館日期以館方公告為準。',
     url: 'https://www.cna.com.tw/postwrite/chi/425420',
@@ -37,6 +41,10 @@ const localHours: Record<string, { url: string; hours: string; studyRoom?: true 
     hours: '週一至週五 08:00–12:00、13:00–17:00。週六、週日及國定假日休館。',
   },
 };
+const hsinchuHoursOverride = {
+  url: 'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=b39fff74-7075-46ee-85c5-dee460b6f208',
+  hours: '週二至週五 09:00–21:00，週六及週日 09:00–17:00。假日異動依館方公告。',
+};
 
 const comparableAddress = (value: string) => value.normalize('NFKC').replaceAll('台', '臺')
   .trim().replace(/^\d{3,6}(?=\s*\D)/, '').replace(/\s/g, '');
@@ -56,8 +64,14 @@ export function withTaichungFax(library: Library, directory: Library[]): Library
 }
 
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
+  if (library.id === 'plis-1d5bc6bb745d6ead49e9' && library.address === '苗栗縣竹南鎮大厝里真如路562號') {
+    detail = { url: 'https://www.chunan.gov.tw/cp.aspx?n=11120', address: library.address,
+      hours: '每日 08:00–18:00，春節及國定假日休館。' };
+  }
   if (!detail?.address || comparableAddress(detail.address) !== comparableAddress(library.address)) return library;
   const local = detail.hours ? undefined : localHours[library.id];
+  const hoursOverride = ['plis-9709456f17abc6c6a512', 'plis-5929930cfc61bd687f1f'].includes(library.id)
+    ? hsinchuHoursOverride : undefined;
   const closure = buildingClosures[library.id];
   const study = libraryStudyHours(library.id);
   const listed = Boolean(detail.facilities?.some((facility) => /^自[修習]室$/.test(facility)));
@@ -73,7 +87,7 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const calendar = libraryCalendar(library);
   return {
     ...library,
-    openingHours: closure?.reason ?? library.openingHours ?? detail.hours ?? local?.hours,
+    openingHours: closure?.reason ?? library.openingHours ?? hoursOverride?.hours ?? detail.hours ?? local?.hours,
     calendarYears: calendar?.calendarYears ?? library.calendarYears,
     checkDates: calendar?.checkDates ? [...new Set([...(library.checkDates ?? []), ...calendar.checkDates])] : library.checkDates,
     closures: [...library.closures, ...(calendar?.closures ?? []), ...(closure ? [closure] : [])],
@@ -82,12 +96,17 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     areas: studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
       ? [...library.areas, localArea] : library.areas,
     sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []),
+      ...(hoursOverride ? [hoursOverride.url] : []),
       ...(kaohsiungArea === null ? [kaohsiungHoursSource] : []),
       ...(calendar?.closures.map(({ url }) => url) ?? []), ...(closure ? [closure.url] : [])])],
   };
 }
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-5929930cfc61bd687f1f') {
+    return { ...area, seats: 216, equipment: { outlet: true },
+      sources: [...area.sources, 'https://library.hccg.gov.tw/chhcml/app/digital/view?id=55&module=branchLibrary&serno=15f84f6d-dc3c-4b82-8e80-df80b371c164'] };
+  }
   if (id === 'plis-6c9e30dc1c6abf7a17d4') {
     return {
       ...area, access: 'card', regionalCard: 'keelung', seats: 109,

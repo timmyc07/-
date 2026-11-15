@@ -17,8 +17,9 @@ export function distanceKm(from?: Coordinates, to?: Coordinates) {
   return 6371 * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
 }
 
-export function directionsUrl({ latitude, longitude }: Coordinates) {
+export function directionsUrl(location: Coordinates | string) {
+  const destination = typeof location === 'string' ? location : location.latitude + ',' + location.longitude;
   return 'https://www.google.com/maps/dir/?' + new URLSearchParams({
-    api: '1', destination: latitude + ',' + longitude,
+    api: '1', destination,
   });
 }

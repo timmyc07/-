@@ -64,6 +64,14 @@ for (const { 縣市: city, 圖書館資訊: records } of regions) {
       library.sources.push('https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000402',
         'https://www.tbkc.gov.tw/FileOutput/Page/高雄市政府交通局路外停車場一覽表.pdf?id=3dff30f4-b62e-4a4a-8e01-d8d0a5ff55c1');
     }
+    if (name === '苗栗縣竹南鎮立圖書館' && library.address === '苗栗縣竹南鎮中正路108號') {
+      library.address = '苗栗縣竹南鎮大厝里真如路562號';
+      library.phone = '037-463813';
+      library.website = 'https://www.chunan.gov.tw/cp.aspx?n=11120';
+      library.coordinates = undefined;
+      library.fax = undefined;
+      library.sources.push(library.website, 'https://www.miaoli.gov.tw/News_Content2.aspx?n=285&s=1005335');
+    }
     libraries.push(library);
   }
 }

@@ -245,7 +245,7 @@ function LibraryCard({ library, area, status, reasons, closure, openUntil, dista
       <div><dt>充電</dt><dd>{visit.power}</dd></div>
     </dl>}
     <div className="card-actions">
-      {library.coordinates && <a href={directionsUrl(library.coordinates)}
+      {(library.coordinates || library.address) && <a href={directionsUrl(library.coordinates ?? library.address)}
         aria-label={library.name + ' Google 地圖導航'}>地圖導航 ↗</a>}
       {!closure && area?.reservation && <a href={area.reservation}>前往館方預約 ↗</a>}
       {library.phone && <a href={'tel:' + library.phone}>電洽 {library.phone}</a>}

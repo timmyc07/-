@@ -109,4 +109,8 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
       checkDates: ['2026-02-20', '2026-02-21'],
     };
   }
+  if (library.id === 'plis-1d5bc6bb745d6ead49e9' || library.id === 'plis-79a601480d722cb58344') {
+    return { closures: closureDates(2026, 'https://www.chunan.gov.tw/News_Content.aspx?n=2791&s=1013816',
+      ['11-28'], '選舉日休館') };
+  }
 }

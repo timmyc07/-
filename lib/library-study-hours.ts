@@ -4,6 +4,8 @@ type WeeklyRange = [days: string, start: string, end: string];
 type StudyHours = { name: string; ranges: WeeklyRange[]; url?: string };
 
 const standardTaoyuan: WeeklyRange[] = [['23456', '08:30', '21:00'], ['01', '08:30', '17:00']];
+const hsinchuRules = 'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=b39fff74-7075-46ee-85c5-dee460b6f208';
+const hsinchuLate: WeeklyRange[] = [['2345', '09:00', '21:00'], ['06', '09:00', '17:00']];
 
 // 館舍詳情明列的專室時段。各範圍以 0 至 6 代表週日至週六。
 const studyHours: Record<string, StudyHours | undefined> = {
@@ -28,7 +30,16 @@ const studyHours: Record<string, StudyHours | undefined> = {
   'plis-bb78c5df4d9aa277ab1c': { name: '1 樓自修室', ranges: standardTaoyuan },
   'plis-e94c48945a092b5818d8': { name: '自修室', ranges: [['023456', '08:30', '20:30']] },
   'plis-0d08a9f889b9abeca093': { name: '4 樓自修室', ranges: [['23456', '08:00', '20:00'], ['0', '08:00', '17:00']] },
-  'plis-9709456f17abc6c6a512': { name: '自修室', ranges: [['023456', '09:00', '21:00']] },
+  'plis-9709456f17abc6c6a512': { name: '自修室', ranges: hsinchuLate, url: hsinchuRules },
+  'plis-539f7d3d76b9f2ee658a': { name: '自修室', ranges: hsinchuLate, url: hsinchuRules },
+  'plis-5929930cfc61bd687f1f': { name: '西門自修室', ranges: hsinchuLate, url: hsinchuRules },
+  'plis-859b54d11aaf9ac7b9be': { name: '自修室', ranges: [['023456', '09:00', '17:00']], url: hsinchuRules },
+  'plis-1d5bc6bb745d6ead49e9': {
+    name: '3 樓自修室', ranges: [['0123456', '08:00', '18:00']], url: 'https://www.chunan.gov.tw/cp.aspx?n=11120',
+  },
+  'plis-79a601480d722cb58344': {
+    name: '2 樓自修室', ranges: [['0123456', '08:00', '21:00']], url: 'https://www.chunan.gov.tw/cp.aspx?n=4539',
+  },
   'plis-b19f4a632868ac1ed335': { name: '3 樓自習室', ranges: [['23456', '08:30', '20:20'], ['0', '08:30', '16:50']] },
   'plis-65e63bfdbf5ce145d999': { name: '3 樓自修室', ranges: [['23456', '09:00', '21:00'], ['0', '09:00', '17:00']] },
   'plis-f935063eced556c94ad8': { name: '自修室', ranges: [['2345', '08:30', '18:50'], ['06', '08:30', '16:50']] },

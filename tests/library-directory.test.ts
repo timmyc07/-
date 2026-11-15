@@ -5,6 +5,7 @@ import { test } from 'node:test';
 import type { Library } from '../lib/study.ts';
 import { withLibraryDetail, withTaichungFax, type LibraryDetail } from '../lib/library-details.ts';
 import { coversCalendarYear, evaluate, minutes, validDate } from '../lib/study.ts';
+import { directionsUrl } from '../lib/distance.ts';
 
 const root = new URL('../public/datasets/', import.meta.url);
 const directory = JSON.parse(readFileSync(new URL('library-directory.json', root), 'utf8')) as {
@@ -36,8 +37,10 @@ test('全臺名錄可追溯到原檔，保留 22 縣市且不填入未核對的�
   }
 });
 
-test('全臺名錄的電話、館方網址與座標齊全，補錄資料保留來源', () => {
-  assert(directory.libraries.every(({ phone, website, coordinates }) => phone && website && coordinates));
+test('全臺名錄的電話與網址齊全，搬遷館舍不帶入舊址座標', () => {
+  assert(directory.libraries.every(({ phone, website }) => phone && website));
+  assert.deepEqual(directory.libraries.filter(({ coordinates }) => !coordinates).map(({ name }) => name),
+    ['苗栗縣竹南鎮立圖書館']);
   const alishan = directory.libraries.find(({ id }) => id === 'plis-e1773325972df453b6c4');
   assert(alishan?.website && alishan.sources.includes(alishan.website));
   const yancheng = directory.libraries.find(({ id }) => id === 'plis-4818cd57388587303882');
@@ -93,7 +96,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   };
   const libraries = directory.libraries.map((library) => withLibraryDetail(library, details[library.id]));
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
-  assert.equal(scheduled.length, 62);
+  assert.equal(scheduled.length, 67);
   for (const { slots } of scheduled) {
     assert.equal(new Set(slots!.map(({ day }) => day)).size, slots!.length);
     assert(slots!.every(({ day, start, end }) => day >= 0 && day <= 6 && start < end && end <= 1440));
@@ -107,6 +110,27 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   });
   assert.equal(result.status, 'no');
   assert.equal(result.closure?.from, '2026-03-02');
+});
+
+test('竹南新館依最新地址與自修室時段查詢，新竹依最新版自修室規定', () => {
+  const { libraries: details } = JSON.parse(readFileSync(new URL('library-details.json', root), 'utf8')) as {
+    libraries: Record<string, LibraryDetail>;
+  };
+  const get = (name: string) => {
+    const library = directory.libraries.find((record) => record.name === name)!;
+    return withLibraryDetail(library, details[library.id]);
+  };
+  const zhunan = get('苗栗縣竹南鎮立圖書館');
+  assert.equal(zhunan.address, '苗栗縣竹南鎮大厝里真如路562號');
+  assert.equal(zhunan.fax, undefined);
+  assert.equal(new URL(directionsUrl(zhunan.address)).searchParams.get('destination'), zhunan.address);
+  assert.equal(zhunan.areas[0].slots?.find(({ day }) => day === 6)?.end, minutes('18:00'));
+  assert(zhunan.closures.some(({ from }) => from === '2026-11-28'));
+  const simen = get('新竹市文化局圖書館西門自修室');
+  assert.equal(simen.areas[0].seats, 216);
+  assert.equal(simen.areas[0].equipment.outlet, true);
+  assert.equal(simen.areas[0].slots?.find(({ day }) => day === 6)?.end, minutes('17:00'));
+  assert.match(get('新竹市文化局圖書館').openingHours!, /閉館重建/);
 });
 
 test('臺南溫書窩採專室入場及設備規則，其他館舍的入座方式依個別證據', () => {

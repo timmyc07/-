@@ -416,6 +416,18 @@ function localStudyRoom(id: string, area: Area): Area {
     return { ...area, name: '自修區', seats: 98,
       sources: [...area.sources, 'https://culture.taitung.gov.tw/activity/臺東縣立圖書館各式活動'] };
   }
+  if (id === 'plis-00bd1306ca6884693919') {
+    return { ...area, seats: 124,
+      sources: [...area.sources, 'https://files.chcg.gov.tw/files/0424-%E7%BE%A4%E5%BE%A1-%E5%92%8C%E7%BE%8E%E9%8E%AE%E8%A8%8A%20NO77%28s%29_57_1070507.pdf'] };
+  }
+  if (id === 'plis-539f7d3d76b9f2ee658a') {
+    const reservation = 'https://libseat.hccg.gov.tw/sm/home_web.do';
+    return { ...area, seats: 46, access: 'card', regionalCard: 'hsinchuCity', reservation,
+      entryNote: '使用新竹市圖書館空間座位管理系統預約或現場登記。',
+      sources: [...area.sources, reservation,
+        'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=60c961f1-8587-4460-9f9d-cb9862d4e41c',
+        'https://www.hsinchu-cc.gov.tw/upload/79/2024102513561144607%E6%96%B0%E7%AB%B9%E5%B8%82%E8%AD%B0%E6%9C%83%E7%AC%AC11%E5%B1%86%E7%AC%AC3%E6%AC%A1%E5%AE%9A%E6%9C%9F%E6%9C%83%E8%AD%B0%E4%BA%8B%E9%8C%84%28%E4%B8%8A%E5%86%8A%29.pdf'] };
+  }
   if (id === 'plis-5929930cfc61bd687f1f') {
     return { ...area, seats: 216, equipment: { ...area.equipment, outlet: true },
       sources: [...area.sources, 'https://library.hccg.gov.tw/chhcml/app/digital/view?id=55&module=branchLibrary&serno=15f84f6d-dc3c-4b82-8e80-df80b371c164'] };

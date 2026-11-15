@@ -10,6 +10,10 @@ const hsinchuLate: WeeklyRange[] = [['2345', '09:00', '21:00'], ['06', '09:00', 
 
 // 館舍詳情明列的專室時段。各範圍以 0 至 6 代表週日至週六。
 const studyHours: Record<string, StudyHours | undefined> = {
+  'plis-24c304d8d8fc5bc58ab9': {
+    name: '2 樓自修區', ranges: [],
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000476',
+  },
   'plis-c45011eb98a75a2b9c10': {
     name: '南豪館 2 樓自修室', ranges: [['023456', '08:30', '17:00']],
     url: 'https://www.lotong.gov.tw/cp.aspx?n=17720',
@@ -127,7 +131,7 @@ const studyHours: Record<string, StudyHours | undefined> = {
   'plis-e94c48945a092b5818d8': { name: '自修室', ranges: [['023456', '08:30', '20:30']] },
   'plis-0d08a9f889b9abeca093': { name: '4 樓自修室', ranges: [['23456', '08:00', '20:00'], ['0', '08:00', '17:00']] },
   'plis-9709456f17abc6c6a512': { name: '自修室', ranges: hsinchuLate, url: hsinchuRules },
-  'plis-539f7d3d76b9f2ee658a': { name: '自修室', ranges: hsinchuLate, url: hsinchuRules },
+  'plis-539f7d3d76b9f2ee658a': { name: '3 樓自修室', ranges: hsinchuLate, url: hsinchuRules },
   'plis-5929930cfc61bd687f1f': { name: '西門自修室', ranges: hsinchuLate, url: hsinchuRules },
   'plis-859b54d11aaf9ac7b9be': { name: '自修室', ranges: [['023456', '09:00', '17:00']], url: hsinchuRules },
   'plis-1d5bc6bb745d6ead49e9': {

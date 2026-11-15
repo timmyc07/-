@@ -554,6 +554,12 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
     assert.equal(evaluate(newTaipei, newTaipei.areas[0], { ...beforeClosing, duration: 61 }).closure?.time?.start, minutes('17:00'));
   }
   assert.equal(coversCalendarYear(newTaipei, 2027), false);
+  const tamsui = libraries.find(({ id }) => id === 'plis-2f3bedb51e2b23a23a59')!;
+  const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
+  const maySunday = { ...taipeiQuery, date: '2026-05-10', start: minutes('20:30'), duration: 30 };
+  assert.equal(evaluate(tamsui, undefined, maySunday).closure, undefined);
+  assert.equal(evaluate(tamsui, undefined, { ...maySunday, duration: 31 }).closure?.time?.start, minutes('21:00'));
+  assert.equal(evaluate(gongliao, undefined, maySunday).closure?.time?.start, minutes('17:00'));
   const electionEve = { ...taipeiQuery, date: '2026-11-27', start: minutes('11:00'), duration: 60 };
   const xindian = libraries.find(({ id }) => id === 'plis-b9568520f14810d9931a')!;
   assert.equal(evaluate(xindian, xindian.areas[0], electionEve).closure, undefined);

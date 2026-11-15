@@ -4,6 +4,12 @@ import { kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 const taipeiUrl = 'https://tpml.gov.taipei/cp.aspx?n=141EFA8D46038957&s=839324A30786DF77';
 export const penghuMainUrl = 'https://www.phlib.nat.gov.tw/wSite/sp?ctNode=5236&mp=1&orgId=001&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp';
 const newTaipeiUrl = 'https://www.library.ntpc.gov.tw/singlehtml/be937c4bcb74427ca3d3c8fd5b4704b9';
+const newTaipeiMayClosing: Record<string, { time: string; url: string } | undefined> = {
+  'plis-2f3bedb51e2b23a23a59': { time: '21:00', url: 'https://www.ntpc.gov.tw/ch/home.jsp?dataserno=febf72596dc925a16b4d281c6955a96b&id=31' },
+  'plis-328bb20a01970d84f947': { time: '21:00', url: 'https://www.ntpc.gov.tw/ch/home.jsp?dataserno=febf72596dc925a173d813580b75cf03&id=31' },
+  'plis-b5812bfda43fbd06e2a4': { time: '21:00', url: 'https://www.ntpc.gov.tw/ch/home.jsp?dataserno=febf72596dc925a116b6e5ab6dbf1b4b&id=31' },
+  'plis-5700fc946f2296c185af': { time: '17:00', url: 'https://www.library.ntpc.gov.tw/multiplehtml/Info%3Bjsessionid%3D367190877F99A6B453912C7EC18A297F?categoryCode=007' },
+};
 const nationalTaiwanUrl = 'https://www.ntl.edu.tw/wSite/ct?ctNode=1711&mp=1&xItem=58536';
 const electionUrl = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=353f6e7dda484242820ea153ab0eb4a0';
 const newTaipeiElectionEve: Record<string, { start: number; url: string } | undefined> = {
@@ -290,6 +296,11 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
   if (library.name.startsWith('新北市立圖書館') || library.id === 'plis-461c4b474bd0eb749aaa') {
     const early = newTaipeiElectionEve[library.id];
     const closures = [...(newTaipeiServiceClosures[library.id] ?? []), ...newTaipei2026];
+    const mayClosing = newTaipeiMayClosing[library.id];
+    if (mayClosing) {
+      closures.push(...closureDates(2026, mayClosing.url, ['05-03', '05-10'], '館方公告當日 ' + mayClosing.time + ' 閉館')
+        .map((closure) => ({ ...closure, time: { start: minutes(mayClosing.time), end: 24 * 60 } })));
+    }
     const inventoryDates = xindianInventoryDates[library.id];
     if (inventoryDates) {
       closures.unshift(...closureDates(2026, 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=52dc595a0d4c4440968dd14d55b7f5c5',

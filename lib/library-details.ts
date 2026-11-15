@@ -77,6 +77,38 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-fd6e00ddec2e11b087ad': {
+    url: 'https://library-dl.yunlin.gov.tw/cp.aspx?n=9679',
+    facilities: ['傑克與仙豆主題區', '綠野叢林區', '海底世界區', '白雲城堡區'],
+  },
+  'plis-f5b5d0c2ee6ce8477832': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000286',
+    facilities: ['期刊閱報區', '電腦檢索區', '兒童室', '書庫', '2 樓參考室兼自修室', '2 樓研討室兼自修室'],
+  },
+  'plis-e9b3e2917254313b6d65': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000290',
+    facilities: ['書庫', '雜誌報紙期刊閱覽室', '兒童室', '參考室', '3 樓自修室'],
+  },
+  'plis-0e472236b6cd90d7217c': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000291',
+    facilities: ['書庫', '兒童閱覽區', '期刊閱覽區', '一般閱覽區', '電腦上網區'],
+  },
+  'plis-eb3e95a67263e5cbf917': {
+    url: 'https://bjgov.yunlin.gov.tw/cp.aspx?n=6174',
+    facilities: ['書庫', '報紙期刊區', '樂齡閱讀區', '兒童室', '青少年閱讀區', '2 樓自修室', '研習室'],
+  },
+  'plis-942c78ab15d304c768e8': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000297',
+    facilities: ['民眾閱覽室', '親子閱覽室', '期刊雜誌閱覽區', '開架書庫', '展覽館', '會議室', '研習室', '閱讀室'],
+  },
+  'plis-bdad3aa0558bd2be752e': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000298',
+    facilities: ['期刊室', '兒童閱覽室', '2 樓自修研習室', '視聽室'],
+  },
+  'plis-4de96f7422a39a1d9542': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000303',
+    facilities: ['在地農產品與兒童繪本館藏特色專櫃'],
+  },
   'plis-4fccd7810b59cf2800f5': {
     url: 'https://www.tnpl.tn.edu.tw/u5265933068424048176/a1',
     facilities: ['開架閱覽區', '英語學習區', '電腦網路區', '青少年區', '漫畫區', '討論室', '多功能室', '兒童區', '嬰幼兒區', '多元文化區', '樂齡區', '期刊報紙區'],

@@ -46,6 +46,9 @@ const studyHours: Record<string, StudyHours | undefined> = {
   'plis-8d09da2a8c7fc2f99893': { name: '自修室', ranges: standardTaoyuan },
   'plis-01e95280aebec7eba09c': { name: '自修室', ranges: standardTaoyuan },
   'plis-9c317ee99e20f7ec3cd3': { name: '6 樓自修室', ranges: standardTaoyuan },
+  'plis-0670e73215c152add507': {
+    name: 'B1 自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/038',
+  },
   'plis-dd0e38aa18f750ffcade': { name: 'B1 自修室', ranges: [['123456', '08:30', '21:00'], ['0', '08:30', '17:00']] },
   'plis-07c47313a8f5b473d2bf': {
     name: '3 樓自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/028',

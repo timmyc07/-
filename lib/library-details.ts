@@ -213,6 +213,15 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   };
 }
 
+const taoyuanSeatSystem: Record<string, { url: string; seats?: number; name?: string } | undefined> = {
+  'plis-9c317ee99e20f7ec3cd3': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/014', seats: 147 },
+  'plis-0d8617adcdaa013618d9': { url: 'https://www.typl.gov.tw/kids/News/Content/2017' },
+  'plis-0670e73215c152add507': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/038', seats: 50 },
+  'plis-14dcd000784259e3f26c': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/021', name: '2 樓自修室', seats: 70 },
+  'plis-a38508dd33caf0cfefdc': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/034', seats: 113, name: '1 樓自習室' },
+  'plis-bb78c5df4d9aa277ab1c': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/041' },
+};
+
 function localStudyRoom(id: string, area: Area): Area {
   if (id === 'plis-2bbbdcd83068ffcf8f4f') {
     return { ...area, name: '2 樓多功能自修室', seats: 54,
@@ -286,14 +295,17 @@ function localStudyRoom(id: string, area: Area): Area {
         'https://kllib.klcg.gov.tw/News_Content.aspx?_CSN=150&n=7789&s=18148&sms=12521'],
     };
   }
-  const dayuan = id === 'plis-9c317ee99e20f7ec3cd3';
-  if (dayuan || id === 'plis-0d8617adcdaa013618d9') {
+  const taoyuan = taoyuanSeatSystem[id];
+  if (taoyuan) {
+    const main = id === 'plis-0d8617adcdaa013618d9';
+    const reservation = 'https://spaceme.typl.gov.tw/';
     return {
-      ...area, access: 'card', regionalCard: 'taoyuan', seats: dayuan ? 147 : undefined,
-      entryNote: '持桃園市圖個人借閱證（含行動借閱證）或市民卡，線上預約或到館登記。',
-      reservation: 'https://spaceme.typl.gov.tw/',
-      sources: [...area.sources, 'https://www.typl.gov.tw/zh-tw/Reader/RegulationContent/6',
-        dayuan ? 'https://www.typl.gov.tw/zh-tw/About/Introduce/014' : 'https://www.typl.gov.tw/zh-tw/About/Introduce/35'],
+      ...area, name: taoyuan.name ?? area.name, access: 'card', regionalCard: 'taoyuan', seats: taoyuan.seats,
+      equipment: main ? { ...area.equipment, laptop: false } : area.equipment,
+      entryNote: '持桃園市圖個人借閱證或市民卡登記，預約席與當日席依座位系統顯示。'
+        + (main ? '7 樓自修室為極靜區，使用筆電請移至同樓層筆電區。' : ''),
+      reservation,
+      sources: [...new Set([...area.sources, taoyuan.url, 'https://www.typl.gov.tw/zh-tw/Reader/RegulationContent/6', reservation])],
     };
   }
   return area;

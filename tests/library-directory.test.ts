@@ -551,4 +551,8 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   assert.equal(keelung.areas[0].regionalCard, 'keelung');
   assert.equal(keelung.areas[0].seats, 109);
   assert.equal(evaluate(keelung, keelung.areas[0], { ...taipeiQuery, date: '2026-02-21' }).status, 'no');
+  const renai = libraries.find(({ id }) => id === 'plis-d5b8a42994a660f05102')!;
+  const outage = { ...taipeiQuery, date: '2026-05-23' };
+  assert.equal(evaluate(renai, undefined, outage).closure?.reason, '仁愛分館停電休館');
+  assert.equal(evaluate(keelung, keelung.areas[0], outage).closure, undefined);
 });

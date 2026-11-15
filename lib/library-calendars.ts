@@ -277,6 +277,10 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     return { calendarYears: [2026], closures: nationalTaiwan2026, checkDates: ['2026-02-20', '2026-02-21'] };
   }
   if (library.name.startsWith('基隆市公共圖書館')) {
+    if (library.id === 'plis-d5b8a42994a660f05102') {
+      return { calendarYears: [2026], closures: [...keelung2026,
+        ...closureDates(2026, 'https://kllib.klcg.gov.tw/Default.aspx', ['05-23'], '仁愛分館停電休館')] };
+    }
     return { calendarYears: [2026], closures: keelung2026 };
   }
   if (library.name.startsWith('桃園市立圖書館') && !/兒童(?:玩具|文學)館$/.test(library.name)) {

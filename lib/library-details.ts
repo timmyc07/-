@@ -29,6 +29,11 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
 const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A';
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
 const localHours: Record<string, { url: string; hours: string; studyRoom?: true; supersedesDirectory?: true } | undefined> = {
+  'plis-898020f5dd3a533a9ee3': {
+    url: 'https://library.hccc.gov.tw/sp.asp?ctNode=930&mp=20&xItem=6889&xdurl=mp200ap%2Fbranch.asp',
+    hours: '臨時館位於文化局園區演藝堂地下 1 樓。週二至週五 09:00–20:00，週末 09:00–18:00。週一及國定假日休館。',
+    supersedesDirectory: true,
+  },
   'plis-f115f1f71be7cccd30e1': {
     url: xinyuanUrl,
     hours: xinyuanHours + ' 縣府館舍頁註明二樓樓梯有安全疑慮，目前只開放一樓。',
@@ -129,6 +134,10 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
 }
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-8e698a4770cf01e3875e') {
+    return { ...area, seats: 147, access: 'conditional',
+      entryNote: '供一般讀者自修。館方請 12 歲以下讀者使用兒童閱覽室。' };
+  }
   if (id === 'plis-d4bafe538b622515b304') {
     return { ...area, name: '3 樓自習室', seats: 100,
       sources: [...area.sources, 'https://www.changhua.gov.tw/RowContent/2242'] };

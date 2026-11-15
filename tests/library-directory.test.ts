@@ -103,7 +103,11 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(gonghe.openingHours!, /08:00–12:00、13:00–17:00.*只開放一樓/);
   assert.equal(gonghe.areas.length, 0);
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
-  assert.equal(scheduled.length, 74);
+  assert.equal(scheduled.length, 75);
+  const nantou = libraries.find(({ id }) => id === 'plis-8e698a4770cf01e3875e')!;
+  assert.equal(nantou.areas[0].seats, 147);
+  const shoufeng = libraries.find(({ id }) => id === 'plis-c601d6fcc4e455f93f93')!;
+  assert.equal(shoufeng.closures[0].until, '2026-12-08');
   const changhua = libraries.find(({ id }) => id === 'plis-b19f4a632868ac1ed335')!;
   assert.equal(changhua.areas[0].regionalCard, 'changhua');
   assert.equal(changhua.areas[0].seats, 70);

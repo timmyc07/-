@@ -9,6 +9,11 @@ import nclStudyRooms from './ncl-study-rooms.json' with { type: 'json' };
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-e65c73ff9e1179e30e89': {
+    from: '2026-01-26', until: '2027-02-15',
+    reason: '原館施工期間暫停開放。借還書及辦證請至東山區公所綜合大樓臨時據點（東山里 225 之 1 號）。週一 13:00–17:00、週二至週五 08:00–17:00、週末 08:00–16:00，國定假日休息。復館日期依館方公告。',
+    url: 'https://www.tnpl.tn.edu.tw/n15511624106174947703/n1Content',
+  },
   'plis-4f656e6f21c469e566ae': {
     from: '2026-06-01',
     reason: '原館整修暫停開放。臨時館位於水上村正義路 141 號舊樂齡中心，週一至週五 08:00–12:00、13:00–17:00 提供部分新書外借及還書，週末及國定假日休息。原館復館日期依公告。',
@@ -72,6 +77,50 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-4fccd7810b59cf2800f5': {
+    url: 'https://www.tnpl.tn.edu.tw/u5265933068424048176/a1',
+    facilities: ['開架閱覽區', '英語學習區', '電腦網路區', '青少年區', '漫畫區', '討論室', '多功能室', '兒童區', '嬰幼兒區', '多元文化區', '樂齡區', '期刊報紙區'],
+  },
+  'plis-3428641ec78aeb601979': {
+    url: 'https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u4903210577041037183',
+    facilities: ['兒童閱覽區', '嬰幼兒專區', '新書展示區', '樂齡閱覽區', '期刊閱報區'],
+  },
+  'plis-d6493c0ee9ea1f948cec': {
+    url: 'https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u4812346487589096684',
+    facilities: ['年度新書區', '視聽區', '期刊區', '青少年區', '英文書區', '樂齡區'],
+  },
+  'plis-a3aa908413cf852b7708': {
+    url: 'https://www.tnpl.tn.edu.tw/u4964966955243776974/a1',
+    facilities: ['兒童圖書區', '兒童閱覽區', '嬰幼兒圖書區', '閱報區', '上網區', '新書展示區', '自修區', '討論室', '多功能研習教室'],
+  },
+  'plis-e65c73ff9e1179e30e89': {
+    url: 'https://dongshan.tainan.gov.tw/News_Content.aspx?n=44262&s=8794510&sms=26921',
+    facilities: ['臨時借還書服務櫃檯', '新書展示區'],
+  },
+  'plis-257f7ab6c6e6b452dd99': {
+    url: 'https://www.tnpl.tn.edu.tw/u5755478225008582095/a1',
+    facilities: ['青少年閱覽區', '影音上網區', '英語學習區', '多功能會議室', '討論室', '文學閱讀區', '開架閱讀區', '視聽資料區', '兒童閱覽區', '嬰幼兒專區', '樂齡閱覽區', '期刊閱報區', '資料檢索區', '新書展示區'],
+  },
+  'plis-98c2b5ee10d97cd2dcc5': {
+    url: 'https://www.tnpl.tn.edu.tw/u5218061093444339773/a1',
+    facilities: ['兒童區', '嬰幼兒區', '青少年區', '上網區', '視聽區', '多功能室'],
+  },
+  'plis-d5b370938477485a9b70': {
+    url: 'https://www.tnpl.tn.edu.tw/u5132474722839973688/a1',
+    facilities: ['新書區', '兒童區', '嬰幼兒區', '青少年區', '上網區', '視聽區', '閱報區', '樂齡區'],
+  },
+  'plis-0c2ace2641b37f2a19ac': {
+    url: 'https://www.tnpl.tn.edu.tw/u5564135435474870361/a1',
+    facilities: ['討論室', '漫畫區', '青少年區', '語言學習區', '多功能室', '視聽資料區', '電腦網路區', '筆電優先區', '開架閱覽區', '樂齡區', '兒童區', '嬰幼兒區', '多元文化區', '期刊報紙區'],
+  },
+  'plis-0cbbf1735c46d0a6488b': {
+    url: 'https://www.tnpl.tn.edu.tw/u5540679532610183827/a1',
+    facilities: ['青少年閱覽區', '英語學習專區', '一般閱覽區', '兒童閱覽區', '資料檢索區', '期刊閱覽室', '影音視聽區', '手工藝專區', '哺集乳室', '無障礙廁所'],
+  },
+  'plis-e1e2bc4b4c8213751baa': {
+    url: 'https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u4874045035169792199',
+    facilities: ['兒童區', '嬰幼兒區', '青少年區', '上網區', '視聽區', '多功能室'],
+  },
   'plis-1ab6b7cad75d50cee778': {
     url: 'https://www.cycab.gov.tw/wSite/ct?ctNode=6266&idPath=6253_6256_6266&mp=1&xItem=13422',
     facilities: ['書庫', '兒童室'],

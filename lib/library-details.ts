@@ -66,6 +66,30 @@ const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA73
 const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-3f6ed064ed62a36e4b9b': {
+    url: 'https://www.ksml.edu.tw/mainlibrary/tour/index.aspx?Parser=13,23,937,158',
+    facilities: ['地下 1 樓國際繪本中心', '1 樓廣場', '3 樓階梯閣樓', '4 樓公共藝術空間'],
+  },
+  'plis-0801decad6296ec8f992': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,83,1395,1384',
+    facilities: ['1 樓常設展覽室', '2 樓高雄文學典藏圖書室', '文學沙龍', '文學放映室', '文學討論室'],
+  },
+  'plis-4818cd57388587303882': {
+    url: 'https://khcc.kcg.gov.tw/rwd_home03.aspx?DATA=937&EXEC=D&ID=%246102&IDK=2',
+    facilities: ['主題漫畫艙', '策展艙', '親子共讀城堡', '童趣探索區', '長桌閱覽席'],
+  },
+  'plis-4211973a59dada78d703': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,84,1394,1383',
+    facilities: ['主題書展區', '兒童室', '學齡前閱讀區', '愛讀屋', '戶外區', '多媒體聆賞區', '影音資料典藏室', '視聽座位區', '期刊區'],
+  },
+  'plis-fa8e93058283261d5014': {
+    url: 'https://isp.ncl.edu.tw/teen-tw/cityres?res=0K313038146963811602',
+    facilities: ['青少年專區'],
+  },
+  'plis-414fcbfe793f5201f41d': {
+    url: 'https://isp.ncl.edu.tw/teen-tw/cityres?res=0K313038146963811602',
+    facilities: ['青少年專區', '原住民文學專櫃'],
+  },
   'plis-accfa2ef1b61329335bb': {
     url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,36,357,350',
     facilities: ['地下 1 樓自修室', '1 樓兒童閱覽室', '研習室', '親子活動區'],
@@ -93,6 +117,142 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
   'plis-10ddca249245164caff7': {
     url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,66,687,680',
     facilities: ['兒童閱覽室', '期刊區', '書庫', '臺灣文史專區', '青少年文學專櫃', '電腦資訊檢索區', '自修室', '閱報區'],
+  },
+  'plis-d82268be588a7123b55a': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,31,302,295',
+    facilities: ['兒童閱覽區', '期刊區', '樂齡專區', '資訊檢索區', '視聽資料區', '哺集乳室', '成人書庫', '無線上網區', '青少年區', '3 樓自修區', '閱報區', '多功能研習教室'],
+  },
+  'plis-d624fdace694450c004a': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,32,313,306',
+    facilities: ['1 樓自修室', '閱報室', '兒童閱覽室', '資訊檢索區', '書庫', '臺灣文史專區', '期刊區', '海洋生物特色館藏區'],
+  },
+  'plis-71ef1498638c72cb65da': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,33,324,317',
+    facilities: ['禮堂', '研習室', '3 樓自修室', '體育與運動特色館藏區', '青少年及漫畫專區', '無線上網區', '書庫', '兒童區', '閱報區', '期刊區', '樂齡區', '資料檢索區'],
+  },
+  'plis-f837393150c2835dca29': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,34,335,328',
+    facilities: ['親子共讀區', '旅遊專區', '臺灣資料專區', '期刊公報區', '圖書資訊研習室', '好書交換分享區', '閱報區', '2 樓自修室', '多功能教室', '魔法故事屋'],
+  },
+  'plis-341b5eb29091a999eb6d': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,35,346,339',
+    facilities: ['兒童閱覽區', '親子共讀區', '閱報區', '資訊檢索區', '三民實驗劇場', '多功能研習教室', '成人書庫', '臺灣資料區', '期刊室', '4 樓自修室', '裝訂報紙典藏室'],
+  },
+  'plis-777d6726d52d0b28eb51': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,38,379,372',
+    facilities: ['4 樓自修室', '閱報區', '多功能活動室', '書庫', '兒童閱覽區', '資訊檢索區', '過期報紙區', '期刊區'],
+  },
+  'plis-037404bb59864ffe1a19': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,40,401,394',
+    facilities: ['自修室', '閱報區', '資訊檢索區', '期刊區', '書庫', '臺灣文史專區', '兒童圖書區', '地方文獻特色館藏區'],
+  },
+  'plis-a908448b0b36ed1715ce': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,41,412,405',
+    facilities: ['閱報室', '無線上網室', '4 樓自修室', '上網區', '期刊區', '開架閱覽區', '討論室', '主題書展示區', '影印設備'],
+  },
+  'plis-793de43144ebd1a7578c': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,42,423,416',
+    facilities: ['開放閱覽區', '兒童圖書區', '期刊閱報區', '資訊檢索區'],
+  },
+  'plis-746d36c88f898d0e8c07': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,43,434,427',
+    facilities: ['普通圖書區', '兒童圖書區', '期刊區', '資訊檢索區', '閱報區', '多功能教室', '自修室'],
+  },
+  'plis-c7774590d6dd49cecbb9': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,46,467,460',
+    facilities: ['親子閱讀區', '視聽區', '電腦檢索區', '兒童圖書區', '環境教育專區', '多功能教室', '閱報區', '書庫', '臺灣資料專區', '樂齡圖書區', '青少年圖書區', '太空科學專區', '外文圖書區'],
+  },
+  'plis-3f58876c12dd20557b26': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,48,489,482',
+    facilities: ['勞工與多元文化館藏區', '臺灣資料專區', '無線上網區', '個人閱覽座位', '藝文研習室', '閱報區', '公用電腦區', '視聽資料區', '期刊區', '親子共讀區', '多功能活動室', '書庫'],
+  },
+  'plis-c51f482514b80a660667': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,49,500,493',
+    facilities: ['資訊檢索區', '閱報區', '期刊區', '兒童閱覽區', '樂齡圖書專區', '親子共讀區', '多元文化專區', '美國資料中心', '筆電使用區', '無線上網區', '書庫', '多功能教室'],
+  },
+  'plis-216cea038dcd5ebbfa28': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,53,544,537',
+    facilities: ['兒童閱覽區', '開架式閱覽區', '雜誌區', '網路資料查詢區', '多功能活動室', '閱報區', '青少年專區', '地方文獻區', '無線上網區'],
+  },
+  'plis-ba0ab6ac6ab1829d39fc': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,555,548',
+    facilities: ['資訊檢索區', '兒童閱覽區', '新書展示區', '閱報區', '期刊區', '開架書庫', '影音資料區', '無線上網區', '多功能教室', '臺灣文史專區', '哺集乳室'],
+  },
+  'plis-3b8c4a64ab4b313ed42f': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,555,548',
+    facilities: ['資訊檢索區', '兒童閱覽區', '閱覽區', '開架書庫', '期刊區', '特色館藏區'],
+  },
+  'plis-a0dd6959841927ca7597': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,55,566,559',
+    facilities: ['嬰幼兒閱讀專區', '養殖漁業特色館藏', '哺乳室', '期刊報紙區', '資訊區', '兒童閱覽區', '臺灣文史專區', '開架閱覽區'],
+  },
+  'plis-3b604bb555eaf744251d': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,55,566,559',
+    facilities: ['兒童閱覽區', '開架閱覽區', '臺灣文史專區', '樂齡專櫃', '昆蟲專區', '期刊報紙區', '青少年專區', '漫畫區', '資訊區', '東南亞專區', '皮影藝術專區', '會議室', '多功能研習室'],
+  },
+  'plis-41a4c4cde2f3e85ef444': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,57,588,581',
+    facilities: ['兒童閱讀區', '資訊檢索區', '新書展示區', '書報閱讀區', '自修閱讀區', '多功能演講廳', '藝文作品展示區', '開架閱讀區', '多功能研習教室'],
+  },
+  'plis-2743e51569604910aa7d': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,59,610,603',
+    facilities: ['多功能教室', '期刊閱報區', '兒童閱覽室', '開放式書庫', '閱覽室'],
+  },
+  'plis-bffc737f45f33bf2784f': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,61,632,625',
+    facilities: ['資訊檢索區', '期刊閱報區', '新書展示區', '視聽資料區', '兒童閱覽區', '親子共讀區', '地質與茶道館藏區', '樂齡圖書專區', '開放閱覽書庫', '臺灣文史專區', '青少年書區'],
+  },
+  'plis-f1aa9ffd4a0fa0eb0db4': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,63,654,647',
+    facilities: ['兒童書庫區', '兒童漫畫區', '幼兒親子區', '新書展示區', '期刊報紙區', '資訊檢索區', '哺集乳室', '成人書庫', '主題書區', '文獻展示區', '3 樓自修室'],
+  },
+  'plis-ae1d09fa9a4aa5086830': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,64,665,658',
+    facilities: ['成人書庫', '親子閱覽區', '資訊檢索區', '期刊閱報區', '青少年及漫畫專區', '無線上網區', '臺灣資料區', '2 樓自修室', '多功能室'],
+  },
+  'plis-d2b9978b7282cea0d7d6': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,67,698,691',
+    facilities: ['新書展示區', '兒童閱覽區', '期刊區', '閱報區', '資訊檢索區', '書庫', '漫畫區', '無線上網區', '視聽教室兼會議室'],
+  },
+  'plis-c047eb13f7af010983af': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,68,709,702',
+    facilities: ['兒童閱覽區', '上網區', '成人書庫', '期刊區', '閱報區', '3 樓自修室'],
+  },
+  'plis-571498276550037f205c': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,69,720,713',
+    facilities: ['藝文展示區', '期刊室', '兒童閱覽區', '書庫', '參考資料室', '研習室', '4 樓自修室'],
+  },
+  'plis-88c4b0b28fd9dc888207': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,70,731,724',
+    facilities: ['報章期刊區', '資訊檢索區', '書庫', '兒童室', '融合玩具專櫃', '哺乳室', '2 樓自修區', '眷村地方文化典藏室'],
+  },
+  'plis-7cc14413d0d90dc8c1d7': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,72,753,746',
+    facilities: ['新書區', '臺灣資料專區', '網路檢索區', '無線上網區', '報章雜誌閱覽區', '自修區'],
+  },
+  'plis-456d4497ec2566631be6': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,75,786,779',
+    facilities: ['兒童閱覽室', '雜誌區', '電腦區', '約翰湯姆生攝影展示區', '書庫閱覽區', '哺乳室', '多功能研習教室'],
+  },
+  'plis-998ee9249ae3def9f7ef': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,76,797,790',
+    facilities: ['展示區', '期刊區', '資訊檢索區', '兒童閱覽區', '幼兒圖書區', '說故事區', '外文圖書區', '哺集乳室', '討論室', '親子廁所', '書庫', '臺灣資料區', '漫畫區', '青少年圖書區'],
+  },
+  'plis-c69dfa5e4b1461ef7a40': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,76,797,790',
+    facilities: ['1 樓閱覽區', '閱報區'],
+  },
+  'plis-e64dc93b08a2aa723db1': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,76,797,790',
+    facilities: ['兒童區', '1 樓閱覽區', '閱報區'],
+  },
+  'plis-51fac3088b9938f8f9ed': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,76,797,790',
+    facilities: ['2 樓閱覽區', '兒童區', '閱報區'],
+  },
+  'plis-9132dca3383e3ab8f634': {
+    url: 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,36,357,350',
+    facilities: ['閱覽區', '期刊區', '參考區', '法律資料區', '臺灣資料專區', '資訊檢索區', '視障資料室'],
   },
   'plis-539f7d3d76b9f2ee658a': {
     url: 'https://www.cna.com.tw/postwrite/chi/444234',

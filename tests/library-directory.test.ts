@@ -583,6 +583,9 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
     assert.equal(library.areas.find(({ kind }) => kind === 'reading')?.seats, seats);
     assert(library.areas.every(({ kind, seats }) => kind !== 'study' || seats !== 56));
   }
+  const culturalCenter = libraries.find(({ id }) => id === 'plis-07432e289be30af20610')!;
+  assert.equal(culturalCenter.closures.find(({ from }) => from === '2026-03-01')?.until, '2026-08-31');
+  assert.match(culturalCenter.accessNote!, /9 月 1 日重新開館/);
   const caogong = libraries.find(({ id }) => id === 'plis-ae1d09fa9a4aa5086830')!;
   assert.equal(caogong.areas.find(({ kind }) => kind === 'reading')?.seats, 37);
   assert.equal(caogong.areas.find(({ kind }) => kind === 'study')?.seats, 36);

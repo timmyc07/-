@@ -466,6 +466,12 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
       url: 'https://www.ksml.edu.tw/lib/Latestevent/Details.aspx?Parser=9,64,659,,,,15497',
     }, ...kaohsiung2026] };
   }
+  if (library.id === 'plis-07432e289be30af20610') {
+    return { calendarYears: [2026], closures: [{
+      from: '2026-03-01', until: '2026-08-31', reason: '耐震補強工程期間休館，9 月 1 日重新開館。',
+      url: 'https://www.ksml.edu.tw/libnews/index.aspx?Parser=99,4,925,,,,,,,,2',
+    }, ...kaohsiung2026] };
+  }
   if (kaohsiungStudyRoom(library.id) !== undefined) return { calendarYears: [2026], closures: kaohsiung2026 };
   if (library.id === 'plis-1b4fab4fae6901d46c23') {
     return {

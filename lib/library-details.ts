@@ -1194,6 +1194,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-07432e289be30af20610': {
+    url: 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,925,,,,16250',
+    note: '館舍於 2026 年 9 月 1 日重新開館。',
+  },
   'plis-5214bc11151c1cde5bf4': {
     url: 'https://www.mlcg.gov.tw/News_Content.aspx?n=2546&s=1004067',
     note: '市公所公告工程預計 2027 年 5 月竣工、7 月正式開館，實際復館日期依後續公告。',

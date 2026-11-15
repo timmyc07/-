@@ -10,6 +10,18 @@ const hsinchuLate: WeeklyRange[] = [['2345', '09:00', '21:00'], ['06', '09:00', 
 
 // 館舍詳情明列的專室時段。各範圍以 0 至 6 代表週日至週六。
 const studyHours: Record<string, StudyHours | undefined> = {
+  'plis-9f7edd85cf79ea635049': {
+    name: '2 樓自修區', ranges: [], url: 'https://yilan.e-land.gov.tw/News.aspx?n=18708&sms=16140',
+  },
+  'plis-5c096392579b74bd371a': {
+    name: '2 樓閱覽室', ranges: [['023456', '09:00', '18:00']], url: 'https://jiaosi.e-land.gov.tw/cp.aspx?n=7777',
+  },
+  'plis-4b6847d140ab7464db3f': {
+    name: '2 樓自習區', ranges: [], url: 'https://ilwct.e-land.gov.tw/cp.aspx?n=6620',
+  },
+  'plis-9bee8536cf45c910547b': {
+    name: '2 樓研習教室', ranges: [], url: 'https://www.sanshing.gov.tw/cp.aspx?n=5799&s=2587',
+  },
   'plis-c9c0fe185180d1def859': {
     name: '2 樓自修室', ranges: [], url: 'https://www.guanshan.gov.tw/about/about4',
   },

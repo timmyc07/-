@@ -458,7 +458,13 @@ function localStudyRoom(id: string, area: Area): Area {
     return { ...area, name: '地下室自修室', seats: 25,
       sources: [...area.sources, 'https://hcplibrary.hchcc.gov.tw/wSite/sp?orgId=007&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp'] };
   }
-  if (id === 'plis-c45011eb98a75a2b9c10') return { ...area, seats: 100 };
+  if (id === 'plis-9f7edd85cf79ea635049') {
+    return { ...area, equipment: { laptop: true, outlet: true }, entryNote: '自修區指定區域可用電，其餘座位請自備電力。' };
+  }
+  if (id === 'plis-c45011eb98a75a2b9c10') {
+    return { ...area, seats: 100, access: 'walk-in',
+      sources: [...area.sources, 'https://www.lotong.gov.tw/UploadDir/OpenInfromation/閱覽要點112修正.pdf'] };
+  }
   const wifi = localStudyWifi[id];
   if (wifi) area = { ...area, equipment: { ...area.equipment, wifi: true }, sources: [...area.sources, wifi] };
   const taoyuanSeats = taoyuanStudySeats[id];

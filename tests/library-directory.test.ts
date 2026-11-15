@@ -123,7 +123,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 140);
+  assert.equal(scheduled.length, 141);
   const yunlin = libraries.find(({ id }) => id === 'plis-3fb94b86e4de966ba65a')!;
   assert.equal(yunlin.areas[0].access, 'walk-in');
   assert.equal(yunlin.areas[0].equipment.outlet, true);
@@ -159,7 +159,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const luodong = libraries.find(({ id }) => id === 'plis-c45011eb98a75a2b9c10')!;
   assert.equal(luodong.areas[0].name, '南豪館 2 樓自修室');
   assert.equal(luodong.areas[0].seats, 100);
+  assert.equal(luodong.areas[0].access, 'walk-in');
   assert.equal(luodong.areas[0].slots?.length, 6);
+  const jiaoxi = libraries.find(({ id }) => id === 'plis-5c096392579b74bd371a')!;
+  assert.deepEqual(jiaoxi.areas[0].slots?.find(({ day }) => day === 0),
+    { day: 0, start: minutes('09:00'), end: minutes('18:00') });
+  const yilanCity = libraries.find(({ id }) => id === 'plis-9f7edd85cf79ea635049')!;
+  assert.deepEqual(yilanCity.areas[0].equipment, { laptop: true, outlet: true });
   const qionglin = libraries.find(({ id }) => id === 'plis-cf8f59d429a9ca2188f7')!;
   assert.equal(qionglin.areas[0].seats, 25);
   assert.equal(qionglin.areas[0].access, 'walk-in');

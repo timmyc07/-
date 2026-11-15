@@ -8,6 +8,11 @@ import { taipeiStudyRoom } from './taipei-study-rules.ts';
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-5700fc946f2296c185af': {
+    from: '2026-08-27', until: '2027-01-06',
+    reason: '貢寮分館設備升級施工，館內閱覽、自修及資訊檢索暫停，3 樓門口另設臨時櫃檯。',
+    url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=49bddcd1aefb4384b3f376e4ec31e780',
+  },
   'plis-b9b43f111c155ee7f7b1': {
     from: '2026-06-29', reason: '三和分館耐震補強及室內整修期間暫停開放，預計 12 月復館，日期以館方公告為準。',
     url: 'https://www.typl.gov.tw/zh-tw/News/Content/3120',
@@ -50,7 +55,27 @@ const serviceUpdates: Record<string, { url: string; note: string } | undefined> 
     note: '北棟自 2026 年 9 月 15 日起整修暫停開放，南棟持續服務。',
   },
 };
-const localHours: Record<string, { url: string; hours: string; studyRoom?: true; supersedesDirectory?: true } | undefined> = {
+const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-851a10bc58bf5f5c6fcb': {
+    url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=2ac534a25d4f41e292b4db4f43b8197e',
+    hours: '原館自 2026 年 6 月 1 日起閉館重建。文化路一段 18 號 1 樓臨時據點提供預約取書、還書及辦證。',
+    studyRoom: false, supersedesDirectory: true,
+  },
+  'plis-6340f6e59e0e98e1adb1': {
+    url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=54ea2029a140446bb5af6b98567a6c8c',
+    hours: '原閱覽室整修。2 樓臨時櫃檯提供預約取書及還書，週二至週六 08:30–21:00，週日及週一 08:30–17:00，國定假日休息。',
+    studyRoom: false, supersedesDirectory: true,
+  },
+  'plis-a2f0f325a9d82ca850f0': {
+    url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=fa1681781d5841f1a4395b90373a6e2b',
+    hours: '原館自 2026 年 6 月 1 日起閉館重建。光興閱覽室的臨時櫃檯提供預約取書及還書，週二至週六 09:00–21:00，週日 09:00–17:00，週一休息。',
+    studyRoom: false, supersedesDirectory: true,
+  },
+  'plis-80f92b0a929540e08c5d': {
+    url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=eba9e12b822f4ee2ae96225f4546bdba',
+    hours: '原館耐震補強。捷運永安市場站 2 樓臨時服務閱覽室每日 09:00–17:00，每月第一個週一及國定假日休息。',
+    studyRoom: false, supersedesDirectory: true,
+  },
   'plis-e2c2e5a82e7e92aa1179': {
     url: 'https://hcplibrary.hchcc.gov.tw/wSite/sp?orgId=016&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
     hours: '福德分館週二至週五 09:00–20:30，週末 09:00–17:00，週一及國定假日休館。',
@@ -216,9 +241,11 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     checkDates: calendar?.checkDates ? [...new Set([...(library.checkDates ?? []), ...calendar.checkDates])] : library.checkDates,
     closures: [...library.closures, ...(calendar?.closures ?? []), ...(closure ? [closure] : [])],
     accessNote: serviceUpdate?.note ?? library.accessNote,
-    facilities: library.facilities ?? detail.facilities,
-    studyRoom: library.studyRoom ?? (kaohsiungArea === null ? false : studyRoom || undefined),
-    areas: studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
+    facilities: local?.studyRoom === false ? (library.facilities ?? detail.facilities)?.filter((facility) => !/^自[修習]室$/.test(facility))
+      : library.facilities ?? detail.facilities,
+    studyRoom: local?.studyRoom === false ? false : library.studyRoom ?? (kaohsiungArea === null ? false : studyRoom || undefined),
+    areas: local?.studyRoom === false ? library.areas.filter(({ kind }) => kind !== 'study')
+      : studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
       ? [...library.areas, localArea] : library.areas,
     sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []),
       ...(serviceUpdate ? [serviceUpdate.url] : []),

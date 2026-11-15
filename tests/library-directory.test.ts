@@ -115,6 +115,12 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(gonghe.openingHours!, /08:00–12:00、13:00–17:00.*只開放一樓/);
   assert.equal(gonghe.areas.length, 0);
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
+  const banqiao = libraries.find(({ id }) => id === 'plis-851a10bc58bf5f5c6fcb')!;
+  assert.equal(banqiao.studyRoom, false);
+  assert.equal(banqiao.areas.length, 0);
+  assert.match(banqiao.openingHours!, /臨時據點/);
+  const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
+  assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
   assert.equal(scheduled.length, 99);
   const longgang = libraries.find(({ name }) => name === '桃園市立圖書館龍岡分館')!;
   assert.equal(longgang.areas[0].seats, 265);

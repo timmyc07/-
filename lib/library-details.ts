@@ -67,6 +67,58 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-e60fc801b70b3694e168': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000437',
+    facilities: ['兒童區', '期刊雜誌區', '多功能教室', '公用電腦'],
+  },
+  'plis-421acf277000ebf61419': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000438',
+    facilities: ['兒童閱覽室'],
+  },
+  'plis-c57afed8fc6cac37fad4': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000439',
+    facilities: ['地下室兒童圖書專區', '1 樓生活資訊中心', '公用電腦', '無線上網區', '庭園廣場'],
+  },
+  'plis-afedb45a9eff2865c224': {
+    url: 'https://isp.ncl.edu.tw/infant-tw/cityres?res=0K291754691357031236',
+    facilities: ['嬰幼兒專區'],
+  },
+  'plis-48e5de0282ee6831ad5e': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000451',
+    facilities: ['新書展示區', '期刊展示區', '兒童區', '閱報區', '電腦上網區', '成人閱覽區', '研習室'],
+  },
+  'plis-4d0c8d7a33e035e307ff': {
+    url: 'https://isp.ncl.edu.tw/teen-tw/cityres?res=0K313038486137355169',
+    facilities: ['青少年書櫃'],
+  },
+  'plis-5f395e10afdb6bce3358': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000456',
+    facilities: ['兒童室', '閱報區', '期刊區', '產業特區', '視聽區', '書庫', '閱讀區', '2 樓 K 書中心', '上網區'],
+  },
+  'plis-1134a5363ae37dec5d31': {
+    url: 'https://isp.ncl.edu.tw/infant-tw/cityres?res=0K291754691357031236',
+    facilities: ['嬰幼兒專區'],
+  },
+  'plis-05b562ce5fb053cecf85': {
+    url: 'https://isp.ncl.edu.tw/teen-tw/cityres?res=0K313038486137355169',
+    facilities: ['青少年專區'],
+  },
+  'plis-b43cab28e604fed1ad99': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000463',
+    facilities: ['1 樓圖書室', '2 樓原住民族文物展示空間'],
+  },
+  'plis-452d6d9aa6f6aa4a66f2': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000464',
+    facilities: ['原住民族圖書區', '兒童閱覽區', '新書展示區', '一般圖書區', '自修閱覽區', '投影設備'],
+  },
+  'plis-6566fcec4f46617d8ca2': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000465',
+    facilities: ['公用電腦', '書庫', '兒童閱覽室', '成人閱覽室', '視聽區', '2 樓研習活動空間'],
+  },
+  'plis-371a7c60bf29d84fe97b': {
+    url: 'https://isp.ncl.edu.tw/infant-tw/cityres?res=0K291754691357031236',
+    facilities: ['親子閱讀區'],
+  },
   'plis-dd0e38aa18f750ffcade': {
     url: 'https://www.typl.gov.tw/zh-tw/News/Content/3345',
     facilities: ['1 樓臨時服務櫃檯', '1 樓還書箱'],
@@ -1042,6 +1094,9 @@ const taoyuanWalkInStudyRooms = new Set([
 ]);
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-452d6d9aa6f6aa4a66f2') {
+    return { ...area, seats: 24 };
+  }
   if (id === 'plis-687f7b5047ffb263f313') {
     return { ...area, entryNote: '縣府資料列出 4 至 9 月週二至週四 17:00–19:00 的自修時段，該時段暫停借還書。' };
   }

@@ -580,6 +580,13 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   assert.equal(evaluate(taishan, taishan.areas[0], request).closure?.until, '2026-12-10');
   assert.equal(evaluate(taishan, undefined, { ...request, kind: 'reading' }).closure, undefined);
   assert.equal(evaluate(taishan, taishan.areas[0], { ...request, date: '2026-12-11' }).closure, undefined);
+  const dongshi = get('新北市立圖書館林口東勢閱覽室');
+  const dongshiStudy = dongshi.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(dongshi.studyRoom, true);
+  assert.equal(dongshiStudy.name, '2 樓自修區');
+  assert.equal(dongshiStudy.seats, 140);
+  assert.equal(dongshiStudy.slots, null);
+  assert.match(dongshiStudy.entryNote!, /約 130 席/);
   const linkou = get('新北市立圖書館林口分館');
   assert.equal(evaluate(linkou, linkou.areas[0], { ...request, date: '2026-11-14' }).closure?.until, '2026-11-14');
   assert.equal(evaluate(linkou, linkou.areas[0], { ...request, date: '2026-11-15' }).closure, undefined);

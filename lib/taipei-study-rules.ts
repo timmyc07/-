@@ -48,7 +48,13 @@ const taipeiReservation = new Set([
   'plis-b4f11997a2a0f56cc70b', 'plis-e3287dc94a64c9288833', 'plis-c21ff2a6d5f510b7fccd',
   'plis-7decf0dff68a9e8b198d', 'plis-0ea807d14456081b105f', 'plis-d14f3a24d79c22efd2da',
 ]);
-const branchSeats: Record<string, { count?: number; url: string; poweredSeats?: string; laptopSeats?: string; wifi?: true } | undefined> = {
+const branchSeats: Record<string, { count?: number; name?: string; note?: string; url: string; poweredSeats?: string; laptopSeats?: string; wifi?: true } | undefined> = {
+  'plis-1dee29e3f2257c15c1cd': {
+    count: 140,
+    name: '2 樓自修區',
+    note: '樓層表列 140 席自修及閱覽座位，館舍簡介另載館內約 130 席。',
+    url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=2d2c7ab867e4497d96de4a0e51b8b441',
+  },
   'plis-fbb1ce331b5c4abb48de': { count: 71, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=ddbda146780e487ca541d6611329c3b2' },
   'plis-12e793940725863678f5': { count: 32, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=a259391449d441c1afd5a9417a92f83d' },
   'plis-f4c982bf00e091bcc667': { count: 24, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=cd2a297d0eb643d8a4457e00a49e507e' },
@@ -143,6 +149,7 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
   const hotspot = taipeiStudyWifi.has(library.id);
   const withSeats = {
     ...area,
+    name: seats?.name ?? area.name,
     ...(seats?.count !== undefined ? { seats: seats.count } : {}),
     equipment: hotspot || seats?.wifi ? { ...area.equipment, wifi: true } : area.equipment,
     sources: [...area.sources, ...(seats ? [seats.url] : []), ...(hotspot ? [taipeiWifiSource] : [])],
@@ -187,7 +194,7 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
         ...(conflictingOutlet ? {} : { outlet: Boolean(seats?.poweredSeats) }) },
       entryNote: conflictingOutlet
         ? '現場入座。分館介紹與自修室管理要點的充電資訊不同，請向館方確認。'
-        : '現場入座，館方得於開館前發放號碼牌。' + (seats?.poweredSeats ?? seats?.laptopSeats ?? ''),
+        : '現場入座，館方得於開館前發放號碼牌。' + (seats?.poweredSeats ?? seats?.laptopSeats ?? seats?.note ?? ''),
       sources: [...withSeats.sources, newTaipeiRule,
         ...(construction ? [construction.closure.url, ...(construction.sources ?? [])] : [])],
     };

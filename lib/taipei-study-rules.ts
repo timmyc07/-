@@ -57,7 +57,7 @@ const branchSeats: Record<string, { count?: number; url: string; poweredSeats?: 
   'plis-c770870780f2e3994cd2': { count: 104, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=5cbaf24850354822b32b7907ef7945b3' },
   'plis-2d54a2fbad4e1969f16d': { count: 65, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=194d0fedaca34b6b8d425d9bf0d6e405' },
   'plis-8c917529e3822d3a0ece': { count: 40, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=dea0fa5bfa8c4196b7f594c5419f135a' },
-  'plis-5e3e0d107165abbc64e5': { count: 135, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=bfc1b820203c4aae9ea7cf4d99827c87' },
+  'plis-5e3e0d107165abbc64e5': { count: 135, wifi: true, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=bfc1b820203c4aae9ea7cf4d99827c87' },
   'plis-aa077d31f651076b59ef': { count: 80, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=04181df4e197467da4590313553f6188' },
   'plis-e3287dc94a64c9288833': { count: 82, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=E9D3E1E398ACCE44' },
   'plis-79c8541a02a760d57156': { count: 24, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=9B5CA23B4B7D3E6E' },

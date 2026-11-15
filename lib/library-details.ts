@@ -967,6 +967,16 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
   },
 };
 const localReadingAreas: Record<string, Area | undefined> = {
+  'plis-116d6ca137065aaf1b89': {
+    name: '3 樓筆記型電腦區', kind: 'reading', seats: 8, slots: null, access: null,
+    equipment: { laptop: true, wifi: true },
+    sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=a889c808b3c0413a88347eeabbecffca'],
+  },
+  'plis-b5812bfda43fbd06e2a4': {
+    name: '6 樓筆電區', kind: 'reading', seats: 12, slots: null, access: null,
+    equipment: { laptop: true, wifi: true, outlet: true },
+    sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=e57e1d4b92334b029508f25dc38c4a39'],
+  },
   'plis-328bb20a01970d84f947': {
     name: '7 樓筆電區', kind: 'reading', seats: 8, slots: null, access: null,
     equipment: { laptop: true, wifi: true, outlet: true },

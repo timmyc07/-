@@ -2106,6 +2106,10 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-7f6f1af1d74f76b8b82a') {
+    return { ...area, entryNote: '供讀者自修，也作為研習活動場地。',
+      sources: [...area.sources, 'https://www.tnpl.tn.edu.tw/u5154486010985754667/a1'] };
+  }
   if (id === 'plis-f0fd06a0e196d2f09357') {
     return { ...area, entryNote: '週一只開放自修室及藝文走廊，國定假日休館。',
       sources: [...area.sources, 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000262'] };

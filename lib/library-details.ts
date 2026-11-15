@@ -110,6 +110,11 @@ const qionglinLibrary = 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_42
 const fuxingLibraryServices = 'https://www.fuxing.tycg.gov.tw/cp.aspx?n=7100';
 const yuminCleaning = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=05b04bc605814183badfe83e28bd8af1';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-5587a95889a363b4a4d6': {
+    url: 'https://www.nthcc.gov.tw/A7_6/content/207',
+    facilities: ['1 樓親子共讀及兒童閱覽區', '1 樓期刊閱報區', '1 樓哺集乳室', '2 樓開放式成人書庫',
+      '3 樓青少年閱讀區', '3 樓電腦與資訊檢索區', '3 樓小團體討論區', '4 樓閱覽室', '4 樓多功能研習教室'],
+  },
   'plis-7d5f6b4a8aae37204a84': {
     url: 'https://www.phlib.nat.gov.tw/wSite/sp?ctNode=6220&mp=1&orgId=006&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
     facilities: ['1 樓閱讀區', '1 樓網路資訊區', '2 樓兒童室', '2 樓期刊雜誌區', '2 樓漫畫休閒區', '3 樓閱讀區', '3 樓視聽中心'],
@@ -1383,6 +1388,16 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-87f04e883855455685fd': {
+    url: 'https://www.nthcc.gov.tw/A7_6/content/212',
+    hours: '週二至週日 09:00–17:00（中午不休息），週一及國定假日休館。',
+    supersedesDirectory: true,
+  },
+  'plis-24ed27c19953ccb5f0c4': {
+    url: 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_4295&mp=1&orgId=004&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    hours: '週二至週日 A 棟及 C 棟 08:00–17:00。B 棟罕借書庫不對外開放。櫃檯於閉館前 10 分鐘停止服務。週一、國定假日及選舉日休館。',
+    supersedesDirectory: true,
+  },
   'plis-a842920d380a52665656': {
     url: 'https://www.phlib.nat.gov.tw/wSite/sp?mp=1&orgId=004&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
     hours: '週三至週日 08:15–12:00、13:30–17:30。週三至週五加開 19:00–21:00，2、7、8 月晚間加開擴及週六及週日。週一、週二及國定假日休館。',
@@ -2006,6 +2021,9 @@ function localStudyRoom(id: string, area: Area): Area {
     'plis-0d08a9f889b9abeca093', 'plis-bda0333882d76e416b20', 'plis-6937f16a63ea043f0527',
     'plis-cf8f59d429a9ca2188f7', 'plis-12cb176cd411e9d41770'].includes(id)) {
     area = { ...area, access: 'walk-in', sources: [...area.sources, hsinchuCountyRules] };
+  }
+  if (id === 'plis-24ed27c19953ccb5f0c4') {
+    return { ...area, entryNote: '公圖名錄列 C 棟 2 樓自修室 08:30 開放，縣館舍頁列 C 棟 08:00 開館。08:30 前使用自修室請先向館方確認。' };
   }
   if (id === 'plis-cf8f59d429a9ca2188f7') {
     return { ...area, name: '地下室自修室', seats: 25,

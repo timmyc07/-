@@ -610,6 +610,17 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
   assert.equal(caogong.areas.find(({ kind }) => kind === 'study')?.seats, 36);
   assert.equal(caogong.closures.find(({ from }) => from === '2026-01-12')?.until, '2026-11-06');
   assert.match(caogong.accessNote!, /11 月 7 日重新開館/);
+  for (const [id, seats] of [
+    ['plis-2743e51569604910aa7d', 51],
+    ['plis-a0dd6959841927ca7597', 44],
+    ['plis-3b604bb555eaf744251d', 50],
+  ] as const) {
+    const library = libraries.find((library) => library.id === id)!;
+    const reading = library.areas.find(({ kind }) => kind === 'reading')!;
+    assert.equal(reading.seats, seats);
+    assert.equal(reading.slots, null);
+    assert.equal(reading.access, null);
+  }
   const cuiping = libraries.find(({ id }) => id === 'plis-793de43144ebd1a7578c')!;
   const cuipingReading = cuiping.areas.find(({ kind }) => kind === 'reading')!;
   assert.equal(cuipingReading.seats, 36);

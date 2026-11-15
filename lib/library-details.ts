@@ -1015,7 +1015,20 @@ const nationalTaiwanLaptopSeats: Area = {
 const hongmeiLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/018';
 const zhongshanLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=9D5E05FD2EDBBA72';
 const dagangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/030';
+const mituoSeatDirectory = 'https://www.ksml.edu.tw/lib/content/Details.aspx?Parser=1,55,565,559,,,283';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-2743e51569604910aa7d': {
+    name: '閱覽座位', kind: 'reading', seats: 51, slots: null, access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,59,609,603'],
+  },
+  'plis-a0dd6959841927ca7597': {
+    name: '閱覽座位', kind: 'reading', seats: 44, slots: null, access: null, equipment: {},
+    sources: [mituoSeatDirectory],
+  },
+  'plis-3b604bb555eaf744251d': {
+    name: '閱覽座位', kind: 'reading', seats: 50, slots: null, access: null, equipment: {},
+    sources: [mituoSeatDirectory],
+  },
   'plis-99799da6e29815c7da11': [
     { name: '1 樓一般閱覽區', kind: 'reading', seats: 12, slots: null, access: null, equipment: {}, sources: [dagangLibrary] },
     { name: '2 樓閱報區', kind: 'reading', seats: 8, slots: null, access: null, equipment: {}, sources: [dagangLibrary] },

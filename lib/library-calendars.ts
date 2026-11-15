@@ -244,6 +244,20 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
       checkDates: ['2026-11-27'],
     };
   }
+  if (library.id === 'plis-2bbbdcd83068ffcf8f4f') {
+    return { closures: [
+      { from: '2026-06-26', until: '2026-06-26', time: { start: minutes('12:00'), end: 24 * 60 },
+        reason: '12:00 提前閉館', url: 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=10989' },
+      { from: '2026-09-01', until: '2026-10-31', reason: '空間改造完工後搬遷休館',
+        url: 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11013' },
+      ...closureDates(2026, 'https://hcplibrary.hchcc.gov.tw/wSite/sp?orgId=008&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+        ['11-28'], '依館方選舉日休館規定休館'),
+    ] };
+  }
+  if (library.id === 'plis-6f3ad22dfc7825bfbbe5') {
+    return { closures: closureDates(2026, 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11036',
+      ['08-29'], '環境教育觀摩休館') };
+  }
   if (/^新竹市文化局圖書館(?:鹽水分館|動物園分館|金山分館|關東分館|南寮分館|青少年館|香山分館|龍山分館|西門自修室)$/.test(library.name)) {
     return { closures: closureDates(2026, hsinchuCityHours, ['11-28'], '依館方選舉日休館規定休館') };
   }
@@ -374,7 +388,7 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
   if (library.name.startsWith('基隆市公共圖書館')) {
     if (library.id === 'plis-6c9e30dc1c6abf7a17d4' || library.id === 'plis-79f7f1447d98ee4e2917') {
       return { calendarYears: [2026], closures: [...keelung2026, {
-        from: '2026-08-26', time: { start: minutes('16:00'), end: 24 * 60 },
+        from: '2026-08-26', until: '2026-08-26', time: { start: minutes('16:00'), end: 24 * 60 },
         reason: '雞籠中元祭 16:00 提前閉館', url: 'https://kllib.klcg.gov.tw/News_Content.aspx?n=8243&s=18291',
       }] };
     }

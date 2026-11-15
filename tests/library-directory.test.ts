@@ -566,6 +566,16 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   const baoshan = libraries.find(({ id }) => id === 'plis-d31d9ccdab3c7bcf9ff3')!;
   assert.equal(evaluate(baoshan, undefined, { ...taipeiQuery, date: '2026-11-28' }).closure?.reason, '選舉日休館');
   assert(baoshan.checkDates?.includes('2026-11-27'));
+  const xinpu = libraries.find(({ id }) => id === 'plis-2bbbdcd83068ffcf8f4f')!;
+  const earlyClosing = { ...taipeiQuery, date: '2026-06-26', start: minutes('11:00'), duration: 60 };
+  assert.equal(evaluate(xinpu, undefined, earlyClosing).closure, undefined);
+  assert.equal(evaluate(xinpu, undefined, { ...earlyClosing, duration: 61 }).closure?.time?.start, minutes('12:00'));
+  assert.equal(evaluate(xinpu, undefined, { ...taipeiQuery, date: '2026-10-31' }).closure?.from, '2026-09-01');
+  assert.equal(evaluate(xinpu, undefined, { ...taipeiQuery, date: '2026-11-01' }).closure, undefined);
+  assert.match(evaluate(xinpu, undefined, { ...taipeiQuery, date: '2026-11-28' }).closure!.reason, /選舉日/);
+  const emei = libraries.find(({ id }) => id === 'plis-6f3ad22dfc7825bfbbe5')!;
+  assert.equal(evaluate(emei, undefined, { ...taipeiQuery, date: '2026-08-29' }).closure?.reason, '環境教育觀摩休館');
+  assert.equal(evaluate(xinpu, undefined, { ...taipeiQuery, date: '2026-08-29' }).closure, undefined);
   assert.equal(libraries.filter(({ city, closures }) => city === '新竹市' &&
     closures.some(({ from }) => from === '2026-11-28')).length, 9);
   assert.equal(evaluate(taipei, taipei.areas[0], taipeiQuery).status, 'no');
@@ -651,6 +661,7 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   for (const library of [keelung, xinyi]) {
     assert.equal(evaluate(library, undefined, { ...festival, start: 15 * 60 }).closure, undefined);
     assert.equal(evaluate(library, undefined, { ...festival, start: 16 * 60 }).closure?.time?.start, 16 * 60);
+    assert.equal(evaluate(library, undefined, { ...festival, date: '2026-08-27', start: 16 * 60 }).closure, undefined);
   }
   assert.equal(evaluate(renai, undefined, { ...festival, start: 16 * 60 }).closure, undefined);
 });

@@ -161,6 +161,12 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
   assert.equal(scheduled.length, 153);
+  const hongmei = libraries.find(({ id }) => id === 'plis-b208b8b3efcd2c80cbaa')!;
+  const hongmeiReading = hongmei.areas.filter(({ kind }) => kind === 'reading');
+  assert.deepEqual(hongmeiReading.map(({ seats }) => seats), [28, 16, 12]);
+  assert.equal(hongmeiReading[2].equipment.laptop, true);
+  assert(hongmeiReading.every(({ access, slots }) => access === null && slots === null));
+  assert.match(hongmei.accessNote!, /觸控式座位管理系統/);
   for (const [id, seats] of [
     ['plis-898020f5dd3a533a9ee3', 50],
     ['plis-efe674464e6fce8f380e', 90],

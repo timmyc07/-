@@ -1008,7 +1008,13 @@ const nationalTaiwanLaptopSeats: Area = {
   entryNote: '館方公布一樓 21 席、二樓 44 席、三樓 10 席、五樓 16 席、六樓 10 席。各區依樓層開放時間使用。',
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
-const localAdditionalAreas: Record<string, Area | undefined> = {
+const hongmeiLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/018';
+const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-b208b8b3efcd2c80cbaa': [
+    { name: '閱覽區', kind: 'reading', seats: 28, slots: null, access: null, equipment: {}, sources: [hongmeiLibrary] },
+    { name: '期刊閱報區', kind: 'reading', seats: 16, slots: null, access: null, equipment: {}, sources: [hongmeiLibrary] },
+    { name: '筆電區', kind: 'reading', seats: 12, slots: null, access: null, equipment: { laptop: true }, sources: [hongmeiLibrary] },
+  ],
   'plis-722fa1747d59f1487f9a': {
     name: '書庫閱覽座位', kind: 'reading', seats: 114, slots: null, access: null, equipment: {},
     sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,39,389,383'],
@@ -1159,6 +1165,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-b208b8b3efcd2c80cbaa': {
+    url: hongmeiLibrary,
+    note: '上網電腦區有 12 席，視聽資料播放區有 6 席，可透過觸控式座位管理系統登記及報到。',
+  },
   'plis-285a909321403c65e3d5': {
     url: 'https://www.tnpl.tn.edu.tw/u5364522661977750278/a1',
     note: '館內提供免費無線網路，也可自備筆電上網。自修室內的網路與筆電使用規定請向館方確認。',
@@ -1641,7 +1651,7 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const facilities = localFacilities
     ? [...new Set([...(baseFacilities ?? []), ...localFacilities.facilities])] : baseFacilities;
   const additionalArea = localAdditionalAreas[library.id];
-  const additionalAreas = [additionalArea, library.id === 'plis-a094b0d4aa7d7722fd03' ? nationalTaiwanLaptopSeats : undefined]
+  const additionalAreas = [additionalArea, library.id === 'plis-a094b0d4aa7d7722fd03' ? nationalTaiwanLaptopSeats : undefined].flat()
     .filter((area): area is Area => Boolean(area && !library.areas.some(({ name }) => name === area.name)));
   const areas = [...library.areas, ...additionalAreas];
   return {

@@ -183,6 +183,7 @@ const pudingOpening = 'https://news.tycg.gov.tw/News_Content.aspx?n=5016&s=19353
 const taoyuanOpeningHours = 'https://www.tycg.gov.tw/News_Content.aspx?n=97&s=1554331';
 const taoyuanSeatPortal = 'https://spaceme.typl.gov.tw/';
 const taoyuanSeatRules = 'https://www.typl.gov.tw/zh-tw/Reader/RegulationContent/6';
+const iTaiwanHotspots = 'https://itaiwan.gov.tw/ftp/upload/HotspotData/hotspotlist_tw.csv';
 const hsinchuNandaContact = 'https://dgservice.hccg.gov.tw/serviceNotice.do?id=1329&rule=guest';
 const hsinchuNandaOpening = 'https://www.cna.com.tw/postwrite/chi/448883';
 const hsinchuReadingOnly = new Set([
@@ -194,9 +195,9 @@ const announcedLibraries: (Library & { city: string })[] = [
   {
     id: 'local-hsinchu-city-nanda', name: '新竹市圖書館南大分館', city: '新竹市', district: '東區',
     address: '新竹市東區南大路521號', phone: '03-5619962', types: ['公共圖書館'],
-    website: hsinchuNandaOpening, sources: [hsinchuNandaOpening, hsinchuNandaContact, 'https://www.openstreetmap.org/way/291042237'],
+    website: hsinchuNandaOpening, sources: [hsinchuNandaOpening, hsinchuNandaContact, 'https://www.openstreetmap.org/way/291042237', iTaiwanHotspots],
     coordinates: { latitude: 24.79408, longitude: 120.96555 },
-    facilities: ['文獻資料專區', '兒童閱覽區', '藝文展區', '多功能室'],
+    facilities: ['文獻資料專區', '兒童閱覽區', '藝文展區', '多功能室', '無線上網wifi'],
     accessNote: '2026 年 11 月 3 日正式開館，館方公布 100 席閱覽座位。',
     areas: [], closures: [],
   },
@@ -351,10 +352,12 @@ const taoyuanSeatSystem: Record<string, { url?: string; seats?: number; name?: s
 };
 
 const localStudyWifi: Record<string, string | undefined> = {
-  'plis-62eb0222ac5626717a13': 'https://itaiwan.gov.tw/ftp/upload/HotspotData/hotspotlist_tw.csv',
-  'plis-eec71326733024bf68f9': 'https://itaiwan.gov.tw/ftp/upload/HotspotData/hotspotlist_tw.csv',
-  'plis-5929930cfc61bd687f1f': 'https://itaiwan.gov.tw/ftp/upload/HotspotData/hotspotlist_tw.csv',
+  'plis-62eb0222ac5626717a13': iTaiwanHotspots,
+  'plis-eec71326733024bf68f9': iTaiwanHotspots,
+  'plis-5929930cfc61bd687f1f': iTaiwanHotspots,
   'plis-112e55434de56841e873': 'https://culture.tycg.gov.tw/News_Content.aspx?n=11129&s=1470563',
+  'plis-539f7d3d76b9f2ee658a': iTaiwanHotspots,
+  'plis-e94c48945a092b5818d8': 'https://isp.ncl.edu.tw/files/file_pool/1/0N145527299641613348/（六）圖書館工作手冊(12.18修).pdf',
 };
 
 const taoyuanStudySeats: Record<string, { seats: number; url: string } | undefined> = {

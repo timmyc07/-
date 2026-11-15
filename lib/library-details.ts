@@ -82,6 +82,7 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const fuxingLibraryServices = 'https://www.fuxing.tycg.gov.tw/cp.aspx?n=7100';
+const yuminCleaning = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=05b04bc605814183badfe83e28bd8af1';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
   'plis-05da96e29ca78b9de81a': {
     url: fuxingLibraryServices,
@@ -974,6 +975,14 @@ const kinmenReadingAreas: Record<string, Area | undefined> = {
   },
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-38c1c05b0d447cb39563': {
+    url: 'https://www.library.ntpc.gov.tw/Kids/singlehtml/2282e79138184d328d2e70de42f23318?cntId=-1534781038',
+    note: '2026 年 11 月 17 日視聽資料區木作地板範圍暫停開放，其餘空間照常開放。',
+  },
+  'plis-aa077d31f651076b59ef': {
+    url: yuminCleaning,
+    note: '地板清潔期間，2026 年 11 月 9 日 5 樓（含自修室）暫停開放，11 月 30 日 4 樓暫停開放。兩天流通櫃檯照常服務。',
+  },
   'plis-a382f4004c63510e6b53': {
     url: minxiongRenovation,
     note: '整修期間 1 樓及閱報室暫停開放，請走側樓梯。借還書及領取預約書請至 3 樓櫃檯。',
@@ -1408,6 +1417,11 @@ const taoyuanWalkInStudyRooms = new Set([
 ]);
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-aa077d31f651076b59ef') {
+    return { ...area, closures: [...(area.closures ?? []), {
+      from: '2026-11-09', until: '2026-11-09', reason: '5 樓自修室清潔暫停開放', url: yuminCleaning,
+    }], sources: [...area.sources, yuminCleaning] };
+  }
   if (id === 'plis-05da96e29ca78b9de81a') {
     return { ...area, name: '2 樓 K 書中心' };
   }

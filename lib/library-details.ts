@@ -1042,7 +1042,16 @@ const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
 const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const lanzhouLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=A3B82F4BECD6CD1C&sms=CFFFC938B352678A';
+const kaohsiungMainReadingRules = 'https://www.ksml.edu.tw/form/Details.aspx?Parser=2%2C8%2C872%2C%2C%2C%2C688';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-8616f8eb019058a7080c': {
+    name: '2 樓書庫閱覽區', kind: 'reading', seats: 14, slots: null, access: null, equipment: {},
+    sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=7ce26c583dfd45f896e4f02548c888f5'],
+  },
+  'plis-3f6ed064ed62a36e4b9b': {
+    name: '5 樓行動裝置座位區', kind: 'reading', slots: null, access: null,
+    equipment: { outlet: true }, sources: [kaohsiungMainReadingRules],
+  },
   'plis-7371f9f4c01f228d896e': [
     { name: '一般閱覽區', kind: 'reading', seats: 88, slots: null, access: null, equipment: {}, sources: [lanzhouLibrary] },
     { name: '兒童閱覽區', kind: 'reading', seats: 24, slots: null, access: null, equipment: {}, sources: [lanzhouLibrary] },
@@ -1338,6 +1347,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-3f6ed064ed62a36e4b9b': {
+    url: kaohsiungMainReadingRules,
+    note: '3 至 7 樓閱覽區自由入座，請勿預占座位。館方張貼離席提醒後逾 60 分鐘未回座，座位可讓其他讀者使用。5 樓行動裝置座位區提供電源，其餘區域請勿自行接電。',
+  },
   'plis-4211973a59dada78d703': {
     url: 'https://www.ksml.edu.tw/lib/form/Details.aspx?Parser=2,84,1387,,,,1544',
     note: '閱覽座位優先供館藏閱覽，離席逾 30 分鐘，館方得清空座位。插座限藝術研究使用，個人物品不得充電。',

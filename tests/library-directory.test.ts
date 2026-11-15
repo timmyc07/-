@@ -123,6 +123,16 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
   assert.equal(scheduled.length, 140);
+  const baoshan = libraries.find(({ id }) => id === 'plis-d31d9ccdab3c7bcf9ff3')!;
+  assert.equal(baoshan.studyRoom, true);
+  assert.equal(baoshan.areas[0].slots, null);
+  assert.match(baoshan.areas[0].sources[0], /^https:\/\/libstat\.ncl\.edu\.tw\/libraryDataDetail\//);
+  const houbi = libraries.find(({ id }) => id === 'plis-a3aa908413cf852b7708')!;
+  assert.equal(houbi.studyRoom, true);
+  assert.equal(houbi.areas[0].name, '自修區');
+  const zhonglu = libraries.find(({ id }) => id === 'plis-094ed6f57775956545a2')!;
+  assert.equal(zhonglu.areas[0].seats, 85);
+  assert.equal(zhonglu.areas[0].equipment.wifi, true);
   const changhuaCity = libraries.find(({ id }) => id === 'plis-d4bafe538b622515b304')!;
   assert.deepEqual(changhuaCity.areas[0].slots?.map(({ day }) => day).sort(), [0, 1, 3, 4, 5, 6]);
   const yuanlin = libraries.find(({ id }) => id === 'plis-016c903b9ad9d1b886d6')!;
@@ -238,7 +248,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   for (const id of ['plis-cbce401033404caad835', 'plis-722d54fbc98c7dc13cc0']) {
     const library = libraries.find((record) => record.id === id)!;
     assert.equal(library.areas[0].kind, 'reading');
-    assert.equal(library.studyRoom, undefined);
+    assert.equal(library.studyRoom, id === 'plis-722d54fbc98c7dc13cc0' ? false : undefined);
   }
   const nantou = libraries.find(({ id }) => id === 'plis-8e698a4770cf01e3875e')!;
   assert.equal(nantou.areas[0].seats, 147);
@@ -349,7 +359,7 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
   };
   const libraries = directory.libraries.filter(({ city }) => city === '高雄市')
     .map((library) => withLibraryDetail(library, details[library.id]));
-  assert.equal(libraries.filter(({ studyRoom }) => studyRoom === true).length, 27);
+  assert.equal(libraries.filter(({ studyRoom }) => studyRoom === true).length, 29);
   assert.equal(libraries.filter(({ studyRoom }) => studyRoom === false).length, 34);
   assert.equal(libraries.filter((library) => coversCalendarYear(library, 2026)).length, 61);
   const cijin = libraries.find(({ name }) => name === '高雄市立圖書館旗津分館')!;

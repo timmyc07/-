@@ -4,6 +4,7 @@ import { chiayiCountyReadingRules, libraryCalendar, penghuMainUrl, penghuStudyCl
 import { kaohsiungHoursSource, kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 import { tainanStudyRoom } from './tainan-study-rules.ts';
 import { taipeiStudyRoom } from './taipei-study-rules.ts';
+import nclStudyRooms from './ncl-study-rooms.json' with { type: 'json' };
 
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
@@ -338,16 +339,19 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     ? hsinchuHoursOverride : undefined;
   const closure = buildingClosures[library.id];
   const study = libraryStudyHours(library.id);
+  const reported = (nclStudyRooms as Record<string, { address: string; code: string; studyRoom: boolean } | undefined>)[library.id];
+  const nclReport = reported && faxLocation(reported.address) === faxLocation(library.address) ? reported : undefined;
+  const nclSource = nclReport ? 'https://libstat.ncl.edu.tw/libraryDataDetail/' + nclReport.code : undefined;
   const listed = Boolean(detail.facilities?.some((facility) => /^自[修習]室$/.test(facility)));
   const area: Area = {
     name: study?.name ?? '自修室', kind: 'study', slots: study?.slots ?? null, access: null, equipment: {},
-    sources: [study?.url ?? (local?.studyRoom ? local.url : detail.url)],
+    sources: [study?.url ?? (local?.studyRoom ? local.url : listed ? detail.url : nclSource ?? detail.url)],
   };
   const taipeiArea = taipeiStudyRoom(library, area, listed);
   const tainanArea = tainanStudyRoom(library.id, area);
   const kaohsiungArea = kaohsiungStudyRoom(library.id);
   const localArea = kaohsiungArea ?? tainanArea ?? localStudyRoom(library.id, taipeiArea ?? area);
-  const studyRoom = Boolean(study || local?.studyRoom || listed || taipeiArea || tainanArea || kaohsiungArea);
+  const studyRoom = Boolean(study || local?.studyRoom || listed || taipeiArea || tainanArea || kaohsiungArea || nclReport?.studyRoom);
   const calendar = libraryCalendar(library);
   const serviceUpdate = serviceUpdates[library.id];
   const readingOnly = hsinchuReadingOnly.has(library.id);
@@ -367,13 +371,14 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     closures: [...library.closures, ...(calendar?.closures ?? []), ...(closure ? [closure] : [])],
     accessNote: serviceUpdate?.note ?? library.accessNote,
     facilities: noStudyRoom ? facilities?.filter((facility) => !/^自[修習]室$/.test(facility)) : facilities,
-    studyRoom: noStudyRoom ? false : library.studyRoom ?? (kaohsiungArea === null ? false : studyRoom || undefined),
+    studyRoom: noStudyRoom ? false : library.studyRoom ?? (kaohsiungArea === null ? false : studyRoom || nclReport?.studyRoom),
     areas: noStudyRoom ? areas.filter(({ kind }) => kind !== 'study')
       : studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !areas.some(({ kind }) => kind === 'study')
       ? [...areas, localArea] : areas,
     sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []),
       ...(serviceUpdate ? [serviceUpdate.url] : []),
       ...(localFacilities ? [localFacilities.url] : []),
+      ...(nclSource ? [nclSource] : []),
       ...(hoursOverride ? [hoursOverride.url] : []),
       ...(readingOnly ? [hsinchuReadingServices] : []),
       ...(kaohsiungArea === null ? [kaohsiungHoursSource] : []),
@@ -416,6 +421,7 @@ const taoyuanStudySeats: Record<string, { seats: number; url: string } | undefin
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-094ed6f57775956545a2') return { ...area, seats: 85, equipment: { wifi: true } };
   if (id === 'plis-016c903b9ad9d1b886d6') {
     return { ...area, name: '地下 1 樓自修室', access: 'walk-in', equipment: { outlet: true, laptop: false },
       entryNote: '通常自由入座，例假日或特殊期間可能發號碼牌。使用筆電請至 1 樓期刊室無線上網區並自備電源。',

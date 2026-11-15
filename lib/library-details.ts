@@ -1,6 +1,7 @@
 import { minutes, type Area, type Library } from './study.ts';
 import { libraryStudyHours } from './library-study-hours.ts';
-import { chiayiCountyReadingRules, libraryCalendar, penghuMainUrl, penghuStudyClosures, tainanTuchengUrl, yuanlinLibraryRules } from './library-calendars.ts';
+import { chiayiCountyReadingRules, libraryCalendar, penghuMainUrl, penghuStudyClosures, sanwanLibraryHours,
+  tainanTuchengUrl, yuanlinLibraryRules } from './library-calendars.ts';
 import { kaohsiungHoursSource, kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 import { tainanStudyRoom } from './tainan-study-rules.ts';
 import { taipeiStudyRoom } from './taipei-study-rules.ts';
@@ -9,6 +10,10 @@ import nclStudyRooms from './ncl-study-rooms.json' with { type: 'json' };
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-9895c2461ceb573cd713': {
+    from: '2026-04-13', until: '2026-12-04', reason: '泰安鄉立圖書館因耐震補強工程暫停開放。',
+    url: 'https://www.taian.gov.tw/News_Content.aspx?n=3892&s=999181',
+  },
   'plis-5da75c6e4e69a34999e4': {
     from: '2025-03-25', reason: '配合大陳社區都市更新，自 2025 年 3 月 25 日起停止對外開放。',
     url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=e5bd7a8339d842c9951bbe5233d62368',
@@ -1167,6 +1172,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-708a19a863b754e58e04': {
+    url: sanwanLibraryHours,
+    hours: '週一至週日 08:00–17:00。農曆春節及選舉日休館。',
+    supersedesDirectory: true,
+  },
   'plis-27e5ed75c8013b01c228': {
     url: tainanTuchengUrl,
     hours: '週三至週日 09:00–20:00。週二及每月最後一個週五 09:00–17:00 僅提供預約書取書。週一及國定假日休館。',

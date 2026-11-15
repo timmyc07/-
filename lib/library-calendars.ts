@@ -107,9 +107,24 @@ const tainanMainUrl = 'https://www.tnpl.tn.edu.tw/u4914263388070917076/a1';
 export const tainanTuchengUrl = 'https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u5069505906890802294';
 const hsinchuCityHours = 'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=1031a73e-224c-4ecd-a33a-496ad144123e';
 export const yuanlinLibraryRules = 'https://files.chcg.gov.tw/files/58_20250124134738385_彰化縣員林市立圖書館圖書資料借閱規定-1140123修正.pdf';
+const miaoliLibraryHours = 'https://opendata.miaoli.gov.tw/OpenDataDetail.aspx?n=9404&s=1811';
+export const sanwanLibraryHours = 'https://www.sanwan.gov.tw/News_Content.aspx?n=9906&s=785817';
 const electionClosureRules: Record<string, string> = {
   'plis-703e62be51f0cd3f7e93': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000174',
-  'plis-eaf18916c54c8e1fffc3': 'https://opendata.miaoli.gov.tw/OpenDataDetail.aspx?n=9404&s=1811',
+  'plis-eaf18916c54c8e1fffc3': miaoliLibraryHours,
+  'plis-5214bc11151c1cde5bf4': miaoliLibraryHours,
+  'plis-687f7b5047ffb263f313': miaoliLibraryHours,
+  'plis-4d279c7315db0ef22427': miaoliLibraryHours,
+  'plis-296440e3a1f9d236a570': miaoliLibraryHours,
+  'plis-0f8ce5ec67aa7c253fe8': miaoliLibraryHours,
+  'plis-189e26aab70c5cb51cdd': miaoliLibraryHours,
+  'plis-85a3abe63d4ba7d005b7': miaoliLibraryHours,
+  'plis-8258ecedb33967785152': miaoliLibraryHours,
+  'plis-cb71eb01e4c6590c8846': miaoliLibraryHours,
+  'plis-1c304ff42dd5276d9acf': miaoliLibraryHours,
+  'plis-1c030fa3616cfb99d6fc': miaoliLibraryHours,
+  'plis-4ee8f2321103a6f17ad7': miaoliLibraryHours,
+  'plis-708a19a863b754e58e04': sanwanLibraryHours,
   'plis-7417038e0db9b35c62ea': 'https://www.houlong.gov.tw/cp.aspx?n=4134',
   'plis-12a529595d2715dda629': yuanlinLibraryRules,
   'plis-016c903b9ad9d1b886d6': yuanlinLibraryRules,

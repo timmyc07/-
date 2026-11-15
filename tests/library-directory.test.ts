@@ -621,6 +621,16 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   assert.equal(evaluate(xinpu, undefined, { ...taipeiQuery, date: '2026-08-29' }).closure, undefined);
   assert.equal(libraries.filter(({ city, closures }) => city === '新竹市' &&
     closures.some(({ from }) => from === '2026-11-28')).length, 9);
+  const miaoli = libraries.filter(({ city }) => city === '苗栗縣');
+  const election = { ...taipeiQuery, date: '2026-11-28' };
+  assert.equal(miaoli.filter((library) => evaluate(library, undefined, election).closure?.from === election.date).length, 18);
+  const sanwan = miaoli.find(({ id }) => id === 'plis-708a19a863b754e58e04')!;
+  assert.match(sanwan.openingHours!, /選舉日休館/);
+  assert.equal(evaluate(sanwan, undefined, { ...election, date: '2026-11-29' }).closure, undefined);
+  const taian = miaoli.find(({ id }) => id === 'plis-9895c2461ceb573cd713')!;
+  assert.equal(evaluate(taian, undefined, election).closure?.from, '2026-04-13');
+  assert.equal(evaluate(taian, undefined, { ...election, date: '2026-12-04' }).closure?.until, '2026-12-04');
+  assert.equal(evaluate(taian, undefined, { ...election, date: '2026-12-05' }).closure, undefined);
   assert.equal(evaluate(taipei, taipei.areas[0], taipeiQuery).status, 'no');
   assert.equal(evaluate(taipei, taipei.areas[0], { ...taipeiQuery, date: '2027-02-10' }).status, 'yes');
   const newTaipei = libraries.find(({ name }) => name === '新北市立圖書館三峽分館')!;

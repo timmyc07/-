@@ -122,7 +122,16 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 139);
+  assert.equal(scheduled.length, 140);
+  const changhuaCity = libraries.find(({ id }) => id === 'plis-d4bafe538b622515b304')!;
+  assert.deepEqual(changhuaCity.areas[0].slots?.map(({ day }) => day).sort(), [0, 1, 3, 4, 5, 6]);
+  const yuanlin = libraries.find(({ id }) => id === 'plis-016c903b9ad9d1b886d6')!;
+  assert.equal(yuanlin.areas[0].name, '地下 1 樓自修室');
+  assert.equal(yuanlin.areas[0].access, 'walk-in');
+  assert.deepEqual(yuanlin.areas[0].equipment, { outlet: true, laptop: false });
+  for (const id of ['plis-12a529595d2715dda629', yuanlin.id]) {
+    assert(libraries.find((library) => library.id === id)?.closures.some(({ from }) => from === '2026-11-28'));
+  }
   const luodong = libraries.find(({ id }) => id === 'plis-c45011eb98a75a2b9c10')!;
   assert.equal(luodong.areas[0].name, '南豪館 2 樓自修室');
   assert.equal(luodong.areas[0].seats, 100);
@@ -184,6 +193,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert(supplemented.some(({ name, openingHours }) => name === '竹北星際圖書館' && openingHours?.includes('24:00')));
   const stellar = supplemented.find(({ name }) => name === '竹北星際圖書館')!;
   assert.deepEqual(stellar.coordinates, { latitude: 24.8396572, longitude: 121.0036135 });
+  assert.equal(supplemented.find(({ id }) => id === 'local-hsinchu-city-nanda')?.areas[0].seats, 100);
   const fude = libraries.find(({ id }) => id === 'plis-e2c2e5a82e7e92aa1179')!;
   assert.match(fude.name, /福德分館/);
   assert.match(fude.openingHours!, /09:00–20:30/);

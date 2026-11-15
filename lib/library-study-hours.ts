@@ -10,6 +10,10 @@ const hsinchuLate: WeeklyRange[] = [['2345', '09:00', '21:00'], ['06', '09:00', 
 
 // 館舍詳情明列的專室時段。各範圍以 0 至 6 代表週日至週六。
 const studyHours: Record<string, StudyHours | undefined> = {
+  'plis-d4bafe538b622515b304': {
+    name: '3 樓自習室', ranges: [['13456', '08:30', '20:30'], ['0', '08:30', '17:00']],
+    url: 'https://www.changhua.gov.tw/Content/192',
+  },
   'plis-34ea4e3647b8191ffef9': {
     name: '普通閱覽室', ranges: [['23456', '09:00', '20:00'], ['0', '09:00', '17:00']],
     url: 'https://www.findglocal.com/TW/Chiayi/569286603199484/嘉義市圖書館',

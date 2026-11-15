@@ -1,6 +1,6 @@
 import { minutes, type Area, type Library } from './study.ts';
 import { libraryStudyHours } from './library-study-hours.ts';
-import { chiayiCountyReadingRules, libraryCalendar } from './library-calendars.ts';
+import { chiayiCountyReadingRules, libraryCalendar, yuanlinLibraryRules } from './library-calendars.ts';
 import { kaohsiungHoursSource, kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 import { tainanStudyRoom } from './tainan-study-rules.ts';
 import { taipeiStudyRoom } from './taipei-study-rules.ts';
@@ -218,7 +218,8 @@ const announcedLibraries: (Library & { city: string })[] = [
     coordinates: { latitude: 24.79408, longitude: 120.96555 },
     facilities: ['文獻資料專區', '兒童閱覽區', '藝文展區', '多功能室', '無線上網wifi'],
     accessNote: '2026 年 11 月 3 日正式開館，館方公布 100 席閱覽座位。',
-    areas: [], closures: [],
+    areas: [{ name: '館內閱覽座位', kind: 'reading', slots: null, access: 'walk-in', seats: 100,
+      equipment: {}, sources: [hsinchuNandaOpening] }], closures: [],
   },
   {
     id: 'local-taoyuan-puding', name: '桃園市立圖書館埔頂分館', city: '桃園市', district: '大溪區',
@@ -266,7 +267,7 @@ const announcedLibraries: (Library & { city: string })[] = [
     coordinates: { latitude: 24.8396572, longitude: 121.0036135 },
     openingHours: '試營運：週二至週四 09:00–20:30，週五至週日 09:00–24:00。週一休館，特殊日期依公告。',
     facilities: ['嬰幼兒圖書區', '館內閱覽區', '書報區', '安靜自修區', '親子閱讀區'],
-    accessNote: '試營運開放館內閱覽，暫停外借、預約、還書、通閱、檢索電腦及視聽設備服務。試營運諮詢可洽竹北市公所總機 03-5515919。',
+    accessNote: '試營運開放館內閱覽，暫停外借、預約、還書、通閱、檢索電腦及視聽設備服務。2026 年 11 月 13 日至 15 日限時 24 小時開放。試營運諮詢可洽竹北市公所總機 03-5515919。',
     studyRoom: true,
     areas: [{ name: '安靜自修區', kind: 'quiet', slots: null, access: null, equipment: {}, sources: [stellarSpace] }],
     closures: [],
@@ -385,6 +386,12 @@ const taoyuanStudySeats: Record<string, { seats: number; url: string } | undefin
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-016c903b9ad9d1b886d6') {
+    return { ...area, name: '地下 1 樓自修室', access: 'walk-in', equipment: { outlet: true, laptop: false },
+      entryNote: '通常自由入座，例假日或特殊期間可能發號碼牌。使用筆電請至 1 樓期刊室無線上網區並自備電源。',
+      sources: [...area.sources, yuanlinLibraryRules,
+        'https://files.chcg.gov.tw/files/彰化縣員林市立圖書館自修室使用須知1040808_58_1090416.pdf'] };
+  }
   if (id === 'plis-e7aaecf3515c7452935c') {
     return { ...area, access: 'walk-in', sources: [...area.sources, chiayiCountyReadingRules] };
   }

@@ -1010,6 +1010,14 @@ const nationalTaiwanLaptopSeats: Area = {
 };
 const hongmeiLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/018';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-f837393150c2835dca29': {
+    name: '書刊閱覽座位', kind: 'reading', seats: 95, slots: null, access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,34,335,328'],
+  },
+  'plis-777d6726d52d0b28eb51': {
+    name: '閱覽座位', kind: 'reading', seats: 70, slots: null, access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,38,379,372'],
+  },
   'plis-539f7d3d76b9f2ee658a': {
     name: '全館閱覽座位', kind: 'reading', seats: 250, slots: null, access: null, equipment: {},
     entryNote: '全館閱覽席次包含擴館時於 4 至 6 樓新增的 160 席。',

@@ -559,6 +559,8 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
   assert.equal(cijin.areas[0].access, 'walk-in');
   assert.deepEqual(cijin.areas[0].equipment, { laptop: false, wifi: false, outlet: false });
   for (const [id, readingSeats, studySeats] of [
+    ['plis-f837393150c2835dca29', 95, 157],
+    ['plis-777d6726d52d0b28eb51', 70, 380],
     ['plis-722fa1747d59f1487f9a', 114, 122],
     ['plis-88c4b0b28fd9dc888207', 15, 74],
     ['plis-d624fdace694450c004a', 26, 38],

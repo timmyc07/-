@@ -193,7 +193,8 @@ const announcedLibraries: (Library & { city: string })[] = [
   {
     id: 'local-hsinchu-city-nanda', name: '新竹市圖書館南大分館', city: '新竹市', district: '東區',
     address: '新竹市東區南大路521號', phone: '03-5619962', types: ['公共圖書館'],
-    website: hsinchuNandaOpening, sources: [hsinchuNandaOpening, hsinchuNandaContact],
+    website: hsinchuNandaOpening, sources: [hsinchuNandaOpening, hsinchuNandaContact, 'https://www.openstreetmap.org/way/291042237'],
+    coordinates: { latitude: 24.79408, longitude: 120.96555 },
     facilities: ['文獻資料專區', '兒童閱覽區', '藝文展區', '多功能室'],
     accessNote: '2026 年 11 月 3 日正式開館，館方公布 100 席閱覽座位。',
     areas: [], closures: [],

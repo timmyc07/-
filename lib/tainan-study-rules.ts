@@ -13,6 +13,13 @@ const studyRoomLocations = new Set([
 export function tainanStudyRoom(id: string, area: Area): Area | undefined {
   if (!studyRoomLocations.has(id)) return;
   const sources = [...new Set([...area.sources, locations])];
+  if (id === 'plis-0cbbf1735c46d0a6488b') {
+    return {
+      ...area, entryNote: '市圖館舍名錄列有自修室，國家圖書館名錄則列無自修室。館方樓層介紹列有 2 樓一般閱覽區，獨立自修室及其使用方式請向館方確認。',
+      sources: [...sources, 'https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u5256274048753421977',
+        'https://libstat.ncl.edu.tw/libraryDataDetail/L3391000'],
+    };
+  }
   if (id === 'plis-524fbb8d8cdb1804a640') {
     return { ...area, name: '地下 1 樓自修室', sources: [...sources, 'https://www.tnpl.tn.edu.tw/u5500876882067823234/a1'] };
   }

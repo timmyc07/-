@@ -797,6 +797,9 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   assert.equal(evaluate(ntl, deviceSeats, { ...deviceQuery, date: '2026-11-16' }).status, 'no');
   assert.equal(coversCalendarYear(libraries.find(({ name }) => name === '新北市烏來區立圖書館')!, 2026), false);
   const liujia = libraries.find(({ name }) => name === '臺南市六甲區圖書館')!;
+  const liujiaStudy = liujia.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(liujiaStudy.name, '自修研習室');
+  assert.equal(liujiaStudy.slots, null);
   const anping = libraries.find(({ name }) => name === '臺南市安平區圖書館')!;
   assert(coversCalendarYear(liujia, 2026) && coversCalendarYear(anping, 2026));
   assert(liujia.closures.some(({ from }) => from === '2026-01-31'));

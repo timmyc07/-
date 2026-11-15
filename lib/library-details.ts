@@ -110,6 +110,10 @@ const qionglinLibrary = 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_42
 const fuxingLibraryServices = 'https://www.fuxing.tycg.gov.tw/cp.aspx?n=7100';
 const yuminCleaning = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=05b04bc605814183badfe83e28bd8af1';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-e236f05575016f72b791': {
+    url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=aeed685215ce447bbaf9f38b30128cd2',
+    facilities: ['3 樓開架閱覽區', '3 樓期刊閱報區', '3 樓電腦檢索區', '3 樓兒童區'],
+  },
   'plis-35fd0d403d4fe15ada5e': {
     url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=480eedf0ee4b442c85726c04abc72ac7',
     facilities: ['1 樓一般閱覽區、期刊閱報區及資訊檢索區', '2 樓親子共讀區及學齡前兒童閱覽區', '3 樓兒童閱覽區', '地下 1 樓多功能活動室', '地下 2 樓樂齡活動區'],
@@ -1849,6 +1853,11 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   if (library.id === 'plis-5931f90c2b78f1094592' && library.address === '屏東縣新園鄉仙吉村新田路22巷21號') {
     detail = { url: xinyuanUrl, address: library.address, hours: xinyuanHours };
   }
+  if (library.id === 'plis-e236f05575016f72b791' && library.address === '新北市汐止區橫科路119號3樓' && detail) {
+    const address = '新北市汐止區橫科路117號3樓';
+    library = { ...library, address, website: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=aeed685215ce447bbaf9f38b30128cd2' };
+    detail = { ...detail, address };
+  }
   if (!detail?.address || comparableAddress(detail.address) !== comparableAddress(library.address)) return library;
   const candidate = localHours[library.id];
   const local = !detail.hours || candidate?.supersedesDirectory ? candidate : undefined;
@@ -2021,7 +2030,8 @@ function localStudyRoom(id: string, area: Area): Area {
     return { ...area, name: '地下 1 樓自修室', seats: 84 };
   }
   if (id === 'plis-e236f05575016f72b791') {
-    return { ...area, seats: 42 };
+    return { ...area, name: '3 樓自修區', seats: 42,
+      sources: [...area.sources, 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=aeed685215ce447bbaf9f38b30128cd2'] };
   }
   if (id === 'plis-f6701d622c9bbfa1dd39') {
     return { ...area, seats: 24 };

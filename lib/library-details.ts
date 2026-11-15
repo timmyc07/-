@@ -8,6 +8,10 @@ import { taipeiStudyRoom } from './taipei-study-rules.ts';
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-b9b43f111c155ee7f7b1': {
+    from: '2026-06-29', reason: '三和分館耐震補強及室內整修期間暫停開放，預計 12 月復館，日期以館方公告為準。',
+    url: 'https://www.typl.gov.tw/zh-tw/News/Content/3120',
+  },
   'plis-37cd73be99573999d94d': {
     from: '2026-03-05', reason: '瑞穗原館耐震補強暫停開放。借閱服務移至溫泉路一段 1 號臨時圖書館（瑞穗站後站對面）。',
     url: 'https://www.juisui.gov.tw/News_Content.aspx?n=3419&s=204355',
@@ -118,7 +122,18 @@ const comparableAddress = (value: string) => value.normalize('NFKC').replaceAll(
 const hsinchuOpening = 'https://www.hclibraryopening.com.tw/';
 const hsinchuFloorGuide = 'https://www.hclibraryopening.com.tw/%E8%AA%8D%E8%AD%98%E7%B8%BD%E5%9C%96';
 const stellarOpening = 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11078';
+const pudingOpening = 'https://news.tycg.gov.tw/News_Content.aspx?n=5016&s=1935304';
 const announcedLibraries: (Library & { city: string })[] = [
+  {
+    id: 'local-taoyuan-puding', name: '桃園市立圖書館埔頂分館', city: '桃園市', district: '大溪區',
+    address: '桃園市大溪區埔仁路557號', types: ['公共圖書館'], website: pudingOpening,
+    sources: [pudingOpening, 'https://opc.tycg.gov.tw/News_Content.aspx?n=9330&s=1787440',
+      'https://youyoutrip88.com/puding-parent/'],
+    studyRoom: true, facilities: ['親子閱覽區', '一般閱覽室', '研習教室', '自修閱覽座位'],
+    areas: [{ name: '自修閱覽區', kind: 'study', slots: null, access: null, seats: 93,
+      equipment: {}, sources: [pudingOpening] }],
+    closures: [],
+  },
   {
     id: 'local-hsinchu-county-main', name: '新竹縣立總圖書館', city: '新竹縣', district: '竹北市',
     address: '新竹縣竹北市自強三路155號', types: ['公共圖書館'],

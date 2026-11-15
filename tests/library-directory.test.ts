@@ -173,6 +173,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const jianshi = libraries.find(({ id }) => id === 'plis-0a0cb9e669998c949020')!;
   assert.equal(jianshi.address, '新竹縣尖石鄉嘉樂村2鄰64號');
   assert(jianshi.facilities?.includes('原住民館藏室'));
+  assert(jianshi.closures.some(({ from, reason }) => from === '2026-11-28' && reason.includes('選舉日')));
   const houbi = libraries.find(({ id }) => id === 'plis-a3aa908413cf852b7708')!;
   assert.equal(houbi.studyRoom, true);
   assert.equal(houbi.areas[0].name, '自修區');
@@ -282,6 +283,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const fude = libraries.find(({ id }) => id === 'plis-e2c2e5a82e7e92aa1179')!;
   assert.match(fude.name, /福德分館/);
   assert.match(fude.openingHours!, /09:00–20:30/);
+  assert(fude.closures.some(({ from, reason }) => from === '2026-11-28' && reason.includes('選舉日')));
   assert.equal(withAnnouncedLibraries([...directory.libraries, { ...main, id: 'plis-from-directory' }])
     .filter(({ address }) => address === main.address).length, 1);
   const oldHsinchuCounty = libraries.find(({ id }) => id === 'plis-e94c48945a092b5818d8')!;

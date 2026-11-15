@@ -169,6 +169,21 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
       checkDates: ['2026-02-20', '2026-02-21'],
     };
   }
+  if (['plis-7f6f1af1d74f76b8b82a', 'plis-f763f09459f5d1d5ed4d'].includes(library.id)) {
+    const liujia = library.id === 'plis-7f6f1af1d74f76b8b82a';
+    const url = liujia ? 'https://www.tnpl.tn.edu.tw/n15587220104535639331/n1Content'
+      : 'https://www.tnpl.tn.edu.tw/u5370815395711610155/a1';
+    return {
+      calendarYears: [2026],
+      closures: [
+        ...holidays(2026, url, '02-21', '06-19', '09-25'),
+        ...closureDates(2026, url, ['01-30', '02-27', '03-27', '04-24', '05-29', '06-26',
+          '07-31', '08-28', '10-30', '11-27', ...(!liujia ? ['09-18', '12-18'] : [])], '清潔日休館'),
+        ...closureDates(2026, url, ['11-28'], '選舉日休館'),
+        ...closureDates(2026, url, liujia ? ['01-31'] : [], '菁埔埤落羽松開幕休館'),
+      ],
+    };
+  }
   if (library.id === 'plis-f69821d5ca7dbea81296') {
     return { closures: closureDates(2026, 'https://tkcc.tnc.gov.tw/ActivityInfoDetailC002100.aspx?Cond=a6b19fec-3a2a-4f47-b4c1-81a93d742595',
       ['11-28'], '選舉日休館') };

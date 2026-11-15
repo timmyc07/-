@@ -320,6 +320,12 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   const ntl = libraries.find(({ name }) => name === '國立臺灣圖書館')!;
   assert.equal(evaluate(ntl, ntl.areas[0], { ...taipeiQuery, date: '2026-02-20' }).status, 'unknown');
   assert.equal(coversCalendarYear(libraries.find(({ name }) => name === '新北市烏來區立圖書館')!, 2026), false);
+  const liujia = libraries.find(({ name }) => name === '臺南市六甲區圖書館')!;
+  const anping = libraries.find(({ name }) => name === '臺南市安平區圖書館')!;
+  assert(coversCalendarYear(liujia, 2026) && coversCalendarYear(anping, 2026));
+  assert(liujia.closures.some(({ from }) => from === '2026-01-31'));
+  assert(anping.closures.some(({ from, reason }) => from === '2026-12-18' && reason === '清潔日休館'));
+  assert(!liujia.closures.some(({ from }) => from === '2026-12-18'));
   const dayuan = libraries.find(({ name }) => name === '桃園市立圖書館大園分館')!;
   assert.equal(dayuan.areas[0].seats, 147);
   const taoyuanQuery = { ...taipeiQuery, regionalCards: ['taoyuan' as const] };

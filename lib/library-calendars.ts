@@ -219,7 +219,24 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     ] };
   }
   if (library.id === 'plis-898454ce1e74dac77083') {
-    return { closures: closureDates(2026, 'https://www.tnpl.tn.edu.tw/u4940839700334178966/a1',
-      ['11-28'], '選舉日休館') };
+    const url = 'https://www.tnpl.tn.edu.tw/u4940839700334178966/a1';
+    return {
+      calendarYears: [2026],
+      closures: [
+        ...holidays(2026, url, '02-21', '06-19', '09-25').filter(({ from }) => from !== '2026-02-28'),
+        ...closureDates(2026, url, ['01-30', '02-27', '03-27', '04-24', '05-29', '06-26',
+          '07-31', '08-28', '10-30', '11-27'], '清潔日休館'),
+        ...closureDates(2026, url, ['11-28'], '選舉日休館'),
+      ],
+      checkDates: ['2026-02-28'],
+    };
+  }
+  if (library.id === 'plis-66fa0a939c2eddc2cbeb') {
+    return { closures: [
+      { from: '2026-03-31', until: '2026-11-16', reason: '鹽水區圖書館原館耐震補強，服務暫移月港里活動中心。',
+        url: 'https://www.tnpl.tn.edu.tw/n14985863905827557371/n1Content' },
+      { from: '2026-11-17', until: '2026-11-20', reason: '鹽水區圖書館搬遷整理，全館暫停服務。',
+        url: 'https://web.tainan.gov.tw/ysdo/News_Content.aspx?n=8385&s=8846323&sms=11449' },
+    ] };
   }
 }

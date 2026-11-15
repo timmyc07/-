@@ -383,6 +383,12 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   assert(liujia.closures.some(({ from }) => from === '2026-01-31'));
   assert(anping.closures.some(({ from, reason }) => from === '2026-12-18' && reason === '清潔日休館'));
   assert(!liujia.closures.some(({ from }) => from === '2026-12-18'));
+  const zhongxi = libraries.find(({ id }) => id === 'plis-898454ce1e74dac77083')!;
+  assert.equal(coversCalendarYear(zhongxi, 2026), true);
+  assert(zhongxi.checkDates?.includes('2026-02-28'));
+  const yanshui = libraries.find(({ id }) => id === 'plis-66fa0a939c2eddc2cbeb')!;
+  assert.equal(evaluate(yanshui, undefined, { ...taipeiQuery, date: '2026-11-20' }).closure?.until, '2026-11-20');
+  assert.equal(evaluate(yanshui, undefined, { ...taipeiQuery, date: '2026-11-21' }).closure, undefined);
   const dayuan = libraries.find(({ name }) => name === '桃園市立圖書館大園分館')!;
   assert.equal(dayuan.areas[0].seats, 147);
   const taoyuanQuery = { ...taipeiQuery, regionalCards: ['taoyuan' as const] };

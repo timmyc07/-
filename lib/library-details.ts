@@ -42,6 +42,10 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
 const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A';
 const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-66fa0a939c2eddc2cbeb': {
+    url: 'https://web.tainan.gov.tw/ysdo/News_Content.aspx?n=8385&s=8846323&sms=11449',
+    note: '2026 年 11 月 17 日至 20 日搬遷期間全館暫停服務，11 月 21 日回到月津路 14 之 1 號原館。',
+  },
   'plis-ccd76885634412ccaa4a': {
     url: 'https://www.ntpc.gov.tw/ch/home.jsp?dataserno=aa076d144bbfd6d2d0821e90527ecc28&id=e8ca970cde5c00e1',
     note: '三芝分館「自然書室」於 2026 年 11 月 3 日在淡金路一段 37 號原址正式啟用。',

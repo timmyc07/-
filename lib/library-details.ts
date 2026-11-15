@@ -84,6 +84,11 @@ const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D31401
 const fuxingLibraryServices = 'https://www.fuxing.tycg.gov.tw/cp.aspx?n=7100';
 const yuminCleaning = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=05b04bc605814183badfe83e28bd8af1';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-d34887b8b49b91a79656': {
+    url: 'https://www.nthcc.gov.tw/A7_6/content/218',
+    facilities: ['1 樓兒童室', '1 樓期刊區', '1 樓電腦區', '1 樓服務櫃檯', '2 樓一般書庫',
+      '2 樓原住民圖書', '2 樓鄉土文化圖書', '2 樓地方產業圖書專櫃', '2 樓讀書會用書專櫃', '2 樓參考書專櫃'],
+  },
   'plis-05da96e29ca78b9de81a': {
     url: fuxingLibraryServices,
     facilities: ['1 樓親子讀書區', '1 樓親子視聽間', '1 樓公用電腦', '2 樓 K 書中心', '3 樓館藏書冊區'],

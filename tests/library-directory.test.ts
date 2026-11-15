@@ -133,9 +133,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
     assert.equal(branch.areas[0].slots, null);
   }
   const baoshan = libraries.find(({ id }) => id === 'plis-d31d9ccdab3c7bcf9ff3')!;
-  assert.equal(baoshan.studyRoom, true);
-  assert.equal(baoshan.areas[0].slots, null);
-  assert.match(baoshan.areas[0].sources[0], /^https:\/\/libstat\.ncl\.edu\.tw\/libraryDataDetail\//);
+  assert.equal(baoshan.address, '新竹縣寶山鄉雙園路二段283號');
+  assert.deepEqual(baoshan.coordinates, { latitude: 24.7665, longitude: 120.993 });
+  assert.equal(baoshan.studyRoom, undefined);
+  assert.equal(baoshan.areas.length, 0);
+  const jianshi = libraries.find(({ id }) => id === 'plis-0a0cb9e669998c949020')!;
+  assert.equal(jianshi.address, '新竹縣尖石鄉嘉樂村2鄰64號');
+  assert(jianshi.facilities?.includes('原住民館藏室'));
   const houbi = libraries.find(({ id }) => id === 'plis-a3aa908413cf852b7708')!;
   assert.equal(houbi.studyRoom, true);
   assert.equal(houbi.areas[0].name, '自修區');

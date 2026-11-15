@@ -376,6 +376,23 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
 }
 
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
+  if (library.id === 'plis-0a0cb9e669998c949020' && library.address === '新竹縣尖石鄉嘉樂村2鄰70號') {
+    const address = '新竹縣尖石鄉嘉樂村2鄰64號';
+    library = { ...library, address, coordinates: { latitude: 24.70548, longitude: 121.20295 },
+      sources: [...library.sources, 'https://www.openstreetmap.org/way/1231623720'] };
+    detail = { address, url: 'https://hcplibrary.hchcc.gov.tw/wSite/sp?orgId=003&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+      hours: '週二至週六 08:00–12:00、13:00–17:00。週日、週一、國定假日及選舉日休館。',
+      facilities: ['開架閱覽室', '兒童閱覽室', '原住民館藏室'] };
+  }
+  if (library.id === 'plis-d31d9ccdab3c7bcf9ff3' && library.address === '新竹縣寶山鄉雙溪村館前路18號') {
+    const address = '新竹縣寶山鄉雙園路二段283號';
+    library = { ...library, address, coordinates: { latitude: 24.7665, longitude: 120.993 },
+      accessNote: '原館整修期間，請前往雙園路二段 283 號老人文康中心臨時館。臨時館的自修空間待確認。',
+      sources: [...library.sources, 'https://www.uknownews.com/page/article/show.aspx?num=6896',
+        'https://ws.hsinchu.gov.tw/Download.ashx?n=5paw56u557ij6YG%2F6Zuj5pS25a655LiA6Ka96KGoLnBkZg%3D%3D&u=LzAwMS9VcGxvYWQvOC9yZWxmaWxlLzg2NjcvMjAxNDUzLzdiMWQwYjExLWZkNjQtNDk5Yi1iMTczLTBlYzBlOTI3MGRlMy5wZGY%3D'] };
+    detail = { address, url: 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=10814',
+      hours: '臨時館週二至週日 08:00–17:00，特殊日期依館方公告。' };
+  }
   if (library.id === 'plis-1d5bc6bb745d6ead49e9' && library.address === '苗栗縣竹南鎮大厝里真如路562號') {
     detail = { url: 'https://www.chunan.gov.tw/cp.aspx?n=11120', address: library.address,
       hours: '每日 08:00–18:00，春節及國定假日休館。',

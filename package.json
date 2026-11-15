@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1",
     "build": "next build",
@@ -11,12 +13,14 @@
     "crawl:taichung-rules": "node --env-file-if-exists=.env scripts/crawl-taichung-rules.ts",
     "import:taichung": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env scripts/import-taichung.ts",
     "test": "node --disable-warning=ExperimentalWarning --test tests/*.test.ts",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "refresh:directory": "node scripts/refresh-library-directory.ts"
   },
   "dependencies": {
     "cheerio": "1.2.0",
     "csv-parse": "7.0.3",
     "mongodb": "7.8.0",
+    "motion": "14.14.0",
     "next": "16.4.6",
     "react": "19.3.1",
     "react-dom": "19.3.1"

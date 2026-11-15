@@ -47,11 +47,12 @@ h1{font-size:clamp(36px,4.5vw,62px);line-height:1.22;letter-spacing:-.035em;marg
 .form-top,.result-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .form-top h2,.result-heading h2{margin-bottom:14px}
 .form-top a,.result-heading p{font-size:13px}
-.inputs{display:grid;grid-template-columns:1fr 1.13fr 1fr 1fr 1fr 1.3fr;gap:10px}
+.inputs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) 1.3fr;gap:10px}
 label,legend{font-weight:650;font-size:13px}
 .inputs label,.nearby-origin label{display:grid;gap:5px;min-width:0}
 .inputs input,.inputs select,.nearby-origin select{height:44px;border:1px solid var(--line);border-radius:8px;padding:0 9px;background:var(--paper);color:var(--ink);width:100%;min-width:0}
 .nearby-origin{display:flex;flex-wrap:wrap;align-items:end;gap:8px 12px;margin-top:16px}
+.nearby-origin label{max-width:100%}
 .nearby-origin select{max-width:100%}
 .nearby-origin button{min-height:44px;margin:0;padding:8px 12px;background:var(--soft);color:var(--accent);font-size:13px}
 .nearby-origin button:hover:not(:disabled){background:#e5ceb5}
@@ -60,7 +61,7 @@ label,legend{font-weight:650;font-size:13px}
 .nearby-origin small{flex-basis:100%}
 .nearby-origin [role=status]{flex-basis:100%}
 .nearby-origin [role=status]:empty{margin-top:-8px}
-.distance-note{color:var(--muted);font-size:13px;margin-bottom:10px}
+.coverage-note,.distance-note{color:var(--muted);font-size:13px;margin-bottom:10px}
 .filters{display:flex;gap:24px;align-items:end;margin-top:17px;flex-wrap:wrap}
 fieldset{margin:0;padding:0;border:0;min-width:0}
 legend{margin-bottom:5px}
@@ -131,4 +132,23 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
   .filters{gap:14px}
   .filters button{width:100%;margin:0}
   .cards{grid-template-columns:1fr}
+}
+
+.city-counts{columns:3 9rem}
+
+.scroll-progress{
+  position:fixed;inset:0 0 auto;z-index:20;height:3px;transform-origin:left;
+  pointer-events:none;background:linear-gradient(90deg,#8a583c,#c69458)
+}
+@media(prefers-reduced-motion:no-preference){
+  html{scroll-behavior:smooth}
+  a,button,input,select{transition:background-color .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease}
+  .card{transition:box-shadow .2s ease,border-color .2s ease}
+  .card:focus-within,.card:hover{border-color:#aa8263;box-shadow:0 10px 30px #50331e20}
+  details[open]>:not(summary){animation:detail-reveal .2s ease-out}
+}
+@keyframes detail-reveal{from{opacity:.65;translate:0 -3px}to{opacity:1;translate:0}}
+@media(prefers-reduced-motion:reduce){
+  .motion-reveal{opacity:1!important;transform:none!important}
+  .scroll-progress{display:none}
 }

@@ -1,12 +1,17 @@
+import Form from 'next/form';
 import Image from 'next/image';
 import Link from 'next/link';
 import NearbyOrigin from './nearby-origin.tsx';
+import RegionFilters from './region-filters.tsx';
+import { BlurFade } from './site-motion.tsx';
+import directory from '../public/datasets/library-directory.json';
 import { directionsUrl, distanceKm, parseCoordinates } from '../lib/distance.ts';
 import { taichungSnapshot } from '../lib/mongodb.ts';
 import { backupLibraries, clock, evaluate, facilities, kindLabels, minutes, timePattern, validDate, weekdays } from '../lib/study.ts';
 import type { Area, Facility, Library, Query } from '../lib/study.ts';
 import { pilotVisit } from '../lib/taichung-visits.ts';
 
+type RegionalLibrary = Library & { city: string };
 type Params = Record<string, string | string[] | undefined>;
 const facilityKeys = Object.keys(facilities) as Facility[];
 const statuses = { yes: '符合條件', unknown: '待確認', no: '不符合' } as const;
@@ -23,6 +28,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const kind = requestedKind && Object.hasOwn(kindLabels, requestedKind) ? requestedKind as Area['kind'] : '';
   const equipment = facilityKeys.filter((key) => get(key) === 'on');
   const district = get('district') ?? '';
+  const city = get('city') ?? (district ? '臺中市' : '');
   const keyword = (get('q') ?? '').trim().slice(0, 100);
   const original = get('original') ?? '';
   const near = get('near');
@@ -36,26 +42,24 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const query: Query = { date, start: minutes(start), duration, kind,
     card: get('card') === 'on', registration: get('registration') === 'on', required: equipment };
 
-  let snapshot;
-  try {
-    snapshot = await taichungSnapshot();
-  } catch {
-    return <main className="shell"><h1>StudyGo</h1><p role="alert">目前無法連線至 MongoDB。請確認本機資料庫已啟動。</p></main>;
-  }
-  if (!snapshot) {
-    return <main className="shell"><h1>StudyGo</h1><p role="status">臺中資料尚未匯入。請先執行 <code>npm run import:taichung</code>。</p></main>;
-  }
-
-  const libraries = snapshot.libraries;
-  const districts = [...new Set(libraries.map((library) => library.district).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-Hant'));
+  const snapshot = await taichungSnapshot().catch(() => null);
+  const libraries: RegionalLibrary[] = snapshot?.libraries.length
+    ? [...directory.libraries.filter((library) => library.city !== '臺中市'),
+      ...snapshot.libraries.map((library) => ({ ...library, city: '臺中市' }))]
+    : directory.libraries;
+  const regions = new Map(Object.keys(directory.cityCounts).map((name) => [name, new Set<string>()]));
+  for (const library of libraries) if (library.district) regions.get(library.city)!.add(library.district);
+  const districtsByCity = Object.fromEntries([...regions].map(([name, districts]) =>
+    [name, [...districts].sort((a, b) => a.localeCompare(b, 'zh-Hant'))]));
+  const formKey = JSON.stringify(Object.entries(params).filter(([key]) => key !== 'page' && key !== 'view').sort());
   const selected = libraries.find((library) => library.id === original);
   const originLibrary = libraries.find((library) => library.id === near && library.coordinates);
   const origin = position ?? originLibrary?.coordinates;
   const originLabel = position ? '我的位置' : originLibrary?.name;
   const normalized = (value: string) => value.normalize('NFKC').replaceAll('台', '臺');
-  const candidates = libraries.filter((library) => (!district || library.district === district) &&
+  const candidates = libraries.filter((library) => (!city || library.city === city) && (!district || library.district === district) &&
     (!keyword || normalized(library.name + ' ' + library.address).includes(normalized(keyword))));
-  const evaluateLibrary = (library: Library) => {
+  const evaluateLibrary = (library: RegionalLibrary) => {
     const matching = kind ? library.areas.filter((area) => area.kind === kind) : library.areas;
     const areas: (Area | undefined)[] = matching.length ? matching : [undefined];
     const distance = distanceKm(origin, library.coordinates);
@@ -77,6 +81,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const checked = libraries.filter((library) => library.areas.some((area) =>
     area.kind === 'study' && area.slots?.length && (area.access === 'walk-in' || area.access === 'card')));
   const featured = checked.slice(0, 4);
+  const resultsKey = JSON.stringify([formKey, statusFilter, currentPage]);
 
   function href(changes: Record<string, string>) {
     const next = new URLSearchParams();
@@ -96,7 +101,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
             <Image src="/taichung-library-logo.svg" alt="臺中市立圖書館官網" width={180} height={34} />
           </a>
           <Link className="brand" href="/" aria-label="StudyGo 首頁">
-            StudyGo<small>公立圖書館自修查詢</small>
+            StudyGo<small>全臺公立圖書館自修查詢</small>
           </Link>
         </div>
         <nav className="site-nav" aria-label="主要導覽">
@@ -110,7 +115,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
       <section className="hero" aria-labelledby="title">
         <div className="shell hero-inner">
           <div>
-            <p className="eyebrow">臺中市公立圖書館</p>
+            <p className="eyebrow">全臺公立圖書館</p>
             <h1 id="title">找一個時段，<br /><span>安靜讀書。</span></h1>
             <p className="intro">按時間、空間和設備找自修地點，出發前確認入場規則與休館公告。</p>
             <div className="hero-actions">
@@ -118,22 +123,23 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
               <a href="#results">{searched ? '查看查詢結果' : '瀏覽已核對館舍'}</a>
             </div>
           </div>
-          <div className="hero-panel">
-            <h2>臺中館舍資料一覽</h2>
+          <BlurFade className="hero-panel">
+            <h2>全臺館舍資料一覽</h2>
             <dl className="stats">
-              <div><dt>行政區</dt><dd>{districts.length}</dd></div>
+              <div><dt>縣市</dt><dd>{regions.size}</dd></div>
               <div><dt>名錄紀錄</dt><dd>{libraries.length}</dd></div>
               <div><dt>已核對自修時段的館舍</dt><dd>{checked.length}</dd></div>
             </dl>
             <Link href="/admin">查看資料狀態 <span aria-hidden="true">↗</span></Link>
-          </div>
+          </BlurFade>
         </div>
       </section>
-      <form id="search" className="shell search" method="get" action="/#results" aria-labelledby="search-title">
+      <Form key={formKey} id="search" className="shell search" action="/#results" aria-labelledby="search-title">
+        <input type="hidden" name="search" value="1" />
         <div className="form-top"><h2 id="search-title">查詢條件</h2><Link href="/#search">清除條件</Link></div>
+        <p className="coverage-note">全臺可查館舍名錄。自修時段、入場資格及設備依各館核對進度顯示。</p>
         <div className="inputs">
-          <label>行政區<select name="district" defaultValue={district}><option value="">全臺中市</option>
-            {districts.map((item) => <option key={item}>{item}</option>)}</select></label>
+          <RegionFilters initialCity={city} initialDistrict={district} districtsByCity={districtsByCity} />
           <label>日期<input type="date" name="date" defaultValue={date} required /></label>
           <label>開始時間<input type="time" name="start" defaultValue={start} required /></label>
           <label>使用時長（分鐘）<input type="number" name="duration" min="1" max="1440" defaultValue={Number.isFinite(duration) ? duration : 120} required /></label>
@@ -142,7 +148,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
           <label>館名或地址<input type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="例如 大墩分館" /></label>
         </div>
         <NearbyOrigin key={position ? 'me:' + get('position') : originLibrary?.id}
-          libraries={libraries.filter((library) => library.coordinates).map(({ id, name }) => ({ id, name }))}
+          libraries={libraries.filter((library) => library.coordinates).map(({ id, name, city }) => ({ id, name: city + ' · ' + name }))}
           initialOrigin={position ? 'me' : originLibrary?.id ?? ''} position={position && get('position')} />
         <div className="filters">
           <fieldset><legend>需要的設備</legend><div className="checks">
@@ -153,53 +159,58 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
             <label><input type="checkbox" name="registration" defaultChecked={query.registration} />可預約或現場登記</label>
           </div></fieldset>
           {selected && <input type="hidden" name="original" value={selected.id} />}
-          <button type="submit" name="search" value="1">查詢空間 <span aria-hidden="true">→</span></button>
+          <button type="submit">查詢空間 <span aria-hidden="true">→</span></button>
         </div>
-      </form>
+      </Form>
       <section id="results" className="shell results" aria-labelledby="results-title">
-        {invalid && <><h2 id="results-title">查詢結果</h2><p className="notice" role="alert">請輸入有效日期、開始時間與正整數分鐘。使用時段須在同一天內。</p></>}
-        {!searched && <><h2 id="results-title">已核對空間時段</h2>
-          <div className="cards">{featured.map((library) => <LibraryCard key={library.id} library={library} area={library.areas.find((area) => area.kind === 'study' && area.slots?.length)} />)}</div>
-        </>}
-        {searched && !invalid && <>
-          <div className="result-heading"><h2 id="results-title">查詢結果</h2><p>{date} · {start}–{clock(query.start + duration)}</p></div>
-          {originLabel && <p className="distance-note">起點 {originLabel} · 同一結果狀態內依直線距離排序</p>}
-          {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult && statuses[originalResult.status]}
-            {originalResult?.area && ' · ' + originalResult.area.name}
-            {originalResult?.reasons.length ? ' · ' + originalResult.reasons.join('、') : ''}
-            {' '}<Link href={href({ original: '' })}>清除原定館舍</Link></div>}
-          {selected && <section className="backups" aria-label="備案比較">
-            <h3>備案比較</h3>
-            {backupOrigin && <p className="distance-note">以{originLabel ?? '原定館舍'}為起點，依直線距離排序</p>}
-            {backups.length ? <div className="cards">{backups.map((item) =>
-              <LibraryCard key={item.library.id} {...item} />)}</div> :
-              <p>目前條件下沒有已確認符合的備案。{' '}
-                {district ? <Link href={href({ district: '', page: '' })}>擴大到全臺中市</Link> : '可調整條件再查詢。'}
-              </p>}
-          </section>}
-          <nav className="tabs" aria-label="依查詢結果篩選">
-            <Link aria-current={!statusFilter ? 'page' : undefined} href={href({ view: '', page: '' })}>全部 {results.length}</Link>
-            {Object.entries(statuses).map(([key, label]) => <Link key={key} aria-current={statusFilter === key ? 'page' : undefined}
-              href={href({ view: key, page: '' })}>{label} {results.filter(({ status }) => status === key).length}</Link>)}
-          </nav>
-          {!visible.length && <p className="notice">沒有符合此篩選的結果。</p>}
-          <div className="cards">{visible.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) =>
-            <LibraryCard key={item.library.id + (item.area?.name ?? '')} {...item}
-              originalLink={href({ original: item.library.id, q: '', page: '' })} />)}</div>
-          {totalPages > 1 && <nav className="pager" aria-label="結果頁碼">
-            {currentPage > 1 && <Link href={href({ page: String(currentPage - 1) })}>上一頁</Link>}
-            <span>{currentPage} / {totalPages}</span>
-            {currentPage < totalPages && <Link href={href({ page: String(currentPage + 1) })}>下一頁</Link>}
-          </nav>}
-        </>}
+        <BlurFade key={resultsKey} inView>
+          {invalid && <><h2 id="results-title">查詢結果</h2><p className="notice" role="alert">請輸入有效日期、開始時間與正整數分鐘。使用時段須在同一天內。</p></>}
+          {!searched && <><h2 id="results-title">已核對空間時段</h2>
+            {!featured.length && <p>可使用上方表單查詢館舍名錄。</p>}
+            <div className="cards">{featured.map((library) => <LibraryCard key={library.id} library={library} area={library.areas.find((area) => area.kind === 'study' && area.slots?.length)} />)}</div>
+          </>}
+          {searched && !invalid && <>
+            <div className="result-heading"><h2 id="results-title">查詢結果</h2><p>{date} · {start}–{clock(query.start + duration)}</p></div>
+            {originLabel && <p className="distance-note">起點 {originLabel} · 同一結果狀態內依直線距離排序</p>}
+            {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult && statuses[originalResult.status]}
+              {originalResult?.area && ' · ' + originalResult.area.name}
+              {originalResult?.reasons.length ? ' · ' + originalResult.reasons.join('、') : ''}
+              {' '}<Link href={href({ original: '' })}>清除原定館舍</Link></div>}
+            {selected && <section className="backups" aria-label="備案比較">
+              <h3>備案比較</h3>
+              {backupOrigin && <p className="distance-note">以{originLabel ?? '原定館舍'}為起點，依直線距離排序</p>}
+              {backups.length ? <div className="cards">{backups.map((item) =>
+                <LibraryCard key={item.library.id} {...item} />)}</div> :
+                <p>目前條件下沒有已確認符合的備案。{' '}
+                  {city ? <Link href={href({ city: '', district: '', page: '' })}>擴大到全臺灣</Link> : '可調整條件再查詢。'}
+                </p>}
+            </section>}
+            <nav className="tabs" aria-label="依查詢結果篩選">
+              <Link aria-current={!statusFilter ? 'page' : undefined} href={href({ view: '', page: '' })}>全部 {results.length}</Link>
+              {Object.entries(statuses).map(([key, label]) => <Link key={key} aria-current={statusFilter === key ? 'page' : undefined}
+                href={href({ view: key, page: '' })}>{label} {results.filter(({ status }) => status === key).length}</Link>)}
+            </nav>
+            {!visible.length && <p className="notice">沒有符合此篩選的結果。</p>}
+            <div className="cards">{visible.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) =>
+              <LibraryCard key={item.library.id + (item.area?.name ?? '')} {...item}
+                originalLink={href({ original: item.library.id, q: '', page: '' })} />)}</div>
+            {totalPages > 1 && <nav className="pager" aria-label="結果頁碼">
+              {currentPage > 1 && <Link href={href({ page: String(currentPage - 1) })}>上一頁</Link>}
+              <span>{currentPage} / {totalPages}</span>
+              {currentPage < totalPages && <Link href={href({ page: String(currentPage + 1) })}>下一頁</Link>}
+            </nav>}
+          </>}
+        </BlurFade>
       </section>
-      <footer className="shell">資料匯入 {new Date(snapshot.importedAt).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' })} · 出發前請查看最新館方公告</footer>
+      <footer className="shell">全臺名錄擷取 {new Date(directory.collectedAt).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' })}
+        {' · '}<Link href="/admin">資料來源與下載</Link> · 出發前請查看最新館方公告
+      </footer>
     </main>
   </>;
 }
 
 function LibraryCard({ library, area, status, reasons, closure, openUntil, distance, originalLink }: {
-  library: Library;
+  library: RegionalLibrary;
   area?: Area;
   status?: keyof typeof statuses;
   reasons?: readonly string[];
@@ -209,8 +220,8 @@ function LibraryCard({ library, area, status, reasons, closure, openUntil, dista
   originalLink?: string;
 }) {
   const visit = area && pilotVisit(library.id, area);
-  return <article className="card">
-    <div className="card-top"><span>{library.district}</span>{status && <span className={'badge ' + status}>{statuses[status]}</span>}</div>
+  return <BlurFade as="article" className="card" inView>
+    <div className="card-top"><span>{library.city}{library.district && ' · ' + library.district}</span>{status && <span className={'badge ' + status}>{statuses[status]}</span>}</div>
     <h3>{library.name}</h3>
     <p className="area">{area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
     <p className="address">{library.address || '地址待確認'}{distance !== undefined && ' · 直線約 ' +
@@ -227,7 +238,7 @@ function LibraryCard({ library, area, status, reasons, closure, openUntil, dista
       {library.coordinates && <a href={directionsUrl(library.coordinates)}
         aria-label={library.name + ' Google 地圖導航'}>地圖導航 ↗</a>}
       {!closure && area?.reservation && <a href={area.reservation}>前往館方預約 ↗</a>}
-      {visit && library.phone && <a href={'tel:' + library.phone}>電洽 {library.phone}</a>}
+      {library.phone && <a href={'tel:' + library.phone}>電洽 {library.phone}</a>}
     </div>
     {visit && <div className="source-links">{visit.links.map(([label, url]) => <a key={url} href={url}>{label} ↗</a>)}</div>}
     <details>
@@ -254,5 +265,5 @@ function LibraryCard({ library, area, status, reasons, closure, openUntil, dista
       </div>
     </details>
     {originalLink && <Link className="backup-link" href={originalLink}>以此館為原定地點找備案 →</Link>}
-  </article>;
+  </BlurFade>;
 }

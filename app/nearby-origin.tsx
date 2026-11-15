@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
 
@@ -8,6 +9,7 @@ export default function NearbyOrigin({ libraries, initialOrigin, position }: {
   initialOrigin: string;
   position?: string;
 }) {
+  const router = useRouter();
   const [origin, setOrigin] = useState(initialOrigin);
   const [locating, setLocating] = useState(false);
   const [message, setMessage] = useState('');
@@ -27,7 +29,9 @@ export default function NearbyOrigin({ libraries, initialOrigin, position }: {
       params.set('near', 'me');
       params.set('position', coords.latitude.toFixed(3) + ',' + coords.longitude.toFixed(3));
       params.set('search', '1');
-      window.location.assign('/?' + params + '#results');
+      setLocating(false);
+      setMessage('');
+      router.push('/?' + params + '#results');
     }, (error) => {
       setLocating(false);
       setMessage(error.code === error.PERMISSION_DENIED

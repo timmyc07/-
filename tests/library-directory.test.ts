@@ -495,6 +495,14 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   assert.equal(evaluate(linkou, linkou.areas[0], { ...request, date: '2026-11-15' }).closure, undefined);
   assert.equal(evaluate(linkou, linkou.areas[0], { ...request, date: '2026-11-27' }).closure?.reason, '圖書盤點休館');
   const xindian = get('新北市立圖書館新店分館');
+  const chengzhou = get('新北市立圖書館五股成州圖書閱覽室').areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(chengzhou.seats, 24);
+  assert.match(chengzhou.entryNote!, /簡介另列 38 席/);
+  const yongping = get('新北市立圖書館蘆洲永平分館');
+  assert.equal(yongping.areas.find(({ kind }) => kind === 'study')?.equipment.wifi, true);
+  assert.equal(yongping.areas.find(({ kind }) => kind === 'study')?.seats, undefined);
+  assert.equal(yongping.areas.find(({ kind }) => kind === 'reading')?.seats, 94);
+  assert.equal(yongping.areas.find(({ kind }) => kind === 'reading')?.equipment.outlet, true);
   const baoxing = get('新北市立圖書館新店寶興圖書閱覽室');
   assert.equal(evaluate(xindian, undefined, { ...request, date: '2026-10-29' }).closure?.reason, '圖書盤點休館');
   assert.equal(evaluate(xindian, undefined, { ...request, date: '2026-10-30' }).closure?.reason, '圖書盤點休館');

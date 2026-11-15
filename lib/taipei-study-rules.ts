@@ -120,7 +120,7 @@ const branchSeats: Record<string, { count?: number; url: string; poweredSeats?: 
   'plis-a40a9a0b96d74b54147e': { count: 69, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=3b882237569f42d3a610b8ccca388ae1' },
   'plis-6a5fcd9a247ae993c036': { count: 288, poweredSeats: '3 樓自修及閱覽區合計約 288 席，設有 3C 優先席、插座及無線網路。', wifi: true,
     url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=88af75ac838f4c518e0b46e351323e78' },
-  'plis-c91fb11bd56bbbfda65a': { laptopSeats: '自修區設有筆電使用區。館方簡介與樓層表的自修座位數不同。',
+  'plis-c91fb11bd56bbbfda65a': { count: 24, laptopSeats: '自修區設有筆電使用區。館方樓層表列 24 席，分館簡介另列 38 席。',
     url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=37914dcbf04f454e91bad2aa085ef688' },
   'plis-49c73b57188489998e49': { poweredSeats: '4 樓景觀閱覽區的電腦及自修座位合計 26 席，提供插座供自備設備使用。',
     url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=707cf3fbd7b549aab651bee868612fb1' },
@@ -128,6 +128,7 @@ const branchSeats: Record<string, { count?: number; url: string; poweredSeats?: 
   'plis-9de55bfc56b18ae1f99a': { count: 53, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=ed45e89a66b64e40aa16299a33c86710' },
   'plis-2b5fb60dcc3812c8a2a4': { count: 12, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=4baa16dffd7c409db3b920fc352548d0' },
   'plis-039d55a9f83160fc0e08': { count: 140, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=e981c14a1847473c8d038b4c19656eab' },
+  'plis-52b31760b5c01701738f': { wifi: true, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=87666d0966844572bc4bf24c9f706ed4' },
 };
 
 export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): Area | undefined {

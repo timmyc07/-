@@ -90,26 +90,42 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   return <>
     <header className="header">
       <div className="shell bar">
-        <Link className="brand" href="/" aria-label="StudyGo 首頁"><span className="brand-icon" aria-hidden="true">S</span>StudyGo</Link>
-        <span className="place">臺中市 · 公立圖書館自修查詢</span>
-        <Link href="/admin" className="data-link">資料狀態 <span aria-hidden="true">↗</span></Link>
+        <Link className="brand" href="/" aria-label="StudyGo 首頁">
+          <span className="brand-icon" aria-hidden="true">S</span>
+          <span className="brand-copy">StudyGo<small>臺中市公立圖書館自修查詢</small></span>
+        </Link>
+        <nav className="site-nav" aria-label="主要導覽">
+          <a href="#search">空間查詢</a>
+          <a href="#results">{searched ? '查詢結果' : '已核對館舍'}</a>
+          <Link href="/admin">資料狀態 <span aria-hidden="true">↗</span></Link>
+        </nav>
       </div>
     </header>
-    <main className="shell">
+    <main>
       <section className="hero" aria-labelledby="title">
-        <div>
-          <p className="eyebrow">臺中市公立圖書館</p>
-          <h1 id="title">找一個時段，<br />安靜讀書。</h1>
-          <p className="intro">按時間、空間和設備找自修地點，出發前確認入場規則與休館公告。</p>
-        </div>
-        <div className="stats" aria-label="名錄統計">
-          <div><strong>{districts.length}</strong><span>行政區</span></div>
-          <div><strong>{libraries.length}</strong><span>名錄紀錄</span></div>
-          <div><strong>{checked.length}</strong><span>已有空間時段的館</span></div>
+        <div className="shell hero-inner">
+          <div>
+            <p className="eyebrow">臺中市公立圖書館</p>
+            <h1 id="title">找一個時段，<br /><span>安靜讀書。</span></h1>
+            <p className="intro">按時間、空間和設備找自修地點，出發前確認入場規則與休館公告。</p>
+            <div className="hero-actions">
+              <a className="primary-action" href="#search">查詢自修空間 <span aria-hidden="true">→</span></a>
+              <a href="#results">{searched ? '查看查詢結果' : '瀏覽已核對館舍'}</a>
+            </div>
+          </div>
+          <div className="hero-panel">
+            <h2>臺中館舍資料一覽</h2>
+            <dl className="stats">
+              <div><dt>行政區</dt><dd>{districts.length}</dd></div>
+              <div><dt>名錄紀錄</dt><dd>{libraries.length}</dd></div>
+              <div><dt>已核對自修時段的館舍</dt><dd>{checked.length}</dd></div>
+            </dl>
+            <Link href="/admin">查看資料狀態 <span aria-hidden="true">↗</span></Link>
+          </div>
         </div>
       </section>
-      <form className="search" method="get" action="/#results">
-        <div className="form-top"><h2>查詢條件</h2><Link href="/">清除條件</Link></div>
+      <form id="search" className="shell search" method="get" action="/#results" aria-labelledby="search-title">
+        <div className="form-top"><h2 id="search-title">查詢條件</h2><Link href="/#search">清除條件</Link></div>
         <div className="inputs">
           <label>行政區<select name="district" defaultValue={district}><option value="">全臺中市</option>
             {districts.map((item) => <option key={item}>{item}</option>)}</select></label>
@@ -135,8 +151,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
           <button type="submit" name="search" value="1">查詢空間 <span aria-hidden="true">→</span></button>
         </div>
       </form>
-      <section id="results" className="results" aria-labelledby="results-title">
-        {invalid && <p className="notice" role="alert">請輸入有效日期、開始時間與正整數分鐘。使用時段須在同一天內。</p>}
+      <section id="results" className="shell results" aria-labelledby="results-title">
+        {invalid && <><h2 id="results-title">查詢結果</h2><p className="notice" role="alert">請輸入有效日期、開始時間與正整數分鐘。使用時段須在同一天內。</p></>}
         {!searched && <><h2 id="results-title">已核對空間時段</h2>
           <div className="cards">{featured.map((library) => <LibraryCard key={library.id} library={library} area={library.areas.find((area) => area.kind === 'study' && area.slots?.length)} />)}</div>
         </>}
@@ -172,7 +188,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
           </nav>}
         </>}
       </section>
-      <footer>資料匯入 {new Date(snapshot.importedAt).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' })} · 出發前請查看最新館方公告</footer>
+      <footer className="shell">資料匯入 {new Date(snapshot.importedAt).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' })} · 出發前請查看最新館方公告</footer>
     </main>
   </>;
 }

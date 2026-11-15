@@ -77,6 +77,18 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-50a85fd5bd2678f089ba': {
+    url: 'https://gutss.blogspot.com/2023/11/blog-post_21.html',
+    facilities: ['1 樓自修區', '閱報室', '4 樓讀者上網區', '期刊雜誌閱覽區', '親子與兒童閱覽區', '5 樓書庫', '視聽室'],
+  },
+  'plis-5931f90c2b78f1094592': {
+    url: 'https://data.moenv.gov.tw/dataset/detail/FAC_P_07',
+    facilities: ['2 樓公廁', '3 樓公廁'],
+  },
+  'plis-290186a03e719a9c8bee': {
+    url: 'https://gutss.blogspot.com/2024/01/blog-post.html',
+    facilities: ['電梯', '1 樓兒童室', '2 樓自修室', '開架閱覽室'],
+  },
   'plis-66e53f44f93b7f476b11': {
     url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000267',
     facilities: ['無障礙電梯'],

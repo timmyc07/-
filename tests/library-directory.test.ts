@@ -90,6 +90,9 @@ test('傳真補錄保留來源，原始名錄明載無傳真的欄位持續有�
   assert.equal(byName('基隆市公共圖書館信義分館').fax, '02-24236174');
   assert.equal(byName('雲林縣元長鄉立圖書館').fax, '05-7888910');
   assert.equal(byName('新北市立圖書館三峽分館').fax, '無');
+  const donggang = byName('屏東縣東港鎮立圖書館');
+  assert.equal(donggang.fax, '無');
+  assert(donggang.sources.includes(donggang.website!));
   assert.equal(byName('高雄市立圖書館鹽埕分館').fax, undefined);
 });
 

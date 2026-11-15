@@ -1017,7 +1017,20 @@ const zhongshanLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F38
 const dagangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/030';
 const mituoSeatDirectory = 'https://www.ksml.edu.tw/lib/content/Details.aspx?Parser=1,55,565,559,,,283';
 const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
+const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-f1eea7fcf8a4cde646ee': {
+    name: '閱覽座位', kind: 'reading', seats: 136, slots: null, access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,73,763,757'],
+  },
+  'plis-ba0ab6ac6ab1829d39fc': {
+    name: '閱覽區', kind: 'reading', seats: 42, slots: null, access: null, equipment: {},
+    sources: [ziguanBranchGuide],
+  },
+  'plis-3b8c4a64ab4b313ed42f': {
+    name: '閱覽區', kind: 'reading', seats: 48, slots: null, access: null, equipment: {},
+    sources: [ziguanBranchGuide],
+  },
   'plis-3e5d2c6ce6577c063ff7': {
     name: '閱覽座位', kind: 'reading', seats: 242, slots: null, access: null, equipment: {},
     sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,51,521,515'],

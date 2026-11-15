@@ -94,6 +94,8 @@ test('傳真補錄保留來源，原始名錄明載無傳真的欄位持續有�
   assert.equal(donggang.fax, '無');
   assert(donggang.sources.includes(donggang.website!));
   assert.equal(byName('高雄市立圖書館鹽埕分館').fax, undefined);
+  assert.equal(byName('高雄市立圖書館梓官分館').fax, '07-6102719');
+  assert.equal(byName('高雄市立圖書館梓官赤東分館').fax, '07-6108196');
 });
 
 test('臺中快照用同名同址名錄補缺，保留已有的開館時段', () => {
@@ -619,6 +621,9 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
   assert.equal(caogong.closures.find(({ from }) => from === '2026-01-12')?.until, '2026-11-06');
   assert.match(caogong.accessNote!, /11 月 7 日重新開館/);
   for (const [id, seats] of [
+    ['plis-f1eea7fcf8a4cde646ee', 136],
+    ['plis-ba0ab6ac6ab1829d39fc', 42],
+    ['plis-3b8c4a64ab4b313ed42f', 48],
     ['plis-3e5d2c6ce6577c063ff7', 242],
     ['plis-2743e51569604910aa7d', 51],
     ['plis-a0dd6959841927ca7597', 44],

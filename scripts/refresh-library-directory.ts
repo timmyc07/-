@@ -16,7 +16,7 @@ type Region = {
   縣市: string;
   圖書館資訊: { Name: string; Address: string; Area: string; TEL?: string; FAX?: string; Latitude?: number; Longitude?: number; URL?: string }[];
 };
-const supplements: Record<string, { address: string; fax: string; source: string } | undefined> = faxSupplements;
+const supplements: Record<string, { address: string; fax: string; source: string; replaces?: string } | undefined> = faxSupplements;
 
 const regions = JSON.parse(raw.toString('utf8')) as Region[];
 const cities = new Set(regions.map((region) => region.縣市));
@@ -49,7 +49,7 @@ for (const { 縣市: city, 圖書館資訊: records } of regions) {
       areas: [], closures: [],
     };
     const fax = supplements[id];
-    if (!library.fax && fax?.address === library.address) {
+    if (fax?.address === library.address && (!library.fax || library.fax === fax.replaces)) {
       library.fax = fax.fax;
       library.sources.push(fax.source);
     }

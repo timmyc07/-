@@ -1,0 +1,50 @@
+import { minutes, type Area, type Library } from './study.ts';
+
+const taipeiRule = 'https://tpml.gov.taipei/News_Content.aspx?n=CD4793DE89132E89&s=9C9863C2224D9B5A';
+const newTaipeiRule = 'https://www.library.ntpc.gov.tw/singlehtml/e81f432c17614ea4b732e114c365e29b?cntId=26b1530a3e724f44892b6cb0c7c7c5ed';
+const taipeiReservation = new Set([
+  'plis-b4f11997a2a0f56cc70b', 'plis-e3287dc94a64c9288833', 'plis-c21ff2a6d5f510b7fccd',
+  'plis-7decf0dff68a9e8b198d', 'plis-0ea807d14456081b105f', 'plis-d14f3a24d79c22efd2da',
+]);
+const branchSeats: Record<string, { count: number; url: string } | undefined> = {
+  'plis-0ea807d14456081b105f': { count: 93, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=92FAAE794AC2B476' },
+  'plis-3c8e68ee422733123905': { count: 82, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=FB486AC6B571E022&sms=CFFFC938B352678A' },
+  'plis-5ca7b8662f3ee724afdb': { count: 160, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=dc82ae43841f4a7580a7da987fe9635a' },
+  'plis-2f2978ce3cdb2b79f6ef': { count: 60, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=87f7f5405b8a4695beea62e6c03d26bd' },
+  'plis-4d33d19b31ac419fb05c': { count: 266, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=1b67994e4e43456aa83d84350bc3301e' },
+  'plis-2a4837295385011e4ddd': { count: 200, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=745e63896b6b47ff8d4890d3e6712fdc' },
+};
+
+export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): Area | undefined {
+  const seats = branchSeats[library.id];
+  const withSeats = seats ? { ...area, seats: seats.count, sources: [...area.sources, seats.url] } : area;
+  if (taipeiReservation.has(library.id)) {
+    return {
+      ...withSeats, access: 'card', regionalCard: 'taipei',
+      reservation: 'https://seat.tpml.edu.tw/sm/home_web.do#',
+      entryNote: '持臺北市圖個人借閱證。當日席現場登記，次日起 7 日內可線上預約。國定假日及每月第一個星期四休館。',
+      slots: Array.from({ length: 7 }, (_, day) => ({
+        day, start: minutes(day <= 1 ? '09:00' : '08:30'), end: minutes(day <= 1 ? '17:00' : '21:00'),
+      })),
+      sources: [...withSeats.sources, taipeiRule],
+    };
+  }
+  if (library.id === 'plis-ebb42497618c005f1223') {
+    return {
+      ...withSeats, access: 'card', regionalCard: 'newTaipei', equipment: { outlet: false },
+      entryNote: '持新北市圖個人借閱證在館內機台登記，並於 15 分鐘內刷證入場。',
+      sources: [...withSeats.sources, newTaipeiRule],
+    };
+  }
+  if ((listed || seats) && library.name.startsWith('新北市立圖書館')) {
+    const conflictingOutlet = library.id === 'plis-2a4837295385011e4ddd';
+    return {
+      ...withSeats, access: 'walk-in', equipment: conflictingOutlet ? {} : { outlet: false },
+      entryNote: conflictingOutlet
+        ? '現場入座。分館介紹與自修室管理要點的充電資訊不同，請向館方確認。'
+        : '現場入座，館方得於開館前發放號碼牌。',
+      sources: [...withSeats.sources, newTaipeiRule],
+    };
+  }
+  return seats ? withSeats : undefined;
+}

@@ -1,6 +1,7 @@
 import type { FieldChangeBatch, FieldReview } from './field-audit.ts';
 
 export const facilities = { laptop: '筆電', wifi: 'Wi-Fi', outlet: '座位插座' };
+export const regionalCards = { taipei: '臺北市圖', newTaipei: '新北市圖' };
 export type Facility = keyof typeof facilities;
 export type Slot = { day: number; start: number; end: number };
 export type Area = {
@@ -10,6 +11,8 @@ export type Area = {
   slotPeriod?: { from: string; until: string };
   limitedOpening?: { from: string; until: string; name: string };
   access: 'walk-in' | 'card' | 'restricted' | 'conditional' | null;
+  regionalCard?: keyof typeof regionalCards;
+  entryNote?: string;
   walkInDates?: (string | { date: string; start: number; end: number })[];
   reservation?: string;
   seats?: number;
@@ -62,6 +65,7 @@ export type Query = {
   duration: number;
   kind: Area['kind'] | '';
   card: boolean;
+  regionalCards?: (keyof typeof regionalCards)[];
   registration: boolean;
   required: Facility[];
 };
@@ -131,8 +135,12 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
     if (area.access === null) missing.push('入場資格或預約方式待確認');
     if (area.access === 'conditional') missing.push('依館方規則須符合訪客條件');
     if (area.access === 'restricted') failed.push('限指定身分使用');
-    if (!changed && area.access === 'card' && !query.card) failed.push('需持國資圖或臺中市圖個人借閱證');
-    if (!changed && area.access === 'card' && !query.registration) failed.push('需預約或現場登記');
+    if (!changed && area.access === 'card') {
+      const hasCard = area.regionalCard ? query.regionalCards?.includes(area.regionalCard) : query.card;
+      const issuer = area.regionalCard ? regionalCards[area.regionalCard] : '國資圖或臺中市圖';
+      if (!hasCard) failed.push('需持' + issuer + '個人借閱證');
+      if (!query.registration) failed.push(area.regionalCard === 'newTaipei' ? '需現場登記' : '需預約或現場登記');
+    }
     for (const equipment of query.required) {
       const available = area.equipment[equipment];
       if (available === false) failed.push('空間未提供' + facilities[equipment]);

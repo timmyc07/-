@@ -1,5 +1,6 @@
-import type { Library } from './study.ts';
+import type { Area, Library } from './study.ts';
 import { libraryStudyHours } from './library-study-hours.ts';
+import { taipeiStudyRoom } from './taipei-study-rules.ts';
 
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
@@ -36,17 +37,21 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const local = detail.hours ? undefined : localHours[library.id];
   const closure = library.id === 'plis-eb5cc227330385ea9b00' ? huangbinClosure : undefined;
   const study = detail.hours ? libraryStudyHours(library.id) : undefined;
-  const studyRoom = Boolean(study || local?.studyRoom || detail.facilities?.some((facility) => /^自[修習]室$/.test(facility)));
+  const listed = Boolean(detail.facilities?.some((facility) => /^自[修習]室$/.test(facility)));
+  const area: Area = {
+    name: study?.name ?? '自修室', kind: 'study', slots: study?.slots ?? null, access: null, equipment: {},
+    sources: [study?.url ?? (local?.studyRoom ? local.url : detail.url)],
+  };
+  const taipeiArea = taipeiStudyRoom(library, area, listed);
+  const studyRoom = Boolean(study || local?.studyRoom || listed || taipeiArea);
   return {
     ...library,
     openingHours: closure?.reason ?? library.openingHours ?? detail.hours ?? local?.hours,
     closures: closure ? [...library.closures, closure] : library.closures,
     facilities: library.facilities ?? detail.facilities,
     studyRoom: library.studyRoom ?? (studyRoom || undefined),
-    areas: studyRoom && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study') ? [...library.areas, {
-      name: study?.name ?? '自修室', kind: 'study', slots: study?.slots ?? null, access: null, equipment: {},
-      sources: [study?.url ?? (local?.studyRoom ? local.url : detail.url)],
-    }] : library.areas,
+    areas: studyRoom && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
+      ? [...library.areas, taipeiArea ?? area] : library.areas,
     sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []), ...(closure ? [closure.url] : [])])],
   };
 }

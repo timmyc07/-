@@ -9,7 +9,7 @@ import details from '../public/datasets/library-details.json';
 import { withLibraryDetail, type LibraryDetail } from '../lib/library-details.ts';
 import { directionsUrl, distanceKm, parseCoordinates } from '../lib/distance.ts';
 import { taichungSnapshot } from '../lib/mongodb.ts';
-import { backupLibraries, clock, evaluate, facilities, kindLabels, minutes, timePattern, validDate, weekdays } from '../lib/study.ts';
+import { backupLibraries, clock, evaluate, facilities, kindLabels, minutes, regionalCards, timePattern, validDate, weekdays } from '../lib/study.ts';
 import type { Area, Facility, Library, Query } from '../lib/study.ts';
 import { pilotVisit } from '../lib/taichung-visits.ts';
 
@@ -42,7 +42,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const invalid = searched && (!validDate(date) || !timePattern.test(start) ||
     !Number.isInteger(duration) || duration < 1 || minutes(start) + duration > 1440);
   const query: Query = { date, start: minutes(start), duration, kind,
-    card: get('card') === 'on', registration: get('registration') === 'on', required: equipment };
+    card: get('card') === 'on', regionalCards: (Object.keys(regionalCards) as (keyof typeof regionalCards)[])
+      .filter((issuer) => get(issuer + 'Card') === 'on'),
+    registration: get('registration') === 'on', required: equipment };
 
   const snapshot = await taichungSnapshot().catch(() => null);
   const nationalLibraries = directory.libraries.map((library) =>
@@ -160,6 +162,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
           </div></fieldset>
           <fieldset><legend>入場條件</legend><div className="checks">
             <label><input type="checkbox" name="card" defaultChecked={query.card} />有國資圖或臺中市圖個人借閱證</label>
+            {Object.entries(regionalCards).map(([issuer, label]) => <label key={issuer}>
+              <input type="checkbox" name={issuer + 'Card'} defaultChecked={query.regionalCards?.includes(issuer as keyof typeof regionalCards)} />有{label}個人借閱證
+            </label>)}
             <label><input type="checkbox" name="registration" defaultChecked={query.registration} />可預約或現場登記</label>
           </div></fieldset>
           {selected && <input type="hidden" name="original" value={selected.id} />}
@@ -248,8 +253,8 @@ function LibraryCard({ library, area, status, reasons, closure, openUntil, dista
     <details>
       <summary>使用規則與來源</summary>
       <dl>
-        <dt>入場</dt><dd>{area?.access === 'walk-in' ? '現場入座' : area?.access === 'card' ? '個人借閱證，須預約或現場登記' : area?.access === 'restricted' ? '限指定身分' :
-          area?.access === 'conditional' ? '須符合校外訪客資格' : '待確認'}</dd>
+        <dt>入場</dt><dd>{area?.entryNote ?? (area?.access === 'walk-in' ? '現場入座' : area?.access === 'card' ? '個人借閱證，須預約或現場登記' : area?.access === 'restricted' ? '限指定身分' :
+          area?.access === 'conditional' ? '須符合校外訪客資格' : '待確認')}</dd>
         {library.reviewNote && !library.accessNote && <><dt>規則核對</dt><dd>{library.reviewNote}</dd></>}
         {library.accessNote && <><dt>館方補充</dt><dd>{library.accessNote}</dd></>}
         <dt>每週開放</dt><dd>{area?.slots?.map((slot) => <span className="slot" key={slot.day + ':' + slot.start}>

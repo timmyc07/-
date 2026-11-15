@@ -69,7 +69,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   };
   const libraries = directory.libraries.map((library) => withLibraryDetail(library, details[library.id]));
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
-  assert.equal(scheduled.length, 27);
+  assert.equal(scheduled.length, 33);
   for (const { slots } of scheduled) {
     assert.equal(new Set(slots!.map(({ day }) => day)).size, slots!.length);
     assert(slots!.every(({ day, start, end }) => day >= 0 && day <= 6 && start < end && end <= 1440));
@@ -83,4 +83,30 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   });
   assert.equal(result.status, 'no');
   assert.equal(result.closure?.from, '2026-03-02');
+});
+
+test('雙北入座規則依館別套用，借閱證不可跨系統代用', () => {
+  const { libraries: details } = JSON.parse(readFileSync(new URL('library-details.json', root), 'utf8')) as {
+    libraries: Record<string, LibraryDetail>;
+  };
+  const get = (name: string) => {
+    const library = directory.libraries.find((record) => record.name === name)!;
+    return withLibraryDetail(library, details[library.id]);
+  };
+  const daoxiang = get('臺北市立圖書館稻香分館');
+  const area = daoxiang.areas[0];
+  assert.equal(area.seats, 93);
+  const query = {
+    date: '2026-11-15', start: minutes('14:00'), duration: 120,
+    kind: 'study' as const, card: true, registration: true, required: [],
+  };
+  assert(evaluate(daoxiang, area, query).reasons.includes('需持臺北市圖個人借閱證'));
+  assert.equal(evaluate(daoxiang, area, { ...query, regionalCards: ['taipei'] }).status, 'unknown');
+  const main = get('新北市立圖書館');
+  assert(evaluate(main, main.areas[0], { ...query, registration: false, regionalCards: ['newTaipei'] })
+    .reasons.includes('需現場登記'));
+  const sanxia = get('新北市立圖書館三峽分館').areas[0];
+  assert.equal(sanxia.access, 'walk-in');
+  assert.equal(sanxia.equipment.outlet, false);
+  assert.equal(get('新北市立圖書館三重東區分館').areas[0].equipment.outlet, undefined);
 });

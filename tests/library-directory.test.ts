@@ -111,7 +111,14 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(gonghe.openingHours!, /08:00–12:00、13:00–17:00.*只開放一樓/);
   assert.equal(gonghe.areas.length, 0);
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
-  assert.equal(scheduled.length, 79);
+  assert.equal(scheduled.length, 81);
+  const beipu = libraries.find(({ id }) => id === 'plis-12cb176cd411e9d41770')!;
+  assert.deepEqual(beipu.areas[0].slots?.find(({ day }) => day === 0),
+    { day: 0, start: minutes('08:00'), end: minutes('17:00') });
+  const zhudong = libraries.find(({ id }) => id === 'plis-24ed27c19953ccb5f0c4')!;
+  assert.equal(zhudong.areas[0].slots?.find(({ day }) => day === 2)?.start, minutes('08:30'));
+  const xinpu = libraries.find(({ id }) => id === 'plis-2bbbdcd83068ffcf8f4f')!;
+  assert.equal(xinpu.areas[0].seats, 54);
   const supplemented = withAnnouncedLibraries(directory.libraries);
   const main = supplemented.find(({ name }) => name === '新竹縣立總圖書館')!;
   assert.equal(main.address, '新竹縣竹北市自強三路155號');

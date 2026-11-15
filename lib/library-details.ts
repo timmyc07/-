@@ -206,6 +206,15 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
 }
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-2bbbdcd83068ffcf8f4f') {
+    return { ...area, name: '2 樓多功能自修室', seats: 54,
+      entryNote: '改造後於 2026 年 11 月 1 日開始試營運。',
+      sources: [...area.sources, 'https://www.govserv.org/TW/Unknown/103898815758341/新埔鎮公所',
+        'https://udn.com/news/story/7324/9851791'] };
+  }
+  if (id === 'plis-946f82daf9ca97d241ba') {
+    return { ...area, entryNote: '國立公共資訊圖書館名錄列出 5 至 6 月自修室週二至週日 08:00–21:00，週一及國定假日休館。' };
+  }
   if (id === 'plis-e94c48945a092b5818d8') {
     return { ...area, seats: 141, access: 'walk-in',
       entryNote: '自由入座，請勿預佔座位。一般閱覽座位 138 席，另有身心障礙人士專用席 3 席。',

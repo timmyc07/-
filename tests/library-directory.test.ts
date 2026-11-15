@@ -343,6 +343,12 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(wanrong.closures[0].from, '2026-05-20');
   assert.equal(wanrong.closures[0].until, '2026-12-31');
   assert.match(wanrong.openingHours!, /萬榮鄉公所 2 樓/);
+  const wanluan = libraries.find(({ id }) => id === 'plis-4ae824a05d3504931b4e')!;
+  assert.equal(wanluan.address, '屏東縣萬巒鄉萬金村萬和路5之11號');
+  assert.deepEqual(wanluan.coordinates, { latitude: 22.59639, longitude: 120.6145 });
+  assert.equal(wanluan.closures[0].from, '2026-11-03');
+  assert.equal(wanluan.closures[0].until, undefined);
+  assert.match(wanluan.openingHours!, /還書可至佳佐分館/);
   const fonglin = libraries.find(({ id }) => id === 'plis-96bdb053d7e967f965dc')!;
   assert.deepEqual(fonglin.calendarYears, [2026]);
   assert(fonglin.closures.some(({ from, until }) => from === '2026-02-14' && until === '2026-02-23'));

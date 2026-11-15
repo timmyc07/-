@@ -9,7 +9,13 @@ import nclStudyRooms from './ncl-study-rooms.json' with { type: 'json' };
 
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
+const wanluanTemporaryClosure = 'https://www.globgov.com/TW/Wanluan/1414151405576012/萬巒圖書館-暨萬巒Doc';
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-4ae824a05d3504931b4e': {
+    from: '2026-11-03',
+    reason: '萬金臨時館因搬遷停館，借書、還書及館內閱覽暫停。還書可至佳佐分館，新館啟用日期另行公告。',
+    url: wanluanTemporaryClosure,
+  },
   'plis-d6eefd9316cdacfd6e67': {
     from: '2026-05-20', until: '2026-12-31',
     reason: '耐震補強工程期間暫停開館。萬榮鄉公所 2 樓文化暨觀光課提供現場還書及取書。恢復日期依館方公告。',
@@ -1493,6 +1499,14 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
 }
 
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
+  if (library.id === 'plis-4ae824a05d3504931b4e' && library.address === '屏東縣萬巒鄉萬和村中正路24號') {
+    const address = '屏東縣萬巒鄉萬金村萬和路5之11號';
+    library = { ...library, address, phone: '08-7836282', fax: undefined,
+      coordinates: { latitude: 22.59639, longitude: 120.6145 },
+      sources: [...library.sources, 'https://itaiwan.moe.gov.tw/doc/index.php?doc=416',
+        'https://www.openstreetmap.org/way/1434626872'] };
+    detail = { address, url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000447' };
+  }
   if (library.id === 'plis-d34887b8b49b91a79656' && library.address === '南投縣信義鄉明德村玉山路47號') {
     const address = '南投縣信義鄉愛國村愛國巷114號';
     library = { ...library, address, phone: '049-2791534',

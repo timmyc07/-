@@ -115,4 +115,6 @@ StudyGo 讓使用者依地區、距離起點、日期、開始時間、使用時
 
 執行 `npm run refresh:directory` 可抓取新版官方名錄。也能在命令後加上 `-- 路徑`，用留存原檔重建名錄。匯入時排除來源中的測試館舍，保留原始名稱、縣市、行政區、地址、公務聯絡電話、館方網址及有效座標。全臺名錄供各縣市查詢，臺中館舍在快照可讀時使用逐館核對版本，例如豐原分館依館方資料分列 A、B 棟，所以首頁的館舍總數可能與官方名錄筆數不同。名錄本身未提供自修時段、入場、設備及休館規則。
 
+執行 `npm run refresh:library-details` 可更新[全臺館舍詳情](/public/datasets/library-details.json)。與名錄同址的開館文字和設施會顯示在館舍卡片，官方詳情明載的自修室也會列出。專室時段、入場資格、座位設備與年度休館依逐館規則核對。
+
 動畫採用 [Magic UI Blur Fade](https://magicui.design/docs/components/blur-fade) 與 [Scroll Progress](https://magicui.design/docs/components/scroll-progress) 的實作，搭配鎖定版本的 Motion。授權保存在 [Magic UI 授權文件](app/MAGIC-UI-LICENSE.md)。

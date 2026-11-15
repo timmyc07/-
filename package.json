@@ -14,7 +14,8 @@
     "import:taichung": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env scripts/import-taichung.ts",
     "test": "node --disable-warning=ExperimentalWarning --test tests/*.test.ts",
     "check": "tsc --noEmit",
-    "refresh:directory": "node scripts/refresh-library-directory.ts"
+    "refresh:directory": "node scripts/refresh-library-directory.ts",
+    "refresh:library-details": "node scripts/refresh-library-details.ts"
   },
   "dependencies": {
     "cheerio": "1.2.0",

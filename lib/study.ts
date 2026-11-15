@@ -33,6 +33,7 @@ export type Library = {
   facilities?: string[];
   coordinates?: { latitude: number; longitude: number };
   schedule?: Slot[];
+  openingHours?: string;
   areas: Area[];
   closures: Closure[];
   calendarYear?: number;

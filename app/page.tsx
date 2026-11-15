@@ -5,6 +5,8 @@ import NearbyOrigin from './nearby-origin.tsx';
 import RegionFilters from './region-filters.tsx';
 import { BlurFade } from './site-motion.tsx';
 import directory from '../public/datasets/library-directory.json';
+import details from '../public/datasets/library-details.json';
+import { withLibraryDetail, type LibraryDetail } from '../lib/library-details.ts';
 import { directionsUrl, distanceKm, parseCoordinates } from '../lib/distance.ts';
 import { taichungSnapshot } from '../lib/mongodb.ts';
 import { backupLibraries, clock, evaluate, facilities, kindLabels, minutes, timePattern, validDate, weekdays } from '../lib/study.ts';
@@ -43,10 +45,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
     card: get('card') === 'on', registration: get('registration') === 'on', required: equipment };
 
   const snapshot = await taichungSnapshot().catch(() => null);
+  const nationalLibraries = directory.libraries.map((library) =>
+    withLibraryDetail(library, (details.libraries as Record<string, LibraryDetail | undefined>)[library.id]));
   const libraries: RegionalLibrary[] = snapshot?.libraries.length
-    ? [...directory.libraries.filter((library) => library.city !== '臺中市'),
+    ? [...nationalLibraries.filter((library) => library.city !== '臺中市'),
       ...snapshot.libraries.map((library) => ({ ...library, city: '臺中市' }))]
-    : directory.libraries;
+    : nationalLibraries;
   const regions = new Map(Object.keys(directory.cityCounts).map((name) => [name, new Set<string>()]));
   for (const library of libraries) if (library.district) regions.get(library.city)!.add(library.district);
   const districtsByCity = Object.fromEntries([...regions].map(([name, districts]) =>
@@ -252,6 +256,7 @@ function LibraryCard({ library, area, status, reasons, closure, openUntil, dista
           週{weekdays[slot.day]} {clock(slot.start)}–{clock(slot.end)}</span>) ?? '空間時段待確認'}</dd>
         {!area?.slots && library.schedule?.length ? <><dt>館舍開放時間</dt><dd>{library.schedule.map((slot) =>
           <span className="slot" key={slot.day + ':' + slot.start}>週{weekdays[slot.day]} {clock(slot.start)}–{clock(slot.end)}</span>)}</dd></> : null}
+        {library.openingHours && <><dt>館方公告的開放時間</dt><dd className="opening-hours">{library.openingHours}</dd></>}
         <dt>設備</dt><dd>{facilityKeys.map((key) => facilities[key] + ' ' +
           (area?.equipment[key] === true ? '有' : area?.equipment[key] === false ? '未提供' : '待確認')).join(' · ')}</dd>
         {library.facilities?.length ? <><dt>館舍設備</dt><dd>{library.facilities.join('、')}</dd></> : null}

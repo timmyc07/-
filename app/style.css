@@ -95,6 +95,7 @@ dl{font-size:13px;margin:9px 0}
 dt{font-weight:700}
 dd{margin:0 0 6px;color:var(--muted)}
 .slot{display:inline-block;margin-right:10px}
+.opening-hours{white-space:pre-line}
 .source-links{display:flex;flex-wrap:wrap;gap:4px 9px;font-size:12px}
 .reasons{font-size:13px;padding-left:1.3em;margin:8px 0}
 .backup-link{display:block;font-size:13px;margin-top:8px}

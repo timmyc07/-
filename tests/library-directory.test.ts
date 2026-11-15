@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import type { Library } from '../lib/study.ts';
+import { withLibraryDetail, type LibraryDetail } from '../lib/library-details.ts';
 
 const root = new URL('../public/datasets/', import.meta.url);
 const directory = JSON.parse(readFileSync(new URL('library-directory.json', root), 'utf8')) as {
@@ -41,4 +42,22 @@ test('全臺名錄的電話、館方網址與座標齊全，補錄資料保留�
   const yancheng = directory.libraries.find(({ id }) => id === 'plis-4818cd57388587303882');
   assert.deepEqual(yancheng?.coordinates, { latitude: 22.626505, longitude: 120.286221 });
   assert(yancheng.sources.some((source) => new URL(source).hostname === 'www.tbkc.gov.tw'));
+});
+
+test('館舍詳情須同址，館舍開館及設備資料不當成自修室規則', () => {
+  const library = directory.libraries[0];
+  const detail: LibraryDetail = {
+    address: '20241 ' + library.address,
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000001',
+    hours: '週二至週六 09:00–21:00',
+    facilities: ['自修室', '無線上網wifi'],
+  };
+  const enriched = withLibraryDetail(library, detail);
+  assert.equal(enriched.openingHours, detail.hours);
+  assert.equal(enriched.studyRoom, true);
+  assert.deepEqual(enriched.areas, [{
+    name: '自修室', kind: 'study', slots: null, access: null, equipment: {}, sources: [detail.url],
+  }]);
+  assert.equal(withLibraryDetail(library, { ...detail, address: '基隆市中正區信一路190號' }), library);
+  assert.equal(withLibraryDetail(library, { ...detail, facilities: ['電梯'] }).studyRoom, undefined);
 });

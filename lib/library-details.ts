@@ -967,6 +967,12 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
   },
 };
 const nationalTaiwanWifi = 'https://www.ntl.edu.tw/wSite/ct?ctNode=3233&mp=1&xItem=7930';
+const nationalTaiwanLaptopSeats: Area = {
+  name: '各樓層筆電專用座位', kind: 'reading', seats: 101, slots: null, access: 'walk-in',
+  equipment: { laptop: true, outlet: true, wifi: true },
+  entryNote: '館方公布一樓 21 席、二樓 44 席、三樓 10 席、五樓 16 席、六樓 10 席。各區依樓層開放時間使用。',
+  sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
+};
 const localReadingAreas: Record<string, Area | undefined> = {
   'plis-a094b0d4aa7d7722fd03': {
     name: '3 樓行動裝置座位區', kind: 'reading', seats: 50,
@@ -1383,8 +1389,9 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const facilities = localFacilities
     ? [...new Set([...(baseFacilities ?? []), ...localFacilities.facilities])] : baseFacilities;
   const readingArea = localReadingAreas[library.id];
-  const areas = readingArea && !library.areas.some(({ name }) => name === readingArea.name)
-    ? [...library.areas, readingArea] : library.areas;
+  const readingAreas = [readingArea, library.id === 'plis-a094b0d4aa7d7722fd03' ? nationalTaiwanLaptopSeats : undefined]
+    .filter((area): area is Area => Boolean(area && !library.areas.some(({ name }) => name === area.name)));
+  const areas = [...library.areas, ...readingAreas];
   return {
     ...library,
     name: library.id === 'plis-e2c2e5a82e7e92aa1179' ? '新竹縣竹北市立圖書館福德分館' : library.name,

@@ -1347,6 +1347,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-2a4837295385011e4ddd': {
+    url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=4439d10d6401458baa7a3f2ea0de5c8e',
+    note: '電梯汰換工程預計自 2026 年 10 月 16 日至 12 月 31 日，期間電梯全面停用。前往 3 樓自修室或 4 樓電影欣賞活動，請改走 1 樓前樓梯。電梯恢復使用日期依工程進度調整。',
+  },
   'plis-9f7edd85cf79ea635049': {
     url: 'https://yilan.e-land.gov.tw/News.aspx?n=18708&sms=16140',
     note: '使用筆電請勿影響他人。筆電、平板、手機等個人電子設備須自備電力，館內供電限緊急充電站與 2 樓自修區指定範圍。',

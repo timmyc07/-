@@ -146,6 +146,10 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const xinyuan = libraries.find(({ id }) => id === 'plis-5931f90c2b78f1094592')!;
   assert.equal(xinyuan.address, '屏東縣新園鄉仙吉村新田路22巷21號');
   assert.deepEqual(xinyuan.coordinates, { latitude: 22.54066737, longitude: 120.45916455 });
+  assert(xinyuan.facilities?.includes('2 樓閱讀區'));
+  assert(xinyuan.facilities?.includes('3 樓多功能視聽室'));
+  assert.equal(xinyuan.studyRoom, undefined);
+  assert.equal(xinyuan.fax, undefined);
   const gonghe = libraries.find(({ id }) => id === 'plis-f115f1f71be7cccd30e1')!;
   assert.match(gonghe.openingHours!, /08:00–12:00、13:00–17:00.*只開放一樓/);
   assert.equal(gonghe.areas.length, 0);

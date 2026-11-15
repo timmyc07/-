@@ -168,8 +168,8 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
     facilities: ['1 樓自修區', '閱報室', '4 樓讀者上網區', '期刊雜誌閱覽區', '親子與兒童閱覽區', '5 樓書庫', '視聽室'],
   },
   'plis-5931f90c2b78f1094592': {
-    url: 'https://data.moenv.gov.tw/dataset/detail/FAC_P_07',
-    facilities: ['2 樓公廁', '3 樓公廁'],
+    url: xinyuanUrl,
+    facilities: ['1 樓兒童室', '1 樓期刊報紙區', '2 樓閱讀區', '3 樓圖書區', '3 樓多功能視聽室', '4 樓圖書區', '2 樓公廁', '3 樓公廁'],
   },
   'plis-290186a03e719a9c8bee': {
     url: 'https://gutss.blogspot.com/2024/01/blog-post.html',

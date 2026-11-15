@@ -11,6 +11,10 @@ export type LibraryDetail = { url: string; address: string; hours?: string; faci
 
 const wanluanTemporaryClosure = 'https://www.globgov.com/TW/Wanluan/1414151405576012/萬巒圖書館-暨萬巒Doc';
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-a52a74385fa7b184d15f': {
+    from: '2025-10-01', reason: '東園分館配合合署大樓拆除工程全面閉館，恢復日期待館方公告。',
+    url: 'https://www.ck.tp.edu.tw/uploads/17720683128085tU8DIOu.pdf',
+  },
   'plis-5214bc11151c1cde5bf4': {
     from: '2025-08-01', reason: '大同路館舍因閱讀環境改善工程閉館，借書與通閱暫停。市公所規劃 2027 年 7 月恢復營運，實際日期依公告。',
     url: 'https://webws.miaoli.gov.tw/Download.ashx?n=MTE0RTAwMDQyNzUtMDEuUERG&u=LzAwMS9VcGxvYWQvNDY2L3JlbGZpbGUvMTQ5MTMvODcxNTc5LzlhMTA2YWExLTIwZmUtNGJhNS1hY2ViLTAwZDQ0NjNkNDYxZS5wZGY%3D',

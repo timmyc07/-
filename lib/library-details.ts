@@ -1416,8 +1416,8 @@ const localHours: Record<string, { url: string; hours: string; studyRoom?: boole
     supersedesDirectory: true,
   },
   'plis-7ef0c1dc2c3fc0c85b29': {
-    url: 'https://www.dongyin.gov.tw/Chhtml/Detail/2618?mcid=114292',
-    hours: '館舍開放時間待確認。2026 年 11 月鄉公所刊載的質詢報導提及建議恢復週六及週日服務。',
+    url: 'https://www.dongyin.gov.tw/Chhtml/content/2503',
+    hours: '週一至週五 08:00–12:00、13:30–17:30，週六、週日及國定假日休館。',
     supersedesDirectory: true,
   },
   'plis-47d9eb53677ef9688a15': {

@@ -110,6 +110,10 @@ const qionglinLibrary = 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_42
 const fuxingLibraryServices = 'https://www.fuxing.tycg.gov.tw/cp.aspx?n=7100';
 const yuminCleaning = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=05b04bc605814183badfe83e28bd8af1';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-35fd0d403d4fe15ada5e': {
+    url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=480eedf0ee4b442c85726c04abc72ac7',
+    facilities: ['1 樓一般閱覽區、期刊閱報區及資訊檢索區', '2 樓親子共讀區及學齡前兒童閱覽區', '3 樓兒童閱覽區', '地下 1 樓多功能活動室', '地下 2 樓樂齡活動區'],
+  },
   'plis-5587a95889a363b4a4d6': {
     url: 'https://www.nthcc.gov.tw/A7_6/content/207',
     facilities: ['1 樓親子共讀及兒童閱覽區', '1 樓期刊閱報區', '1 樓哺集乳室', '2 樓開放式成人書庫',
@@ -1270,6 +1274,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-07c47313a8f5b473d2bf': {
+    url: 'https://www.typl.gov.tw/zh-tw/Rent/Detail/11',
+    note: '演藝廳因修繕於 2027 年 1 月至 7 月暫停對外開放及租借，重新開放日期由館方另行公告。',
+  },
   'plis-a619dc2bf2c66d2c8d4b': {
     url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=010&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
     note: '自修請前往北港鎮文仁路 10 號學習中心（北港分局親民空間）。學習中心週二至週五 08:30–21:00、週六及週日 08:30–17:00，週一時段請依館方公告。國定假日休館。',

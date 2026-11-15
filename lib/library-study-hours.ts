@@ -38,7 +38,7 @@ const studyHours: Record<string, StudyHours | undefined> = {
     name: '3 樓 K 書中心', ranges: [], url: 'https://www.fonglin.gov.tw/cp.aspx?n=1934',
   },
   'plis-7f6f1af1d74f76b8b82a': {
-    name: '自修研習室', ranges: [],
+    name: '4 樓自修研習室', ranges: [],
     url: 'https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u5764397187548319569',
   },
   'plis-06504d756c4ec047d449': {

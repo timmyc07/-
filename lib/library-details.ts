@@ -1042,6 +1042,11 @@ const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
 const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-9cc6fe4291e642996d87': {
+    name: '3 樓筆電使用區', kind: 'reading', slots: null, access: null,
+    equipment: { laptop: true },
+    sources: ['https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u5137741304911699517'],
+  },
   'plis-e3287dc94a64c9288833': {
     name: '3 樓筆記型電腦區', kind: 'reading', seats: 71, slots: null, access: 'card', regionalCard: 'taipei',
     reservation: 'https://seat.tpml.edu.tw/sm/home_web.do#',

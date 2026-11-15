@@ -1,4 +1,4 @@
-import type { Closure, Library } from './study.ts';
+import { minutes, type Closure, type Library } from './study.ts';
 import { kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 
 const taipeiUrl = 'https://tpml.gov.taipei/cp.aspx?n=141EFA8D46038957&s=839324A30786DF77';
@@ -70,6 +70,14 @@ function songshanClosures(year: number) {
 }
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  if (library.id === 'plis-b19f4a632868ac1ed335') {
+    const url = 'https://lib.bocach.gov.tw/News_Content.aspx?n=887&s=54813&sms=10437';
+    return { closures: [
+      { from: '2026-11-02', until: '2026-12-15', reason: '館舍整修及圖書盤點期間暫停開放', url },
+      { from: '2026-12-16', until: '2026-12-16', time: { start: 0, end: minutes('11:00') },
+        reason: '上午 11:00 全面開館', url },
+    ] };
+  }
   if (['plis-1d5bc6bb745d6ead49e9', 'plis-79a601480d722cb58344'].includes(library.id)) {
     return { closures: closureDates(2026, 'https://www.chunan.gov.tw/News_Content.aspx?n=2791&s=1013816',
       ['11-28'], '選舉及公投日休館') };

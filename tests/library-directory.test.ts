@@ -103,11 +103,15 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(gonghe.openingHours!, /08:00–12:00、13:00–17:00.*只開放一樓/);
   assert.equal(gonghe.areas.length, 0);
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
-  assert.equal(scheduled.length, 71);
+  assert.equal(scheduled.length, 74);
   const changhua = libraries.find(({ id }) => id === 'plis-b19f4a632868ac1ed335')!;
   assert.equal(changhua.areas[0].regionalCard, 'changhua');
   assert.equal(changhua.areas[0].seats, 70);
+  assert.equal(changhua.closures[0].until, '2026-12-15');
+  assert.equal(changhua.closures[1].time?.end, minutes('11:00'));
   const shengang = libraries.find(({ id }) => id === 'plis-61f904e8f436ea8fc25d')!;
+  assert.equal(shengang.areas[0].access, 'walk-in');
+  assert.equal(shengang.areas[0].equipment.laptop, false);
   assert.deepEqual(shengang.areas[0].slots?.find(({ day }) => day === 1),
     { day: 1, start: minutes('17:00'), end: minutes('20:00') });
   const yilan = libraries.find(({ id }) => id === 'plis-2fcff6be9344e712594c')!;

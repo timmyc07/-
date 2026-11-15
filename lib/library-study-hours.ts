@@ -78,6 +78,18 @@ const studyHours: Record<string, StudyHours | undefined> = {
     name: '2 樓自修室', ranges: [['023456', '08:30', '17:00']],
     url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=019&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
   },
+  'plis-00bd1306ca6884693919': {
+    name: '3 樓讀者自修區', ranges: [['23456', '09:00', '20:00'], ['0', '09:00', '17:00']],
+    url: 'https://www.chcg.gov.tw/TSO/hemei/07other/main.aspx?main_id=1193',
+  },
+  'plis-21b90fd0847520bc7c74': {
+    name: '4 樓自修區', ranges: [['2345', '08:30', '20:30'], ['06', '08:30', '17:30']],
+    url: 'https://www.chcg.gov.tw/TSO/xianxi/07other/main.aspx?main_id=1986',
+  },
+  'plis-0fbff29cac66fc6527df': {
+    name: '自修室', ranges: [['2345', '08:00', '21:00'], ['06', '08:00', '17:00']],
+    url: 'https://files.chcg.gov.tw/files/彰化縣社頭鄉立圖書館圖書資料借閱規定(修正)_114_1090214.pdf',
+  },
 };
 
 export function libraryStudyHours(id: string): { name: string; slots: Slot[]; url?: string } | undefined {

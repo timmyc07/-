@@ -129,6 +129,19 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
 }
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-d4bafe538b622515b304') {
+    return { ...area, name: '3 樓自習室', seats: 100,
+      sources: [...area.sources, 'https://www.changhua.gov.tw/RowContent/2242'] };
+  }
+  if (id === 'plis-424ebe1541690abe5b92') {
+    return { ...area, name: 'B1 讀者自習室', seats: 42,
+      sources: [...area.sources, 'https://www.chcg.gov.tw/TSO/Puxin/07other/main.aspx?main_id=12367'] };
+  }
+  if (id === 'plis-61f904e8f436ea8fc25d') {
+    return { ...area, access: 'walk-in', equipment: { laptop: false },
+      entryNote: '自由入座，每人一席。自修室限閱讀，筆電及平板請至資訊閱讀區。每月最後一個星期一清潔休館。',
+      sources: [...area.sources, 'https://ctrl.chcg.gov.tw/main/main_act3/mainV2.aspx?act_id=45&main_id=33233'] };
+  }
   const changhuaMain = id === 'plis-b19f4a632868ac1ed335';
   if (changhuaMain || id === 'plis-f935063eced556c94ad8') {
     return { ...area, seats: changhuaMain ? 70 : 38, access: 'card', regionalCard: 'changhua',

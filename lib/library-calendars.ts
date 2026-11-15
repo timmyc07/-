@@ -113,8 +113,8 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
       checkDates: ['2026-02-20', '2026-02-21'],
     };
   }
-  if (library.id === 'plis-1d5bc6bb745d6ead49e9' || library.id === 'plis-79a601480d722cb58344') {
-    return { closures: closureDates(2026, 'https://www.chunan.gov.tw/News_Content.aspx?n=2791&s=1013816',
+  if (library.id === 'plis-f69821d5ca7dbea81296') {
+    return { closures: closureDates(2026, 'https://tkcc.tnc.gov.tw/ActivityInfoDetailC002100.aspx?Cond=a6b19fec-3a2a-4f47-b4c1-81a93d742595',
       ['11-28'], '選舉日休館') };
   }
 }

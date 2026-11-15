@@ -125,6 +125,9 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
 }
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-d7b92d13f890b0fd9998') {
+    return { ...area, name: '3 樓自修區', sources: [...area.sources, 'https://zuhu.yunlin.gov.tw/sihhuLIB.htm'] };
+  }
   if (id === 'plis-674920ab9a5621eaf6cf') {
     return { ...area, name: '自修區', seats: 98,
       sources: [...area.sources, 'https://culture.taitung.gov.tw/activity/臺東縣立圖書館各式活動'] };

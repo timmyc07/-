@@ -3,7 +3,7 @@
   "download": "https://plisnet.nlpi.edu.tw/api/API/LibraryInfoData",
   "rawFile": "plis-b26c2297e3f7.json",
   "sha256": "b26c2297e3f7c0919fb6c9436fc861f3c32078baf13f8ab567e68a89939f4558",
-  "collectedAt": "2026-11-15T10:01:58.333Z",
+  "collectedAt": "2026-11-15T10:03:55.028Z",
   "rawCount": 616,
   "count": 615,
   "exclusions": [
@@ -295,7 +295,7 @@
     {"id":"plis-296440e3a1f9d236a570","name":"苗栗縣頭屋鄉立圖書館","city":"苗栗縣","district":"頭屋鄉","address":"苗栗縣頭屋鄉頭屋村中正街27號","types":["公共圖書館"],"sources":["https://data.gov.tw/dataset/99567"],"phone":"037-250108","fax":"037-250108","website":"https://lib.miaoli.gov.tw/wSite/lp?ctNode=272&mp=1","coordinates":{"latitude":24.5771,"longitude":120.8521},"areas":[],"closures":[]},
     {"id":"plis-0f8ce5ec67aa7c253fe8","name":"苗栗縣三義鄉立圖書館","city":"苗栗縣","district":"三義鄉","address":"苗栗縣三義鄉廣盛村新生路9-21號","types":["公共圖書館"],"sources":["https://data.gov.tw/dataset/99567"],"phone":"037-876842","fax":"037-874309","website":"https://lib.miaoli.gov.tw/wSite/lp?ctNode=273&mp=1","coordinates":{"latitude":24.4144,"longitude":120.7732},"areas":[],"closures":[]},
     {"id":"plis-95c10375e363b499b6fc","name":"苗栗縣西湖鄉立圖書館","city":"苗栗縣","district":"西湖鄉","address":"苗栗縣西湖鄉金獅村2鄰金獅26-3號","types":["公共圖書館"],"sources":["https://data.gov.tw/dataset/99567"],"phone":"037-921519","fax":"037-921519","website":"https://lib.miaoli.gov.tw/wSite/lp?ctNode=283&mp=1","coordinates":{"latitude":24.559,"longitude":120.7579},"areas":[],"closures":[]},
-    {"id":"plis-1c030fa3616cfb99d6fc","name":"苗栗縣造橋鄉立圖書館","city":"苗栗縣","district":"造橋鄉","address":"苗栗縣造橋鄉造橋村14鄰1號","types":["公共圖書館"],"sources":["https://data.gov.tw/dataset/99567"],"phone":"037-540040","website":"https://lib.miaoli.gov.tw/wSite/lp?ctNode=276&mp=1","coordinates":{"latitude":24.63855,"longitude":120.8652},"areas":[],"closures":[]},
+    {"id":"plis-1c030fa3616cfb99d6fc","name":"苗栗縣造橋鄉立圖書館","city":"苗栗縣","district":"造橋鄉","address":"苗栗縣造橋鄉造橋村14鄰1號","types":["公共圖書館"],"sources":["https://data.gov.tw/dataset/99567","https://www.tch.gov.tw/cp.aspx?n=10068"],"phone":"037-540040","fax":"037-540106","website":"https://lib.miaoli.gov.tw/wSite/lp?ctNode=276&mp=1","coordinates":{"latitude":24.63855,"longitude":120.8652},"areas":[],"closures":[]},
     {"id":"plis-708a19a863b754e58e04","name":"苗栗縣三灣鄉立圖書館","city":"苗栗縣","district":"三灣鄉","address":"苗栗縣三灣鄉三灣村11鄰親民路17-1號","types":["公共圖書館"],"sources":["https://data.gov.tw/dataset/99567"],"phone":"037-833430","fax":"037-832220","website":"https://lib.miaoli.gov.tw/wSite/lp?ctNode=268&mp=1","coordinates":{"latitude":24.6528,"longitude":120.9569},"areas":[],"closures":[]},
     {"id":"plis-4ee8f2321103a6f17ad7","name":"苗栗縣獅潭鄉立圖書館","city":"苗栗縣","district":"獅潭鄉","address":"苗栗縣獅潭鄉新店村9鄰98號","types":["公共圖書館"],"sources":["https://data.gov.tw/dataset/99567"],"phone":"037-931803","fax":"037-931946","website":"https://lib.miaoli.gov.tw/wSite/lp?ctNode=278&mp=1","coordinates":{"latitude":24.5409,"longitude":120.9215},"areas":[],"closures":[]},
     {"id":"plis-9895c2461ceb573cd713","name":"苗栗縣泰安鄉立圖書館","city":"苗栗縣","district":"泰安鄉","address":"苗栗縣泰安鄉清安村2鄰69號","types":["公共圖書館"],"sources":["https://data.gov.tw/dataset/99567"],"phone":"037-941025#208","fax":"037-941621","website":"https://lib.miaoli.gov.tw/wSite/lp?ctNode=281&mp=1","coordinates":{"latitude":24.4474,"longitude":120.9079},"areas":[],"closures":[]},

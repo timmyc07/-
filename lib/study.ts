@@ -7,6 +7,7 @@ export const regionalCards = {
   tainan: '臺南市公共圖書館借閱證',
   changhua: '彰化縣公共圖書館個人借閱證',
   hsinchuCity: '新竹市圖書館借閱證',
+  taitung: '臺東縣公共圖書館借閱證',
 };
 export type Facility = keyof typeof facilities;
 export type Slot = { day: number; start: number; end: number };

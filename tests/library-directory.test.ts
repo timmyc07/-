@@ -299,6 +299,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(taitung.openingHours!, /09:00–21:00/);
   assert.equal(taitung.areas[0].seats, 98);
   assert.equal(taitung.areas[0].slots, null);
+  assert.equal(taitung.areas[0].access, 'card');
+  assert.equal(taitung.areas[0].regionalCard, 'taitung');
+  const guanshan = libraries.find(({ id }) => id === 'plis-c9c0fe185180d1def859')!;
+  assert.equal(guanshan.studyRoom, true);
+  assert.equal(guanshan.areas[0].name, '2 樓自修室');
+  const jinfeng = libraries.find(({ id }) => id === 'plis-41bce5bf027121bcb9e9')!;
+  assert.equal(jinfeng.areas[0].equipment.laptop, true);
   const chenggong = libraries.find(({ id }) => id === 'plis-3dc026b916c043fe287e')!;
   assert.match(chenggong.openingHours!, /整修期間閱覽區週二至週日 08:00–17:00/);
   assert.deepEqual(chenggong.areas[0].slots?.[0], { day: 0, start: minutes('08:00'), end: minutes('17:00') });

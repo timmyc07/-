@@ -531,8 +531,14 @@ function localStudyRoom(id: string, area: Area): Area {
     return { ...area, name: '3 樓自修區', sources: [...area.sources, 'https://zuhu.yunlin.gov.tw/sihhuLIB.htm'] };
   }
   if (id === 'plis-674920ab9a5621eaf6cf') {
-    return { ...area, name: '自修區', seats: 98,
+    return { ...area, name: '自修區', seats: 98, access: 'card', regionalCard: 'taitung',
+      entryNote: '持臺東縣公共圖書館借閱證至入口機台現場登記，一人一卡，當日使用。',
       sources: [...area.sources, 'https://culture.taitung.gov.tw/activity/臺東縣立圖書館各式活動'] };
+  }
+  if (id === 'plis-41bce5bf027121bcb9e9') {
+    return { ...area, equipment: { ...area.equipment, laptop: true },
+      entryNote: '可使用筆電及平板，請勿影響他人閱讀。充電座位位置請向館方確認。',
+      sources: [...area.sources, 'https://ttjfng.gov.tw/home/images/download/rules-stra/1150126.pdf'] };
   }
   if (id === 'plis-00bd1306ca6884693919') {
     return { ...area, seats: 124,

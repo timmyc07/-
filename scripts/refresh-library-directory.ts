@@ -72,6 +72,13 @@ for (const { 縣市: city, 圖書館資訊: records } of regions) {
       library.fax = undefined;
       library.sources.push(library.website, 'https://www.miaoli.gov.tw/News_Content2.aspx?n=285&s=1005335');
     }
+    if (name === '屏東縣新園鄉立圖書館' && library.address === '屏東縣新園鄉仙吉村仙吉路93號') {
+      library.address = '屏東縣新園鄉仙吉村新田路22巷21號';
+      library.coordinates = { latitude: 22.54066737, longitude: 120.45916455 };
+      library.fax = undefined;
+      library.sources.push('https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A',
+        'https://data.moenv.gov.tw/dataset/detail/FAC_P_07');
+    }
     libraries.push(library);
   }
 }

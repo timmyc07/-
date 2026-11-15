@@ -95,6 +95,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
     libraries: Record<string, LibraryDetail>;
   };
   const libraries = directory.libraries.map((library) => withLibraryDetail(library, details[library.id]));
+  assert(libraries.every(({ openingHours }) => openingHours));
+  const xinyuan = libraries.find(({ id }) => id === 'plis-5931f90c2b78f1094592')!;
+  assert.equal(xinyuan.address, '屏東縣新園鄉仙吉村新田路22巷21號');
+  assert.deepEqual(xinyuan.coordinates, { latitude: 22.54066737, longitude: 120.45916455 });
+  const gonghe = libraries.find(({ id }) => id === 'plis-f115f1f71be7cccd30e1')!;
+  assert.match(gonghe.openingHours!, /08:00–12:00、13:00–17:00.*只開放一樓/);
+  assert.equal(gonghe.areas.length, 0);
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
   assert.equal(scheduled.length, 68);
   for (const { slots } of scheduled) {

@@ -70,6 +70,10 @@ function songshanClosures(year: number) {
 }
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  if (['plis-1d5bc6bb745d6ead49e9', 'plis-79a601480d722cb58344'].includes(library.id)) {
+    return { closures: closureDates(2026, 'https://www.chunan.gov.tw/News_Content.aspx?n=2791&s=1013816',
+      ['11-28'], '選舉及公投日休館') };
+  }
   if (library.name.startsWith('臺北市立圖書館')) {
     const songshan = library.id === 'plis-b7a50b9284256d36bef0';
     return {

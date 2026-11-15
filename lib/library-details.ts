@@ -22,7 +22,14 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
   },
 };
 
+const xinyuanUrl = 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=EBBCF8C0C79D379A';
+const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、國定假日及每月最後一個星期四休館。';
 const localHours: Record<string, { url: string; hours: string; studyRoom?: true; supersedesDirectory?: true } | undefined> = {
+  'plis-f115f1f71be7cccd30e1': {
+    url: xinyuanUrl,
+    hours: xinyuanHours + ' 縣府館舍頁註明二樓樓梯有安全疑慮，目前只開放一樓。',
+    supersedesDirectory: true,
+  },
   'plis-674920ab9a5621eaf6cf': {
     url: 'https://www.cna.com.tw/postwrite/chi/431519',
     hours: '週二至週日 09:00–21:00。週末館藏區開放至 17:30。週一、國定假日及每月最後一日休館。',
@@ -78,6 +85,9 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   if (library.id === 'plis-1d5bc6bb745d6ead49e9' && library.address === '苗栗縣竹南鎮大厝里真如路562號') {
     detail = { url: 'https://www.chunan.gov.tw/cp.aspx?n=11120', address: library.address,
       hours: '每日 08:00–18:00，春節及國定假日休館。' };
+  }
+  if (library.id === 'plis-5931f90c2b78f1094592' && library.address === '屏東縣新園鄉仙吉村新田路22巷21號') {
+    detail = { url: xinyuanUrl, address: library.address, hours: xinyuanHours };
   }
   if (!detail?.address || comparableAddress(detail.address) !== comparableAddress(library.address)) return library;
   const candidate = localHours[library.id];

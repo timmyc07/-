@@ -1,7 +1,10 @@
 import type { FieldChangeBatch, FieldReview } from './field-audit.ts';
 
 export const facilities = { laptop: '筆電', wifi: 'Wi-Fi', outlet: '座位插座' };
-export const regionalCards = { taipei: '臺北市圖', newTaipei: '新北市圖' };
+export const regionalCards = {
+  taipei: '臺北市圖個人借閱證', newTaipei: '新北市圖個人借閱證',
+  keelung: '基隆市圖個人借閱證', taoyuan: '桃園市圖個人借閱證或市民卡',
+};
 export type Facility = keyof typeof facilities;
 export type Slot = { day: number; start: number; end: number };
 export type Area = {
@@ -137,8 +140,8 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
     if (area.access === 'restricted') failed.push('限指定身分使用');
     if (!changed && area.access === 'card') {
       const hasCard = area.regionalCard ? query.regionalCards?.includes(area.regionalCard) : query.card;
-      const issuer = area.regionalCard ? regionalCards[area.regionalCard] : '國資圖或臺中市圖';
-      if (!hasCard) failed.push('需持' + issuer + '個人借閱證');
+      const cardName = area.regionalCard ? regionalCards[area.regionalCard] : '國資圖或臺中市圖個人借閱證';
+      if (!hasCard) failed.push('需持' + cardName);
       if (!query.registration) failed.push(area.regionalCard === 'newTaipei' ? '需現場登記' : '需預約或現場登記');
     }
     for (const equipment of query.required) {

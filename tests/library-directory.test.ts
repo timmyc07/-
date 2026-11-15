@@ -46,10 +46,10 @@ test('全臺名錄的電話、館方網址與座標齊全，補錄資料保留�
 });
 
 test('館舍詳情須同址，館舍開館及設備資料不當成自修室規則', () => {
-  const library = directory.libraries[0];
+  const library = directory.libraries.find(({ name }) => name === '基隆市公共圖書館中山分館')!;
   const detail: LibraryDetail = {
-    address: '20241 ' + library.address,
-    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000001',
+    address: '203 ' + library.address,
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000002',
     hours: '週二至週六 09:00–21:00',
     facilities: ['自修室', '無線上網wifi'],
   };
@@ -69,7 +69,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   };
   const libraries = directory.libraries.map((library) => withLibraryDetail(library, details[library.id]));
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
-  assert.equal(scheduled.length, 33);
+  assert.equal(scheduled.length, 35);
   for (const { slots } of scheduled) {
     assert.equal(new Set(slots!.map(({ day }) => day)).size, slots!.length);
     assert(slots!.every(({ day, start, end }) => day >= 0 && day <= 6 && start < end && end <= 1440));
@@ -135,4 +135,15 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   const ntl = libraries.find(({ name }) => name === '國立臺灣圖書館')!;
   assert.equal(evaluate(ntl, ntl.areas[0], { ...taipeiQuery, date: '2026-02-20' }).status, 'unknown');
   assert.equal(coversCalendarYear(libraries.find(({ name }) => name === '新北市烏來區立圖書館')!, 2026), false);
+  const dayuan = libraries.find(({ name }) => name === '桃園市立圖書館大園分館')!;
+  assert.equal(dayuan.areas[0].seats, 147);
+  const taoyuanQuery = { ...taipeiQuery, regionalCards: ['taoyuan' as const] };
+  assert.equal(evaluate(dayuan, dayuan.areas[0], { ...taoyuanQuery, date: '2026-11-26' }).status, 'no');
+  assert.equal(evaluate(dayuan, dayuan.areas[0], { ...taoyuanQuery, date: '2026-11-27' }).status, 'yes');
+  const qiding = libraries.find(({ name }) => name === '桃園市立圖書館崎頂分館')!;
+  assert.match(evaluate(qiding, qiding.areas[0], { ...taoyuanQuery, date: '2026-11-27' }).closure!.reason, /搬遷/);
+  const keelung = libraries.find(({ name }) => name === '基隆市公共圖書館總館')!;
+  assert.equal(keelung.areas[0].regionalCard, 'keelung');
+  assert.equal(keelung.areas[0].seats, 109);
+  assert.equal(evaluate(keelung, keelung.areas[0], { ...taipeiQuery, date: '2026-02-21' }).status, 'no');
 });

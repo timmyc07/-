@@ -8,6 +8,12 @@ const standardTaoyuan: WeeklyRange[] = [['23456', '08:30', '21:00'], ['01', '08:
 // 館舍詳情明列的專室時段。各範圍以 0 至 6 代表週日至週六。
 const studyHours: Record<string, StudyHours | undefined> = {
   'plis-a094b0d4aa7d7722fd03': { name: '自修室', ranges: [['023456', '08:00', '21:00']] },
+  'plis-0d8617adcdaa013618d9': {
+    name: '7 樓自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/Reader/RegulationContent/20',
+  },
+  'plis-112e55434de56841e873': {
+    name: '5 樓自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/051',
+  },
   'plis-8d09da2a8c7fc2f99893': { name: '自修室', ranges: standardTaoyuan },
   'plis-01e95280aebec7eba09c': { name: '自修室', ranges: standardTaoyuan },
   'plis-9c317ee99e20f7ec3cd3': { name: '6 樓自修室', ranges: standardTaoyuan },

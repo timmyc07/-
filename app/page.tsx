@@ -163,7 +163,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
           <fieldset><legend>入場條件</legend><div className="checks">
             <label><input type="checkbox" name="card" defaultChecked={query.card} />有國資圖或臺中市圖個人借閱證</label>
             {Object.entries(regionalCards).map(([issuer, label]) => <label key={issuer}>
-              <input type="checkbox" name={issuer + 'Card'} defaultChecked={query.regionalCards?.includes(issuer as keyof typeof regionalCards)} />有{label}個人借閱證
+              <input type="checkbox" name={issuer + 'Card'} defaultChecked={query.regionalCards?.includes(issuer as keyof typeof regionalCards)} />有{label}
             </label>)}
             <label><input type="checkbox" name="registration" defaultChecked={query.registration} />可預約或現場登記</label>
           </div></fieldset>

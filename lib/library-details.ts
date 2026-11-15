@@ -5,9 +5,15 @@ import { taipeiStudyRoom } from './taipei-study-rules.ts';
 
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
-const huangbinClosure = {
-  from: '2026-03-02', reason: '自 2026 年 3 月 2 日起閉館施工，復館日期以館方公告為準。',
-  url: 'https://www.cna.com.tw/postwrite/chi/425420',
+const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-eb5cc227330385ea9b00': {
+    from: '2026-03-02', reason: '自 2026 年 3 月 2 日起閉館施工，復館日期以館方公告為準。',
+    url: 'https://www.cna.com.tw/postwrite/chi/425420',
+  },
+  'plis-79f43b2ba26bb9afade0': {
+    from: '2026-01-01', reason: '崎頂分館自 2026 年 1 月 1 日起因搬遷至埔頂分館停止開放。',
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/02',
+  },
 };
 
 const localHours: Record<string, { url: string; hours: string; studyRoom?: true } | undefined> = {
@@ -36,7 +42,7 @@ const comparableAddress = (value: string) => value.normalize('NFKC').replaceAll(
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
   if (!detail?.address || comparableAddress(detail.address) !== comparableAddress(library.address)) return library;
   const local = detail.hours ? undefined : localHours[library.id];
-  const closure = library.id === 'plis-eb5cc227330385ea9b00' ? huangbinClosure : undefined;
+  const closure = buildingClosures[library.id];
   const study = detail.hours ? libraryStudyHours(library.id) : undefined;
   const listed = Boolean(detail.facilities?.some((facility) => /^自[修習]室$/.test(facility)));
   const area: Area = {
@@ -44,6 +50,7 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     sources: [study?.url ?? (local?.studyRoom ? local.url : detail.url)],
   };
   const taipeiArea = taipeiStudyRoom(library, area, listed);
+  const localArea = localStudyRoom(library.id, taipeiArea ?? area);
   const studyRoom = Boolean(study || local?.studyRoom || listed || taipeiArea);
   const calendar = libraryCalendar(library);
   return {
@@ -55,8 +62,31 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     facilities: library.facilities ?? detail.facilities,
     studyRoom: library.studyRoom ?? (studyRoom || undefined),
     areas: studyRoom && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
-      ? [...library.areas, taipeiArea ?? area] : library.areas,
+      ? [...library.areas, localArea] : library.areas,
     sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []),
       ...(calendar?.closures.map(({ url }) => url) ?? []), ...(closure ? [closure.url] : [])])],
   };
+}
+
+function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-6c9e30dc1c6abf7a17d4') {
+    return {
+      ...area, access: 'card', regionalCard: 'keelung', seats: 109,
+      entryNote: '持基隆市圖個人借閱證，線上預約或到館登記。每次原則為 1–3 小時，現場零星時段至少 30 分鐘。',
+      reservation: 'https://ireserve.klccab.gov.tw/',
+      sources: [...area.sources, 'https://kllib.klcg.gov.tw/cp.aspx?n=9043',
+        'https://kllib.klcg.gov.tw/News_Content.aspx?_CSN=150&n=7789&s=18148&sms=12521'],
+    };
+  }
+  const dayuan = id === 'plis-9c317ee99e20f7ec3cd3';
+  if (dayuan || id === 'plis-0d8617adcdaa013618d9') {
+    return {
+      ...area, access: 'card', regionalCard: 'taoyuan', seats: dayuan ? 147 : undefined,
+      entryNote: '持桃園市圖個人借閱證（含行動借閱證）或市民卡，線上預約或到館登記。',
+      reservation: 'https://spaceme.typl.gov.tw/',
+      sources: [...area.sources, 'https://www.typl.gov.tw/zh-tw/Reader/RegulationContent/6',
+        dayuan ? 'https://www.typl.gov.tw/zh-tw/About/Introduce/014' : 'https://www.typl.gov.tw/zh-tw/About/Introduce/35'],
+    };
+  }
+  return area;
 }

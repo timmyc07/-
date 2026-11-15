@@ -1037,6 +1037,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-a2f0f325a9d82ca850f0': {
+    url: 'https://www.library.ntpc.gov.tw/singlehtml/ActvInfo?cntId=46cff6829c18462fadbd5e49dccbea78',
+    note: '原館 3 樓自修室自 2026 年 5 月 27 日起因拆遷準備停止開放。',
+  },
   'plis-5ca7b8662f3ee724afdb': newTaipeiEquipmentWork,
   'plis-b3b132289aafe42b7431': newTaipeiEquipmentWork,
   'plis-45e2769173fd5cf565ff': newTaipeiEquipmentWork,

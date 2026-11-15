@@ -484,6 +484,13 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   assert.match(fuying.entryNote!, /28 席/);
   assert.equal(get('新北市立圖書館中和分館').studyRoom, false);
   const taishan = get('新北市立圖書館泰山分館');
+  const chongde = get('新北市立圖書館三重崇德分館');
+  const chongdeStudy = chongde.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(chongdeStudy.name, '3 樓自修室');
+  assert.equal(chongdeStudy.closures?.[0]?.from, '2026-06-08');
+  assert.equal(chongdeStudy.closures?.[0]?.until, '2026-06-09');
+  assert(!chongde.closures.some(({ from }) => from === '2026-06-08'));
+  assert.match(get('新北市立圖書館三重分館').accessNote!, /5 月 27 日/);
   const request = { date: '2026-12-10', start: minutes('14:00'), duration: 60,
     kind: 'study' as const, card: false, registration: false, required: [] };
   assert.equal(taishan.areas[0].seats, 170);

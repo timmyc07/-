@@ -21,6 +21,13 @@ const taipeiStudyWifi = new Set([
 ]);
 const newTaipeiRule = 'https://www.library.ntpc.gov.tw/singlehtml/e81f432c17614ea4b732e114c365e29b?cntId=26b1530a3e724f44892b6cb0c7c7c5ed';
 const studyConstruction: Record<string, { name: string; closure: Closure; sources?: string[] } | undefined> = {
+  'plis-e560724330a3485ec121': {
+    name: '3 樓自修室',
+    closure: {
+      from: '2026-06-08', until: '2026-06-09', reason: '3 樓自修室因內部空間調整暫停開放。',
+      url: 'https://www.library.ntpc.gov.tw/%3Bjsessionid%3DB6432A57A0B1AC7AAA2FBC31D8DD2C45',
+    },
+  },
   'plis-6178fec7a54e55fdd3ff': {
     name: '3 樓自修室',
     closure: {

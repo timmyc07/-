@@ -1347,6 +1347,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-c45011eb98a75a2b9c10': {
+    url: 'https://www.lotong.gov.tw/News_Content.aspx?_CSN=4895&n=17722&s=339113&sms=16265',
+    note: '館內飲品限白開水，請勿攜帶食物或其他飲料。使用筆電或其他行動裝置請勿影響他人；個人筆電以外的私人電器須自備電源。',
+  },
   'plis-2a4837295385011e4ddd': {
     url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=4439d10d6401458baa7a3f2ea0de5c8e',
     note: '電梯汰換工程預計自 2026 年 10 月 16 日至 12 月 31 日，期間電梯全面停用。前往 3 樓自修室或 4 樓電影欣賞活動，請改走 1 樓前樓梯。電梯恢復使用日期依工程進度調整。',

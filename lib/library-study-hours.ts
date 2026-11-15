@@ -66,6 +66,18 @@ const studyHours: Record<string, StudyHours | undefined> = {
     name: '1 樓閱覽區（整修期間）', ranges: [['023456', '08:00', '17:00']],
     url: 'https://www.changkang.gov.tw/news/news1/detail/9834',
   },
+  'plis-61f904e8f436ea8fc25d': {
+    name: '3 樓自修室', ranges: [['1', '17:00', '20:00'], ['2345', '08:00', '20:00'], ['06', '08:00', '17:00']],
+    url: 'https://ctrl.chcg.gov.tw/main/main_act3/main.aspx?act_id=45&main_id=3428',
+  },
+  'plis-3fb94b86e4de966ba65a': {
+    name: '自修室', ranges: [['123456', '09:00', '20:00'], ['0', '09:00', '17:00']],
+    url: 'https://content.yunlin.gov.tw/cp.aspx?n=994',
+  },
+  'plis-43bc851b4926b0b037f2': {
+    name: '2 樓自修室', ranges: [['023456', '08:30', '17:00']],
+    url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=019&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+  },
 };
 
 export function libraryStudyHours(id: string): { name: string; slots: Slot[]; url?: string } | undefined {

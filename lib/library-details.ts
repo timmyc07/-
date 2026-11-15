@@ -8,6 +8,10 @@ import { taipeiStudyRoom } from './taipei-study-rules.ts';
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-2fcff6be9344e712594c': {
+    from: '2022-03-01', reason: '宜蘭縣文化局圖書館因縣級圖書館總館工程閉館，復館日期以館方公告為準。',
+    url: 'https://www.suao.gov.tw/News_Content.aspx?n=9043&s=385366&sms=13359',
+  },
   'plis-5b3805f2ce866586020e': {
     from: '2026-04-15', reason: '新竹市圖書館總館閉館重建中，復館日期以館方公告為準。',
     url: 'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=b39fff74-7075-46ee-85c5-dee460b6f208',
@@ -125,6 +129,14 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
 }
 
 function localStudyRoom(id: string, area: Area): Area {
+  const changhuaMain = id === 'plis-b19f4a632868ac1ed335';
+  if (changhuaMain || id === 'plis-f935063eced556c94ad8') {
+    return { ...area, seats: changhuaMain ? 70 : 38, access: 'card', regionalCard: 'changhua',
+      entryNote: '持彰化縣公共圖書館個人借閱證線上預約或現場登記，須於時段開始後 30 分鐘內刷證報到。',
+      reservation: 'https://ireserve.toread.bocach.gov.tw/sm/home_web.do',
+      sources: [...area.sources, changhuaMain ? 'https://lib.bocach.gov.tw/cp.aspx?n=933'
+        : 'https://www.chcg.gov.tw/TSO/tianzhong/04bulletin/bulletin02_con.aspx?bull_id=392826'] };
+  }
   if (id === 'plis-d7b92d13f890b0fd9998') {
     return { ...area, name: '3 樓自修區', sources: [...area.sources, 'https://zuhu.yunlin.gov.tw/sihhuLIB.htm'] };
   }

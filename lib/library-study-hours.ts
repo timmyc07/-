@@ -4,6 +4,7 @@ type WeeklyRange = [days: string, start: string, end: string];
 type StudyHours = { name: string; ranges: WeeklyRange[]; url?: string };
 
 const standardTaoyuan: WeeklyRange[] = [['23456', '08:30', '21:00'], ['01', '08:30', '17:00']];
+const shortTaoyuan: WeeklyRange[] = [['0123456', '08:30', '17:00']];
 const hsinchuRules = 'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=b39fff74-7075-46ee-85c5-dee460b6f208';
 const hsinchuLate: WeeklyRange[] = [['2345', '09:00', '21:00'], ['06', '09:00', '17:00']];
 
@@ -62,22 +63,22 @@ const studyHours: Record<string, StudyHours | undefined> = {
     name: '4 樓自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/042',
   },
   'plis-3fe72b1ccca37949b0a8': {
-    name: '2 樓自修閱覽室', ranges: [], url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/039',
+    name: '2 樓自修閱覽室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/039',
   },
   'plis-163c307c64aa5fc02e8a': {
-    name: '2 樓自修區', ranges: [], url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/048',
+    name: '2 樓自修區', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/048',
   },
   'plis-ab3dfbc049455a84068e': {
-    name: '自修室', ranges: [], url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/047',
+    name: '自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/047',
   },
   'plis-e13b542aa05bf70e234a': {
-    name: '自修室', ranges: [], url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/011',
+    name: '自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/011',
   },
   'plis-62af35b79d7d88c393d7': {
-    name: '3 樓自修室', ranges: [], url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/027',
+    name: '3 樓自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/027',
   },
   'plis-67ab5e6b0d8d6c9a2e25': {
-    name: '6 樓極靜自修區', ranges: [], url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/025',
+    name: '6 樓極靜自修區', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/025',
   },
   'plis-dd0e38aa18f750ffcade': { name: 'B1 自修室', ranges: [['123456', '08:30', '21:00'], ['0', '08:30', '17:00']] },
   'plis-07c47313a8f5b473d2bf': {
@@ -85,7 +86,30 @@ const studyHours: Record<string, StudyHours | undefined> = {
   },
   'plis-79f43b2ba26bb9afade0': { name: '自修室', ranges: standardTaoyuan },
   'plis-99799da6e29815c7da11': { name: '2 樓自修室', ranges: standardTaoyuan },
-  'plis-9df366887a25b0673ee7': { name: '多功能研習教室（自修室）', ranges: standardTaoyuan },
+  'plis-5f74f02b42c06b3fc9d9': {
+    name: '自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/016',
+  },
+  'plis-b4d4a98c101cbfdc3b6d': {
+    name: '3 樓自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/015',
+  },
+  'plis-bb87f2dc7cdcad6eca8b': {
+    name: '自修閱覽室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/036',
+  },
+  'plis-369d482f8c183f32943f': {
+    name: '2 樓自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/037',
+  },
+  'plis-14dcd000784259e3f26c': {
+    name: '2 樓自修室', ranges: standardTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/021',
+  },
+  'plis-1ed4208570aa338878bc': {
+    name: '自修室', ranges: shortTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/045',
+  },
+  'plis-76fd541d0ef4efcbb6ab': {
+    name: '自修室', ranges: shortTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/040',
+  },
+  'plis-9df366887a25b0673ee7': {
+    name: '多功能研習教室（自修室）', ranges: shortTaoyuan, url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/04',
+  },
   'plis-a38508dd33caf0cfefdc': { name: '自習室', ranges: standardTaoyuan },
   'plis-bb78c5df4d9aa277ab1c': { name: '1 樓自修室', ranges: standardTaoyuan },
   'plis-e94c48945a092b5818d8': { name: '自修室', ranges: [['023456', '08:30', '20:30']] },

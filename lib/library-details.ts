@@ -228,6 +228,7 @@ const taoyuanSeatSystem: Record<string, { url?: string; seats?: number; name?: s
   'plis-ab3dfbc049455a84068e': { seats: 110 },
   'plis-e13b542aa05bf70e234a': { seats: 60 },
   'plis-112e55434de56841e873': { seats: 98 },
+  'plis-5f74f02b42c06b3fc9d9': { seats: 172, note: '另設 8 席筆電區。' },
 };
 
 function localStudyRoom(id: string, area: Area): Area {
@@ -302,6 +303,9 @@ function localStudyRoom(id: string, area: Area): Area {
       sources: [...area.sources, 'https://kllib.klcg.gov.tw/cp.aspx?n=9043',
         'https://kllib.klcg.gov.tw/News_Content.aspx?_CSN=150&n=7789&s=18148&sms=12521'],
     };
+  }
+  if (id === 'plis-b4d4a98c101cbfdc3b6d' || id === 'plis-9df366887a25b0673ee7') {
+    return { ...area, seats: id === 'plis-b4d4a98c101cbfdc3b6d' ? 38 : 24 };
   }
   const taoyuan = taoyuanSeatSystem[id];
   if (taoyuan) {

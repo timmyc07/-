@@ -1370,6 +1370,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-a842920d380a52665656': {
+    url: 'https://www.phlib.nat.gov.tw/wSite/sp?mp=1&orgId=004&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    hours: '週三至週日 08:15–12:00、13:30–17:30。週三至週五加開 19:00–21:00，2、7、8 月晚間加開擴及週六及週日。週一、週二及國定假日休館。',
+    supersedesDirectory: true,
+  },
   'plis-bfff639f154e1c065ad1': {
     url: 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=016&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
     hours: '週二至週六 08:00–17:00。週日 08:00–17:00，縣府各館時段表列週日 12:00–13:00 休息，午間到館前請先確認。',

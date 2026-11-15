@@ -145,6 +145,8 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   };
   const libraries = directory.libraries.map((library) => withLibraryDetail(library, details[library.id]));
   assert(libraries.every(({ openingHours }) => openingHours));
+  const pongnan = libraries.find(({ id }) => id === 'plis-a842920d380a52665656')!;
+  assert.match(pongnan.openingHours!, /週三至週五加開 19:00–21:00，2、7、8 月晚間加開擴及週六及週日/);
   const dongyin = libraries.find(({ id }) => id === 'plis-7ef0c1dc2c3fc0c85b29')!;
   assert.match(dongyin.openingHours!, /週一至週五 08:00–12:00、13:30–17:30.*週六、週日及國定假日休館/);
   assert.equal(dongyin.areas.some(({ kind }) => kind === 'study'), false);

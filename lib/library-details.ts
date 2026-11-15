@@ -1009,6 +1009,10 @@ const nationalTaiwanLaptopSeats: Area = {
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
 const localReadingAreas: Record<string, Area | undefined> = {
+  'plis-946f82daf9ca97d241ba': {
+    name: '地下室閱覽區', kind: 'reading', seats: 40, slots: null, access: null, equipment: {},
+    sources: ['https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_4295&mp=1&orgId=010&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp'],
+  },
   'plis-898020f5dd3a533a9ee3': {
     name: '臨時館閱覽區', kind: 'reading', seats: 50, slots: null, access: null, equipment: {},
     sources: ['https://library.hccc.gov.tw/ct.asp?ctNode=1051&mp=20&xItem=7450'],
@@ -1219,6 +1223,16 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-c9c0fe185180d1def859': {
+    url: 'https://www.guanshan.gov.tw/about/about4',
+    hours: '週二至週日 08:00–12:00、13:00–17:00，週一休館。特殊日期依館方公告。',
+    supersedesDirectory: true,
+  },
+  'plis-41bce5bf027121bcb9e9': {
+    url: 'https://www.ttjfng.gov.tw/home/images/download/rules-stra/1150126.pdf',
+    hours: '週一至週五 08:30–12:00、13:30–17:30。政府公告放假日及鄉內重大慶典活動期間休館。',
+    supersedesDirectory: true,
+  },
   'plis-de863fe06ace49835a69': {
     url: 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=003&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
     hours: '館方頁面仍列原館整修。臨時借還書服務在嘉檳文化館（中埔村 128 之 8 號），週一至週五 09:00–18:00。原館復館時間待館方確認。',
@@ -1687,6 +1701,9 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-06504d756c4ec047d449') {
+    return { ...area, entryNote: '公圖名錄列自習室 09:00–18:00，3 至 8 月延長至 21:00，週一及國定假日休館。' };
+  }
   if (id === 'plis-9bee8536cf45c910547b') {
     return { ...area, entryNote: '研習教室供自修及研習課程使用。' };
   }
@@ -1895,7 +1912,7 @@ function localStudyRoom(id: string, area: Area): Area {
   if (id === 'plis-41bce5bf027121bcb9e9') {
     return { ...area, equipment: { ...area.equipment, laptop: true },
       entryNote: '可使用筆電及平板，請勿影響他人閱讀。充電座位位置請向館方確認。',
-      sources: [...area.sources, 'https://ttjfng.gov.tw/home/images/download/rules-stra/1150126.pdf'] };
+      sources: [...area.sources, 'https://www.ttjfng.gov.tw/home/images/download/rules-stra/1150126.pdf'] };
   }
   if (id === 'plis-00bd1306ca6884693919') {
     return { ...area, seats: 124,

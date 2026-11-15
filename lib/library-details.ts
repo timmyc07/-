@@ -77,6 +77,14 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-3832d23bbe5146a74169': {
+    url: 'https://www.nlpi.edu.tw/StaticPage/main-floors',
+    facilities: ['地下 1 樓自修閱覽室', '兒童學習中心', '自助借還書區', '新書展示區', '期刊閱覽區', '樂齡閱覽區', '多元文化區', '留學資料區', '視聽區'],
+  },
+  'plis-ae310f74e5c07b98a13a': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000195',
+    facilities: ['期刊閱報室', '兒童室', '網路資源室', '書庫', '4 樓讀者自修室'],
+  },
   'plis-50a85fd5bd2678f089ba': {
     url: 'https://gutss.blogspot.com/2023/11/blog-post_21.html',
     facilities: ['1 樓自修區', '閱報室', '4 樓讀者上網區', '期刊雜誌閱覽區', '親子與兒童閱覽區', '5 樓書庫', '視聽室'],
@@ -1183,7 +1191,7 @@ const taichungFaxName = (value: string) => value.normalize('NFKC').replace(/\s/g
 
 export function withTaichungDirectoryDetails(library: Library, directory: Library[]): Library {
   const hasHours = Boolean(library.openingHours || library.schedule?.length);
-  if (library.fax && hasHours) return library;
+  if (library.fax && hasHours && library.facilities?.length) return library;
   const name = taichungFaxName(library.name);
   const address = faxLocation(library.address);
   const [match, duplicate] = directory.filter((candidate) =>
@@ -1191,8 +1199,9 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
   if (!match || duplicate || !address) return library;
   const fax = library.fax ?? match.fax;
   const openingHours = hasHours ? library.openingHours : match.openingHours;
-  if (fax === library.fax && openingHours === library.openingHours) return library;
-  return { ...library, fax, openingHours, sources: [...new Set([...library.sources, ...match.sources])] };
+  const facilities = library.facilities?.length ? library.facilities : match.facilities ?? library.facilities;
+  if (fax === library.fax && openingHours === library.openingHours && facilities === library.facilities) return library;
+  return { ...library, fax, openingHours, facilities, sources: [...new Set([...library.sources, ...match.sources])] };
 }
 
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {

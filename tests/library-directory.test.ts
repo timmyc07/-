@@ -84,6 +84,11 @@ test('臺中快照用同名同址名錄補缺，保留已有的開館時段', ()
   assert.equal(withTaichungDirectoryDetails(branch, [enrichedRecord]).openingHours, enrichedRecord.openingHours);
   const scheduled = { ...branch, schedule: [{ day: 2, start: minutes('09:00'), end: minutes('17:00') }] };
   assert.equal(withTaichungDirectoryDetails(scheduled, [enrichedRecord]).openingHours, undefined);
+  const missingFacilities = { ...scheduled, fax: result.fax, facilities: [] };
+  const facilityRecord = { ...enrichedRecord, facilities: ['兒童閱覽區'] };
+  assert.deepEqual(withTaichungDirectoryDetails(missingFacilities, [facilityRecord]).facilities, ['兒童閱覽區']);
+  const existingFacilities = { ...missingFacilities, facilities: ['無障礙電梯'] };
+  assert.equal(withTaichungDirectoryDetails(existingFacilities, [facilityRecord]), existingFacilities);
 });
 
 test('館舍詳情須同址，館舍開館及設備資料不當成自修室規則', () => {

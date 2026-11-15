@@ -1009,6 +1009,10 @@ const nationalTaiwanLaptopSeats: Area = {
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
 const localReadingAreas: Record<string, Area | undefined> = {
+  'plis-4f772c9702962d95b0f8': {
+    name: '閱覽區', kind: 'reading', seats: 32, slots: null, access: null, equipment: {},
+    sources: ['https://www.typl.gov.tw/zh-tw/About/Introduce/029'],
+  },
   'plis-793de43144ebd1a7578c': {
     name: '閱覽區', kind: 'reading', seats: 36,
     slots: [0, 2, 3, 4, 5, 6].map((day) => ({ day, start: minutes('09:00'), end: minutes('17:00') })),

@@ -157,6 +157,11 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
   assert.equal(scheduled.length, 151);
+  const shande = libraries.find(({ id }) => id === 'plis-4f772c9702962d95b0f8')!;
+  const shandeReading = shande.areas.find(({ kind }) => kind === 'reading')!;
+  assert.equal(shandeReading.seats, 32);
+  assert.equal(shandeReading.slots, null);
+  assert(shande.areas.every(({ kind, seats }) => kind !== 'study' || seats == null));
   const yunlin = libraries.find(({ id }) => id === 'plis-3fb94b86e4de966ba65a')!;
   assert.equal(yunlin.areas[0].access, 'walk-in');
   assert.equal(yunlin.areas[0].equipment.outlet, true);

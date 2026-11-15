@@ -129,6 +129,7 @@ const electionClosureRules: Record<string, string> = {
   'plis-12a529595d2715dda629': yuanlinLibraryRules,
   'plis-016c903b9ad9d1b886d6': yuanlinLibraryRules,
   'plis-e2293e37a8a158591761': 'https://lib.bocach.gov.tw/cp.aspx?n=1206',
+  'plis-674920ab9a5621eaf6cf': 'https://culture.taitung.gov.tw/news/【休館公告】11-28-日休館一日',
   'plis-a382f4004c63510e6b53': 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=007&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
   'plis-3a8fa4c8db9589758aef': 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=011&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
   'plis-e94c48945a092b5818d8': 'https://www.hchcc.gov.tw/Tw/Common/SinglePage?filter=55A4FB62-998F-4818-BDE2-08AF8B3245C2',
@@ -425,8 +426,16 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     return { calendarYears: [2026], closures: nationalTaiwan2026, checkDates: ['2026-02-20', '2026-02-21'] };
   }
   if (library.name.startsWith('基隆市公共圖書館')) {
-    if (library.id === 'plis-6c9e30dc1c6abf7a17d4' || library.id === 'plis-79f7f1447d98ee4e2917') {
-      return { calendarYears: [2026], closures: [...keelung2026, {
+    const main = library.id === 'plis-6c9e30dc1c6abf7a17d4';
+    if (main || library.id === 'plis-79f7f1447d98ee4e2917') {
+      const trialClosures = main ? [
+        { from: '2026-01-01', until: '2026-07-01', reason: '總館整建期間暫停開放',
+          url: 'https://kllib.klcg.gov.tw/News_Content.aspx?_CSN=151&n=7789&s=18076&sms=12521' },
+        ...closureDates(2026, 'https://kllib.klcg.gov.tw/News_Content.aspx?_CSN=150&n=7789&s=18148&sms=12521',
+          ['07-07', '07-08', '07-14', '07-15', '07-21', '07-22', '07-28', '07-29',
+            '08-04', '08-05', '08-11', '08-12'], '總館首波試營運僅週四至週日開放'),
+      ] : [];
+      return { calendarYears: [2026], closures: [...trialClosures, ...keelung2026, {
         from: '2026-08-26', until: '2026-08-26', time: { start: minutes('16:00'), end: 24 * 60 },
         reason: '雞籠中元祭 16:00 提前閉館', url: 'https://kllib.klcg.gov.tw/News_Content.aspx?n=8243&s=18291',
       }] };

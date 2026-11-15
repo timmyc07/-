@@ -730,13 +730,17 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   const qiding = libraries.find(({ name }) => name === '桃園市立圖書館崎頂分館')!;
   assert.match(evaluate(qiding, qiding.areas[0], { ...taoyuanQuery, date: '2026-11-27' }).closure!.reason, /搬遷/);
   const keelung = libraries.find(({ name }) => name === '基隆市公共圖書館總館')!;
+  const taitungCounty = libraries.find(({ id }) => id === 'plis-674920ab9a5621eaf6cf')!;
+  assert.match(evaluate(taitungCounty, undefined, { ...taipeiQuery, date: '2026-11-28' }).closure!.reason, /選舉日休館/);
   assert.equal(keelung.areas[0].regionalCard, 'keelung');
   assert.equal(keelung.areas[0].seats, 109);
   assert.equal(evaluate(keelung, keelung.areas[0], { ...taipeiQuery, date: '2026-02-21' }).status, 'no');
   const renai = libraries.find(({ id }) => id === 'plis-d5b8a42994a660f05102')!;
   const outage = { ...taipeiQuery, date: '2026-05-23' };
   assert.equal(evaluate(renai, undefined, outage).closure?.reason, '仁愛分館停電休館');
-  assert.equal(evaluate(keelung, keelung.areas[0], outage).closure, undefined);
+  assert.equal(evaluate(keelung, keelung.areas[0], outage).closure?.reason, '總館整建期間暫停開放');
+  assert.equal(evaluate(keelung, keelung.areas[0], { ...outage, date: '2026-08-12' }).closure?.reason, '總館首波試營運僅週四至週日開放');
+  assert.equal(evaluate(keelung, keelung.areas[0], { ...outage, date: '2026-08-18' }).closure, undefined);
   const xinyi = libraries.find(({ id }) => id === 'plis-79f7f1447d98ee4e2917')!;
   const festival = { ...taipeiQuery, date: '2026-08-26', duration: 60 };
   for (const library of [keelung, xinyi]) {

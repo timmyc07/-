@@ -10,6 +10,14 @@ const hsinchuLate: WeeklyRange[] = [['2345', '09:00', '21:00'], ['06', '09:00', 
 
 // 館舍詳情明列的專室時段。各範圍以 0 至 6 代表週日至週六。
 const studyHours: Record<string, StudyHours | undefined> = {
+  'plis-942c78ab15d304c768e8': {
+    name: '2 樓自修室', ranges: [],
+    url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=003&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+  },
+  'plis-0e472236b6cd90d7217c': {
+    name: '自修區', ranges: [],
+    url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=021&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+  },
   'plis-c326876c7e0206c1aba1': {
     name: '10 樓自修區', ranges: [],
     url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=72657041F7AA3992&sms=CFFFC938B352678A',
@@ -196,7 +204,7 @@ const studyHours: Record<string, StudyHours | undefined> = {
     url: 'https://ctrl.chcg.gov.tw/main/main_act3/main.aspx?act_id=45&main_id=3428',
   },
   'plis-3fb94b86e4de966ba65a': {
-    name: '自修室', ranges: [['123456', '09:00', '20:00'], ['0', '09:00', '17:00']],
+    name: '3 樓自修室', ranges: [['123456', '09:00', '20:00'], ['0', '09:00', '17:00']],
     url: 'https://content.yunlin.gov.tw/cp.aspx?n=994',
   },
   'plis-43bc851b4926b0b037f2': {

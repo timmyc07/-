@@ -63,6 +63,7 @@ test('傳真補錄保留來源，原始名錄明載無傳真的欄位持續有�
   assert.equal(shilin.fax, '02-28353985');
   assert(shilin.sources.includes('https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011'));
   assert.equal(byName('基隆市公共圖書館信義分館').fax, '02-24236174');
+  assert.equal(byName('雲林縣元長鄉立圖書館').fax, '05-7888910');
   assert.equal(byName('新北市立圖書館三峽分館').fax, '無');
   assert.equal(byName('高雄市立圖書館鹽埕分館').fax, undefined);
 });
@@ -123,6 +124,14 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
   assert.equal(scheduled.length, 140);
+  const yunlin = libraries.find(({ id }) => id === 'plis-3fb94b86e4de966ba65a')!;
+  assert.equal(yunlin.areas[0].access, 'walk-in');
+  assert.equal(yunlin.areas[0].equipment.outlet, true);
+  for (const id of ['plis-942c78ab15d304c768e8', 'plis-0e472236b6cd90d7217c']) {
+    const branch = libraries.find((library) => library.id === id)!;
+    assert.equal(branch.studyRoom, true);
+    assert.equal(branch.areas[0].slots, null);
+  }
   const baoshan = libraries.find(({ id }) => id === 'plis-d31d9ccdab3c7bcf9ff3')!;
   assert.equal(baoshan.studyRoom, true);
   assert.equal(baoshan.areas[0].slots, null);

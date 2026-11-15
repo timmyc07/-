@@ -421,6 +421,11 @@ const taoyuanStudySeats: Record<string, { seats: number; url: string } | undefin
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-3fb94b86e4de966ba65a') {
+    return { ...area, access: 'walk-in', equipment: { ...area.equipment, outlet: true },
+      entryNote: '一人限用一席，暫時離席須在 60 分鐘內返回。自修室插座可供充電。',
+      sources: [...area.sources, 'https://lib.ylccb.gov.tw/wSite/ct?ctNode=5240&mp=1&xItem=11513'] };
+  }
   if (id === 'plis-094ed6f57775956545a2') return { ...area, seats: 85, equipment: { wifi: true } };
   if (id === 'plis-016c903b9ad9d1b886d6') {
     return { ...area, name: '地下 1 樓自修室', access: 'walk-in', equipment: { outlet: true, laptop: false },

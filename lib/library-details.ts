@@ -1038,6 +1038,24 @@ const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
 const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-556af005b3614de06ca7': {
+    name: '6 樓筆記型電腦區', kind: 'reading', seats: 7, slots: null, access: null,
+    equipment: { laptop: true, outlet: true },
+    entryNote: '插座供筆記型電腦及平板電腦使用。',
+    sources: ['https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=C6F658AB460A6821'],
+  },
+  'plis-d4a372e3044256cc569b': {
+    name: '4 樓筆記型電腦區', kind: 'reading', seats: 4, slots: null, access: null,
+    equipment: { laptop: true, outlet: true },
+    sources: ['https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=11E1368E3BDE143B',
+      'https://tpml.gov.taipei/News_toggle.aspx?n=B64082F5678B94B1&sms=D0034AF4F8239B65'],
+  },
+  'plis-235cf5117c19f3df0087': {
+    name: '2 樓筆記型電腦區', kind: 'reading', seats: 5, slots: null, access: null,
+    equipment: { laptop: true, outlet: true },
+    sources: ['https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=5885A582B271E3C7',
+      'https://tpml.gov.taipei/News_toggle.aspx?n=B64082F5678B94B1&sms=D0034AF4F8239B65'],
+  },
   'plis-8b76b5bd5da364ef7614': {
     name: '4 樓筆記型電腦區', kind: 'reading', seats: 32, slots: null, access: null,
     equipment: { laptop: true, outlet: true, wifi: true },

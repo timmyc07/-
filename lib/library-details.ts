@@ -9,6 +9,7 @@ import nclStudyRooms from './ncl-study-rooms.json' with { type: 'json' };
 
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
+const hsinchuCountyRules = 'https://hcplibrary.hchcc.gov.tw/wSite/ct?CPType=&ctNode=4303&mp=1&xItem=10646';
 const wanluanTemporaryClosure = 'https://www.globgov.com/TW/Wanluan/1414151405576012/萬巒圖書館-暨萬巒Doc';
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
   'plis-21b90fd0847520bc7c74': {
@@ -1903,8 +1904,9 @@ const announcedLibraries: (Library & { city: string })[] = [
     openingHours: '試營運至 2026 年 11 月 15 日，09:00–21:00，週一休館。12 月 18 日預定正式開館。',
     studyRoom: true,
     facilities: ['地下 1 樓自修室', '閱報區', '兒童閱覽區', '視障服務區', '資訊檢索區', '討論小間', '汽機車停車場'],
-    areas: [{ name: '地下 1 樓自修室', kind: 'study', slots: null, access: null,
-      equipment: {}, sources: [hsinchuFloorGuide] }],
+    areas: [{ name: '地下 1 樓自修室', kind: 'study', slots: null, access: 'walk-in',
+      entryNote: '依新竹縣公共圖書館使用規定自由入座，不得預占。離座逾 1 小時未歸，館方得取消座位使用權。',
+      equipment: {}, sources: [hsinchuFloorGuide, hsinchuCountyRules] }],
     closures: [{ from: '2026-11-16', until: '2026-12-17', reason: '試營運結束，12 月 18 日預定正式開館',
       url: hsinchuOpening }],
   },
@@ -2276,7 +2278,6 @@ function localStudyRoom(id: string, area: Area): Area {
   if (id === 'plis-e7aaecf3515c7452935c') {
     return { ...area, access: 'walk-in', sources: [...area.sources, chiayiCountyReadingRules] };
   }
-  const hsinchuCountyRules = 'https://hcplibrary.hchcc.gov.tw/wSite/ct?CPType=&ctNode=4303&mp=1&xItem=10646';
   if (['plis-946f82daf9ca97d241ba', 'plis-2bbbdcd83068ffcf8f4f', 'plis-24ed27c19953ccb5f0c4',
     'plis-0d08a9f889b9abeca093', 'plis-bda0333882d76e416b20', 'plis-6937f16a63ea043f0527',
     'plis-cf8f59d429a9ca2188f7', 'plis-12cb176cd411e9d41770', 'plis-e2c2e5a82e7e92aa1179'].includes(id)) {

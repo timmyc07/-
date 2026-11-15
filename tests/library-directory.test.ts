@@ -133,7 +133,9 @@ test('館舍詳情須同址，館舍開館及設備資料不當成自修室規�
   assert.equal(enriched.openingHours, detail.hours);
   assert.equal(enriched.studyRoom, true);
   assert.deepEqual(enriched.areas, [{
-    name: '自修室', kind: 'study', slots: null, access: null, equipment: {}, sources: [detail.url],
+    name: '自修室', kind: 'study', slots: null, access: 'walk-in', equipment: {},
+    sources: [detail.url, 'https://kllib.klcg.gov.tw/cp.aspx?n=7807'],
+    entryNote: '通常自由入座，不得預占。館方必要時可採預約、訂位或號牌。離座逾 1 小時未歸視同放棄座位。',
   }]);
   assert.equal(withLibraryDetail(library, { ...detail, address: '基隆市中正區信一路190號' }), library);
   assert.equal(withLibraryDetail(library, { ...detail, facilities: ['電梯'] }).studyRoom, undefined);

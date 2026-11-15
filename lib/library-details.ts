@@ -2157,6 +2157,12 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (['plis-995a90f8387d2668be41', 'plis-2065ea3c3619a2597356',
+    'plis-d5b8a42994a660f05102', 'plis-65dcee6860c52419f419'].includes(id)) {
+    return { ...area, access: 'walk-in',
+      entryNote: '通常自由入座，不得預占。館方必要時可採預約、訂位或號牌。離座逾 1 小時未歸視同放棄座位。',
+      sources: [...area.sources, 'https://kllib.klcg.gov.tw/cp.aspx?n=7807'] };
+  }
   if (id === 'plis-7f6f1af1d74f76b8b82a') {
     return { ...area, entryNote: '供讀者自修，也作為研習活動場地。',
       sources: [...area.sources, 'https://www.tnpl.tn.edu.tw/u5154486010985754667/a1'] };

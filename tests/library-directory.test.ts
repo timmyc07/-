@@ -140,7 +140,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 143);
+  assert.equal(scheduled.length, 144);
   const yunlin = libraries.find(({ id }) => id === 'plis-3fb94b86e4de966ba65a')!;
   assert.equal(yunlin.areas[0].access, 'walk-in');
   assert.equal(yunlin.areas[0].equipment.outlet, true);
@@ -518,7 +518,14 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   const dongsheng = libraries.find(({ id }) => id === 'plis-f5672c9a38fabba9eabb')!;
   assert.match(dongsheng.closures.find(({ from }) => from === '2026-12-01')!.reason, /中洲街 5-2 號/);
   const ntl = libraries.find(({ name }) => name === '國立臺灣圖書館')!;
-  assert.equal(evaluate(ntl, ntl.areas[0], { ...taipeiQuery, date: '2026-02-20' }).status, 'unknown');
+  const ntlStudy = ntl.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(evaluate(ntl, ntlStudy, { ...taipeiQuery, date: '2026-02-20' }).status, 'unknown');
+  const deviceSeats = ntl.areas.find(({ name }) => name === '3 樓行動裝置座位區')!;
+  assert.equal(deviceSeats.seats, 50);
+  const deviceQuery = { ...taipeiQuery, date: '2026-11-19', kind: 'reading' as const, start: minutes('08:00'),
+    duration: 60, regionalCards: ['nationalTaiwan' as const], registration: true, required: ['outlet' as const] };
+  assert.equal(evaluate(ntl, deviceSeats, deviceQuery).status, 'yes');
+  assert.equal(evaluate(ntl, deviceSeats, { ...deviceQuery, date: '2026-11-16' }).status, 'no');
   assert.equal(coversCalendarYear(libraries.find(({ name }) => name === '新北市烏來區立圖書館')!, 2026), false);
   const liujia = libraries.find(({ name }) => name === '臺南市六甲區圖書館')!;
   const anping = libraries.find(({ name }) => name === '臺南市安平區圖書館')!;

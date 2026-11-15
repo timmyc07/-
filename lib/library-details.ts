@@ -967,6 +967,15 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
   },
 };
 const localReadingAreas: Record<string, Area | undefined> = {
+  'plis-a094b0d4aa7d7722fd03': {
+    name: '3 樓行動裝置座位區', kind: 'reading', seats: 50,
+    slots: [0, 2, 3, 4, 5, 6].map((day) => ({ day, start: minutes('08:00'), end: minutes('21:00') })),
+    access: 'card', regionalCard: 'nationalTaiwan', reservation: 'https://ireserve.ntl.edu.tw/sm/home_web.do',
+    entryNote: '從中和門入館，持本人國立臺灣圖書館借閱證或悠遊卡借閱證登記。25 席可線上預約，25 席限現場登記。限使用筆電、平板或手機的讀者。',
+    equipment: { laptop: true, outlet: true },
+    sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3195&mp=1&xItem=87056',
+      'https://www.ntl.edu.tw/wSite/ct?ctNode=1711&mp=1&xItem=58536'],
+  },
   'plis-116d6ca137065aaf1b89': {
     name: '3 樓筆記型電腦區', kind: 'reading', seats: 8, slots: null, access: null,
     equipment: { laptop: true, wifi: true },

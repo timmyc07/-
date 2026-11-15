@@ -31,6 +31,7 @@ export type Library = {
   types: string[];
   sources: string[];
   phone?: string;
+  fax?: string;
   website?: string;
   studyRoom?: boolean;
   accessNote?: string;

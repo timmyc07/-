@@ -45,6 +45,16 @@ test('全臺名錄的電話、館方網址與座標齊全，補錄資料保留�
   assert(yancheng.sources.some((source) => new URL(source).hostname === 'www.tbkc.gov.tw'));
 });
 
+test('傳真補錄保留來源，原始名錄明載無傳真的欄位持續有效', () => {
+  const byName = (name: string) => directory.libraries.find((library) => library.name === name)!;
+  const shilin = byName('臺北市立圖書館士林分館');
+  assert.equal(shilin.fax, '02-28353985');
+  assert(shilin.sources.includes('https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011'));
+  assert.equal(byName('基隆市公共圖書館信義分館').fax, '02-24236174');
+  assert.equal(byName('新北市立圖書館三峽分館').fax, '無');
+  assert.equal(byName('高雄市立圖書館鹽埕分館').fax, undefined);
+});
+
 test('館舍詳情須同址，館舍開館及設備資料不當成自修室規則', () => {
   const library = directory.libraries.find(({ name }) => name === '基隆市公共圖書館中山分館')!;
   const detail: LibraryDetail = {

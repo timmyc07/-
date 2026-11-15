@@ -266,6 +266,7 @@ function LibraryCard({ library, area, status, reasons, closure, openUntil, dista
           (area?.equipment[key] === true ? '有' : area?.equipment[key] === false ? '未提供' : '待確認')).join(' · ')}</dd>
         {library.facilities?.length ? <><dt>館舍設備</dt><dd>{library.facilities.join('、')}</dd></> : null}
         {library.phone && <><dt>電話</dt><dd>{library.phone}</dd></>}
+        {library.fax && <><dt>傳真</dt><dd>{library.fax}</dd></>}
       </dl>
       <div className="source-links">
         {library.website && <a href={library.website}>館方網站 ↗</a>}

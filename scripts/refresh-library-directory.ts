@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFile, rename, writeFile } from 'node:fs/promises';
 import type { Library } from '../lib/study.ts';
+import faxSupplements from './library-fax-supplements.json' with { type: 'json' };
 
 const source = 'https://data.gov.tw/dataset/99567';
 const download = 'https://plisnet.nlpi.edu.tw/api/API/LibraryInfoData';
@@ -13,8 +14,9 @@ const raw = file ? await readFile(file) : await fetch(download, { signal: AbortS
 
 type Region = {
   縣市: string;
-  圖書館資訊: { Name: string; Address: string; Area: string; TEL?: string; Latitude?: number; Longitude?: number; URL?: string }[];
+  圖書館資訊: { Name: string; Address: string; Area: string; TEL?: string; FAX?: string; Latitude?: number; Longitude?: number; URL?: string }[];
 };
+const supplements: Record<string, { address: string; fax: string; source: string } | undefined> = faxSupplements;
 
 const regions = JSON.parse(raw.toString('utf8')) as Region[];
 const cities = new Set(regions.map((region) => region.縣市));
@@ -40,11 +42,17 @@ for (const { 縣市: city, 圖書館資訊: records } of regions) {
       id, name, city, district: row.Area.trim(), address: row.Address.trim(),
       types: ['公共圖書館'], sources: [source],
       phone: row.TEL?.trim() || undefined,
+      fax: row.FAX?.trim() || undefined,
       website: /^https?:\/\//i.test(row.URL?.trim() ?? '') ? row.URL?.trim() : undefined,
       coordinates: latitude >= 21 && latitude <= 27 && longitude >= 117 && longitude <= 123
         ? { latitude, longitude } : undefined,
       areas: [], closures: [],
     };
+    const fax = supplements[id];
+    if (!library.fax && fax?.address === library.address) {
+      library.fax = fax.fax;
+      library.sources.push(fax.source);
+    }
     if (city === '嘉義縣' && name === '嘉義縣阿里山鄉立圖書館' && !library.website) {
       library.website = 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=012&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp';
       library.sources.push(library.website);

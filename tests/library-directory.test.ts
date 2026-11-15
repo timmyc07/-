@@ -371,6 +371,9 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   ]);
   const xiyu = libraries.find(({ id }) => id === 'plis-9c4e98f5a888073fdc0c')!;
   assert.equal(xiyu.closures.find(({ from }) => from === '2026-10-25')?.reason, '光復節休館');
+  const qiaotou = libraries.find(({ id }) => id === 'plis-3d9a951164210abf4cb8')!;
+  assert.equal(qiaotou.areas.find(({ kind }) => kind === 'reading')?.seats, 18);
+  assert.equal(qiaotou.areas.find(({ kind }) => kind === 'study')?.seats, undefined);
   const pingzhen = libraries.find(({ id }) => id === 'plis-07c47313a8f5b473d2bf')!;
   assert.deepEqual(pingzhen.areas[0].slots?.find(({ day }) => day === 0),
     { day: 0, start: minutes('08:30'), end: minutes('17:00') });

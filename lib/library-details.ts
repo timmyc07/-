@@ -966,15 +966,16 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
       '討論室', '讀者劇場', '閱讀自習室', '多元閱讀區', '音樂影音專區'],
   },
 };
+const nationalTaiwanWifi = 'https://www.ntl.edu.tw/wSite/ct?ctNode=3233&mp=1&xItem=7930';
 const localReadingAreas: Record<string, Area | undefined> = {
   'plis-a094b0d4aa7d7722fd03': {
     name: '3 樓行動裝置座位區', kind: 'reading', seats: 50,
     slots: [0, 2, 3, 4, 5, 6].map((day) => ({ day, start: minutes('08:00'), end: minutes('21:00') })),
     access: 'card', regionalCard: 'nationalTaiwan', reservation: 'https://ireserve.ntl.edu.tw/sm/home_web.do',
     entryNote: '從中和門入館，持本人國立臺灣圖書館借閱證或悠遊卡借閱證登記。25 席可線上預約，25 席限現場登記。限使用筆電、平板或手機的讀者。',
-    equipment: { laptop: true, outlet: true },
+    equipment: { laptop: true, outlet: true, wifi: true },
     sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3195&mp=1&xItem=87056',
-      'https://www.ntl.edu.tw/wSite/ct?ctNode=1711&mp=1&xItem=58536'],
+      'https://www.ntl.edu.tw/wSite/ct?ctNode=1711&mp=1&xItem=58536', nationalTaiwanWifi],
   },
   'plis-116d6ca137065aaf1b89': {
     name: '3 樓筆記型電腦區', kind: 'reading', seats: 8, slots: null, access: null,
@@ -1490,9 +1491,11 @@ function localStudyRoom(id: string, area: Area): Area {
   }
   if (id === 'plis-a094b0d4aa7d7722fd03') {
     return { ...area, name: '3 樓自修室', seats: 178, access: 'card', regionalCard: 'nationalTaiwan',
-      entryNote: '自修席分為現場刷卡登記 92 席及線上預約 86 席，請持本人國立臺灣圖書館借閱證或悠遊卡借閱證辦理。',
+      equipment: { ...area.equipment, wifi: true, laptop: true },
+      entryNote: '自修席分為現場刷卡登記 92 席及線上預約 86 席，請持本人國立臺灣圖書館借閱證或悠遊卡借閱證辦理。筆電限室內 12 席指定座位。',
       reservation: 'https://ireserve.ntl.edu.tw/sm/home_web.do',
-      sources: [...area.sources, 'https://www.ntl.edu.tw/wSite/ct?ctNode=1746&mp=1&xItem=87059'] };
+      sources: [...area.sources, 'https://www.ntl.edu.tw/wSite/ct?ctNode=1746&mp=1&xItem=87059',
+        'https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi] };
   }
   if (id === 'plis-aa077d31f651076b59ef') {
     return { ...area, closures: [...(area.closures ?? []), {

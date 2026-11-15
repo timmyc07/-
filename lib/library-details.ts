@@ -1041,7 +1041,15 @@ const mituoSeatDirectory = 'https://www.ksml.edu.tw/lib/content/Details.aspx?Par
 const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
 const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
+const lanzhouLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=A3B82F4BECD6CD1C&sms=CFFFC938B352678A';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-7371f9f4c01f228d896e': [
+    { name: '一般閱覽區', kind: 'reading', seats: 88, slots: null, access: null, equipment: {}, sources: [lanzhouLibrary] },
+    { name: '兒童閱覽區', kind: 'reading', seats: 24, slots: null, access: null, equipment: {}, sources: [lanzhouLibrary] },
+    { name: '筆記型電腦區', kind: 'reading', seats: 7, slots: null, access: null,
+      equipment: { laptop: true, outlet: true }, sources: [lanzhouLibrary,
+        'https://tpml.gov.taipei/News_toggle.aspx?n=B64082F5678B94B1&sms=D0034AF4F8239B65'] },
+  ],
   'plis-bd1ae9a8fe9b769cd7e7': {
     name: '2 樓一般閱覽及書報期刊區', kind: 'reading', seats: 8, slots: null, access: null, equipment: {},
     sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=a0aa6231771f4746b8523c02ee652977'],

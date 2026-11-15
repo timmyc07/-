@@ -59,6 +59,22 @@ const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、�
 const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O065604454792753757/金門縣公共圖書館館藏發展政策.pdf';
 const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-8ec15d072d689e24a3b1': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000156',
+    facilities: ['書區', '電腦區', '視聽區', '閱覽區', '兒童圖書區'],
+  },
+  'plis-859b54d11aaf9ac7b9be': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000157',
+    facilities: ['1 樓自修室', '成人書庫區', '一般閱覽席', '期刊區', '電腦網路區', '兒童閱覽區'],
+  },
+  'plis-9709456f17abc6c6a512': {
+    url: 'https://library.hccg.gov.tw/chhcml/app/digital/view?id=73&module=branchLibrary&serno=ab7c9460-79dd-4d1a-8ace-549cd24d28b1',
+    facilities: ['成人讀物區', '雜誌報紙及視聽區', '兒童閱覽區', '自修室'],
+  },
+  'plis-29ea3972b0a938ef5d16': {
+    url: 'https://libstat.ncl.edu.tw/libraryDataDetail/L5001001',
+    facilities: ['一般閱覽室', '兒童區', '幼兒閱讀區'],
+  },
   'plis-2efbf4bcfe8e68151f65': {
     url: 'https://www.nlpi.edu.tw/Publications/libpub/fc93fc86-82ee-4ac2-b285-f775096e3a2e/Journal/fdae4308-f74b-4fdf-9830-caeea32a4ca0/Articles?articleId=530aec90-67ba-4eef-ba2b-e04048daee30',
     facilities: ['無障礙電梯'],
@@ -574,6 +590,11 @@ const taoyuanWalkInStudyRooms = new Set([
 ]);
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-859b54d11aaf9ac7b9be') {
+    return { ...area, name: '1 樓自修室', seats: 46,
+      sources: [...area.sources, 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000157',
+        'https://www.cna.com.tw/postwrite/chi/347529'] };
+  }
   if (id === 'plis-4b6847d140ab7464db3f') {
     return { ...area, entryNote: '自習區樓層與開放時段請向館方確認。',
       sources: [...area.sources, 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000484'] };

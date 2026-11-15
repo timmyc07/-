@@ -9,6 +9,11 @@ import nclStudyRooms from './ncl-study-rooms.json' with { type: 'json' };
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
 
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-4f656e6f21c469e566ae': {
+    from: '2026-06-01',
+    reason: '原館整修暫停開放。臨時館位於水上村正義路 141 號舊樂齡中心，週一至週五 08:00–12:00、13:00–17:00 提供部分新書外借及還書，週末及國定假日休息。原館復館日期依公告。',
+    url: 'https://www.cycab.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=13562',
+  },
   'plis-95c10375e363b499b6fc': {
     from: '2026-09-24', until: '2026-12-31',
     reason: '西湖鄉立圖書館因館舍安全暫停開放，復館日期依館方公告。',
@@ -67,6 +72,42 @@ const nantouEarlyReading = 'https://www.nthcc.gov.tw/A7_1/content/31020';
 const dashuFloors = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669';
 const taipeiBranchDirectory = 'https://tpml.gov.taipei/cp.aspx?n=1F9AED300D314011';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-1ab6b7cad75d50cee778': {
+    url: 'https://www.cycab.gov.tw/wSite/ct?ctNode=6266&idPath=6253_6256_6266&mp=1&xItem=13422',
+    facilities: ['書庫', '兒童室'],
+  },
+  'plis-613d73644fc40d8abe54': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000316',
+    facilities: ['視聽設備', '網路查詢設備'],
+  },
+  'plis-4f656e6f21c469e566ae': {
+    url: 'https://www.cycab.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=13562',
+    facilities: ['臨時借還書服務櫃檯'],
+  },
+  'plis-7ef01c27698fc303f21c': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000321',
+    facilities: ['館內藝文展示空間'],
+  },
+  'plis-7dba03a9a3c1c99da1e7': {
+    url: 'https://isp.ncl.edu.tw/infant-tw/cityres?res=0K291754641712162219',
+    facilities: ['嬰幼兒專區'],
+  },
+  'plis-160dd50bd9f6fe4751b0': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000324',
+    facilities: ['月光廣場', '多功能教室', '展演區', '視聽教室', '網路資訊室'],
+  },
+  'plis-e1773325972df453b6c4': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000325',
+    facilities: ['部落圖書資訊站'],
+  },
+  'plis-e9ad834b90b6ec26f69a': {
+    url: 'https://www.nlpi.edu.tw/Publications/libpub/fc93fc86-82ee-4ac2-b285-f775096e3a2e/Journal/a5ade32b-7dea-4573-91de-aab0922ffc32/Articles?articleId=f42fb936-2e0f-4ab2-967b-24abc58c3076',
+    facilities: ['學齡前閱讀區', '兒童閱讀區'],
+  },
+  'plis-a141c3b5fc0e2accfd60': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000328',
+    facilities: ['兒童閱覽室', '親子共讀區', '報紙雜誌室'],
+  },
   'plis-674920ab9a5621eaf6cf': {
     url: 'https://tour.taitung.gov.tw/zh-tw/news/details/6328',
     facilities: ['縱谷館藏閱讀區', '多媒體視聽室', '自修室', '自修室自動預約機', '預約書自助取書機', '自助借書機', '檢索電腦'],

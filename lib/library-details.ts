@@ -186,9 +186,10 @@ const announcedLibraries: (Library & { city: string })[] = [
   {
     id: 'local-taoyuan-puding', name: '桃園市立圖書館埔頂分館', city: '桃園市', district: '大溪區',
     address: '桃園市大溪區埔仁路555號', phone: '03-3072254', types: ['公共圖書館'], website: pudingOpening,
+    coordinates: { latitude: 24.90865, longitude: 121.2834 },
     openingHours: '週二至週六 08:30–21:00，週日及週一 08:30–17:00。國定假日及每月最後一個星期四休館，以館方公告為準。',
     sources: [pudingOpening, 'https://www.tycg.gov.tw/NewsPage.aspx?n=9&sms=9881',
-      'https://www.typl.gov.tw/zh-tw/Closed/Today', taoyuanOpeningHours],
+      'https://www.typl.gov.tw/zh-tw/Closed/Today', taoyuanOpeningHours, 'https://www.openstreetmap.org/way/264105961'],
     studyRoom: true, facilities: ['親子閱覽區', '一般閱覽室', '研習教室', '自修閱覽座位'],
     areas: [{ name: '自修閱覽區', kind: 'study', access: 'card', regionalCard: 'taoyuan', seats: 93,
       reservation: taoyuanSeatPortal,

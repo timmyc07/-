@@ -45,6 +45,10 @@ test('全臺名錄的電話與網址齊全，搬遷館舍不帶入舊址座標',
   assert.deepEqual(magang.coordinates, { latitude: 26.159619, longitude: 119.919897 });
   const shanlong = directory.libraries.find(({ id }) => id === 'plis-cceeef12e0bfff59593f')!;
   assert.notDeepEqual(shanlong.coordinates, magang.coordinates);
+  const pingzhen = directory.libraries.find(({ id }) => id === 'plis-07c47313a8f5b473d2bf')!;
+  assert.deepEqual(pingzhen.coordinates, { latitude: 24.939778, longitude: 121.2176788 });
+  const jinning = directory.libraries.find(({ id }) => id === 'plis-722d54fbc98c7dc13cc0')!;
+  assert.deepEqual(jinning.coordinates, { latitude: 24.45112, longitude: 118.33422 });
   const alishan = directory.libraries.find(({ id }) => id === 'plis-e1773325972df453b6c4');
   assert(alishan?.website && alishan.sources.includes(alishan.website));
   const yancheng = directory.libraries.find(({ id }) => id === 'plis-4818cd57388587303882');

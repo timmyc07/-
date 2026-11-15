@@ -84,6 +84,17 @@ for (const { 縣市: city, 圖書館資訊: records } of regions) {
       library.coordinates = { latitude: 26.159619, longitude: 119.919897 };
       library.sources.push('https://itaiwan.gov.tw/ITaiwanHotspotQuery/ConditionalQuery?City=%E9%80%A3%E6%B1%9F%E7%B8%A3&Type=1');
     }
+    if (name === '桃園市立圖書館平鎮分館' && library.address === '桃園市平鎮區環南路3段88號' &&
+        latitude === 24.90504 && longitude === 121.1455) {
+      library.coordinates = { latitude: 24.939778, longitude: 121.2176788 };
+      library.sources.push('https://www.typl.gov.tw/zh-tw/About/Introduce/028');
+    }
+    if (name === '金門縣金寧鄉圖書館' && library.address === '金門縣金寧鄉仁愛新村7號' &&
+        latitude === 24.491471 && longitude === 118.41425) {
+      library.coordinates = { latitude: 24.45112, longitude: 118.33422 };
+      library.sources.push('https://cabkc.kinmen.gov.tw/information?pid=23&uid=9',
+        'https://www.openstreetmap.org/way/425672883');
+    }
     libraries.push(library);
   }
 }

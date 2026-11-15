@@ -175,6 +175,8 @@ const hsinchuFloorGuide = 'https://www.hclibraryopening.com.tw/%E8%AA%8D%E8%AD%9
 const stellarOpening = 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11078';
 const pudingOpening = 'https://news.tycg.gov.tw/News_Content.aspx?n=5016&s=1935304';
 const taoyuanOpeningHours = 'https://www.tycg.gov.tw/News_Content.aspx?n=97&s=1554331';
+const taoyuanSeatPortal = 'https://spaceme.typl.gov.tw/';
+const taoyuanSeatRules = 'https://www.typl.gov.tw/zh-tw/Reader/RegulationContent/6';
 const announcedLibraries: (Library & { city: string })[] = [
   {
     id: 'local-taoyuan-puding', name: '桃園市立圖書館埔頂分館', city: '桃園市', district: '大溪區',
@@ -183,11 +185,13 @@ const announcedLibraries: (Library & { city: string })[] = [
     sources: [pudingOpening, 'https://www.tycg.gov.tw/NewsPage.aspx?n=9&sms=9881',
       'https://www.typl.gov.tw/zh-tw/Closed/Today', taoyuanOpeningHours],
     studyRoom: true, facilities: ['親子閱覽區', '一般閱覽室', '研習教室', '自修閱覽座位'],
-    areas: [{ name: '自修閱覽區', kind: 'study', access: null, seats: 93,
+    areas: [{ name: '自修閱覽區', kind: 'study', access: 'card', regionalCard: 'taoyuan', seats: 93,
+      reservation: taoyuanSeatPortal,
+      entryNote: '持桃園市圖個人借閱證或市民卡登記。座位系統列 76 席當日席、17 席預約席。',
       slots: Array.from({ length: 7 }, (_, day) => ({
         day, start: minutes('08:30'), end: minutes(day <= 1 ? '17:00' : '21:00'),
       })),
-      equipment: {}, sources: [pudingOpening, taoyuanOpeningHours] }],
+      equipment: {}, sources: [pudingOpening, taoyuanOpeningHours, taoyuanSeatRules, taoyuanSeatPortal] }],
     closures: [
       { from: '2026-11-28', until: '2026-11-28', reason: '地方公職人員選舉日休館',
         url: 'https://www.typl.gov.tw/zh-tw/Closed/Content/90' },
@@ -296,13 +300,15 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   };
 }
 
-const taoyuanSeatSystem: Record<string, { url?: string; seats?: number; name?: string; note?: string } | undefined> = {
+const taoyuanSeatSystem: Record<string, { url?: string; seats?: number; name?: string; note?: string; onsiteOnly?: true } | undefined> = {
   'plis-9c317ee99e20f7ec3cd3': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/014', seats: 147 },
-  'plis-0d8617adcdaa013618d9': { url: 'https://www.typl.gov.tw/kids/News/Content/2017' },
+  'plis-0d8617adcdaa013618d9': { url: 'https://www.typl.gov.tw/kids/News/Content/2017', seats: 167 },
   'plis-0670e73215c152add507': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/038', seats: 50 },
   'plis-14dcd000784259e3f26c': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/021', name: '2 樓自修室', seats: 70 },
   'plis-a38508dd33caf0cfefdc': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/034', seats: 113, name: '1 樓自習室' },
-  'plis-bb78c5df4d9aa277ab1c': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/041' },
+  'plis-bb78c5df4d9aa277ab1c': { url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/041', seats: 45 },
+  'plis-07c47313a8f5b473d2bf': { name: '3 樓第一自修室', seats: 84, onsiteOnly: true },
+  'plis-67ab5e6b0d8d6c9a2e25': { seats: 101, onsiteOnly: true },
   'plis-62eb0222ac5626717a13': { seats: 304 },
   'plis-3fe72b1ccca37949b0a8': { seats: 244 },
   'plis-77084e202fe916823f9a': { seats: 115, note: '館方介紹列約 126 席，座位系統列 115 個當日登記席。' },
@@ -402,15 +408,15 @@ function localStudyRoom(id: string, area: Area): Area {
   const taoyuan = taoyuanSeatSystem[id];
   if (taoyuan) {
     const main = id === 'plis-0d8617adcdaa013618d9';
-    const reservation = 'https://spaceme.typl.gov.tw/';
     return {
       ...area, name: taoyuan.name ?? area.name, access: 'card', regionalCard: 'taoyuan', seats: taoyuan.seats,
       equipment: main ? { ...area.equipment, laptop: false } : area.equipment,
-      entryNote: '持桃園市圖個人借閱證或市民卡登記，預約席與當日席依座位系統顯示。'
+      entryNote: '持桃園市圖個人借閱證或市民卡登記。'
+        + (taoyuan.onsiteOnly ? '座位系統目前列為當日席，請至館內登記。' : '預約席與當日席依座位系統顯示。')
         + (main ? '7 樓自修室為極靜區，使用筆電請移至同樓層筆電區。' : taoyuan.note ?? ''),
-      reservation,
+      reservation: taoyuan.onsiteOnly ? undefined : taoyuanSeatPortal,
       sources: [...new Set([...area.sources, ...(taoyuan.url ? [taoyuan.url] : []),
-        'https://www.typl.gov.tw/zh-tw/Reader/RegulationContent/6', reservation])],
+        taoyuanSeatRules, taoyuanSeatPortal])],
     };
   }
   return area;

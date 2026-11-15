@@ -3,7 +3,7 @@ import { kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 
 const taipeiUrl = 'https://tpml.gov.taipei/cp.aspx?n=141EFA8D46038957&s=839324A30786DF77';
 const taipeiZhongshanElection = 'https://doit.gov.taipei/News_Content.aspx?n=E3D88B653EACBF6E&s=1CBA72450CC8FCAE&sms=78D644F2755ACCAA';
-const taipeiElectionClosures: Record<string, Closure[] | undefined> = {
+const taipeiBranchClosures: Record<string, Closure[] | undefined> = {
   'plis-4a5392763b505085c4b0': [
     { from: '2026-11-27', until: '2026-11-27', time: { start: minutes('17:30'), end: 24 * 60 },
       reason: '配合選務作業提前閉館', url: taipeiZhongshanElection },
@@ -20,6 +20,18 @@ const taipeiElectionClosures: Record<string, Closure[] | undefined> = {
   'plis-e3287dc94a64c9288833': [
     { from: '2026-11-28', until: '2026-11-29', reason: '配合選務作業閉館',
       url: 'https://tpml.gov.taipei/News_Content.aspx?n=E492D531630BC406&s=BFFCCC6F19D10582&sms=78D644F2755ACCAA' },
+  ],
+  'plis-a41c03305803788dff81': [
+    { from: '2026-10-30', until: '2026-12-29', reason: '地坪及屋頂防水施工閉館，預約書請改至安康民眾閱覽室取書。',
+      url: 'https://doit.gov.taipei/News_Content.aspx?n=E3D88B653EACBF6E&s=FBDA637F57E66E70&sms=78D644F2755ACCAA' },
+  ],
+  'plis-edeec13b64c0ca4d0965': [
+    { from: '2026-10-30', until: '2027-02-18', reason: '空調及監控設備施工閉館，臨時櫃檯提供辦證、還書及預約取書。',
+      url: 'https://reading.tpml.gov.taipei/News_Content.aspx?n=B3B7F57C7B16FDE6&s=13FADA52FA4C8241&sms=78D644F2755ACCAA' },
+  ],
+  'plis-556af005b3614de06ca7': [
+    { from: '2026-09-01', until: '2026-12-20', reason: '館舍及廁所整修閉館，預約書請改至稻香分館取書。',
+      url: 'https://doit.gov.taipei/News_Content.aspx?n=E3D88B653EACBF6E&s=3485793297A17F05&sms=78D644F2755ACCAA' },
   ],
 };
 export const penghuMainUrl = 'https://www.phlib.nat.gov.tw/wSite/sp?ctNode=5236&mp=1&orgId=001&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp';
@@ -309,7 +321,7 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     const songshan = library.id === 'plis-b7a50b9284256d36bef0';
     return {
       calendarYears: [2026, 2027],
-      closures: [...(taipeiElectionClosures[library.id] ?? []), ...taipei2026, ...taipei2027, ...(songshan ? [2026, 2027].flatMap((year) =>
+      closures: [...(taipeiBranchClosures[library.id] ?? []), ...taipei2026, ...taipei2027, ...(songshan ? [2026, 2027].flatMap((year) =>
         monthlyClosures(year, 1, taipeiUrl, '松山分館臨時服務處每月最後一個星期一休館')) : [])],
     };
   }

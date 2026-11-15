@@ -1037,6 +1037,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-114080cf8fa32977d08a': {
+    url: 'https://doit.gov.taipei/News_Content.aspx?n=E3D88B653EACBF6E&s=4A1259C6B21F2AA5&sms=78D644F2755ACCAA',
+    note: '整修期間至 2026 年 12 月 14 日，3 樓圖書與閱覽區、4 樓視聽室及樂齡學習中心暫停開放。3 樓館藏可線上預約到館取書。',
+  },
   'plis-a2f0f325a9d82ca850f0': {
     url: 'https://www.library.ntpc.gov.tw/singlehtml/ActvInfo?cntId=46cff6829c18462fadbd5e49dccbea78',
     note: '原館 3 樓自修室自 2026 年 5 月 27 日起因拆遷準備停止開放。',
@@ -1536,6 +1540,10 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-114080cf8fa32977d08a') {
+    return { ...area, name: '地下 1 樓自修室',
+      sources: [...area.sources, 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=4643DE8A8785BFD0&sms=CFFFC938B352678A'] };
+  }
   if (id === 'plis-c1eecc7328938e1f8113') {
     const url = 'https://reading.tpml.gov.taipei/News_Content.aspx?n=B3B7F57C7B16FDE6&s=A1ED499E7D303433&sms=78D644F2755ACCAA';
     return { ...area, sources: [...area.sources, url],

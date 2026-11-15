@@ -587,6 +587,14 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   assert.equal(evaluate(gongliao, undefined, maySunday).closure?.time?.start, minutes('17:00'));
   const electionEve = { ...taipeiQuery, date: '2026-11-27', start: minutes('11:00'), duration: 60 };
   const taipeiZhongshan = libraries.find(({ id }) => id === 'plis-4a5392763b505085c4b0')!;
+  const liKoyong = libraries.find(({ id }) => id === 'plis-edeec13b64c0ca4d0965')!;
+  assert.match(evaluate(liKoyong, undefined, { ...electionEve, date: '2027-02-18' }).closure!.reason, /臨時櫃檯/);
+  assert.equal(evaluate(liKoyong, undefined, { ...electionEve, date: '2027-02-19' }).closure, undefined);
+  const donghu = libraries.find(({ id }) => id === 'plis-114080cf8fa32977d08a')!;
+  const donghuStudy = donghu.areas.find(({ kind }) => kind === 'study')!;
+  assert.equal(donghuStudy.name, '地下 1 樓自修室');
+  assert.match(donghu.accessNote!, /12 月 14 日/);
+  assert.equal(evaluate(donghu, donghuStudy, { ...electionEve, date: '2026-11-17' }).closure, undefined);
   assert.equal(evaluate(taipeiZhongshan, undefined, electionEve).closure, undefined);
   assert.equal(evaluate(taipeiZhongshan, undefined, { ...electionEve, start: minutes('17:30') }).closure?.time?.start, minutes('17:30'));
   assert.equal(evaluate(taipeiZhongshan, undefined, { ...electionEve, date: '2026-11-29' }).closure?.until, '2026-11-29');

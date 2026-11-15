@@ -158,6 +158,10 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
       });
     }
     if (library.id === 'plis-f5672c9a38fabba9eabb') closures.push(dongshengClosure);
+    if (library.id === 'plis-9de55bfc56b18ae1f99a') {
+      closures.push(...closureDates(2026, 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=677c7d169fde41a19734ca3efee0641e',
+        ['11-23', '11-24'], '圖書盤點休館'));
+    }
     if (library.id === 'plis-e1f47e046250c8795b4f') {
       closures.push(...closureDates(2026, 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=677c7d169fde41a19734ca3efee0641e',
         ['11-27'], '圖書盤點休館'));

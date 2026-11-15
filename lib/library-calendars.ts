@@ -22,6 +22,7 @@ const dongshengClosure: Closure = {
 const keelungUrl = 'https://kllib.klcg.gov.tw/News_Content.aspx?n=7789&s=16436&sms=12521';
 const taoyuanUrl = 'https://www.typl.gov.tw/zh-tw/News/Content/1067';
 const kaohsiungUrl = 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,33,,,,15495';
+export const chiayiCountyReadingRules = 'https://www.cycab.gov.tw/wSite/ct?ctNode=6267&mp=1&xItem=9895';
 const tainanMainUrl = 'https://www.tnpl.tn.edu.tw/u4914263388070917076/a1';
 const electionClosureRules: Record<string, string> = {
   'plis-e94c48945a092b5818d8': 'https://www.hchcc.gov.tw/Tw/Common/SinglePage?filter=55A4FB62-998F-4818-BDE2-08AF8B3245C2',
@@ -140,6 +141,18 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
       { from: '2026-11-02', until: '2026-12-15', reason: '館舍整修及圖書盤點期間暫停開放', url },
       { from: '2026-12-16', until: '2026-12-16', time: { start: 0, end: minutes('11:00') },
         reason: '上午 11:00 全面開館', url },
+      { from: '2026-03-02', until: '2026-11-01', reason: '空間改善工程期間暫停入館，借還書請洽後門臨時服務台',
+        url: 'https://www.chcg.gov.tw/ch2/print_all.aspx?bull_id=426095' },
+    ] };
+  }
+  if (library.id === 'plis-e7aaecf3515c7452935c') {
+    return { closures: [
+      ...[2026, 2027].flatMap((year) => {
+        const dates = Array.from({ length: 12 }, (_, month) => String(month + 1).padStart(2, '0') + '-20')
+          .filter((date) => [1, 2, 3, 4, 5].includes(new Date(year + '-' + date + 'T00:00:00Z').getUTCDay()));
+        return closureDates(year, chiayiCountyReadingRules, dates, '每月 20 日清館休館');
+      }),
+      ...closureDates(2026, chiayiCountyReadingRules, ['11-28'], '依館方選舉日休館規定休館'),
     ] };
   }
   if (['plis-1d5bc6bb745d6ead49e9', 'plis-79a601480d722cb58344'].includes(library.id)) {

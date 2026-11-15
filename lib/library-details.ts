@@ -1,6 +1,6 @@
 import { minutes, type Area, type Library } from './study.ts';
 import { libraryStudyHours } from './library-study-hours.ts';
-import { libraryCalendar } from './library-calendars.ts';
+import { chiayiCountyReadingRules, libraryCalendar } from './library-calendars.ts';
 import { kaohsiungHoursSource, kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 import { tainanStudyRoom } from './tainan-study-rules.ts';
 import { taipeiStudyRoom } from './taipei-study-rules.ts';
@@ -339,6 +339,9 @@ const taoyuanStudySeats: Record<string, { seats: number; url: string } | undefin
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-e7aaecf3515c7452935c') {
+    return { ...area, access: 'walk-in', sources: [...area.sources, chiayiCountyReadingRules] };
+  }
   const wifi = localStudyWifi[id];
   if (wifi) area = { ...area, equipment: { ...area.equipment, wifi: true }, sources: [...area.sources, wifi] };
   const taoyuanSeats = taoyuanStudySeats[id];

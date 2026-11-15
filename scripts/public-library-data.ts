@@ -171,6 +171,7 @@ const greenMuseumTeen = citySite + 'lib/tour/Details?Parser=14,101,703,,,,46';
 const greenMuseumGuide = citySite + 'lib/tour/index?Parser=14,101,703';
 const greenMuseumMap = 'https://tgm-go.com.tw/zh-tw/map';
 const likeyongGuide = citySite + 'lib/content/index?Parser=1,112,265';
+const likeyongDiscussionRules = citySite + 'df_ufiles/lib48/臺中市立圖書館李科永紀念圖書分館討論室補充事項.pdf';
 const xinganGuide = citySite + 'lib/content/index?Parser=1,115,295';
 const xinganIntro = citySite + 'lib/Introduction/index?Parser=99,115,294';
 const xinganVisit = 'https://www.walkerland.com.tw/article/view/349577';
@@ -386,9 +387,9 @@ export const reviewedSources: Record<string, {
       sources: [greenMuseumTeen, greenMuseumPlan, readingRules, wifiFaq] }],
   },
   李科永紀念圖書分館: {
-    sources: [likeyongGuide, 'https://travellens.pixnet.net/blog/posts/939436017933247207', 'https://apoarea.tw/lkylib/'],
+    sources: [likeyongGuide, likeyongDiscussionRules, citySite + 'form/Details?Parser=2,3,48,28,,,,205', 'https://travellens.pixnet.net/blog/posts/939436017933247207', 'https://apoarea.tw/lkylib/'],
     readingEquipment: { laptop: true, outlet: true },
-    accessNote: '分館介紹列有筆電席位。3 樓資訊檢索區旁的閱覽桌設有可供筆電充電的插座。',
+    accessNote: '分館介紹列有筆電席位。3 樓資訊檢索區旁的閱覽桌設有可供筆電充電的插座。 3 樓討論室供團體討論及課業研討，每組 3 至 8 人，登記者須年滿 7 歲，全組持本人借閱證至 1 樓服務臺登記，每次最長 2 小時。6 歲以下兒童可隨成人入內。受理時間為週二至週六 09:00–18:30、週日 09:00–15:00。',
   },
   梧棲分館: { studyRoom: false, sources: [nclDirectory + 'L5278000'],
     readingEquipment: { laptop: true },

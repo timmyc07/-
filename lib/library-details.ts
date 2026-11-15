@@ -1330,6 +1330,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-4211973a59dada78d703': {
+    url: 'https://www.ksml.edu.tw/lib/form/Details.aspx?Parser=2,84,1387,,,,1544',
+    note: '閱覽座位優先供館藏閱覽，離席逾 30 分鐘，館方得清空座位。插座限藝術研究使用，個人物品不得充電。',
+  },
   'plis-bd1ae9a8fe9b769cd7e7': {
     url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=a0aa6231771f4746b8523c02ee652977',
     note: '資訊檢索區有 1 台館藏查詢電腦及 2 台可依館方規定憑證借用的電腦。',

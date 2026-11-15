@@ -96,10 +96,10 @@ const kaohsiung2026 = [
   ...closureDates(2026, kaohsiungUrl, ['11-28'], '選舉日休館'),
 ];
 
-function monthlyClosures(year: number, weekday: number, url: string, reason: string) {
+function monthlyClosures(year: number, weekday: number | null, url: string, reason: string) {
   const dates = Array.from({ length: 12 }, (_, month) => {
     const last = new Date(Date.UTC(year, month + 1, 0));
-    last.setUTCDate(last.getUTCDate() - (last.getUTCDay() + 7 - weekday) % 7);
+    if (weekday !== null) last.setUTCDate(last.getUTCDate() - (last.getUTCDay() + 7 - weekday) % 7);
     return last.toISOString().slice(5, 10);
   });
   return closureDates(year, url, dates, reason);
@@ -109,6 +109,10 @@ export const penghuStudyClosures = [2026, 2027].flatMap((year) =>
   monthlyClosures(year, 2, penghuMainUrl, '閱覽室每月最後一個星期二清潔休室'));
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  if (['plis-c45011eb98a75a2b9c10', 'plis-cc40d48dc090e913387c', 'plis-462b4877085902245ddb'].includes(library.id)) {
+    return { closures: [2026, 2027].flatMap((year) => monthlyClosures(year, null,
+      'https://www.lotong.gov.tw/cp.aspx?n=17720', '每月最後一日休館')) };
+  }
   const pingtungHolidayRule = pingtungHolidayRules[library.id];
   if (pingtungHolidayRule) {
     return { closures: [

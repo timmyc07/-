@@ -110,6 +110,10 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
         ['12-25'], '行憲紀念日休館'),
     ] };
   }
+  if (library.id === 'plis-3d9a951164210abf4cb8') {
+    return { closures: closureDates(2026, 'https://www.mlvillage.gov.tw/content/index.aspx?Parser=1,4,153,31',
+      ['12-25'], '依分館國定假日休館規定，行憲紀念日休館') };
+  }
   if (library.id === 'plis-f3080ccd8c34dad70222') {
     return { closures: [{ from: '2026-04-04', until: '2026-04-05', reason: '兒童節及清明節全館休館',
       url: 'https://www.phlib.nat.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=11299' }] };

@@ -1,6 +1,12 @@
 import type { Library } from './study.ts';
+import { libraryStudyHours } from './library-study-hours.ts';
 
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
+
+const huangbinClosure = {
+  from: '2026-03-02', reason: '自 2026 年 3 月 2 日起閉館施工，復館日期以館方公告為準。',
+  url: 'https://www.cna.com.tw/postwrite/chi/425420',
+};
 
 const localHours: Record<string, { url: string; hours: string; studyRoom?: true } | undefined> = {
   'plis-6c9e30dc1c6abf7a17d4': {
@@ -28,16 +34,19 @@ const comparableAddress = (value: string) => value.normalize('NFKC').replaceAll(
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
   if (!detail?.address || comparableAddress(detail.address) !== comparableAddress(library.address)) return library;
   const local = detail.hours ? undefined : localHours[library.id];
-  const studyRoom = local?.studyRoom || detail.facilities?.some((facility) => /^自[修習]室$/.test(facility));
+  const closure = library.id === 'plis-eb5cc227330385ea9b00' ? huangbinClosure : undefined;
+  const study = detail.hours ? libraryStudyHours(library.id) : undefined;
+  const studyRoom = Boolean(study || local?.studyRoom || detail.facilities?.some((facility) => /^自[修習]室$/.test(facility)));
   return {
     ...library,
-    openingHours: library.openingHours ?? detail.hours ?? local?.hours,
+    openingHours: closure?.reason ?? library.openingHours ?? detail.hours ?? local?.hours,
+    closures: closure ? [...library.closures, closure] : library.closures,
     facilities: library.facilities ?? detail.facilities,
     studyRoom: library.studyRoom ?? (studyRoom || undefined),
     areas: studyRoom && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study') ? [...library.areas, {
-      name: '自修室', kind: 'study', slots: null, access: null, equipment: {},
-      sources: [local?.studyRoom ? local.url : detail.url],
+      name: study?.name ?? '自修室', kind: 'study', slots: study?.slots ?? null, access: null, equipment: {},
+      sources: [study?.url ?? (local?.studyRoom ? local.url : detail.url)],
     }] : library.areas,
-    sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : [])])],
+    sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []), ...(closure ? [closure.url] : [])])],
   };
 }

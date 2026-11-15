@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import type { Library } from '../lib/study.ts';
 import { withLibraryDetail, type LibraryDetail } from '../lib/library-details.ts';
+import { evaluate, minutes } from '../lib/study.ts';
 
 const root = new URL('../public/datasets/', import.meta.url);
 const directory = JSON.parse(readFileSync(new URL('library-directory.json', root), 'utf8')) as {
@@ -60,4 +61,26 @@ test('館舍詳情須同址，館舍開館及設備資料不當成自修室規�
   }]);
   assert.equal(withLibraryDetail(library, { ...detail, address: '基隆市中正區信一路190號' }), library);
   assert.equal(withLibraryDetail(library, { ...detail, facilities: ['電梯'] }).studyRoom, undefined);
+});
+
+test('專室時段採館方資料，施工閉館可排除查詢', () => {
+  const { libraries: details } = JSON.parse(readFileSync(new URL('library-details.json', root), 'utf8')) as {
+    libraries: Record<string, LibraryDetail>;
+  };
+  const libraries = directory.libraries.map((library) => withLibraryDetail(library, details[library.id]));
+  const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
+  assert.equal(scheduled.length, 27);
+  for (const { slots } of scheduled) {
+    assert.equal(new Set(slots!.map(({ day }) => day)).size, slots!.length);
+    assert(slots!.every(({ day, start, end }) => day >= 0 && day <= 6 && start < end && end <= 1440));
+  }
+  const pingzhen = libraries.find(({ id }) => id === 'plis-07c47313a8f5b473d2bf')!;
+  assert.deepEqual(pingzhen.areas[0].slots?.find(({ day }) => day === 0),
+    { day: 0, start: minutes('08:30'), end: minutes('17:00') });
+  const huangbin = libraries.find(({ id }) => id === 'plis-eb5cc227330385ea9b00')!;
+  const result = evaluate(huangbin, undefined, {
+    date: '2026-11-15', start: minutes('14:00'), duration: 120, kind: 'study', card: false, registration: false, required: [],
+  });
+  assert.equal(result.status, 'no');
+  assert.equal(result.closure?.from, '2026-03-02');
 });

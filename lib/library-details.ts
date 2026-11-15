@@ -59,6 +59,39 @@ const xinyuanHours = '週二至週日 08:00–12:00、13:00–17:00。週一、�
 const kinmenCollectionPolicy = 'https://isp.ncl.edu.tw/files/file_pool/1/0O065604454792753757/金門縣公共圖書館館藏發展政策.pdf';
 const jinshaReopening = 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=CFD61B662D63D7C9&sms=BF7D6D478B935644';
 const localFacilityLists: Record<string, { url: string; facilities: string[] } | undefined> = {
+  'plis-f3080ccd8c34dad70222': {
+    url: 'https://www.penghu.gov.tw/phhcc/home.jsp?id=10016',
+    facilities: ['閱覽室', '書庫', '兒童室', '閱報期刊區', '資訊查詢設備', '個人視聽室'],
+  },
+  'plis-3762599f4dcfd24804ba': {
+    url: 'https://www.phlib.nat.gov.tw/wSite/sp?mp=1&orgId=005&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    facilities: ['兒童圖書室', '閱覽室（會議室及多功能教室）', '視聽室', '展示室', '書庫',
+      '期刊區', '閱報區', '參考書區', '個人視聽區', '檢索區'],
+  },
+  'plis-a842920d380a52665656': {
+    url: 'https://www.phlib.nat.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=004&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    facilities: ['書庫', '兒童室', '期刊室', '視聽室', '公共上網電腦'],
+  },
+  'plis-838b908932f56e7b1d22': {
+    url: 'https://matsucc.gov.tw/連江縣政府文化處公告/',
+    facilities: ['兒童閱覽區'],
+  },
+  'plis-0f447bbe2c470b97e41a': {
+    url: 'https://matsucc.gov.tw/莒光鄉圖書館-東莒分館/',
+    facilities: ['電腦檢索區', '期刊及閱覽區（12 席）', '兒童區', '影印設備'],
+  },
+  'plis-f37b49d54805d1b961ae': {
+    url: 'https://matsucc.gov.tw/北竿鄉圖書館/',
+    facilities: ['報紙雜誌閱覽區', '網路資訊檢索區', '兒童閱讀區', '開放式書庫閱讀區', '影片視聽區', '個人研究區'],
+  },
+  'plis-7ef0c1dc2c3fc0c85b29': {
+    url: 'https://matsucc.gov.tw/東引鄉圖書館/',
+    facilities: ['公共上網電腦'],
+  },
+  'plis-cceeef12e0bfff59593f': {
+    url: 'https://www.matsu-news.gov.tw/news/article/70424',
+    facilities: ['兒童閱覽區', '影音暨網路資料查詢區', '期刊資料區', '館藏特色區'],
+  },
   'plis-12cb176cd411e9d41770': {
     url: 'https://hcplibrary.hchcc.gov.tw/wSite/sp?idPath=4292_4295&mp=1&orgId=012&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
     facilities: ['開架書庫', '鄉土文獻區', '兒童閱讀區', '藝文走廊'],

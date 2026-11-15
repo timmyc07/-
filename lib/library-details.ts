@@ -1360,6 +1360,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-f5b5d0c2ee6ce8477832': {
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000286',
+    note: '館內提供 Wi-Fi。2 樓參考室及研討室兼供自修，專室時段待館方確認。',
+  },
   'plis-4818cd57388587303882': {
     url: 'https://khcc.kcg.gov.tw/rwd_home03.aspx?DATA=937&EXEC=D&ID=%246102&IDK=2',
     note: '鹽埕分館於 2026 年 11 月 12 日遷至原高雄國際會議中心 1 樓，以高雄漫畫圖書館開館。',
@@ -1566,6 +1570,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-f5b5d0c2ee6ce8477832': {
+    url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=012&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    hours: '週二至週日 08:00–12:00、13:30–17:30。週一及國定假日休館。',
+    supersedesDirectory: true,
+  },
   'plis-f4ef2b6827f2374ad985': {
     url: 'https://www.dongshan.gov.tw/cp.aspx?n=17769',
     hours: '鄉公所列週二至週五 08:30–17:00。週一、國定假日及月底清潔日休館，週末服務請向順安館確認。',

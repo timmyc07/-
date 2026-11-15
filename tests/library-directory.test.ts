@@ -209,6 +209,11 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(luodong.areas[0].access, 'walk-in');
   assert.equal(luodong.areas[0].slots?.length, 6);
   const jiaoxi = libraries.find(({ id }) => id === 'plis-5c096392579b74bd371a')!;
+  assert.equal(jiaoxi.areas[0].name, '2 樓右側閱覽室');
+  assert.match(jiaoxi.areas[0].entryNote!, /藝文活動/);
+  const sanxing = libraries.find(({ id }) => id === 'plis-9bee8536cf45c910547b')!;
+  assert.match(sanxing.areas[0].entryNote!, /自修及研習課程/);
+  assert.equal(sanxing.areas[0].slots, null);
   assert.deepEqual(jiaoxi.areas[0].slots?.find(({ day }) => day === 0),
     { day: 0, start: minutes('09:00'), end: minutes('18:00') });
   const yilanCity = libraries.find(({ id }) => id === 'plis-9f7edd85cf79ea635049')!;

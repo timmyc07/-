@@ -1675,6 +1675,13 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-9bee8536cf45c910547b') {
+    return { ...area, entryNote: '研習教室供自修及研習課程使用。' };
+  }
+  if (id === 'plis-5c096392579b74bd371a') {
+    return { ...area, name: '2 樓右側閱覽室', entryNote: '閱覽室供讀者進修，也作為藝文活動場地。',
+      sources: [...area.sources, 'https://jiaosi.e-land.gov.tw/cp.aspx?n=7775&s=2682'] };
+  }
   if (id === 'plis-114080cf8fa32977d08a') {
     return { ...area, name: '地下 1 樓自修室',
       sources: [...area.sources, 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=4643DE8A8785BFD0&sms=CFFFC938B352678A'] };

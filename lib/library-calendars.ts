@@ -110,8 +110,12 @@ export const penghuStudyClosures = [2026, 2027].flatMap((year) =>
 
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
   if (['plis-c45011eb98a75a2b9c10', 'plis-cc40d48dc090e913387c', 'plis-462b4877085902245ddb'].includes(library.id)) {
-    return { closures: [2026, 2027].flatMap((year) => monthlyClosures(year, null,
-      'https://www.lotong.gov.tw/cp.aspx?n=17720', '每月最後一日休館')) };
+    const url = 'https://www.lotong.gov.tw/cp.aspx?n=17720';
+    return { closures: [
+      ...[2026, 2027].flatMap((year) => monthlyClosures(year, null, url, '每月最後一日休館')),
+      ...closureDates(2026, url, ['12-25'], '依館方國定假日休館規定，行憲紀念日休館'),
+      ...closureDates(2027, url, ['01-01'], '依館方國定假日休館規定，開國紀念日休館'),
+    ] };
   }
   const pingtungHolidayRule = pingtungHolidayRules[library.id];
   if (pingtungHolidayRule) {

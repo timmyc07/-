@@ -1028,6 +1028,10 @@ const localReadingAreas: Record<string, Area | undefined> = {
   },
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-2fcff6be9344e712594c': {
+    url: 'https://www.cna.com.tw/news/aloc/202609210263.aspx',
+    note: '依文化局公布的搬遷安排，化龍一村兒少書房自 2026 年 10 月 12 日閉館，樂齡書房自 11 月 16 日閉館。新總館 B 館預計 12 月 20 日試營運，實際開放時間依館方公告。',
+  },
   'plis-e05db638ff1f09f7be82': {
     url: 'https://files.chcg.gov.tw/files/68_20250407115710143_彰化縣福興鄉立圖書館借閱規定.pdf',
     note: '館方借閱規定指出，館內座位供閱覽館藏使用，請勿佔位自修。',

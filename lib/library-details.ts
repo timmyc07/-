@@ -988,6 +988,15 @@ const nationalTaiwanLaptopSeats: Area = {
   sources: ['https://www.ntl.edu.tw/wSite/ct?ctNode=3193&mp=1&xItem=49384', nationalTaiwanWifi],
 };
 const localReadingAreas: Record<string, Area | undefined> = {
+  'plis-8e698a4770cf01e3875e': {
+    name: '1 樓期刊閱報區', kind: 'reading', seats: 80,
+    slots: [0, 2, 3, 4, 5, 6].map((day) => ({
+      day, start: minutes('08:30'), end: minutes(day === 0 ? '17:00' : '20:30'),
+    })),
+    access: 'conditional', equipment: {},
+    entryNote: '供閱覽館內報紙與期刊。禁止自修或閱讀個人書籍、資料，未滿 6 歲不得入內。',
+    sources: ['https://www.nthcc.gov.tw/A7_2/content/127'],
+  },
   'plis-cf8f59d429a9ca2188f7': {
     name: '1 樓閱覽區', kind: 'reading', seats: 36, slots: null, access: null,
     equipment: {}, sources: [qionglinLibrary],

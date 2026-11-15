@@ -11,6 +11,10 @@ export type LibraryDetail = { url: string; address: string; hours?: string; faci
 
 const wanluanTemporaryClosure = 'https://www.globgov.com/TW/Wanluan/1414151405576012/萬巒圖書館-暨萬巒Doc';
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
+  'plis-0a7bdfab9e0c217b4951': {
+    from: '2021-02-17', reason: '大安分館所在的黎元合署大樓因高氯離子鑑定結果拆除重建，分館全面閉館，恢復日期待館方公告。',
+    url: 'https://www-ws.gov.taipei/001/Upload/367/relfile/46908/8457696/46dcfa55-9c40-4ef7-bfa7-436304d141a7.pdf',
+  },
   'plis-a52a74385fa7b184d15f': {
     from: '2025-10-01', reason: '東園分館配合合署大樓拆除工程全面閉館，恢復日期待館方公告。',
     url: 'https://www.ck.tp.edu.tw/uploads/17720683128085tU8DIOu.pdf',

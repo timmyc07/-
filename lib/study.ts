@@ -3,6 +3,7 @@ import type { FieldChangeBatch, FieldReview } from './field-audit.ts';
 export const facilities = { laptop: '筆電', wifi: 'Wi-Fi', outlet: '座位插座' };
 export const regionalCards = {
   taipei: '臺北市圖個人借閱證', newTaipei: '新北市圖個人借閱證',
+  nationalTaiwan: '國立臺灣圖書館個人借閱證',
   keelung: '基隆市圖個人借閱證', taoyuan: '桃園市圖個人借閱證或市民卡',
   tainan: '臺南市公共圖書館借閱證',
   changhua: '彰化縣公共圖書館個人借閱證',

@@ -1417,6 +1417,12 @@ const taoyuanWalkInStudyRooms = new Set([
 ]);
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-a094b0d4aa7d7722fd03') {
+    return { ...area, name: '3 樓自修室', seats: 178, access: 'card', regionalCard: 'nationalTaiwan',
+      entryNote: '自修席分為現場刷卡登記 92 席及線上預約 86 席，請持本人國立臺灣圖書館借閱證或悠遊卡借閱證辦理。',
+      reservation: 'https://ireserve.ntl.edu.tw/sm/home_web.do',
+      sources: [...area.sources, 'https://www.ntl.edu.tw/wSite/ct?ctNode=1746&mp=1&xItem=87059'] };
+  }
   if (id === 'plis-aa077d31f651076b59ef') {
     return { ...area, closures: [...(area.closures ?? []), {
       from: '2026-11-09', until: '2026-11-09', reason: '5 樓自修室清潔暫停開放', url: yuminCleaning,

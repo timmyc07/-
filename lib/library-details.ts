@@ -1360,6 +1360,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-4818cd57388587303882': {
+    url: 'https://khcc.kcg.gov.tw/rwd_home03.aspx?DATA=937&EXEC=D&ID=%246102&IDK=2',
+    note: '鹽埕分館於 2026 年 11 月 12 日遷至原高雄國際會議中心 1 樓，以高雄漫畫圖書館開館。',
+  },
   'plis-058be989d22b992c5b8a': {
     url: jinshanLibrary,
     note: '館方列有 Wi-Fi。1 樓資訊檢索與數位資源區有 8 部桌上型電腦須登記使用，另有 8 席附插座的筆電席，可自備筆電或平板。',
@@ -2014,6 +2018,9 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     detail = { ...detail, address };
   }
   if (!detail?.address || comparableAddress(detail.address) !== comparableAddress(library.address)) return library;
+  if (library.id === 'plis-4818cd57388587303882') {
+    library = { ...library, name: '高雄漫畫圖書館（高雄市立圖書館鹽埕分館）' };
+  }
   const candidate = localHours[library.id];
   const local = !detail.hours || candidate?.supersedesDirectory ? candidate : undefined;
   const hoursOverride = ['plis-9709456f17abc6c6a512', 'plis-5929930cfc61bd687f1f'].includes(library.id)

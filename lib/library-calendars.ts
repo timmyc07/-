@@ -2,6 +2,26 @@ import { minutes, type Closure, type Library } from './study.ts';
 import { kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 
 const taipeiUrl = 'https://tpml.gov.taipei/cp.aspx?n=141EFA8D46038957&s=839324A30786DF77';
+const taipeiZhongshanElection = 'https://doit.gov.taipei/News_Content.aspx?n=E3D88B653EACBF6E&s=1CBA72450CC8FCAE&sms=78D644F2755ACCAA';
+const taipeiElectionClosures: Record<string, Closure[] | undefined> = {
+  'plis-4a5392763b505085c4b0': [
+    { from: '2026-11-27', until: '2026-11-27', time: { start: minutes('17:30'), end: 24 * 60 },
+      reason: '配合選務作業提前閉館', url: taipeiZhongshanElection },
+    { from: '2026-11-28', until: '2026-11-29', reason: '配合選務作業閉館', url: taipeiZhongshanElection },
+  ],
+  'plis-43a6f9462110b6734cd6': [
+    { from: '2026-11-27', until: '2026-11-28', reason: '配合投開票所作業閉館',
+      url: 'https://reading.tpml.gov.taipei/News_Content.aspx?n=B3B7F57C7B16FDE6&s=51DAF6801B3A8125&sms=78D644F2755ACCAA' },
+  ],
+  'plis-4235a1e69db7bb767466': [
+    { from: '2026-11-26', until: '2026-11-29', reason: '配合選務作業閉館',
+      url: 'https://www.gov.taipei/News_Content.aspx?n=D0042A87C2F0270A&s=42805488DDD562C0&sms=78D644F2755ACCAA' },
+  ],
+  'plis-e3287dc94a64c9288833': [
+    { from: '2026-11-28', until: '2026-11-29', reason: '配合選務作業閉館',
+      url: 'https://tpml.gov.taipei/News_Content.aspx?n=E492D531630BC406&s=BFFCCC6F19D10582&sms=78D644F2755ACCAA' },
+  ],
+};
 export const penghuMainUrl = 'https://www.phlib.nat.gov.tw/wSite/sp?ctNode=5236&mp=1&orgId=001&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp';
 const newTaipeiUrl = 'https://www.library.ntpc.gov.tw/singlehtml/be937c4bcb74427ca3d3c8fd5b4704b9';
 const newTaipeiMayClosing: Record<string, { time: string; url: string } | undefined> = {
@@ -289,7 +309,7 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     const songshan = library.id === 'plis-b7a50b9284256d36bef0';
     return {
       calendarYears: [2026, 2027],
-      closures: [...taipei2026, ...taipei2027, ...(songshan ? [2026, 2027].flatMap((year) =>
+      closures: [...(taipeiElectionClosures[library.id] ?? []), ...taipei2026, ...taipei2027, ...(songshan ? [2026, 2027].flatMap((year) =>
         monthlyClosures(year, 1, taipeiUrl, '松山分館臨時服務處每月最後一個星期一休館')) : [])],
     };
   }

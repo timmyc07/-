@@ -1536,6 +1536,13 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-c1eecc7328938e1f8113') {
+    const url = 'https://reading.tpml.gov.taipei/News_Content.aspx?n=B3B7F57C7B16FDE6&s=A1ED499E7D303433&sms=78D644F2755ACCAA';
+    return { ...area, sources: [...area.sources, url],
+      closures: [...(area.closures ?? []), { from: '2026-11-27', until: '2026-11-27',
+        reason: '選務作業期間自修室暫停開放，服務臺及 3 樓閱覽區正常開放。', url }],
+    };
+  }
   if (id === 'plis-4d33d19b31ac419fb05c') {
     return { ...area, name: '8 樓自修室',
       limitedOpening: {

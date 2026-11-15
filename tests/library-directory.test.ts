@@ -586,6 +586,13 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   assert.equal(evaluate(tamsui, undefined, { ...maySunday, duration: 31 }).closure?.time?.start, minutes('21:00'));
   assert.equal(evaluate(gongliao, undefined, maySunday).closure?.time?.start, minutes('17:00'));
   const electionEve = { ...taipeiQuery, date: '2026-11-27', start: minutes('11:00'), duration: 60 };
+  const taipeiZhongshan = libraries.find(({ id }) => id === 'plis-4a5392763b505085c4b0')!;
+  assert.equal(evaluate(taipeiZhongshan, undefined, electionEve).closure, undefined);
+  assert.equal(evaluate(taipeiZhongshan, undefined, { ...electionEve, start: minutes('17:30') }).closure?.time?.start, minutes('17:30'));
+  assert.equal(evaluate(taipeiZhongshan, undefined, { ...electionEve, date: '2026-11-29' }).closure?.until, '2026-11-29');
+  const yongchun = libraries.find(({ id }) => id === 'plis-c1eecc7328938e1f8113')!;
+  assert.equal(evaluate(yongchun, undefined, electionEve).closure, undefined);
+  assert.equal(evaluate(yongchun, yongchun.areas[0], electionEve).closure?.until, '2026-11-27');
   const xindian = libraries.find(({ id }) => id === 'plis-b9568520f14810d9931a')!;
   assert.equal(evaluate(xindian, xindian.areas[0], electionEve).closure, undefined);
   assert.equal(evaluate(xindian, xindian.areas[0], { ...electionEve, duration: 61 }).closure?.time?.start, minutes('12:00'));

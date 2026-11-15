@@ -1720,7 +1720,9 @@ const announcedLibraries: (Library & { city: string })[] = [
     facilities: ['文獻資料專區', '兒童閱覽區', '藝文展區', '多功能室', '無線上網wifi'],
     accessNote: '2026 年 11 月 3 日正式開館，館方公布 100 席閱覽座位。',
     areas: [{ name: '館內閱覽座位', kind: 'reading', slots: null, access: 'walk-in', seats: 100,
-      equipment: {}, sources: [hsinchuNandaOpening] }], closures: [],
+      equipment: {}, sources: [hsinchuNandaOpening] }],
+    closures: [{ from: '2026-11-28', until: '2026-11-28', reason: '依新竹市圖書館選舉日休館規定休館',
+      url: 'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=1031a73e-224c-4ecd-a33a-496ad144123e' }],
   },
   {
     id: 'local-taoyuan-puding', name: '桃園市立圖書館埔頂分館', city: '桃園市', district: '大溪區',

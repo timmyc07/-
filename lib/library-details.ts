@@ -1558,8 +1558,8 @@ function localStudyRoom(id: string, area: Area): Area {
   }
   if (id === 'plis-094ed6f57775956545a2') return { ...area, seats: 85, equipment: { ...area.equipment, wifi: true } };
   if (id === 'plis-016c903b9ad9d1b886d6') {
-    return { ...area, name: '地下 1 樓自修室', access: 'walk-in', equipment: { outlet: true, laptop: false },
-      entryNote: '通常自由入座，例假日或特殊期間可能發號碼牌。使用筆電請至 1 樓期刊室無線上網區並自備電源。',
+    return { ...area, name: '地下 1 樓自修室', access: 'walk-in', equipment: { outlet: false, laptop: false },
+      entryNote: '通常自由入座，例假日或特殊期間可能發號碼牌。自修室禁止私自接用電器。使用筆電請至 1 樓期刊室無線上網區並自備電源。',
       sources: [...area.sources, yuanlinLibraryRules,
         'https://files.chcg.gov.tw/files/彰化縣員林市立圖書館自修室使用須知1040808_58_1090416.pdf'] };
   }

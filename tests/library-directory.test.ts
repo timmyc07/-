@@ -173,7 +173,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const yuanlin = libraries.find(({ id }) => id === 'plis-016c903b9ad9d1b886d6')!;
   assert.equal(yuanlin.areas[0].name, '地下 1 樓自修室');
   assert.equal(yuanlin.areas[0].access, 'walk-in');
-  assert.deepEqual(yuanlin.areas[0].equipment, { outlet: true, laptop: false });
+  assert.deepEqual(yuanlin.areas[0].equipment, { outlet: false, laptop: false });
   for (const id of ['plis-12a529595d2715dda629', yuanlin.id]) {
     assert(libraries.find((library) => library.id === id)?.closures.some(({ from }) => from === '2026-11-28'));
   }

@@ -93,7 +93,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   };
   const libraries = directory.libraries.map((library) => withLibraryDetail(library, details[library.id]));
   const scheduled = libraries.flatMap(({ areas }) => areas).filter(({ slots }) => slots?.length);
-  assert.equal(scheduled.length, 35);
+  assert.equal(scheduled.length, 59);
   for (const { slots } of scheduled) {
     assert.equal(new Set(slots!.map(({ day }) => day)).size, slots!.length);
     assert(slots!.every(({ day, start, end }) => day >= 0 && day <= 6 && start < end && end <= 1440));
@@ -107,6 +107,28 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   });
   assert.equal(result.status, 'no');
   assert.equal(result.closure?.from, '2026-03-02');
+});
+
+test('高雄以館方自修室欄決定席次與時段，總館和分館依公告區別假日', () => {
+  const { libraries: details } = JSON.parse(readFileSync(new URL('library-details.json', root), 'utf8')) as {
+    libraries: Record<string, LibraryDetail>;
+  };
+  const libraries = directory.libraries.filter(({ city }) => city === '高雄市')
+    .map((library) => withLibraryDetail(library, details[library.id]));
+  assert.equal(libraries.filter(({ studyRoom }) => studyRoom === true).length, 27);
+  assert.equal(libraries.filter(({ studyRoom }) => studyRoom === false).length, 34);
+  assert.equal(libraries.filter((library) => coversCalendarYear(library, 2026)).length, 61);
+  const cijin = libraries.find(({ name }) => name === '高雄市立圖書館旗津分館')!;
+  assert.equal(cijin.areas[0].seats, 38);
+  assert.equal(cijin.areas[0].access, 'walk-in');
+  const query = {
+    date: '2026-11-28', start: minutes('14:00'), duration: 120,
+    kind: 'study' as const, card: false, registration: false, required: [],
+  };
+  assert.equal(evaluate(cijin, cijin.areas[0], query).closure?.reason, '選舉日休館');
+  const main = libraries.find(({ name }) => name === '高雄市立圖書館')!;
+  assert.equal(evaluate(main, undefined, query).closure, undefined);
+  assert(main.checkDates?.includes(query.date));
 });
 
 test('雙北入座規則依館別套用，借閱證不可跨系統代用', () => {

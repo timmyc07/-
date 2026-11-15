@@ -1,6 +1,7 @@
 import type { Area, Library } from './study.ts';
 import { libraryStudyHours } from './library-study-hours.ts';
 import { libraryCalendar } from './library-calendars.ts';
+import { kaohsiungHoursSource, kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 import { taipeiStudyRoom } from './taipei-study-rules.ts';
 
 export type LibraryDetail = { url: string; address: string; hours?: string; facilities?: string[] };
@@ -64,8 +65,9 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     sources: [study?.url ?? (local?.studyRoom ? local.url : detail.url)],
   };
   const taipeiArea = taipeiStudyRoom(library, area, listed);
-  const localArea = localStudyRoom(library.id, taipeiArea ?? area);
-  const studyRoom = Boolean(study || local?.studyRoom || listed || taipeiArea);
+  const kaohsiungArea = kaohsiungStudyRoom(library.id);
+  const localArea = kaohsiungArea ?? localStudyRoom(library.id, taipeiArea ?? area);
+  const studyRoom = Boolean(study || local?.studyRoom || listed || taipeiArea || kaohsiungArea);
   const calendar = libraryCalendar(library);
   return {
     ...library,
@@ -74,10 +76,11 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     checkDates: calendar?.checkDates ? [...new Set([...(library.checkDates ?? []), ...calendar.checkDates])] : library.checkDates,
     closures: [...library.closures, ...(calendar?.closures ?? []), ...(closure ? [closure] : [])],
     facilities: library.facilities ?? detail.facilities,
-    studyRoom: library.studyRoom ?? (studyRoom || undefined),
-    areas: studyRoom && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
+    studyRoom: library.studyRoom ?? (kaohsiungArea === null ? false : studyRoom || undefined),
+    areas: studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
       ? [...library.areas, localArea] : library.areas,
     sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []),
+      ...(kaohsiungArea === null ? [kaohsiungHoursSource] : []),
       ...(calendar?.closures.map(({ url }) => url) ?? []), ...(closure ? [closure.url] : [])])],
   };
 }

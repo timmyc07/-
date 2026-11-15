@@ -1,4 +1,5 @@
 import type { Closure, Library } from './study.ts';
+import { kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 
 const taipeiUrl = 'https://tpml.gov.taipei/cp.aspx?n=141EFA8D46038957&s=839324A30786DF77';
 const newTaipeiUrl = 'https://www.library.ntpc.gov.tw/singlehtml/be937c4bcb74427ca3d3c8fd5b4704b9';
@@ -6,6 +7,7 @@ const nationalTaiwanUrl = 'https://www.ntl.edu.tw/wSite/ct?ctNode=1711&mp=1&xIte
 const electionUrl = 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=353f6e7dda484242820ea153ab0eb4a0';
 const keelungUrl = 'https://kllib.klcg.gov.tw/News_Content.aspx?n=7789&s=16436&sms=12521';
 const taoyuanUrl = 'https://www.typl.gov.tw/zh-tw/News/Content/1067';
+const kaohsiungUrl = 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,33,,,,15495';
 
 function closureDates(year: number, url: string, dates: string[], reason: string): Closure[] {
   return dates.map((date) => ({ from: year + '-' + date, until: year + '-' + date, reason, url }));
@@ -51,6 +53,11 @@ const taoyuan2026 = [
   ...closureDates(2026, taoyuanUrl, ['01-29', '02-26', '03-26', '04-30', '05-28', '06-25', '07-30', '08-27', '09-24', '10-29', '11-26', '12-31'], '圖書整理清館日休館'),
   ...closureDates(2026, 'https://www.typl.gov.tw/zh-tw/Closed/Content/90', ['11-28'], '選舉日休館'),
 ];
+const kaohsiung2026 = [
+  ...holidays(2026, kaohsiungUrl, '02-19', '06-19', '09-25'),
+  ...closureDates(2026, kaohsiungUrl, ['04-06', '10-26'], '補假日休館'),
+  ...closureDates(2026, kaohsiungUrl, ['11-28'], '選舉日休館'),
+];
 
 function songshanClosures(year: number) {
   const dates = Array.from({ length: 12 }, (_, month) => {
@@ -84,4 +91,13 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
   if (library.name.startsWith('桃園市立圖書館') && !/兒童(?:玩具|文學)館$/.test(library.name)) {
     return { calendarYears: [2026], closures: taoyuan2026 };
   }
+  if (library.name === '高雄市立圖書館') {
+    return {
+      calendarYears: [2026],
+      closures: [{ from: '2026-02-15', until: '2026-02-16', reason: '春節休館', url: kaohsiungUrl }],
+      checkDates: [...kaohsiung2026.filter(({ from }) => from !== '2026-02-15').map(({ from }) => from),
+        '2026-02-17', '2026-02-18', '2026-02-19'],
+    };
+  }
+  if (kaohsiungStudyRoom(library.id) !== undefined) return { calendarYears: [2026], closures: kaohsiung2026 };
 }

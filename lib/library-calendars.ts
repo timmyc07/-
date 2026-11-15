@@ -28,6 +28,9 @@ const tainanMainUrl = 'https://www.tnpl.tn.edu.tw/u4914263388070917076/a1';
 const hsinchuCityHours = 'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=1031a73e-224c-4ecd-a33a-496ad144123e';
 export const yuanlinLibraryRules = 'https://files.chcg.gov.tw/files/58_20250124134738385_彰化縣員林市立圖書館圖書資料借閱規定-1140123修正.pdf';
 const electionClosureRules: Record<string, string> = {
+  'plis-703e62be51f0cd3f7e93': 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000174',
+  'plis-eaf18916c54c8e1fffc3': 'https://opendata.miaoli.gov.tw/OpenDataDetail.aspx?n=9404&s=1811',
+  'plis-7417038e0db9b35c62ea': 'https://www.houlong.gov.tw/cp.aspx?n=4134',
   'plis-12a529595d2715dda629': yuanlinLibraryRules,
   'plis-016c903b9ad9d1b886d6': yuanlinLibraryRules,
   'plis-e94c48945a092b5818d8': 'https://www.hchcc.gov.tw/Tw/Common/SinglePage?filter=55A4FB62-998F-4818-BDE2-08AF8B3245C2',

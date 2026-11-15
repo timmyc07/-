@@ -177,6 +177,7 @@ const comparableAddress = (value: string) => value.normalize('NFKC').replaceAll(
 
 const hsinchuOpening = 'https://www.hclibraryopening.com.tw/';
 const hsinchuFloorGuide = 'https://www.hclibraryopening.com.tw/%E8%AA%8D%E8%AD%98%E7%B8%BD%E5%9C%96';
+const stellarSpace = 'https://www.ftvnews.com.tw/news/detail/2026B12W0750';
 const stellarOpening = 'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11078';
 const pudingOpening = 'https://news.tycg.gov.tw/News_Content.aspx?n=5016&s=1935304';
 const taoyuanOpeningHours = 'https://www.tycg.gov.tw/News_Content.aspx?n=97&s=1554331';
@@ -240,12 +241,15 @@ const announcedLibraries: (Library & { city: string })[] = [
   {
     id: 'local-zhubei-stellar', name: '竹北星際圖書館', city: '新竹縣', district: '竹北市',
     address: '新竹縣竹北市中正西路52號', types: ['公共圖書館'],
-    website: stellarOpening, sources: [stellarOpening, 'https://www.openstreetmap.org/node/14355577123'],
+    website: stellarOpening, sources: [stellarOpening, stellarSpace, 'https://www.openstreetmap.org/node/14355577123',
+      'https://www.hsinchu.gov.tw/cp.aspx?n=1647'],
     coordinates: { latitude: 24.8396572, longitude: 121.0036135 },
     openingHours: '試營運：週二至週四 09:00–20:30，週五至週日 09:00–24:00。週一休館，特殊日期依公告。',
-    facilities: ['嬰幼兒圖書區', '館內閱覽區'],
-    accessNote: '試營運開放館內閱覽，暫停外借、預約、還書、通閱、檢索電腦及視聽設備服務。',
-    areas: [], closures: [],
+    facilities: ['嬰幼兒圖書區', '館內閱覽區', '書報區', '安靜自修區', '親子閱讀區'],
+    accessNote: '試營運開放館內閱覽，暫停外借、預約、還書、通閱、檢索電腦及視聽設備服務。試營運諮詢可洽竹北市公所總機 03-5515919。',
+    studyRoom: true,
+    areas: [{ name: '安靜自修區', kind: 'quiet', slots: null, access: null, equipment: {}, sources: [stellarSpace] }],
+    closures: [],
   },
 ];
 

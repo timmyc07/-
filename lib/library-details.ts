@@ -1042,6 +1042,11 @@ const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
 const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-7d0a942d6021349d56dd': {
+    name: '4 樓一般閱覽區', kind: 'reading', slots: null, access: null,
+    equipment: { laptop: true, outlet: true },
+    sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=7e7d8fa65cfe45a2bef8f2d135f9e432'],
+  },
   'plis-556af005b3614de06ca7': {
     name: '6 樓筆記型電腦區', kind: 'reading', seats: 7, slots: null, access: null,
     equipment: { laptop: true, outlet: true },
@@ -1302,6 +1307,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-3fe72b1ccca37949b0a8': {
+    url: 'https://www.typl.gov.tw/zh-tw/News/Content/3312',
+    note: '館舍周邊步道預計於 2026 年 10 月 1 日至 11 月 30 日施工，期間可能有噪音，周邊停車及交通可能受影響。',
+  },
   'plis-ae39026bfbebe222706a': {
     url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000449',
     note: '竹田國小內的臨時圖書館（公正路 35 號）因空間有限，展閱近 3 年的新書，其餘館藏暫時封存。',

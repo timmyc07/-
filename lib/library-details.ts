@@ -1118,11 +1118,13 @@ const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
     name: '2 樓一般閱覽及書報期刊區', kind: 'reading', seats: 8, slots: null, access: null, equipment: {},
     sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=a0aa6231771f4746b8523c02ee652977'],
   },
-  'plis-9cc6fe4291e642996d87': {
-    name: '3 樓筆電使用區', kind: 'reading', slots: null, access: null,
-    equipment: { laptop: true },
-    sources: ['https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u5137741304911699517'],
-  },
+  'plis-9cc6fe4291e642996d87': [
+    { name: '3 樓筆電使用區', kind: 'reading', slots: null, access: null, equipment: { laptop: true },
+      sources: ['https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=u5137741304911699517'] },
+    { name: '3 樓青少年閱覽區', kind: 'reading', slots: null, access: null, equipment: {},
+      entryNote: '供青少年及一般讀者閱讀、自修。',
+      sources: ['https://www.tnpl.tn.edu.tw/u4878540023815248225/a1', 'https://www.tnpl.tn.edu.tw/u5748583250786538025/a1'] },
+  ],
   'plis-e3287dc94a64c9288833': {
     name: '3 樓筆記型電腦區', kind: 'reading', seats: 71, slots: null, access: 'card', regionalCard: 'taipei',
     reservation: 'https://seat.tpml.edu.tw/sm/home_web.do#',

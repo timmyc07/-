@@ -1558,8 +1558,8 @@ const serviceUpdates: Record<string, { url: string; note: string; additionalSour
     note: '館方 2026 年 11 月 14 日公告因漏水檢修，2 樓 B 側及該區廁所、1 樓無障礙廁所暫停開放。恢復日期依館方公告，無障礙廁所使用需求可洽服務臺。',
   },
   'plis-114080cf8fa32977d08a': {
-    url: 'https://doit.gov.taipei/News_Content.aspx?n=E3D88B653EACBF6E&s=4A1259C6B21F2AA5&sms=78D644F2755ACCAA',
-    note: '整修期間至 2026 年 12 月 14 日，3 樓圖書與閱覽區、4 樓視聽室及樂齡學習中心暫停開放。3 樓館藏可線上預約到館取書。',
+    url: 'https://reading.tpml.gov.taipei/News_Content.aspx?n=B3B7F57C7B16FDE6&s=4A1259C6B21F2AA5&sms=78D644F2755ACCAA',
+    note: '整修期間至 2026 年 12 月 14 日，3 樓圖書與閱覽區、4 樓視聽室及樂齡學習中心暫停開放。3 樓館藏可線上預約到館取書。密集書庫館藏及裝訂期刊暫停借閱、查詢及預約。',
   },
   'plis-a2f0f325a9d82ca850f0': {
     url: 'https://www.library.ntpc.gov.tw/singlehtml/ActvInfo?cntId=46cff6829c18462fadbd5e49dccbea78',

@@ -1060,6 +1060,10 @@ const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/det
 const yuliLibrary = 'https://www.hlyl.gov.tw/cl.aspx?n=20261';
 const yuliReadingRules = 'https://www.hlyl.gov.tw/cl.aspx?n=21246';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-00259e7a928da5c62131': {
+    name: '一般民眾閱覽室', kind: 'reading', slots: null, access: null, equipment: {},
+    sources: ['https://kllib.klcg.gov.tw/cp.aspx?n=7936'],
+  },
   'plis-7d3a7de84e59a626b045': ['2 樓閱讀室', '地下 1 樓閱讀室'].map((name): Area => ({
     name, kind: 'reading', slots: null, access: null, equipment: {},
     entryNote: '離座逾 30 分鐘未歸，館方得取消該座位的使用權。',

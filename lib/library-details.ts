@@ -1394,6 +1394,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string; additionalSource?: string } | undefined> = {
+  'plis-0e21ed69e80b8f68b768': {
+    url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=020&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
+    note: '鄉公所列週六 08:00 開館，縣圖目錄列 08:30。週六 08:30 前到館請先向館方確認。',
+  },
   'plis-917334d7cea0e59828e0': {
     url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/031',
     note: '館方介紹列一般閱覽區、期刊區、兒童閱覽區及資訊檢索區，全館共 27 席。',
@@ -1613,6 +1617,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-0e21ed69e80b8f68b768': {
+    url: 'https://tapi.yunlin.gov.tw/cp.aspx?n=14339',
+    hours: '週二至週五 08:00–17:30，週六 08:00–18:00，中午照常開館。週日、週一及國定假日休館。',
+    supersedesDirectory: true,
+  },
   'plis-34ea4e3647b8191ffef9': {
     supersedesDirectory: true,
     url: 'https://library.chiayi.gov.tw/wSite/sp?xdUrl=/wSite/ApBlock/Library.jsp&orgId=003&mp=1&idPath=5217_5222_5236',

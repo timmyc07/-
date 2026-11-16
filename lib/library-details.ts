@@ -1052,6 +1052,16 @@ const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/det
 const yuliLibrary = 'https://www.hlyl.gov.tw/cl.aspx?n=20261';
 const yuliReadingRules = 'https://www.hlyl.gov.tw/cl.aspx?n=21246';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-ebb42497618c005f1223': {
+    name: '一般閱覽座位', kind: 'reading', slots: null, access: 'walk-in', equipment: {},
+    entryNote: '自由入座，請勿預佔。納入座位管理系統的座位及空間另依各區規則。',
+    sources: ['https://www.library.ntpc.gov.tw/singlehtml/e81f432c17614ea4b732e114c365e29b?cntId=05f2edcca862459391c398d20c470a05'],
+  },
+  'plis-1b4fab4fae6901d46c23': {
+    name: '一般閱覽座位', kind: 'reading', slots: null, access: 'walk-in', equipment: {},
+    entryNote: '自由入座，請勿預佔。座位管理系統管理的座位另依各區規則。',
+    sources: ['https://www.tnpl.tn.edu.tw/n15361206559179021249/n1Content'],
+  },
   'plis-2795b0ebc2c7f0ecfff2': {
     name: '3 樓一般閱覽座位', kind: 'reading', seats: 80, slots: null, access: null, equipment: {},
     sources: ['https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=84CAF73F014CA323&sms=CFFFC938B352678A'],

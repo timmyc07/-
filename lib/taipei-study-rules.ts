@@ -20,6 +20,7 @@ const taipeiStudyWifi = new Set([
   'plis-e0e7f601f41ffc98e2aa', 'plis-9f8e62981180e7c9a7d3', 'plis-e3287dc94a64c9288833',
 ]);
 const newTaipeiRule = 'https://www.library.ntpc.gov.tw/singlehtml/e81f432c17614ea4b732e114c365e29b?cntId=26b1530a3e724f44892b6cb0c7c7c5ed';
+const newTaipeiReadingRule = 'https://www.library.ntpc.gov.tw/singlehtml/e81f432c17614ea4b732e114c365e29b?cntId=d52799f735b74dafbb11ecb8b87a4360';
 const studyConstruction: Record<string, { name: string; closure: Closure; sources?: string[] } | undefined> = {
   'plis-e560724330a3485ec121': {
     name: '3 樓自修室',
@@ -198,10 +199,11 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
       equipment: { ...withSeats.equipment,
         ...(seats?.poweredSeats || seats?.laptopSeats ? { laptop: true } : {}),
         ...(conflictingOutlet ? {} : { outlet: Boolean(seats?.poweredSeats) }) },
-      entryNote: conflictingOutlet
-        ? '現場入座。分館介紹與自修室管理要點的充電資訊不同，請向館方確認。'
-        : '現場入座，館方得於開館前發放號碼牌。' + (seats?.poweredSeats ?? seats?.laptopSeats ?? seats?.note ?? ''),
-      sources: [...withSeats.sources, newTaipeiRule,
+      entryNote: '現場入座，每人限一席，請勿預佔。館方得於開館前發放號碼牌，請依序領牌入座。'
+        + '暫離以 1 小時為限，館方會巡查，首次發現會放置巡查單，第二次巡查得清空座位。'
+        + (conflictingOutlet ? '分館介紹與自修室管理要點的充電資訊不同，請向館方確認。'
+          : seats?.poweredSeats ?? seats?.laptopSeats ?? seats?.note ?? ''),
+      sources: [...withSeats.sources, newTaipeiRule, newTaipeiReadingRule,
         ...(construction ? [construction.closure.url, ...(construction.sources ?? [])] : [])],
     };
   }

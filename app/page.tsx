@@ -253,27 +253,29 @@ function LibraryCard({ library, area, status, reasons, closure, openUntil, dista
     {visit && <div className="source-links">{visit.links.map(([label, url]) => <a key={url} href={url}>{label} ↗</a>)}</div>}
     <details>
       <summary>使用規則與來源</summary>
-      <dl>
-        <dt>入場</dt><dd>{area?.entryNote ?? (area?.access === 'walk-in' ? '現場入座' : area?.access === 'card' ? '個人借閱證，須預約或現場登記' : area?.access === 'restricted' ? '限指定身分' :
-          area?.access === 'conditional' ? '須符合校外訪客資格' : '待確認')}</dd>
-        {library.reviewNote && !library.accessNote && <><dt>規則核對</dt><dd>{library.reviewNote}</dd></>}
-        {library.accessNote && <><dt>館方補充</dt><dd>{library.accessNote}</dd></>}
-        <dt>每週開放</dt><dd>{area?.slots?.map((slot) => <span className="slot" key={slot.day + ':' + slot.start}>
-          週{weekdays[slot.day]} {clock(slot.start)}–{clock(slot.end)}</span>) ?? '空間時段待確認'}</dd>
-        {!area?.slots && library.schedule?.length ? <><dt>館舍開放時間</dt><dd>{library.schedule.map((slot) =>
-          <span className="slot" key={slot.day + ':' + slot.start}>週{weekdays[slot.day]} {clock(slot.start)}–{clock(slot.end)}</span>)}</dd></> : null}
-        {library.openingHours && <><dt>館方公告的開放時間</dt><dd className="opening-hours">{library.openingHours}</dd></>}
-        <dt>設備</dt><dd>{facilityKeys.map((key) => facilities[key] + ' ' +
-          (area?.equipment[key] === true ? '有' : area?.equipment[key] === false ? '未提供' : '待確認')).join(' · ')}</dd>
-        {library.facilities?.length ? <><dt>館舍設備</dt><dd>{library.facilities.join('、')}</dd></> : null}
-        {library.phone && <><dt>電話</dt><dd>{library.phone}</dd></>}
-        {library.fax && <><dt>傳真</dt><dd>{library.fax}</dd></>}
-      </dl>
-      <div className="source-links">
-        {library.website && <a href={library.website}>館方網站 ↗</a>}
-        {library.ruleLinks?.map((link, index) => <a key={link} href={link}>館方規則 {index + 1} ↗</a>)}
-        {[...new Set([...(area?.sources ?? []), ...library.sources, ...(library.notices ?? [])])].map((source, index) =>
-          <a href={source} key={source}>來源 {index + 1} ↗</a>)}
+      <div className="disclosure-body">
+        <dl>
+          <dt>入場</dt><dd>{area?.entryNote ?? (area?.access === 'walk-in' ? '現場入座' : area?.access === 'card' ? '個人借閱證，須預約或現場登記' : area?.access === 'restricted' ? '限指定身分' :
+            area?.access === 'conditional' ? '須符合校外訪客資格' : '待確認')}</dd>
+          {library.reviewNote && !library.accessNote && <><dt>規則核對</dt><dd>{library.reviewNote}</dd></>}
+          {library.accessNote && <><dt>館方補充</dt><dd>{library.accessNote}</dd></>}
+          <dt>每週開放</dt><dd>{area?.slots?.map((slot) => <span className="slot" key={slot.day + ':' + slot.start}>
+            週{weekdays[slot.day]} {clock(slot.start)}–{clock(slot.end)}</span>) ?? '空間時段待確認'}</dd>
+          {!area?.slots && library.schedule?.length ? <><dt>館舍開放時間</dt><dd>{library.schedule.map((slot) =>
+            <span className="slot" key={slot.day + ':' + slot.start}>週{weekdays[slot.day]} {clock(slot.start)}–{clock(slot.end)}</span>)}</dd></> : null}
+          {library.openingHours && <><dt>館方公告的開放時間</dt><dd className="opening-hours">{library.openingHours}</dd></>}
+          <dt>設備</dt><dd>{facilityKeys.map((key) => facilities[key] + ' ' +
+            (area?.equipment[key] === true ? '有' : area?.equipment[key] === false ? '未提供' : '待確認')).join(' · ')}</dd>
+          {library.facilities?.length ? <><dt>館舍設備</dt><dd>{library.facilities.join('、')}</dd></> : null}
+          {library.phone && <><dt>電話</dt><dd>{library.phone}</dd></>}
+          {library.fax && <><dt>傳真</dt><dd>{library.fax}</dd></>}
+        </dl>
+        <div className="source-links">
+          {library.website && <a href={library.website}>館方網站 ↗</a>}
+          {library.ruleLinks?.map((link, index) => <a key={link} href={link}>館方規則 {index + 1} ↗</a>)}
+          {[...new Set([...(area?.sources ?? []), ...library.sources, ...(library.notices ?? [])])].map((source, index) =>
+            <a href={source} key={source}>來源 {index + 1} ↗</a>)}
+        </div>
       </div>
     </details>
     {originalLink && <Link className="backup-link" href={originalLink}>以此館為原定地點找備案 →</Link>}

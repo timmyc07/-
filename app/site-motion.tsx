@@ -4,9 +4,9 @@ import { motion, useScroll } from 'motion/react';
 import type { ReactNode } from 'react';
 
 // Adapted from Magic UI's Blur Fade and Scroll Progress (MIT).
-const initial = { opacity: 0.88, y: 6 };
+const initial = { opacity: 0.78, y: 10 };
 const reveal = { opacity: 1, y: 0 };
-const transition = { duration: 0.28, ease: 'easeOut' } as const;
+const transition = { duration: 0.34, ease: 'easeOut' } as const;
 
 export function BlurFade({ children, className, inView = false, as = 'div' }: {
   children: ReactNode;

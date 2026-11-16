@@ -69,7 +69,7 @@ export default async function FieldAudit({ searchParams }: {
     <h2 className="audit-history">匯入異動紀錄</h2>
     {history.length ? history.map(({ importedAt, changes }) => <details key={importedAt}>
       <summary><time dateTime={importedAt}>{taipeiDateTime.format(new Date(importedAt))}</time> · {changes.length} 項異動</summary>
-      <div className="table-wrap"><table>
+      <div className="table-wrap disclosure-body"><table>
         <thead><tr><th scope="col">館舍</th><th scope="col">空間</th><th scope="col">欄位</th>
           <th scope="col">匯入前</th><th scope="col">匯入後</th></tr></thead>
         <tbody>{changes.map((change) => <tr key={JSON.stringify([change.libraryId, change.area, change.field])}>
@@ -89,8 +89,10 @@ function Evidence({ review, sources = review?.sources ?? [], showDate }: {
     {showDate && review && <div><time dateTime={review.checkedOn}>{review.checkedOn}</time></div>}
     {review && <div>{review.note}</div>}
     {sources.length > 0 && <details><summary>{review ? '欄位證據' : '館舍或空間參考來源'}</summary>
-      <div className="source-links">{sources.map((source, i) =>
-        <a key={source} href={source}>來源 {i + 1} ↗</a>)}</div>
+      <div className="disclosure-body">
+        <div className="source-links">{sources.map((source, i) =>
+          <a key={source} href={source}>來源 {i + 1} ↗</a>)}</div>
+      </div>
     </details>}
   </>;
 }

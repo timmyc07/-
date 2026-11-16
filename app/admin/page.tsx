@@ -31,8 +31,10 @@ export default async function Admin() {
         <li><a href="/datasets/library-directory.json" download>下載 StudyGo 整理後的館舍名錄（JSON）</a> · 縣市筆數、排除紀錄和原始檔雜湊</li>
       </ul>
       <details><summary>各縣市名錄筆數</summary>
-        <ul className="city-counts">{Object.entries(directory.cityCounts).map(([name, count]) =>
-          <li key={name}>{name} {count} 筆</li>)}</ul>
+        <div className="disclosure-body">
+          <ul className="city-counts">{Object.entries(directory.cityCounts).map(([name, count]) =>
+            <li key={name}>{name} {count} 筆</li>)}</ul>
+        </div>
       </details>
     </section>
     <section className="audit-history" aria-labelledby="taichung-title">

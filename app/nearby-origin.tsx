@@ -47,8 +47,7 @@ export default function NearbyOrigin({ libraries, initialOrigin, position }: {
       {libraries.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
     </select></label>
     {origin === 'me' && position && <input type="hidden" name="position" value={position} />}
-    <button type="button" onClick={locate} disabled={locating} aria-describedby="location-note">使用我的位置查詢</button>
-    <small id="location-note">允許定位後，查詢網址會包含約略座標。</small>
+    <button type="button" onClick={locate} disabled={locating}>使用我的位置查詢</button>
     <span role="status">{message}</span>
   </div>;
 }

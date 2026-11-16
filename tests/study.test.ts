@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import { directionsUrl, distanceKm, parseCoordinates } from '../lib/distance.ts';
 import { auditRows, diffAuditFields } from '../lib/field-audit.ts';
 import type { FieldReview } from '../lib/field-audit.ts';
+import { sourcesByHost } from '../lib/source-catalog.ts';
 import { backupLibraries, coverageGaps, evaluate, isPublicLibrary, validDate } from '../lib/study.ts';
 import type { Area, Library, Query } from '../lib/study.ts';
 import { pilotVisit } from '../lib/taichung-visits.ts';
@@ -19,6 +20,29 @@ const library: Library = {
 const query: Query = {
   date: '2026-11-12', start: 630, duration: 120, kind: 'study', required: [],
 };
+
+test('頁尾來源依網域去重並涵蓋空間、休館、預約與核對紀錄', () => {
+  const closure = { from: query.date, reason: '臨時休館', url: 'https://example.org/closed' };
+  const review: FieldReview = {
+    libraryId: library.id, area: area.name, field: 'studyHours', checkedOn: query.date,
+    value: null, note: '', sources: ['https://example.org/review'],
+  };
+  const venue = {
+    ...library, website: 'https://example.org/', sources: ['https://example.org', 'javascript:alert(1)'],
+    closures: [closure],
+    areas: [{ ...area, sources: ['https://example.org/area'], reservation: 'https://seat.example.org/reserve',
+      closures: [closure] }],
+  };
+  const groups = new Map(sourcesByHost([venue], {
+    _id: 'taichung', importedAt: query.date, sourceCounts: { city: 0, branches: 0, publicLibraries: 0 },
+    issues: [], libraries: [venue], fieldReviews: [review],
+  }));
+  assert.deepEqual([...groups.get('example.org')!.keys()], [
+    'https://example.org/', 'https://example.org/closed', 'https://example.org/area', 'https://example.org/review',
+  ]);
+  assert.deepEqual([...groups.get('seat.example.org')!.keys()], ['https://seat.example.org/reserve']);
+  assert.equal(groups.size, 2);
+});
 
 test('公立館清單排除學校、私立、混合館別及未分類館舍', () => {
   const publicLibrary = { ...library, types: ['公共圖書館'] };

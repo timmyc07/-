@@ -1,8 +1,10 @@
 import Form from 'next/form';
 import Image from 'next/image';
 import Link from 'next/link';
+import DurationField from './duration-field.tsx';
 import NearbyOrigin from './nearby-origin.tsx';
 import RegionFilters from './region-filters.tsx';
+import SiteFooter from './site-footer.tsx';
 import { BlurFade } from './site-motion.tsx';
 import directory from '../public/datasets/library-directory.json';
 import details from '../public/datasets/library-details.json';
@@ -42,6 +44,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const statusFilter = view && Object.hasOwn(statuses, view) ? view as keyof typeof statuses : '';
   const page = Math.max(1, Number.parseInt(get('page') ?? '1', 10) || 1);
   const searched = get('search') === '1';
+  const showSources = get('sources') === '1';
   const invalid = searched && (!validDate(date) || !timePattern.test(start) ||
     !Number.isInteger(duration) || duration < 1 || minutes(start) + duration > 1440);
   const query: Query = { date, start: minutes(start), duration, kind, required: equipment };
@@ -58,7 +61,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   for (const library of libraries) if (library.district) regions.get(library.city)!.add(library.district);
   const districtsByCity = Object.fromEntries([...regions].map(([name, districts]) =>
     [name, [...districts].sort((a, b) => a.localeCompare(b, 'zh-Hant'))]));
-  const formKey = JSON.stringify(Object.entries(params).filter(([key]) => key !== 'page' && key !== 'view').sort());
+  const formKey = JSON.stringify(Object.entries(params).filter(([key]) => !['page', 'view', 'sources'].includes(key)).sort());
   const selected = libraries.find((library) => library.id === original);
   const originLibrary = libraries.find((library) => library.id === near && library.coordinates);
   const origin = position ?? originLibrary?.coordinates;
@@ -91,14 +94,14 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const featured = checked.slice(0, 4);
   const resultsKey = JSON.stringify([formKey, statusFilter, currentPage]);
 
-  function href(changes: Record<string, string>) {
+  function href(changes: Record<string, string>, section = 'results') {
     const next = new URLSearchParams();
-    for (const [key, value] of Object.entries(params)) if (typeof value === 'string') next.set(key, value);
+    for (const [key, value] of Object.entries(params)) if (key !== 'sources' && typeof value === 'string') next.set(key, value);
     for (const [key, value] of Object.entries(changes)) {
       if (value) next.set(key, value);
       else next.delete(key);
     }
-    return '/?' + next.toString() + '#results';
+    return '/?' + next.toString() + '#' + section;
   }
 
   return <>
@@ -146,7 +149,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
           <RegionFilters initialCity={city} initialDistrict={district} districtsByCity={districtsByCity} />
           <label>日期<input type="date" name="date" defaultValue={date} required /></label>
           <label>開始時間<input type="time" name="start" defaultValue={start} required /></label>
-          <label>使用時長（分鐘）<input type="number" name="duration" min="1" max="1440" defaultValue={Number.isFinite(duration) ? duration : 120} required /></label>
+          <DurationField minutes={Number.isFinite(duration) ? duration : 120} />
           <label>空間類型<select name="kind" defaultValue={kind}><option value="">所有空間</option>
             {Object.entries(kindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
           <label>館名或地址<input type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="例如 大墩分館" /></label>
@@ -210,10 +213,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
           </>}
         </BlurFade>
       </section>
-      <footer className="shell">全臺名錄擷取 {new Date(directory.collectedAt).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' })}
-        {' · '}<Link href="/admin">資料來源與下載</Link> · 出發前請查看最新館方公告
-      </footer>
     </main>
+    <SiteFooter libraries={libraries} snapshot={snapshot} expanded={showSources}
+      indexHref={href({ sources: showSources ? '' : '1' }, 'sources')} />
   </>;
 }
 

@@ -150,6 +150,10 @@ const studyHours: Record<string, StudyHours | undefined> = {
   'plis-7d5f6b4a8aae37204a84': {
     name: '自修室', ranges: [], url: 'https://libstat.ncl.edu.tw/libraryDataDetail/L3457000',
   },
+  'plis-50a85fd5bd2678f089ba': {
+    name: '1 樓自修室', ranges: [],
+    url: 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=E90637FFE06B2379',
+  },
   'plis-d4bafe538b622515b304': {
     name: '3 樓自習室', ranges: [['13456', '08:30', '20:30'], ['0', '08:30', '17:00']],
     url: 'https://www.changhua.gov.tw/Content/192',

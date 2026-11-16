@@ -203,8 +203,8 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
     facilities: ['期刊閱報室', '兒童室', '網路資源室', '書庫', '4 樓讀者自修室'],
   },
   'plis-50a85fd5bd2678f089ba': {
-    url: 'https://gutss.blogspot.com/2023/11/blog-post_21.html',
-    facilities: ['1 樓自修區', '閱報室', '4 樓讀者上網區', '期刊雜誌閱覽區', '親子與兒童閱覽區', '5 樓書庫', '視聽室'],
+    url: 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=E90637FFE06B2379',
+    facilities: ['1 樓自修室', '1 樓報紙閱覽區', '4 樓讀者上網區', '4 樓期刊閱覽區', '4 樓兒童圖書室及親子閱覽區', '5 樓成人圖書室及閱覽區', '5 樓視聽室'],
   },
   'plis-5931f90c2b78f1094592': {
     url: xinyuanUrl,
@@ -1528,7 +1528,7 @@ const serviceUpdates: Record<string, { url: string; note: string } | undefined> 
   },
   'plis-50a85fd5bd2678f089ba': {
     url: 'https://www.cultural.pthg.gov.tw/library/cp.aspx?n=CDFE6D1C65C796B9&s=E90637FFE06B2379',
-    note: '縣府館舍頁列有一樓自修室，國家圖書館館別統計列為無自修室。現況與使用時段請洽館方。',
+    note: '縣府館舍頁列有 1 樓自修室，約 64 席。國家圖書館館別統計列為無自修室，使用時段請洽館方。',
   },
   'plis-38c1c05b0d447cb39563': {
     url: 'https://www.library.ntpc.gov.tw/Kids/singlehtml/2282e79138184d328d2e70de42f23318?cntId=-1534781038',

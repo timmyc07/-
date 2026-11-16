@@ -2400,8 +2400,8 @@ function localStudyRoom(id: string, area: Area): Area {
   if (id === 'plis-f3080ccd8c34dad70222') {
     return { ...area, name: '2 樓閱覽室（自修室）', access: 'walk-in',
       closures: penghuStudyClosures, equipment: { laptop: true, wifi: true },
-      entryNote: '筆電等電子設備請保持靜音。請勿預佔座位，考季期間可能不定時清場。',
-      sources: [...area.sources, penghuMainUrl] };
+      entryNote: '筆電等電子設備請保持靜音。館內供筆電、平板及手機使用電源，請勿使用延長線。請勿預佔座位，離座時請帶走個人物品，考季期間可能不定時清場。',
+      sources: [...area.sources, penghuMainUrl, 'https://www.phlib.nat.gov.tw/wSite/ct?ctNode=5248&idPath=5217_5225_5248&mp=1&xItem=9875'] };
   }
   if (id === 'plis-8e698a4770cf01e3875e') {
     return { ...area, seats: 147, access: 'conditional',

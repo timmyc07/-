@@ -1,6 +1,7 @@
 import type { FieldChangeBatch, FieldReview } from './field-audit.ts';
 
 export const facilities = { laptop: '筆電', wifi: 'Wi-Fi', outlet: '座位插座' };
+export const documentLabels = { none: '不需特定證件', required: '需要特定證件', unknown: '證件需求待確認' };
 export const regionalCards = {
   taipei: '臺北市圖個人借閱證', newTaipei: '新北市圖個人借閱證',
   nationalTaiwan: '國立臺灣圖書館個人借閱證',
@@ -11,6 +12,7 @@ export const regionalCards = {
   taitung: '臺東縣公共圖書館借閱證',
 };
 export type Facility = keyof typeof facilities;
+export type DocumentRequirement = keyof typeof documentLabels;
 export type Slot = { day: number; start: number; end: number };
 export type Area = {
   closures?: Closure[];
@@ -20,6 +22,7 @@ export type Area = {
   slotPeriod?: { from: string; until: string };
   limitedOpening?: { from: string; until: string; name: string; entryNote?: string };
   access: 'walk-in' | 'card' | 'restricted' | 'conditional' | null;
+  entryDocuments?: DocumentRequirement;
   regionalCard?: keyof typeof regionalCards;
   entryNote?: string;
   walkInDates?: (string | { date: string; start: number; end: number })[];
@@ -74,9 +77,6 @@ export type Query = {
   start: number;
   duration: number;
   kind: Area['kind'] | '';
-  card: boolean;
-  regionalCards?: (keyof typeof regionalCards)[];
-  registration: boolean;
   required: Facility[];
 };
 export const kindLabels = { study: '自修室', quiet: '安靜閱覽區', reading: '一般閱覽區' };
@@ -103,6 +103,12 @@ export function coversCalendarYear(library: Library, year: number) {
   return library.calendarYear === year || library.calendarYears?.includes(year) === true;
 }
 
+export function entryDocumentRequirement(area: Area | undefined): DocumentRequirement {
+  if (area?.entryDocuments) return area.entryDocuments;
+  if (area?.access === 'card') return 'required';
+  return area?.access === 'walk-in' ? 'none' : 'unknown';
+}
+
 export function evaluate(library: Library, area: Area | undefined, query: Query) {
   const end = query.start + query.duration;
   const limited = area?.limitedOpening;
@@ -112,7 +118,7 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
   const walkIn = area?.walkInDates?.find((opening) => typeof opening === 'string' ? opening === query.date :
     opening.date === query.date && opening.start <= query.start && end <= opening.end);
   if (area && walkIn) {
-    area = { ...area, access: 'walk-in', reservation: undefined };
+    area = { ...area, access: 'walk-in', entryDocuments: 'none', entryNote: undefined, reservation: undefined };
   }
   const missing: string[] = [];
   const failed: string[] = [];
@@ -146,12 +152,6 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
     if (area.access === null) missing.push('入場資格或預約方式待確認');
     if (area.access === 'conditional') missing.push('依館方規則須符合訪客條件');
     if (area.access === 'restricted') failed.push('限指定身分使用');
-    if (!changed && area.access === 'card') {
-      const hasCard = area.regionalCard ? query.regionalCards?.includes(area.regionalCard) : query.card;
-      const cardName = area.regionalCard ? regionalCards[area.regionalCard] : '國資圖或臺中市圖個人借閱證';
-      if (!hasCard) failed.push('需持' + cardName);
-      if (!query.registration) failed.push(area.regionalCard === 'newTaipei' ? '需現場登記' : '需預約或現場登記');
-    }
     for (const equipment of query.required) {
       const available = area.equipment[equipment];
       if (available === false) failed.push('空間未提供' + facilities[equipment]);
@@ -166,6 +166,7 @@ export function evaluate(library: Library, area: Area | undefined, query: Query)
   }
   return {
     area,
+    documents: changed && !walkIn ? 'unknown' : entryDocumentRequirement(area),
     status: failed.length ? 'no' : missing.length ? 'unknown' : 'yes',
     reasons: [...failed, ...missing],
     closure,

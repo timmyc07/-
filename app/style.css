@@ -55,9 +55,9 @@ h1{font-size:clamp(36px,4.5vw,62px);line-height:1.22;letter-spacing:-.035em;marg
 .form-top a,.result-heading p{font-size:13px}
 .inputs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) 1.3fr;gap:10px}
 label,legend{font-weight:650;font-size:13px}
-.inputs label,.nearby-origin label{display:grid;gap:5px;min-width:0}
-.inputs input,.inputs select,.nearby-origin select{height:44px;border:1px solid var(--line);border-radius:8px;padding:0 9px;background:var(--paper);color:var(--ink);width:100%;min-width:0}
-.inputs select,.nearby-origin select{border-radius:12px;padding-inline:12px;cursor:pointer}
+.inputs label,.nearby-origin label,.document-filter{display:grid;gap:5px;min-width:0}
+.inputs input,:is(.inputs,.nearby-origin,.document-filter) select{height:44px;border:1px solid var(--line);border-radius:8px;padding:0 9px;background:var(--paper);color:var(--ink);width:100%;min-width:0}
+:is(.inputs,.nearby-origin,.document-filter) select{border-radius:12px;padding-inline:12px;cursor:pointer}
 select:disabled{cursor:not-allowed;opacity:.55}
 @supports (appearance:base-select){
   select,::picker(select){appearance:base-select}
@@ -111,6 +111,7 @@ button:hover{background:var(--accent-hover)}
 .card h3{margin:6px 0 2px;font-size:18px}
 .area{color:var(--accent);font-weight:650;margin:0 0 3px}
 .address{color:var(--muted);font-size:13px;margin-bottom:9px}
+.entry-documents{color:var(--accent);font-size:13px;font-weight:650;margin-bottom:8px}
 .card-actions{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;font-weight:650}
 .card-actions+.source-links{margin-top:6px}
 .open-until{color:var(--accent);font-size:13px;font-weight:700;margin:0 0 8px}
@@ -179,7 +180,7 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
 }
 :where(a):hover,summary:hover{color:var(--accent-hover)}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-.inputs input:focus,.inputs select:focus,.nearby-origin select:focus{border-color:var(--scroll-thumb);box-shadow:0 0 0 3px var(--soft)}
+.inputs input:focus,:is(.inputs,.nearby-origin,.document-filter) select:focus{border-color:var(--scroll-thumb);box-shadow:0 0 0 3px var(--soft)}
 .card:focus-within,.card:hover,.card:has(>details[open]){border-color:var(--scroll-thumb);box-shadow:0 10px 30px #50331e20}
 .tabs a:hover,.pager a:hover{border-color:var(--scroll-thumb)}
 tbody tr:hover,tbody tr:focus-within{background:var(--paper)}

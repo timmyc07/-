@@ -17,7 +17,7 @@ const library: Library = {
   calendarYear: 2026, areas: [area], closures: [],
 };
 const query: Query = {
-  date: '2026-11-12', start: 630, duration: 120, kind: 'study', card: false, registration: false, required: [],
+  date: '2026-11-12', start: 630, duration: 120, kind: 'study', required: [],
 };
 
 test('公立館清單排除學校、私立、混合館別及未分類館舍', () => {
@@ -108,28 +108,35 @@ test('缺少設備資料待確認，已知未提供和不符空間類型可排�
   assert.equal(evaluate(library, undefined, query).status, 'unknown');
 });
 
-test('借閱證和登記資格皆符合才可使用', () => {
+test('證件需求區分必須、免證與待確認', () => {
   const cardArea = { ...area, access: 'card' as const };
-  assert.equal(evaluate(library, cardArea, query).status, 'no');
-  assert.equal(evaluate(library, cardArea, { ...query, card: true }).status, 'no');
-  assert.equal(evaluate(library, cardArea, { ...query, card: true, registration: true }).status, 'yes');
+  assert.equal(evaluate(library, cardArea, query).documents, 'required');
+  assert.equal(evaluate(library, cardArea, query).status, 'yes');
+  assert.equal(evaluate(library, area, query).documents, 'none');
+  assert.equal(evaluate(library, undefined, query).documents, 'unknown');
+  assert.equal(evaluate(library, { ...area, access: 'conditional' }, query).documents, 'unknown');
+  assert.equal(evaluate(library, { ...area, access: 'conditional', entryDocuments: 'required' }, query).documents, 'required');
+  assert.equal(evaluate({ ...library, checkDates: [query.date] }, cardArea, query).documents, 'unknown');
 });
 
 test('館方公告的自由入座日期不要求借閱證或登記', () => {
-  const cardArea = { ...area, access: 'card' as const, reservation: 'https://example.org', walkInDates: [query.date] };
+  const cardArea = { ...area, access: 'card' as const, entryNote: '需持借閱證',
+    reservation: 'https://example.org', walkInDates: [query.date] };
   const result = evaluate(library, cardArea, query);
   assert.equal(result.status, 'yes');
   assert.equal(result.area?.access, 'walk-in');
+  assert.equal(result.documents, 'none');
+  assert.equal(result.area?.entryNote, undefined);
   assert.equal(result.area?.reservation, undefined);
-  assert.equal(evaluate(library, cardArea, { ...query, date: '2026-11-13' }).status, 'no');
+  assert.equal(evaluate(library, cardArea, { ...query, date: '2026-11-13' }).documents, 'required');
 });
 
 test('短期自由入座只適用公告時段內的查詢', () => {
   const study: Area = { ...area, access: 'card', walkInDates: [{ date: query.date, start: 570, end: 750 }] };
   assert.equal(evaluate(library, study, { ...query, start: 570, duration: 180 }).status, 'yes');
   assert.equal(evaluate(library, study, { ...query, start: 570, duration: 60 }).openUntil, 750);
-  assert.equal(evaluate(library, study, { ...query, start: 569, duration: 30 }).status, 'no');
-  assert.equal(evaluate(library, study, { ...query, start: 720, duration: 31 }).status, 'no');
+  assert.equal(evaluate(library, study, { ...query, start: 569, duration: 30 }).documents, 'required');
+  assert.equal(evaluate(library, study, { ...query, start: 720, duration: 31 }).documents, 'required');
 });
 
 test('休館優先，特殊時段與未核對年度保持待確認', () => {

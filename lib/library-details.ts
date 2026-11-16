@@ -2571,7 +2571,7 @@ function localStudyRoom(id: string, area: Area): Area {
       sources: [...area.sources, penghuMainUrl, 'https://www.phlib.nat.gov.tw/wSite/ct?ctNode=5248&idPath=5217_5225_5248&mp=1&xItem=9875'] };
   }
   if (id === 'plis-8e698a4770cf01e3875e') {
-    return { ...area, seats: 147, access: 'conditional',
+    return { ...area, seats: 147, access: 'conditional', entryDocuments: 'required',
       entryNote: '持借閱證或身分證使用座位管理系統，自由選位後對號入座，請勿預占其他座位。離座逾 1 小時未歸，館方得取消座位使用權。館方請 12 歲以下讀者使用兒童閱覽室。',
       sources: [...area.sources, 'https://glrs.nantou.gov.tw/LawContent.aspx?id=GL000630'] };
   }

@@ -453,6 +453,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   const nantouStudy = nantou.areas.find(({ kind }) => kind === 'study')!;
   assert.equal(nantouStudy.seats, 147);
   assert.match(nantouStudy.entryNote!, /借閱證或身分證.*離座逾 1 小時/);
+  assert.equal(nantouStudy.entryDocuments, 'required');
   const periodicals = nantou.areas.find(({ kind }) => kind === 'reading')!;
   assert.equal(periodicals.seats, 80);
   assert.equal(periodicals.access, 'conditional');
@@ -551,7 +552,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.deepEqual(chenggong.areas[0].slots?.[0], { day: 0, start: minutes('08:00'), end: minutes('17:00') });
   const huangbin = libraries.find(({ id }) => id === 'plis-eb5cc227330385ea9b00')!;
   const result = evaluate(huangbin, undefined, {
-    date: '2026-11-15', start: minutes('14:00'), duration: 120, kind: 'study', card: false, registration: false, required: [],
+    date: '2026-11-15', start: minutes('14:00'), duration: 120, kind: 'study', required: [],
   });
   assert.equal(result.status, 'no');
   assert.equal(result.closure?.from, '2026-03-02');
@@ -599,8 +600,7 @@ test('臺南溫書窩採專室入場及設備規則，其他館舍的入座方�
   assert.equal(area.seats, 130);
   assert.equal(area.equipment.laptop, false);
   const query = {
-    date: '2026-11-28', start: minutes('14:00'), duration: 120, registration: true, card: false,
-    kind: 'study' as const, required: [], regionalCards: ['tainan' as const],
+    date: '2026-11-28', start: minutes('14:00'), duration: 120, kind: 'study' as const, required: [],
   };
   assert.equal(evaluate(main, area, query).closure?.reason, '選舉日休館');
   assert.equal(evaluate(main, area, { ...query, date: '2026-11-29' }).status, 'yes');
@@ -706,7 +706,7 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
   assert.equal(study.slots?.find(({ day }) => day === 2)?.end, minutes('21:00'));
   const query = {
     date: '2026-11-28', start: minutes('14:00'), duration: 120,
-    kind: 'study' as const, card: false, registration: false, required: [],
+    kind: 'study' as const, required: [],
   };
   assert.equal(evaluate(cijin, cijin.areas[0], query).closure?.reason, '選舉日休館');
   const main = libraries.find(({ name }) => name === '高雄市立圖書館')!;
@@ -714,7 +714,7 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
   assert(main.checkDates?.includes(query.date));
 });
 
-test('雙北入座規則依館別套用，借閱證不可跨系統代用', () => {
+test('雙北入座規則依館別保留證件與登記要求', () => {
   const { libraries: details } = JSON.parse(readFileSync(new URL('library-details.json', root), 'utf8')) as {
     libraries: Record<string, LibraryDetail>;
   };
@@ -739,13 +739,14 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   assert(donghu.closures.some(({ from, until }) => from === '2026-11-16' && until === from));
   const query = {
     date: '2026-11-15', start: minutes('14:00'), duration: 120,
-    kind: 'study' as const, card: true, registration: true, required: [],
+    kind: 'study' as const, required: [],
   };
-  assert(evaluate(daoxiang, area, query).reasons.includes('需持臺北市圖個人借閱證'));
-  assert.equal(evaluate(daoxiang, area, { ...query, regionalCards: ['taipei'] }).status, 'yes');
+  assert.equal(evaluate(daoxiang, area, query).documents, 'required');
+  assert.equal(evaluate(daoxiang, area, query).status, 'yes');
+  assert.equal(evaluate(qingjiang, qingjiang.areas[0], query).documents, 'unknown');
   const main = get('新北市立圖書館');
-  assert(evaluate(main, main.areas[0], { ...query, registration: false, regionalCards: ['newTaipei'] })
-    .reasons.includes('需現場登記'));
+  assert.equal(evaluate(main, main.areas[0], query).documents, 'required');
+  assert.match(main.areas[0].entryNote!, /借閱證在館內機台登記/);
   const sanxia = get('新北市立圖書館三峽分館').areas[0];
   assert.equal(sanxia.access, 'walk-in');
   assert.equal(sanxia.equipment.outlet, false);
@@ -764,7 +765,7 @@ test('雙北入座規則依館別套用，借閱證不可跨系統代用', () =>
   assert(!chongde.closures.some(({ from }) => from === '2026-06-08'));
   assert.match(get('新北市立圖書館三重分館').accessNote!, /5 月 27 日/);
   const request = { date: '2026-12-10', start: minutes('14:00'), duration: 60,
-    kind: 'study' as const, card: false, registration: false, required: [] };
+    kind: 'study' as const, required: [] };
   const zhonggang = get('新北市立圖書館新莊中港分館');
   const zhonggangStudy = zhonggang.areas.find(({ kind }) => kind === 'study')!;
   for (const date of ['2026-11-02', '2026-11-14']) {
@@ -827,13 +828,11 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   for (const { closures } of libraries) {
     assert(closures.every(({ from, until }) => validDate(from) && (!until || validDate(until) && until >= from)));
   }
-  const query = {
+  const taipeiQuery = {
     date: '2027-02-09', start: minutes('14:00'), duration: 120,
-    kind: 'study' as const, card: false, registration: true, required: [],
-    regionalCards: ['taipei'] as const,
+    kind: 'study' as const, required: [],
   };
   const taipei = libraries.find(({ name }) => name === '臺北市立圖書館稻香分館')!;
-  const taipeiQuery = { ...query, regionalCards: [...query.regionalCards] };
   const baoshan = libraries.find(({ id }) => id === 'plis-d31d9ccdab3c7bcf9ff3')!;
   assert.equal(evaluate(baoshan, undefined, { ...taipeiQuery, date: '2026-11-28' }).closure?.reason, '選舉日休館');
   assert(baoshan.checkDates?.includes('2026-11-27'));
@@ -928,7 +927,7 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   const deviceSeats = ntl.areas.find(({ name }) => name === '3 樓行動裝置座位區')!;
   assert.equal(deviceSeats.seats, 50);
   const deviceQuery = { ...taipeiQuery, date: '2026-11-19', kind: 'reading' as const, start: minutes('08:00'),
-    duration: 60, regionalCards: ['nationalTaiwan' as const], registration: true, required: ['outlet' as const] };
+    duration: 60, required: ['outlet' as const] };
   assert.equal(evaluate(ntl, deviceSeats, deviceQuery).status, 'yes');
   assert.equal(evaluate(ntl, deviceSeats, { ...deviceQuery, date: '2026-11-16' }).status, 'no');
   assert.equal(coversCalendarYear(libraries.find(({ name }) => name === '新北市烏來區立圖書館')!, 2026), false);
@@ -949,12 +948,11 @@ test('年度休館按館方範圍套用，部分開放與跨年時段各自判�
   assert.equal(evaluate(yanshui, undefined, { ...taipeiQuery, date: '2026-11-21' }).closure, undefined);
   const dayuan = libraries.find(({ name }) => name === '桃園市立圖書館大園分館')!;
   assert.equal(dayuan.areas[0].seats, 147);
-  const taoyuanQuery = { ...taipeiQuery, regionalCards: ['taoyuan' as const] };
-  assert.equal(evaluate(dayuan, dayuan.areas[0], { ...taoyuanQuery, date: '2026-10-24' }).closure?.reason, '薔琵颱風休館');
-  assert.equal(evaluate(dayuan, dayuan.areas[0], { ...taoyuanQuery, date: '2026-11-26' }).status, 'no');
-  assert.equal(evaluate(dayuan, dayuan.areas[0], { ...taoyuanQuery, date: '2026-11-27' }).status, 'yes');
+  assert.equal(evaluate(dayuan, dayuan.areas[0], { ...taipeiQuery, date: '2026-10-24' }).closure?.reason, '薔琵颱風休館');
+  assert.equal(evaluate(dayuan, dayuan.areas[0], { ...taipeiQuery, date: '2026-11-26' }).status, 'no');
+  assert.equal(evaluate(dayuan, dayuan.areas[0], { ...taipeiQuery, date: '2026-11-27' }).status, 'yes');
   const qiding = libraries.find(({ name }) => name === '桃園市立圖書館崎頂分館')!;
-  assert.match(evaluate(qiding, qiding.areas[0], { ...taoyuanQuery, date: '2026-11-27' }).closure!.reason, /搬遷/);
+  assert.match(evaluate(qiding, qiding.areas[0], { ...taipeiQuery, date: '2026-11-27' }).closure!.reason, /搬遷/);
   const keelung = libraries.find(({ name }) => name === '基隆市公共圖書館總館')!;
   const taitungCounty = libraries.find(({ id }) => id === 'plis-674920ab9a5621eaf6cf')!;
   assert.match(evaluate(taitungCounty, undefined, { ...taipeiQuery, date: '2026-11-28' }).closure!.reason, /選舉日休館/);

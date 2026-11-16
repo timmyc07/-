@@ -9,8 +9,9 @@ import details from '../public/datasets/library-details.json';
 import { withAnnouncedLibraries, withLibraryDetail, withTaichungDirectoryDetails, type LibraryDetail } from '../lib/library-details.ts';
 import { directionsUrl, distanceKm, parseCoordinates } from '../lib/distance.ts';
 import { taichungSnapshot } from '../lib/mongodb.ts';
-import { backupLibraries, clock, evaluate, facilities, kindLabels, minutes, regionalCards, timePattern, validDate, weekdays } from '../lib/study.ts';
-import type { Area, Facility, Library, Query } from '../lib/study.ts';
+import { backupLibraries, clock, documentLabels, entryDocumentRequirement, evaluate, facilities, kindLabels, minutes,
+  regionalCards, timePattern, validDate, weekdays } from '../lib/study.ts';
+import type { Area, DocumentRequirement, Facility, Library, Query } from '../lib/study.ts';
 import { pilotVisit } from '../lib/taichung-visits.ts';
 
 type RegionalLibrary = Library & { city: string };
@@ -29,6 +30,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const requestedKind = get('kind');
   const kind = requestedKind && Object.hasOwn(kindLabels, requestedKind) ? requestedKind as Area['kind'] : '';
   const equipment = facilityKeys.filter((key) => get(key) === 'on');
+  const requestedDocuments = get('documents');
+  const documentFilter = requestedDocuments === 'required' || requestedDocuments === 'none' ? requestedDocuments : '';
   const district = get('district') ?? '';
   const city = get('city') ?? (district ? '臺中市' : '');
   const keyword = (get('q') ?? '').trim().slice(0, 100);
@@ -41,10 +44,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const searched = get('search') === '1';
   const invalid = searched && (!validDate(date) || !timePattern.test(start) ||
     !Number.isInteger(duration) || duration < 1 || minutes(start) + duration > 1440);
-  const query: Query = { date, start: minutes(start), duration, kind,
-    card: get('card') === 'on', regionalCards: (Object.keys(regionalCards) as (keyof typeof regionalCards)[])
-      .filter((issuer) => get(issuer + 'Card') === 'on'),
-    registration: get('registration') === 'on', required: equipment };
+  const query: Query = { date, start: minutes(start), duration, kind, required: equipment };
 
   const snapshot = await taichungSnapshot().catch(() => null);
   const nationalLibraries = withAnnouncedLibraries(directory.libraries.map((library) =>
@@ -70,7 +70,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
     const matching = kind ? library.areas.filter((area) => area.kind === kind) : library.areas;
     const areas: (Area | undefined)[] = matching.length ? matching : [undefined];
     const distance = distanceKm(origin, library.coordinates);
-    return areas.map((area) => ({ library, distance, ...evaluate(library, area, query) }));
+    return areas.map((area) => ({ library, distance, ...evaluate(library, area, query) }))
+      .filter(({ documents }) => !documentFilter || documents === documentFilter);
   };
   const rank = { yes: 0, unknown: 1, no: 2 };
   type Result = ReturnType<typeof evaluateLibrary>[number];
@@ -161,13 +162,13 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
           <fieldset><legend>需要的設備</legend><div className="checks">
             {facilityKeys.map((key) => <label key={key}><input type="checkbox" name={key} defaultChecked={equipment.includes(key)} />{facilities[key]}</label>)}
           </div></fieldset>
-          <fieldset><legend>入場條件</legend><div className="checks">
-            <label><input type="checkbox" name="card" defaultChecked={query.card} />有國資圖或臺中市圖個人借閱證</label>
-            {Object.entries(regionalCards).map(([issuer, label]) => <label key={issuer}>
-              <input type="checkbox" name={issuer + 'Card'} defaultChecked={query.regionalCards?.includes(issuer as keyof typeof regionalCards)} />有{label}
-            </label>)}
-            <label><input type="checkbox" name="registration" defaultChecked={query.registration} />可預約或現場登記</label>
-          </div></fieldset>
+          <label className="document-filter">是否需要特定證件
+            <select name="documents" defaultValue={documentFilter}>
+              <option value="">不限</option>
+              <option value="none">{documentLabels.none}</option>
+              <option value="required">{documentLabels.required}</option>
+            </select>
+          </label>
           {selected && <input type="hidden" name="original" value={selected.id} />}
           <button type="submit">查詢空間 <span aria-hidden="true">→</span></button>
         </div>
@@ -182,7 +183,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
           {searched && !invalid && <>
             <div className="result-heading"><h2 id="results-title">查詢結果</h2><p>{date} · {start}–{clock(query.start + duration)}</p></div>
             {originLabel && <p className="distance-note">起點 {originLabel} · 同一結果狀態內依直線距離排序</p>}
-            {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult && statuses[originalResult.status]}
+            {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult
+              ? statuses[originalResult.status] : '沒有符合所選證件條件的空間'}
               {originalResult?.area && ' · ' + originalResult.area.name}
               {originalResult?.reasons.length ? ' · ' + originalResult.reasons.join('、') : ''}
               {' '}<Link href={href({ original: '' })}>清除原定館舍</Link></div>}
@@ -219,9 +221,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   </>;
 }
 
-function LibraryCard({ library, area, status, reasons, closure, openUntil, distance, originalLink }: {
+function LibraryCard({ library, area, documents = entryDocumentRequirement(area), status, reasons, closure, openUntil, distance, originalLink }: {
   library: RegionalLibrary;
   area?: Area;
+  documents?: DocumentRequirement;
   status?: keyof typeof statuses;
   reasons?: readonly string[];
   closure?: { reason: string; url: string };
@@ -236,6 +239,7 @@ function LibraryCard({ library, area, status, reasons, closure, openUntil, dista
     <p className="area">{area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
     <p className="address">{library.address || '地址待確認'}{distance !== undefined && ' · 直線約 ' +
       (distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里')}</p>
+    <p className="entry-documents">{documentLabels[documents]}</p>
     {openUntil !== undefined && <p className="open-until">當日時段可用至 {clock(openUntil)}</p>}
     {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>{reason}{' '}
       {closure && reason === closure.reason && <a href={closure.url}>休館來源 ↗</a>}</li>)}</ul> : null}
@@ -255,7 +259,8 @@ function LibraryCard({ library, area, status, reasons, closure, openUntil, dista
       <summary>使用規則與來源</summary>
       <div className="disclosure-body">
         <dl>
-          <dt>入場</dt><dd>{area?.entryNote ?? (area?.access === 'walk-in' ? '現場入座' : area?.access === 'card' ? '個人借閱證，須預約或現場登記' : area?.access === 'restricted' ? '限指定身分' :
+          <dt>入場</dt><dd>{area?.entryNote ?? (area?.access === 'walk-in' ? '現場入座' : area?.access === 'card'
+            ? '需持' + (area.regionalCard ? regionalCards[area.regionalCard] : '國資圖或臺中市圖個人借閱證') + '，須預約或現場登記' : area?.access === 'restricted' ? '限指定身分' :
             area?.access === 'conditional' ? '須符合校外訪客資格' : '待確認')}</dd>
           {library.reviewNote && !library.accessNote && <><dt>規則核對</dt><dd>{library.reviewNote}</dd></>}
           {library.accessNote && <><dt>館方補充</dt><dd>{library.accessNote}</dd></>}

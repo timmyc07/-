@@ -181,7 +181,7 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
   if (library.name.startsWith('臺北市立圖書館') && (listed || seats || taipeiListed)
     && !['plis-0a7bdfab9e0c217b4951', 'plis-a52a74385fa7b184d15f'].includes(library.id)) {
     return {
-      ...withSeats, slots: standardSlots, access: 'walk-in',
+      ...withSeats, slots: standardSlots, access: 'walk-in', entryDocuments: 'unknown',
       equipment: seats?.laptopSeats ? { ...withSeats.equipment, laptop: true } : withSeats.equipment,
       entryNote: '平日自由入座。例假日、寒暑假或考季，館方得於開館前發放號碼牌，並可能查驗借閱證。'
         + (seats?.laptopSeats ?? ''),

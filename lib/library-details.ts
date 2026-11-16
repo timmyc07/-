@@ -1920,6 +1920,19 @@ const hsinchuReadingServices = 'https://library.hccg.gov.tw/chhcml/app/artwebsit
 const hengchunFolkLibrary = 'https://www.cna.com.tw/postwrite/chi/374040';
 const announcedLibraries: (Library & { city: string })[] = [
   {
+    id: 'local-yunlin-beigang-learning-center', name: '北港鎮立圖書館學習中心', city: '雲林縣', district: '北港鎮',
+    address: '雲林縣北港鎮文仁路10號', types: ['公共圖書館'],
+    website: 'https://bggov.yunlin.gov.tw/cp.aspx?n=3316',
+    sources: ['https://bggov.yunlin.gov.tw/cp.aspx?n=3316',
+      'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=010&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp'],
+    openingHours: '自修室週二至週五 08:30–21:00、週六及週日 08:30–17:00，週一時段請依館方公告。國定假日休館。',
+    accessNote: '學習中心位於北港分局親民空間，北辰路的圖書館主館另有館舍。',
+    studyRoom: true, facilities: ['自修室', '數位學習教室'],
+    areas: [{ name: '學習中心自修室', kind: 'study', slots: null, access: null, equipment: {},
+      sources: ['https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=010&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp'] }],
+    closures: [],
+  },
+  {
     id: 'local-pingtung-hengchun-folk-library', name: '恆春文化中心民謠館圖書館', city: '屏東縣', district: '恆春鎮',
     address: '屏東縣恆春鎮東門路一巷6號', phone: '08-8891688', types: ['公共圖書館'],
     website: 'https://www.cultural.pthg.gov.tw/cp.aspx?n=258BE29D0243BCF6',

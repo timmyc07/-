@@ -1374,7 +1374,7 @@ const newTaipeiEquipmentWork = {
   url: 'https://www.library.ntpc.gov.tw/singlehtml/Info?cntId=1543977c02c848e185486a90c2104f2d',
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
-const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+const serviceUpdates: Record<string, { url: string; note: string; additionalSource?: string } | undefined> = {
   'plis-917334d7cea0e59828e0': {
     url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/031',
     note: '館方介紹列一般閱覽區、期刊區、兒童閱覽區及資訊檢索區，全館共 27 席。',
@@ -1493,7 +1493,8 @@ const serviceUpdates: Record<string, { url: string; note: string } | undefined> 
   },
   'plis-5214bc11151c1cde5bf4': {
     url: 'https://www.mlcg.gov.tw/News_Content.aspx?n=2546&s=1004067',
-    note: '市公所公告工程預計 2027 年 5 月竣工、7 月正式開館，實際復館日期依後續公告。',
+    additionalSource: 'https://www.mlcg.gov.tw/News_Content.aspx?n=9918&s=783700',
+    note: '市公所公告工程預計 2027 年 5 月竣工、7 月正式開館，實際復館日期依後續公告。整修前設有自修室，館內提供 Wi‑Fi，讀者設備用插座未開放。復館後的空間及使用規則待公告。',
   },
   'plis-ae1d09fa9a4aa5086830': {
     url: 'https://www.ksml.edu.tw/mainlibrary/Latestevent/Details.aspx?Parser=9,23,212,157,,,15337,,,,4',
@@ -2110,7 +2111,7 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
       : studyRoom && kaohsiungArea !== null && library.studyRoom !== false && !library.areas.some(({ kind }) => kind === 'study')
       ? [...library.areas, ...studyAreas, ...additionalAreas] : areas,
     sources: [...new Set([...library.sources, detail.url, ...(local ? [local.url] : []),
-      ...(serviceUpdate ? [serviceUpdate.url] : []),
+      ...(serviceUpdate ? [serviceUpdate.url, ...(serviceUpdate.additionalSource ? [serviceUpdate.additionalSource] : [])] : []),
       ...(localFacilities ? [localFacilities.url] : []),
       ...(nclSource ? [nclSource] : []),
       ...(hoursOverride ? [hoursOverride.url] : []),

@@ -1,6 +1,6 @@
 import { minutes, type Area, type Library } from './study.ts';
 import { libraryStudyHours } from './library-study-hours.ts';
-import { chiayiCountyReadingRules, libraryCalendar, penghuMainUrl, penghuStudyClosures, sanwanLibraryHours,
+import { chiayiCountyReadingRules, kinmenStudyClosures, kinmenStudyHoursUrl, libraryCalendar, penghuMainUrl, penghuStudyClosures, sanwanLibraryHours,
   tainanTuchengUrl, yuanlinLibraryRules } from './library-calendars.ts';
 import { kaohsiungHoursSource, kaohsiungStudyRoom } from './kaohsiung-study-rules.ts';
 import { tainanStudyRoom } from './tainan-study-rules.ts';
@@ -1625,8 +1625,8 @@ const serviceUpdates: Record<string, { url: string; note: string; additionalSour
     note: '縣政九路館各樓層已恢復開放。自 9 月 12 日起暫停館內調閱、超商借書、贈書及好書交換，自 10 月 20 日起暫停受理指定本館為取書館的新預約。',
   },
   'plis-e3c1d8e816d9e6061a7d': {
-    url: 'https://www.kmdn.gov.tw/1117/1271/1272/590112/',
-    note: '北棟自 2026 年 9 月 15 日起整修暫停開放，南棟持續服務。',
+    url: 'https://www.kinmen.gov.tw/News_Content2.aspx?n=98E3CA7358C89100&s=8C8634E4C3DC0AFA&sms=BF7D6D478B935644',
+    note: '北棟自 2026 年 9 月 15 日起因整修暫停開放，讀者服務移至南棟，南棟持續服務。北棟恢復開放日期依館方公告。',
   },
 };
 const keelungExtendedHours = {
@@ -2266,9 +2266,9 @@ function localStudyRoom(id: string, area: Area): Area {
       sources: [...area.sources, 'https://www.chcg.gov.tw/TSO/getFile.aspx?did=4133&dir=xihu&file=1&file_id=542807&type=3'] };
   }
   if (id === 'plis-e3c1d8e816d9e6061a7d') {
-    return { ...area,
+    return { ...area, closures: [...(area.closures ?? []), ...kinmenStudyClosures],
       entryNote: '週一及國定假日休館。請勿以物品佔位，離座超過 30 分鐘，館方得將物品移至置物區。',
-      sources: [...area.sources, 'https://cabkc.kinmen.gov.tw/information?pid=1566&uid=9'] };
+      sources: [...new Set([...area.sources, kinmenStudyHoursUrl, 'https://cabkc.kinmen.gov.tw/information?pid=1566&uid=9'])] };
   }
   if (['plis-995a90f8387d2668be41', 'plis-2065ea3c3619a2597356',
     'plis-d5b8a42994a660f05102', 'plis-65dcee6860c52419f419',

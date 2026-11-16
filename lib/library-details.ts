@@ -62,9 +62,9 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
     url: 'https://www.cycab.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=13562',
   },
   'plis-95c10375e363b499b6fc': {
-    from: '2026-09-24', until: '2026-12-31',
+    from: '2026-10-02', until: '2026-12-31',
     reason: '西湖鄉立圖書館因館舍安全暫停開放，復館日期依館方公告。',
-    url: 'https://udn.com/news/amp/story/7324/9775214',
+    url: 'https://webws.miaoli.gov.tw/Download.ashx?n=MTE1RTAwMDYxODEtMDEuUERG&u=LzAwMS9VcGxvYWQvNDY2L3JlbGZpbGUvMTQ5MTMvMTAwMTkwMy9kMDM0Y2Q3Mi01OGVkLTRlMDUtODc4ZC1jMWUwMTNiODVmMDAucGRm',
   },
   'plis-d08bf679986d39ae195e': {
     from: '2026-08-20', until: '2027-02-28',
@@ -1401,6 +1401,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string; additionalSource?: string } | undefined> = {
+  'plis-95c10375e363b499b6fc': {
+    url: 'https://udn.com/news/story/7324/9775214',
+    note: '9 月 23 日館舍天花板掉落後，館方緊急封鎖閱覽室。鄉公所 10 月 2 日發函公告閉館至 12 月 31 日。',
+  },
   'plis-7d3a7de84e59a626b045': {
     url: yuliReadingRules,
     note: '1 樓網路區公用電腦供資訊檢索，憑閱覽證登記，每次 30 分鐘。離座或預約後未就座超過 5 分鐘，視同放棄。',

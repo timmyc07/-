@@ -1371,6 +1371,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string } | undefined> = {
+  'plis-917334d7cea0e59828e0': {
+    url: 'https://www.typl.gov.tw/zh-tw/About/Introduce/031',
+    note: '館方介紹列一般閱覽區、期刊區、兒童閱覽區及資訊檢索區，全館共 27 席。',
+  },
   'plis-be5bfb0404539bf8903f': {
     url: 'https://www.shlin.gov.tw/cp.aspx?n=40784',
     note: '使用數位視聽區電腦須憑閱覽證登記，每次 1 小時。無其他讀者登記時，可再登記下一時段。',

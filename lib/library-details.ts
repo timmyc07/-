@@ -402,10 +402,6 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
     url: 'https://isp.ncl.edu.tw/teen-tw/cityres?res=0K313038577850072241',
     facilities: ['青少年專區'],
   },
-  'plis-09b55d87247eb8201b76': {
-    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000516',
-    facilities: ['閱覽室', '兒童讀書區', '育嬰室', '資訊查詢區', '書庫', '電腦教室', '投影設備'],
-  },
   'plis-55fd79be7a9db6bbe14d': {
     url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000517',
     facilities: ['兒童室', '開架閱覽室', '期刊區', '多功能研習室'],
@@ -1465,8 +1461,9 @@ const serviceUpdates: Record<string, { url: string; note: string; additionalSour
     note: '使用筆電請勿影響他人。筆電、平板、手機等個人電子設備須自備電力，館內供電限緊急充電站與 2 樓自修區指定範圍。',
   },
   'plis-09b55d87247eb8201b76': {
-    url: 'https://kmfinance.kinmen.gov.tw/news.aspx?Create=1&PageSize=999&n=55FDE4EAE7CDA1E6&page=10&sms=4FEFD09995C4BB81',
-    note: '鄉公所原公告 2025 年 12 月至 2026 年 6 月整修休館。大埔 49 之 1 號自 2026 年 4 月起另作鄉公所辦公地點，圖書館目前的開放狀態請先向館方確認。',
+    url: 'https://www.cs.gov.tw/home/index.php/31-about-us/142-csgov',
+    additionalSource: 'https://www.cs.gov.tw/home/index.php/news/8499-114-12-115-6',
+    note: '鄉公所原公告 2025 年 12 月至 2026 年 6 月整修休館。原館址大埔村大埔 49 之 1 號現為鄉公所臨時辦公室。圖書館目前的服務地點及時間請洽鄉公所總機 089-862041 確認。',
   },
   'plis-f4ef2b6827f2374ad985': {
     url: 'https://libstat.ncl.edu.tw/libraryDataDetail/L5170000',
@@ -2154,6 +2151,10 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     library = { ...library, name: '高雄漫畫圖書館（高雄市立圖書館鹽埕分館）' };
   }
   const candidate = localHours[library.id];
+  if (library.id === 'plis-09b55d87247eb8201b76' && library.address === '臺東縣池上鄉大埔村大埔49之1號') {
+    library = { ...library, address: '', coordinates: undefined, phone: '089-862041', fax: undefined,
+      openingHours: '目前服務時間請洽鄉公所確認。' };
+  }
   const local = !detail.hours || candidate?.supersedesDirectory ? candidate : undefined;
   const hoursOverride = ['plis-9709456f17abc6c6a512', 'plis-5929930cfc61bd687f1f'].includes(library.id)
     ? hsinchuHoursOverride : undefined;

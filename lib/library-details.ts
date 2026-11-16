@@ -1404,6 +1404,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string; additionalSource?: string } | undefined> = {
+  'plis-708a19a863b754e58e04': {
+    url: sanwanLibraryHours,
+    note: '入館請將手機等電訊設備設為靜音。館內禁止飲食，請勿攜入寵物，導盲犬可入館。',
+  },
   'plis-5c096392579b74bd371a': {
     url: 'https://jiaosi.e-land.gov.tw/cp.aspx?n=7776&s=2711',
     additionalSource: 'https://jiaosi.e-land.gov.tw/cp.aspx?n=7777',

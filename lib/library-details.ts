@@ -1423,6 +1423,11 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string; additionalSource?: string } | undefined> = {
+  'plis-539f7d3d76b9f2ee658a': {
+    url: 'https://library.hccg.gov.tw/chhcml/app/data/view?id=18&module=userTerm&serno=60c961f1-8587-4460-9f9d-cb9862d4e41c',
+    additionalSource: 'https://libseat.hccg.gov.tw/sm/make_reservation_select_area_web_new.do?areaId=3210',
+    note: '3 樓視聽區及討論區供持新竹市圖有效個人借閱證的讀者使用，可提前 3 天線上預約或現場登記。視聽區每次最多 180 分鐘；討論區每組 2 至 4 人、每次最多 120 分鐘，全員須於現場機台報到。網路預約請於使用時段開始後 15 分鐘內報到。',
+  },
   'plis-4f656e6f21c469e566ae': {
     url: 'https://www.cycab.gov.tw/wSite/ct?ctNode=5231&mp=1&xItem=13562',
     additionalSource: 'https://www.cna.com.tw/postwrite/chi/447000',

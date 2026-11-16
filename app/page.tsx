@@ -104,14 +104,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   return <>
     <header className="header">
       <div className="shell bar">
-        <div className="brand-group">
-          <a className="library-brand" href="https://www.library.taichung.gov.tw/">
-            <Image src="/taichung-library-logo.svg" alt="臺中市立圖書館官網" width={180} height={34} />
-          </a>
-          <Link className="brand" href="/" aria-label="StudyGo 首頁">
-            StudyGo<small>全臺公立圖書館自修查詢</small>
-          </Link>
-        </div>
+        <Link className="brand" href="/" aria-label="StudyGo 全臺圖書館小幫手首頁">
+          <Image className="brand-mark" src="/studygo-logo.webp" alt="" width={48} height={48} unoptimized />
+          <span className="brand-text">StudyGo<small>全臺圖書館小幫手</small></span>
+        </Link>
         <nav className="site-nav" aria-label="主要導覽">
           <a href="#search">空間查詢</a>
           <a href="#results">{searched ? '查詢結果' : '已核對館舍'}</a>
@@ -234,13 +230,20 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
 }) {
   const visit = area && pilotVisit(library.id, area);
   return <BlurFade as="article" className="card" inView>
-    <div className="card-top"><span>{library.city}{library.district && ' · ' + library.district}</span>{status && <span className={'badge ' + status}>{statuses[status]}</span>}</div>
-    <h3>{library.name}</h3>
-    <p className="area">{area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
-    <p className="address">{library.address || '地址待確認'}{distance !== undefined && ' · 直線約 ' +
-      (distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里')}</p>
-    <p className="entry-documents">{documentLabels[documents]}</p>
-    {openUntil !== undefined && <p className="open-until">當日時段可用至 {clock(openUntil)}</p>}
+    <header className="card-heading">
+      <div className="card-top">
+        <span>{library.city}{library.district && ' · ' + library.district}</span>
+        {status && <span className={'badge ' + status}>{statuses[status]}</span>}
+      </div>
+      <h3>{library.name}</h3>
+      <p className="area">{area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
+      <p className="address">{library.address || '地址待確認'}{distance !== undefined && ' · 直線約 ' +
+        (distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里')}</p>
+    </header>
+    <dl className="card-facts">
+      <div><dt>證件</dt><dd className="entry-documents">{documentLabels[documents]}</dd></div>
+      {openUntil !== undefined && <div><dt>可用至</dt><dd className="open-until">{clock(openUntil)}</dd></div>}
+    </dl>
     {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>{reason}{' '}
       {closure && reason === closure.reason && <a href={closure.url}>休館來源 ↗</a>}</li>)}</ul> : null}
     {visit && <dl className="visit-details">
@@ -249,16 +252,16 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
       <div><dt>充電</dt><dd>{visit.power}</dd></div>
     </dl>}
     <div className="card-actions">
-      {(library.coordinates || library.address) && <a href={directionsUrl(library.coordinates ?? library.address)}
+      {(library.coordinates || library.address) && <a className="map-link" href={directionsUrl(library.coordinates ?? library.address)}
         aria-label={library.name + ' Google 地圖導航'}>地圖導航 ↗</a>}
       {!closure && area?.reservation && <a href={area.reservation}>前往館方預約 ↗</a>}
       {library.phone && <a href={'tel:' + library.phone}>電洽 {library.phone}</a>}
     </div>
     {visit && <div className="source-links">{visit.links.map(([label, url]) => <a key={url} href={url}>{label} ↗</a>)}</div>}
-    <details>
+    <details className="card-rules">
       <summary>使用規則與來源</summary>
       <div className="disclosure-body">
-        <dl>
+        <dl className="rule-details">
           <dt>入場</dt><dd>{area?.entryNote ?? (area?.access === 'walk-in' ? '現場入座' : area?.access === 'card'
             ? '需持' + (area.regionalCard ? regionalCards[area.regionalCard] : '國資圖或臺中市圖個人借閱證') + '，須預約或現場登記' : area?.access === 'restricted' ? '限指定身分' :
             area?.access === 'conditional' ? '須符合校外訪客資格' : '待確認')}</dd>

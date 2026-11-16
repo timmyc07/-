@@ -1408,6 +1408,11 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string; additionalSource?: string } | undefined> = {
+  'plis-5c096392579b74bd371a': {
+    url: 'https://jiaosi.e-land.gov.tw/cp.aspx?n=7776&s=2711',
+    additionalSource: 'https://jiaosi.e-land.gov.tw/cp.aspx?n=7777',
+    note: '1 樓資訊檢索區的公用電腦開放時間為 09:00–17:30。請持借書證或身分證至服務臺登記；館方開放時間表另列駕照、學生證或戶口名簿。每次 30 分鐘，無人等候可重新登記延長一次。',
+  },
   'plis-95c10375e363b499b6fc': {
     url: 'https://udn.com/news/story/7324/9775214',
     note: '9 月 23 日館舍天花板掉落後，館方緊急封鎖閱覽室。鄉公所 10 月 2 日發函公告閉館至 12 月 31 日。',

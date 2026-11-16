@@ -217,6 +217,12 @@ function monthlyClosures(year: number, weekday: number | null, url: string, reas
   return closureDates(year, url, dates, reason);
 }
 
+const newTaipeiCleaning2027 = monthlyClosures(2027, 4, newTaipeiUrl, '依每月最後一個星期四清館規定推算休館')
+  // The operator has used a different closing time for the June cleaning day.
+  .filter(({ from }) => from !== '2027-06-24');
+const taoyuanCleaning2027 = monthlyClosures(2027, 4, 'https://www.typl.gov.tw/zh-tw/Closed/Calendar',
+  '依每月最後一個星期四清館規定推算休館');
+
 export const penghuStudyClosures = [2026, 2027].flatMap((year) =>
   monthlyClosures(year, 2, penghuMainUrl, '閱覽室每月最後一個星期二清潔休室'));
 
@@ -386,7 +392,7 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
   }
   if (library.name.startsWith('新北市立圖書館') || library.id === 'plis-461c4b474bd0eb749aaa') {
     const early = newTaipeiElectionEve[library.id];
-    const closures = [...(newTaipeiServiceClosures[library.id] ?? []), ...newTaipei2026];
+    const closures = [...(newTaipeiServiceClosures[library.id] ?? []), ...newTaipei2026, ...newTaipeiCleaning2027];
     const mayClosing = newTaipeiMayClosing[library.id];
     if (mayClosing) {
       closures.push(...closureDates(2026, mayClosing.url, ['05-03', '05-10'], '館方公告當日 ' + mayClosing.time + ' 閉館')
@@ -452,7 +458,7 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     return { calendarYears: [2026], closures: keelung2026 };
   }
   if (library.name.startsWith('桃園市立圖書館') && !/兒童(?:玩具|文學)館$/.test(library.name)) {
-    return { calendarYears: [2026], closures: taoyuan2026 };
+    return { calendarYears: [2026], closures: [...taoyuan2026, ...taoyuanCleaning2027] };
   }
   if (library.name === '高雄市立圖書館') {
     return {

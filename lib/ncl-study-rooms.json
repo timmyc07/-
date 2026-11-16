@@ -58,5 +58,8 @@
   "plis-e641450483afbb290910": {"address": "屏東縣麟洛鄉中山路158號", "code": "L3473000", "studyRoom": true},
   "plis-e9ad834b90b6ec26f69a": {"address": "嘉義縣朴子市光復路36號", "code": "L3349000", "studyRoom": true},
   "plis-f37b49d54805d1b961ae": {"address": "連江縣北竿鄉塘岐村113號", "code": "L5052000", "studyRoom": true},
-  "plis-f5b5d0c2ee6ce8477832": {"address": "雲林縣土庫鎮中正路69之1號", "code": "L3362000", "studyRoom": true}
+  "plis-f5b5d0c2ee6ce8477832": {"address": "雲林縣土庫鎮中正路69之1號", "code": "L3362000", "studyRoom": true},
+  "plis-2efbf4bcfe8e68151f65": {"address": "基隆市七堵區福三街92號", "code": "L5048000", "studyRoom": true},
+  "plis-79f7f1447d98ee4e2917": {"address": "基隆市信義區信二路179號4樓", "code": "L5043000", "studyRoom": true},
+  "plis-fb0648ec4fff7472b345": {"address": "基隆市暖暖區東勢街2號4樓", "code": "L5047000", "studyRoom": true}
 }

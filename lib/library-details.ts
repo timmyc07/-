@@ -1056,6 +1056,11 @@ const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/det
 const yuliLibrary = 'https://www.hlyl.gov.tw/cl.aspx?n=20261';
 const yuliReadingRules = 'https://www.hlyl.gov.tw/cl.aspx?n=21246';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-7b95877ab74c89a1e379': ['普通閱覽室', '報紙期刊閱覽室'].map((name) => ({
+    name, kind: 'reading', slots: null, access: null, equipment: {},
+    entryNote: '請勿預佔座位，離開閱覽室時請帶走個人物品。',
+    sources: ['https://www.puli.gov.tw/Tag/PostDoc?AspxAutoDetectCookieSupport=1&ID=10016'],
+  })),
   'plis-00259e7a928da5c62131': {
     name: '一般民眾閱覽室', kind: 'reading', slots: null, access: null, equipment: {},
     sources: ['https://kllib.klcg.gov.tw/cp.aspx?n=7936'],

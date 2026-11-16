@@ -109,7 +109,7 @@ const branchSeats: Record<string, { count?: number; name?: string; note?: string
   'plis-3c8e68ee422733123905': { count: 82, url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=FB486AC6B571E022&sms=CFFFC938B352678A' },
   'plis-5ca7b8662f3ee724afdb': { count: 160, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=dc82ae43841f4a7580a7da987fe9635a' },
   'plis-2f2978ce3cdb2b79f6ef': { count: 60, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=87f7f5405b8a4695beea62e6c03d26bd' },
-  'plis-4d33d19b31ac419fb05c': { count: 266, poweredSeats: '自修室木桌區內有兩間附插座的筆電區。',
+  'plis-4d33d19b31ac419fb05c': { count: 266, note: '木桌區內兩間筆電專區共 17 席，設有插座。館方未說明這 17 席是否計入 266 席自修席位。',
     url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=1b67994e4e43456aa83d84350bc3301e' },
   'plis-c919871190687b80121b': { count: 90, url: 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=c5ce4004327d4cc6b186029af9f34309' },
   'plis-bd1ae9a8fe9b769cd7e7': { count: 30, poweredSeats: '自修閱覽區設有筆電區、插座及無線網路。', wifi: true,

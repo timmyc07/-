@@ -2306,8 +2306,9 @@ function localStudyRoom(id: string, area: Area): Area {
   }
   if (id === 'plis-859b54d11aaf9ac7b9be') {
     return { ...area, name: '1 樓自修室', seats: 46,
+      entryNote: 'iTaiwan 列有分館 1 樓及 2 樓熱點，自修室內的收訊範圍待確認。',
       sources: [...area.sources, 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000157',
-        'https://www.cna.com.tw/postwrite/chi/347529'] };
+        'https://www.cna.com.tw/postwrite/chi/347529', iTaiwanHotspots] };
   }
   if (id === 'plis-4b6847d140ab7464db3f') {
     return { ...area, entryNote: '自習區專用開放時段請向館方確認。' };

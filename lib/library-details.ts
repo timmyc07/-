@@ -56,11 +56,6 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
     reason: '原館施工期間暫停開放。借還書及辦證請至東山區公所綜合大樓臨時據點（東山里 225 之 1 號）。週一 13:00–17:00、週二至週五 08:00–17:00、週末 08:00–16:00，國定假日休息。復館日期依館方公告。',
     url: 'https://www.tnpl.tn.edu.tw/n15511624106174947703/n1Content',
   },
-  'plis-4f656e6f21c469e566ae': {
-    from: '2026-06-01',
-    reason: '原館整修暫停開放。臨時館位於水上村正義路 141 號舊樂齡中心，週一至週五 08:00–12:00、13:00–17:00 提供部分新書外借及還書，週末及國定假日休息。原館復館日期依公告。',
-    url: 'https://www.cycab.gov.tw/wSite/ct?ctNode=5239&mp=1&xItem=13562',
-  },
   'plis-95c10375e363b499b6fc': {
     from: '2026-10-02', until: '2026-12-31',
     reason: '西湖鄉立圖書館因館舍安全暫停開放，復館日期依館方公告。',
@@ -1409,6 +1404,11 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string; additionalSource?: string } | undefined> = {
+  'plis-4f656e6f21c469e566ae': {
+    url: 'https://www.cycab.gov.tw/wSite/ct?ctNode=5231&mp=1&xItem=13562',
+    additionalSource: 'https://www.cna.com.tw/postwrite/chi/447000',
+    note: '柳林村 80 之 1 號原館整修中，預計 2027 年完工，復館日期依館方公告。臨時服務點位於水上村辦公室後棟的舊樂齡中心，提供部分新書外借及還書。館內閱覽、自修及預約書與通閱書取書暫停。',
+  },
   'plis-708a19a863b754e58e04': {
     url: sanwanLibraryHours,
     note: '入館請將手機等電訊設備設為靜音。館內禁止飲食，請勿攜入寵物，導盲犬可入館。',
@@ -2082,6 +2082,12 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
 }
 
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
+  if (library.id === 'plis-4f656e6f21c469e566ae' && library.address === '嘉義縣水上鄉柳林村80-1號') {
+    const address = '嘉義縣水上鄉水上村正義路141號';
+    library = { ...library, address, coordinates: undefined, fax: undefined };
+    detail = { address, url: 'https://www.cycab.gov.tw/wSite/ct?ctNode=5231&mp=1&xItem=13562',
+      hours: '臨時服務點週一至週五 08:00–12:00、13:00–17:00，週末及國定假日休息。' };
+  }
   if (library.id === 'plis-bfff639f154e1c065ad1' && library.address === '嘉義縣鹿草鄉西井村長壽路230號') {
     const address = '嘉義縣鹿草鄉西井村長壽路226巷3號';
     library = { ...library, address, coordinates: undefined };

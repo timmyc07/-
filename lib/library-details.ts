@@ -1975,7 +1975,7 @@ const announcedLibraries: (Library & { city: string })[] = [
     phone: '03-658-8139',
     website: hsinchuOpening, sources: [hsinchuOpening, hsinchuFloorGuide,
       'https://hcplibrary.hchcc.gov.tw/wSite/ct?ctNode=4293&mp=1&xItem=11074', 'https://www.openstreetmap.org/relation/17509614'],
-    openingHours: '試營運至 2026 年 11 月 15 日，09:00–21:00，週一休館。12 月 18 日預定正式開館。',
+    openingHours: '試營運至 2026 年 11 月 15 日，週二至週日 09:00–21:00。12 月 18 日預定正式開館，常態開放時間為週二至週日 09:00–21:00，週一休館。',
     studyRoom: true,
     facilities: ['地下 1 樓自修室', '閱報區', '兒童閱覽區', '視障服務區', '資訊檢索區', '討論小間', '汽機車停車場'],
     areas: [{ name: '地下 1 樓自修室', kind: 'study', slots: null, access: 'walk-in',

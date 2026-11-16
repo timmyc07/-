@@ -936,7 +936,7 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
   },
   'plis-79f7f1447d98ee4e2917': {
     url: 'https://kllib.klcg.gov.tw/cp.aspx?n=7946',
-    facilities: ['開架閱覽室', '兒童閱覽室', '閱報區', '期刊區', '新書展示區'],
+    facilities: ['開架閱覽室', '兒童閱覽室', '閱報區', '期刊區', '新書展示區', '公用電腦 12 部'],
   },
   'plis-d5b8a42994a660f05102': {
     url: 'https://kllib.klcg.gov.tw/cp.aspx?n=7928',
@@ -2196,7 +2196,8 @@ function localStudyRoom(id: string, area: Area): Area {
       sources: [...area.sources, 'https://cabkc.kinmen.gov.tw/information?pid=1566&uid=9'] };
   }
   if (['plis-995a90f8387d2668be41', 'plis-2065ea3c3619a2597356',
-    'plis-d5b8a42994a660f05102', 'plis-65dcee6860c52419f419'].includes(id)) {
+    'plis-d5b8a42994a660f05102', 'plis-65dcee6860c52419f419',
+    'plis-2efbf4bcfe8e68151f65', 'plis-fb0648ec4fff7472b345', 'plis-79f7f1447d98ee4e2917'].includes(id)) {
     return { ...area, access: 'walk-in',
       entryNote: '通常自由入座，不得預占。館方必要時可採預約、訂位或號牌。離座逾 1 小時未歸視同放棄座位。',
       sources: [...area.sources, 'https://kllib.klcg.gov.tw/cp.aspx?n=7807'] };

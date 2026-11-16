@@ -2195,6 +2195,11 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-73fa3d8c3a6527be6a48') {
+    return { ...area, access: 'walk-in',
+      entryNote: '自由入座，不得預佔。館方視情況於開館前發放號碼牌。請優先使用 A 自修室，勿私自接用館內電源。',
+      sources: [...area.sources, 'https://www.chcg.gov.tw/TSO/getFile.aspx?did=4133&dir=xihu&file=1&file_id=542807&type=3'] };
+  }
   if (id === 'plis-e3c1d8e816d9e6061a7d') {
     return { ...area,
       entryNote: '週一及國定假日休館。請勿以物品佔位，離座超過 30 分鐘，館方得將物品移至置物區。',

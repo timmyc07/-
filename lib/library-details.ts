@@ -2046,6 +2046,18 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
 }
 
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
+  if (library.id === 'plis-14aad42b37ccee310fd2' && library.address === '南投縣南投市漳興巷51號') {
+    const address = '南投縣南投市平和里信義街101號';
+    library = { ...library, address, phone: undefined, fax: undefined,
+      coordinates: { latitude: 23.9122498, longitude: 120.6908138 },
+      accessNote: '南投市立圖書館原址重建後於 2026 年 9 月 16 日啟用，請前往信義街 101 號。',
+      sources: [...library.sources,
+        'https://www.nantou.gov.tw/getfile.php?path=upload%2FsbGr7gpLBb7YER2m.pdf',
+        'https://www.cna.com.tw/news/aloc/202609160145.aspx'] };
+    detail = { address,
+      url: 'https://www.nantou.gov.tw/big5/news_content.php?cid=251&dptid=376480000&id=169016',
+      hours: '新館開放時間請向館方確認。' };
+  }
   if (library.id === 'plis-4ae824a05d3504931b4e' && library.address === '屏東縣萬巒鄉萬和村中正路24號') {
     const address = '屏東縣萬巒鄉萬金村萬和路5之11號';
     library = { ...library, address, phone: '08-7836282', fax: undefined,

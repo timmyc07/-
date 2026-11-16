@@ -1412,7 +1412,10 @@ const serviceUpdates: Record<string, { url: string; note: string; additionalSour
   },
   'plis-4818cd57388587303882': {
     url: 'https://khcc.kcg.gov.tw/rwd_home03.aspx?DATA=937&EXEC=D&ID=%246102&IDK=2',
-    note: '鹽埕分館於 2026 年 11 月 12 日遷至原高雄國際會議中心 1 樓，以高雄漫畫圖書館開館。',
+    additionalSource: 'https://www.ksml.edu.tw/LibNews/Details.aspx?Parser=9,4,33,,,,16511',
+    note: '鹽埕分館於 2026 年 11 月 12 日遷至原高雄國際會議中心 1 樓，以高雄漫畫圖書館開館。'
+      + '2026 年 11 月 12 日至 2027 年 1 月 31 日，本館館藏暫停通閱，預約取書限本館，書籍暫停續借。'
+      + '主題書展區、新書展示區、熱門書區及主題漫畫艙展示的複本限館內閱覽。借期 7 天，個人證可借圖書 5 冊、過期期刊 2 冊、視聽資料 4 件。家庭證可借圖書 10 冊、過期期刊 2 冊、視聽資料 6 件。',
   },
   'plis-058be989d22b992c5b8a': {
     url: jinshanLibrary,

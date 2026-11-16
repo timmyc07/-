@@ -2493,7 +2493,7 @@ function localStudyRoom(id: string, area: Area): Area {
       equipment: main ? { ...area.equipment, laptop: false } : area.equipment,
       entryNote: '持桃園市圖個人借閱證或市民卡登記。'
         + (taoyuan.onsiteOnly ? '座位系統目前列為當日席，請至館內登記。' : '預約席與當日席依座位系統顯示。')
-        + (main ? '7 樓自修室為極靜區，使用筆電請移至同樓層筆電區。' : taoyuan.note ?? ''),
+        + (main ? '7 樓自修室為極靜區，使用筆電請至同樓層筆電區，或各樓層設有插座的閱覽座位。' : taoyuan.note ?? ''),
       reservation: taoyuan.onsiteOnly ? undefined : taoyuanSeatPortal,
       sources: [...new Set([...area.sources, ...(taoyuan.url ? [taoyuan.url] : []),
         taoyuanSeatRules, taoyuanSeatPortal])],

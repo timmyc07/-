@@ -473,7 +473,11 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     return { calendarYears: [2026], closures: keelung2026 };
   }
   if (library.name.startsWith('桃園市立圖書館') && !/兒童(?:玩具|文學)館$/.test(library.name)) {
-    return { calendarYears: [2026], closures: [...taoyuan2026, ...taoyuanCleaning2027] };
+    const mainEarlyClosure = library.id === 'plis-0d8617adcdaa013618d9' ? [{
+      from: '2026-10-31', until: '2026-10-31', time: { start: minutes('17:00'), end: 24 * 60 },
+      reason: '配合萬聖城活動，總館 17:00 提早閉館', url: 'https://www.typl.gov.tw/zh-tw/Closed/Content/84',
+    }] : [];
+    return { calendarYears: [2026], closures: [...taoyuan2026, ...taoyuanCleaning2027, ...mainEarlyClosure] };
   }
   if (library.name === '高雄市立圖書館') {
     return {

@@ -158,6 +158,9 @@ const studyHours: Record<string, StudyHours | undefined> = {
     name: '1 樓自習閱覽室（K 書中心）', ranges: [['023456', '08:30', '17:00']],
     url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=009&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
   },
+  'plis-44d1777aefba3d40891b': {
+    name: '自修室', ranges: [], url: 'https://www.yuanshan.gov.tw/cp.aspx?n=5787',
+  },
   'plis-d4bafe538b622515b304': {
     name: '3 樓自習室', ranges: [['13456', '08:30', '20:30'], ['0', '08:30', '17:00']],
     url: 'https://www.changhua.gov.tw/Content/192',

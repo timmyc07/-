@@ -1052,6 +1052,11 @@ const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/det
 const yuliLibrary = 'https://www.hlyl.gov.tw/cl.aspx?n=20261';
 const yuliReadingRules = 'https://www.hlyl.gov.tw/cl.aspx?n=21246';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-e7aaecf3515c7452935c': {
+    name: '2 樓筆電使用區', kind: 'reading', slots: null, access: null,
+    equipment: { laptop: true, outlet: true, wifi: true },
+    sources: ['https://www.cycab.gov.tw/wSite/ct?ctNode=6267&mp=1&xItem=9931'],
+  },
   'plis-ebb42497618c005f1223': {
     name: '一般閱覽座位', kind: 'reading', slots: null, access: 'walk-in', equipment: {},
     entryNote: '自由入座，請勿預佔。納入座位管理系統的座位及空間另依各區規則。',

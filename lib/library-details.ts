@@ -1073,8 +1073,9 @@ const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
   'plis-38b264704ba919b0a591': [
     { name: '2 樓閱讀區', kind: 'reading', seats: 30, slots: null, access: null, equipment: {},
       sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,72,753,746'] },
-    { name: '2 樓無線上網區', kind: 'reading', seats: 6, slots: null, access: null, equipment: { wifi: true },
-      sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,72,753,746'] },
+    { name: '2 樓無線上網區', kind: 'reading', seats: 6, slots: null, access: null, equipment: { wifi: true, outlet: true },
+      sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,72,753,746',
+        'https://www.ksml.edu.tw/faq/index.aspx?Parser=27,8,64,,,,,,,,5'] },
   ],
   'plis-10ddca249245164caff7': {
     name: '4 樓閱覽區', kind: 'reading', seats: 50, slots: null, access: null, equipment: {},

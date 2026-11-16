@@ -1635,6 +1635,11 @@ const keelungExtendedHours = {
   supersedesDirectory: true,
 } as const;
 const localHours: Record<string, { url: string; hours: string; studyRoom?: boolean; supersedesDirectory?: true } | undefined> = {
+  'plis-cceeef12e0bfff59593f': {
+    url: 'https://matsucc.gov.tw/文化處馬祖圖書館-山隴分館/',
+    hours: '週二至週日開館，每年 5 至 10 月 13:00–21:00，11 月至隔年 4 月 09:00–17:00。週一及國定假日休館。',
+    supersedesDirectory: true,
+  },
   'plis-0e21ed69e80b8f68b768': {
     url: 'https://tapi.yunlin.gov.tw/cp.aspx?n=14339',
     hours: '週二至週五 08:00–17:30，週六 08:00–18:00，中午照常開館。週日、週一及國定假日休館。',

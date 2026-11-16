@@ -331,8 +331,14 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     ] };
   }
   const electionClosureRule = electionClosureRules[library.id];
-  if (electionClosureRule) {
-    return { closures: closureDates(2026, electionClosureRule, ['11-28'], '依館方選舉日休館規定休館') };
+  const newYearRule = ['plis-fe9c622fb1bdd5279ec1', 'plis-0f447bbe2c470b97e41a'].includes(library.id)
+    ? electionClosureRule
+    : library.id === 'plis-f37b49d54805d1b961ae' ? 'https://matsucc.gov.tw/北竿鄉圖書館/' : undefined;
+  if (electionClosureRule || newYearRule) {
+    return { closures: [
+      ...(electionClosureRule ? closureDates(2026, electionClosureRule, ['11-28'], '依館方選舉日休館規定休館') : []),
+      ...(newYearRule ? closureDates(2027, newYearRule, ['01-01'], '依館方規定元旦休館') : []),
+    ] };
   }
   if (['plis-838b908932f56e7b1d22', 'plis-cceeef12e0bfff59593f'].includes(library.id)) {
     return { closures: [{ from: '2026-02-14', until: '2026-02-22', reason: '春節休館',

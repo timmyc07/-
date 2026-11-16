@@ -1053,6 +1053,11 @@ const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/det
 const yuliLibrary = 'https://www.hlyl.gov.tw/cl.aspx?n=20261';
 const yuliReadingRules = 'https://www.hlyl.gov.tw/cl.aspx?n=21246';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-6178fec7a54e55fdd3ff': {
+    name: '5 樓開架閱覽區', kind: 'reading', slots: null, access: null, equipment: { outlet: true, wifi: true },
+    entryNote: '開架閱覽區有可使用插座的座位，館內提供免費 Wi-Fi。',
+    sources: ['https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=12a6af39e58141d48e4af250720ba636'],
+  },
   'plis-216cea038dcd5ebbfa28': {
     name: '2 樓無線上網區', kind: 'reading', slots: null, access: null, equipment: { wifi: true, outlet: true },
     sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,53,544,537', kaohsiungWirelessOutletRules],

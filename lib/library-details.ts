@@ -2078,7 +2078,7 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   const calendar = libraryCalendar(library);
   const serviceUpdate = serviceUpdates[library.id];
   const readingOnly = hsinchuReadingOnly.has(library.id);
-  const noStudyRoom = local?.studyRoom === false || readingOnly;
+  const noStudyRoom = local?.studyRoom === false || readingOnly || library.id === 'plis-02957c7615629150a28b';
   const localFacilities = localFacilityLists[library.id];
   const baseFacilities = library.facilities ?? detail.facilities;
   const facilities = localFacilities

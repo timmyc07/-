@@ -226,7 +226,20 @@ const taoyuanCleaning2027 = monthlyClosures(2027, 4, 'https://www.typl.gov.tw/zh
 export const penghuStudyClosures = [2026, 2027].flatMap((year) =>
   monthlyClosures(year, 2, penghuMainUrl, '閱覽室每月最後一個星期二清潔休室'));
 
+const tainanCleaningBranches: Record<string, string | undefined> = {
+  'plis-c9599dab12b05bf49162': 'u5258534016076988173',
+  'plis-524fbb8d8cdb1804a640': 'u4703329710266206191',
+  'plis-e1e2bc4b4c8213751baa': 'u4874045035169792199',
+};
+const tainanBranchDirectory = 'https://www.tnpl.tn.edu.tw/page/EachPavilionList.aspx';
+
 export function libraryCalendar(library: Library): Pick<Library, 'calendarYears' | 'closures' | 'checkDates'> | undefined {
+  const tainanCleaningBranch = tainanCleaningBranches[library.id];
+  if (tainanCleaningBranch) {
+    return { closures: monthlyClosures(2027, 5,
+      'https://www.tnpl.tn.edu.tw/Page/EachPavilionIndex.aspx?id=' + tainanCleaningBranch,
+      '依月末週五清潔規定推算休館') };
+  }
   if (library.id === 'plis-27e5ed75c8013b01c228') {
     const reason = '閱覽及自修空間不開放。非國定假日僅提供預約書取書。';
     return {
@@ -312,8 +325,10 @@ export function libraryCalendar(library: Library): Pick<Library, 'calendarYears'
     return { closures: closureDates(2026, hsinchuCityHours, ['11-28'], '依館方選舉日休館規定休館') };
   }
   if (library.id === 'plis-57c550f79ce262c9b2d6') {
-    return { closures: closureDates(2026, 'https://www.tnpl.tn.edu.tw/n15132655629462848525/n1Content',
-      ['11-28'], '選舉日休館') };
+    return { closures: [
+      ...closureDates(2026, 'https://www.tnpl.tn.edu.tw/n15132655629462848525/n1Content', ['11-28'], '選舉日休館'),
+      ...monthlyClosures(2027, 5, tainanBranchDirectory, '依月末週五清潔規定推算，閱覽及自修空間不開放，僅提供取預約書'),
+    ] };
   }
   const electionClosureRule = electionClosureRules[library.id];
   if (electionClosureRule) {

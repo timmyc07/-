@@ -1046,6 +1046,7 @@ const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
 const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const lanzhouLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=A3B82F4BECD6CD1C&sms=CFFFC938B352678A';
+const kaohsiungBranchReadingRules = 'https://www.ksml.edu.tw/form/Details.aspx?Parser=2%2C8%2C97%2C50%2C%2C%2C1499';
 const kaohsiungMainReadingRules = 'https://www.ksml.edu.tw/form/Details.aspx?Parser=2%2C8%2C872%2C%2C%2C%2C688';
 const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=099812be491c45e59238adcaf69d3443';
 const yuliLibrary = 'https://www.hlyl.gov.tw/cl.aspx?n=20261';
@@ -2211,7 +2212,14 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
     ? [...new Set([...(baseFacilities ?? []), ...localFacilities.facilities])] : baseFacilities;
   const additionalArea = localAdditionalAreas[library.id];
   const additionalAreas = [additionalArea, library.id === 'plis-a094b0d4aa7d7722fd03' ? nationalTaiwanLaptopSeats : undefined].flat()
-    .filter((area): area is Area => Boolean(area && !library.areas.some(({ name }) => name === area.name)));
+    .filter((area): area is Area => Boolean(area && !library.areas.some(({ name }) => name === area.name)))
+    .map((area): Area => {
+      if (!/^高雄市立圖書館.*分館$/.test(library.name) || area.kind !== 'reading' || area.access !== null
+          || !/閱覽|閱讀/.test(area.name) || area.entryNote || area.reservation) return area;
+      return { ...area, access: 'walk-in',
+        entryNote: '閱覽席自由入座，請勿預佔。館方張貼離席提醒單後，逾 60 分鐘未入座可釋出座位。',
+        sources: [...area.sources, kaohsiungBranchReadingRules] };
+    });
   const areas = [...library.areas, ...additionalAreas];
   return {
     ...library,

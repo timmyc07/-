@@ -689,13 +689,13 @@ test('高雄以館方自修室欄決定席次與時段，總館和分館依公�
     const reading = library.areas.find(({ kind }) => kind === 'reading')!;
     assert.equal(reading.seats, seats);
     assert.equal(reading.slots, null);
-    assert.equal(reading.access, null);
+    assert.equal(reading.access, 'walk-in');
   }
   const cuiping = libraries.find(({ id }) => id === 'plis-793de43144ebd1a7578c')!;
   const cuipingReading = cuiping.areas.find(({ kind }) => kind === 'reading')!;
   assert.equal(cuipingReading.seats, 36);
   assert.deepEqual(cuipingReading.slots?.map(({ day }) => day), [0, 2, 3, 4, 5, 6]);
-  assert.equal(cuipingReading.access, null);
+  assert.equal(cuipingReading.access, 'walk-in');
   assert.equal(cuiping.areas.some(({ kind }) => kind === 'study'), false);
   const lingya = libraries.find(({ id }) => id === 'plis-a908448b0b36ed1715ce')!;
   const reading = lingya.areas.find(({ kind }) => kind === 'reading')!;

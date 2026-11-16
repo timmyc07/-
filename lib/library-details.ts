@@ -1051,6 +1051,14 @@ const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/det
 const yuliLibrary = 'https://www.hlyl.gov.tw/cl.aspx?n=20261';
 const yuliReadingRules = 'https://www.hlyl.gov.tw/cl.aspx?n=21246';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-2795b0ebc2c7f0ecfff2': {
+    name: '3 樓一般閱覽座位', kind: 'reading', seats: 80, slots: null, access: null, equipment: {},
+    sources: ['https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=84CAF73F014CA323&sms=CFFFC938B352678A'],
+  },
+  'plis-9f8e62981180e7c9a7d3': {
+    name: '2 樓筆記型電腦區', kind: 'reading', seats: 24, slots: null, access: null, equipment: { laptop: true },
+    sources: ['https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=6CE4E65B3438B4F7&sms=CFFFC938B352678A'],
+  },
   'plis-7b95877ab74c89a1e379': ['普通閱覽室', '報紙期刊閱覽室'].map((name) => ({
     name, kind: 'reading', slots: null, access: null, equipment: {},
     entryNote: '請勿預佔座位，離開閱覽室時請帶走個人物品。',

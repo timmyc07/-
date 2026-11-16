@@ -50,6 +50,9 @@ const taipeiReservation = new Set([
   'plis-7decf0dff68a9e8b198d', 'plis-0ea807d14456081b105f', 'plis-d14f3a24d79c22efd2da',
 ]);
 const branchSeats: Record<string, { count?: number; name?: string; note?: string; url: string; poweredSeats?: string; laptopSeats?: string; wifi?: true } | undefined> = {
+  'plis-2795b0ebc2c7f0ecfff2': { count: 45, name: '3 樓自修座位',
+    laptopSeats: '自修座位均可使用筆電或平板。',
+    url: 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=84CAF73F014CA323&sms=CFFFC938B352678A' },
   'plis-1dee29e3f2257c15c1cd': {
     count: 140,
     name: '2 樓自修區',
@@ -179,7 +182,9 @@ export function taipeiStudyRoom(library: Library, area: Area, listed: boolean): 
     && !['plis-0a7bdfab9e0c217b4951', 'plis-a52a74385fa7b184d15f'].includes(library.id)) {
     return {
       ...withSeats, slots: standardSlots, access: 'walk-in',
-      entryNote: '平日自由入座。例假日、寒暑假或考季，館方得於開館前發放號碼牌，並可能查驗借閱證。',
+      equipment: seats?.laptopSeats ? { ...withSeats.equipment, laptop: true } : withSeats.equipment,
+      entryNote: '平日自由入座。例假日、寒暑假或考季，館方得於開館前發放號碼牌，並可能查驗借閱證。'
+        + (seats?.laptopSeats ?? ''),
       sources: [...withSeats.sources, taipeiManualRule, ...(taipeiListed ? [taipeiDirectory] : [])],
     };
   }

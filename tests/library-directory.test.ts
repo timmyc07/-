@@ -180,7 +180,7 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(banqiao.openingHours!, /臨時據點/);
   const gongliao = libraries.find(({ id }) => id === 'plis-5700fc946f2296c185af')!;
   assert(gongliao.closures.some(({ from, until }) => from === '2026-08-27' && until === '2027-01-06'));
-  assert.equal(scheduled.length, 158);
+  assert.equal(scheduled.length, 159);
   for (const [id, seats] of [
     ['plis-d4a372e3044256cc569b', 4], ['plis-235cf5117c19f3df0087', undefined],
   ] as const) {

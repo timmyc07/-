@@ -161,6 +161,10 @@ const studyHours: Record<string, StudyHours | undefined> = {
   'plis-44d1777aefba3d40891b': {
     name: '自修室', ranges: [], url: 'https://www.yuanshan.gov.tw/cp.aspx?n=5787',
   },
+  'plis-424ebe1541690abe5b92': {
+    name: 'B1 讀者自習室', ranges: [['023456', '08:00', '17:00']],
+    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000271',
+  },
   'plis-73fa3d8c3a6527be6a48': {
     name: '4 樓自習室', ranges: [['23456', '08:30', '16:45'], ['0', '08:30', '16:30']],
     url: 'https://www.chcg.gov.tw/TSO/getFile.aspx?did=4133&dir=xihu&file=1&file_id=542226&type=3',

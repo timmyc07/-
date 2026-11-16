@@ -1046,12 +1046,25 @@ const kangzhuangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/04';
 const ziguanBranchGuide = 'https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,54,554,548';
 const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const lanzhouLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=A3B82F4BECD6CD1C&sms=CFFFC938B352678A';
+const kaohsiungWirelessOutletRules = 'https://www.ksml.edu.tw/faq/index.aspx?Parser=27,8,64,,,,,,,,5';
 const kaohsiungBranchReadingRules = 'https://www.ksml.edu.tw/form/Details.aspx?Parser=2%2C8%2C97%2C50%2C%2C%2C1499';
 const kaohsiungMainReadingRules = 'https://www.ksml.edu.tw/form/Details.aspx?Parser=2%2C8%2C872%2C%2C%2C%2C688';
 const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=099812be491c45e59238adcaf69d3443';
 const yuliLibrary = 'https://www.hlyl.gov.tw/cl.aspx?n=20261';
 const yuliReadingRules = 'https://www.hlyl.gov.tw/cl.aspx?n=21246';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-216cea038dcd5ebbfa28': {
+    name: '2 樓無線上網區', kind: 'reading', slots: null, access: null, equipment: { wifi: true, outlet: true },
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,53,544,537', kaohsiungWirelessOutletRules],
+  },
+  'plis-9f200d6bbcb863c3920a': {
+    name: '3 樓無線上網區', kind: 'reading', slots: null, access: null, equipment: { wifi: true, outlet: true },
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,65,676,669', kaohsiungWirelessOutletRules],
+  },
+  'plis-3f58876c12dd20557b26': {
+    name: '1 樓無線上網區', kind: 'reading', slots: null, access: null, equipment: { wifi: true, outlet: true },
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,48,489,482', kaohsiungWirelessOutletRules],
+  },
   'plis-e7aaecf3515c7452935c': {
     name: '2 樓筆電使用區', kind: 'reading', slots: null, access: null,
     equipment: { laptop: true, outlet: true, wifi: true },
@@ -1099,7 +1112,7 @@ const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
       sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,72,753,746'] },
     { name: '2 樓無線上網區', kind: 'reading', seats: 6, slots: null, access: null, equipment: { wifi: true, outlet: true },
       sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,72,753,746',
-        'https://www.ksml.edu.tw/faq/index.aspx?Parser=27,8,64,,,,,,,,5'] },
+        kaohsiungWirelessOutletRules] },
   ],
   'plis-10ddca249245164caff7': {
     name: '4 樓閱覽區', kind: 'reading', seats: 50, slots: null, access: null, equipment: {},
@@ -1331,13 +1344,15 @@ const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
     equipment: {}, entryNote: '期刊區為沙發座位。電腦使用區另有 4 席，幼兒閱覽區可供 30 人以上親子共讀。',
     sources: ['https://www.mlvillage.gov.tw/content/index.aspx?Parser=1,4,153,31'],
   },
-  'plis-a908448b0b36ed1715ce': {
-    name: '5 樓書庫閱覽區', kind: 'reading', seats: 24,
-    slots: [0, 2, 3, 4, 5, 6].map((day) => ({ day, start: minutes('09:00'), end: minutes('17:00') })),
-    access: null, equipment: {},
-    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,41,411,405',
-      'https://youth.ksml.edu.tw/content/index?Parser=1,4,45,26'],
-  },
+  'plis-a908448b0b36ed1715ce': [
+    { name: '5 樓書庫閱覽區', kind: 'reading', seats: 24,
+      slots: [0, 2, 3, 4, 5, 6].map((day) => ({ day, start: minutes('09:00'), end: minutes('17:00') })),
+      access: null, equipment: {},
+      sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,41,411,405',
+        'https://youth.ksml.edu.tw/content/index?Parser=1,4,45,26'] },
+    { name: '4 樓無線上網室', kind: 'reading', slots: null, access: null, equipment: { wifi: true, outlet: true },
+      sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,41,412,405', kaohsiungWirelessOutletRules] },
+  ],
   'plis-fe9c622fb1bdd5279ec1': {
     name: '2 樓閱覽區', kind: 'reading', seats: 20,
     slots: [0, 3, 4, 5, 6].flatMap((day) => [

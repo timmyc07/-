@@ -2167,6 +2167,11 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-e3c1d8e816d9e6061a7d') {
+    return { ...area,
+      entryNote: '週一及國定假日休館。請勿以物品佔位，離座超過 30 分鐘，館方得將物品移至置物區。',
+      sources: [...area.sources, 'https://cabkc.kinmen.gov.tw/information?pid=1566&uid=9'] };
+  }
   if (['plis-995a90f8387d2668be41', 'plis-2065ea3c3619a2597356',
     'plis-d5b8a42994a660f05102', 'plis-65dcee6860c52419f419'].includes(id)) {
     return { ...area, access: 'walk-in',

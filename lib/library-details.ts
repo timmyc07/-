@@ -2597,7 +2597,10 @@ function localStudyRoom(id: string, area: Area): Area {
         : 'https://www.chcg.gov.tw/TSO/tianzhong/04bulletin/bulletin02_con.aspx?bull_id=392826'] };
   }
   if (id === 'plis-d7b92d13f890b0fd9998') {
-    return { ...area, name: '3 樓自修區', sources: [...area.sources, 'https://zuhu.yunlin.gov.tw/sihhuLIB.htm'] };
+    return { ...area, name: '3 樓自修區', equipment: { ...area.equipment, laptop: true, outlet: false },
+      entryNote: '可使用筆電或平板，請自備電池或先充電。自修區不提供個人設備用電。',
+      sources: [...area.sources, 'https://zuhu.yunlin.gov.tw/sihhuLIB.htm',
+        'https://zuhu.yunlin.gov.tw/ForumList1.aspx?n=6384&s=67266&sms=14355'] };
   }
   if (id === 'plis-674920ab9a5621eaf6cf') {
     return { ...area, name: '自修區', seats: 98, access: 'card', regionalCard: 'taitung',

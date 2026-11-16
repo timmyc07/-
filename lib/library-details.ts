@@ -1058,6 +1058,16 @@ const lanzhouLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F3880
 const kaohsiungMainReadingRules = 'https://www.ksml.edu.tw/form/Details.aspx?Parser=2%2C8%2C872%2C%2C%2C%2C688';
 const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=099812be491c45e59238adcaf69d3443';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-38b264704ba919b0a591': [
+    { name: '2 樓閱讀區', kind: 'reading', seats: 30, slots: null, access: null, equipment: {},
+      sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,72,753,746'] },
+    { name: '2 樓無線上網區', kind: 'reading', seats: 6, slots: null, access: null, equipment: { wifi: true },
+      sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,72,753,746'] },
+  ],
+  'plis-10ddca249245164caff7': {
+    name: '4 樓閱覽區', kind: 'reading', seats: 50, slots: null, access: null, equipment: {},
+    sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,66,687,680'],
+  },
   'plis-7ef01c27698fc303f21c': {
     name: '開架閱覽區', kind: 'reading', slots: null, access: null, equipment: {},
     sources: ['https://www.cycab.gov.tw/wSite/ct?CPType=&ctNode=6276&mp=1&xItem=13397'],

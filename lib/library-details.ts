@@ -2595,10 +2595,11 @@ function localStudyRoom(id: string, area: Area): Area {
   if (id === 'plis-6c9e30dc1c6abf7a17d4') {
     return {
       ...area, access: 'card', regionalCard: 'keelung', seats: 109,
-      entryNote: '持基隆市圖個人借閱證，線上預約或到館登記。每次原則為 1–3 小時，現場零星時段至少 30 分鐘。',
+      entryNote: '持基隆市圖個人借閱證。A 區 61 席供線上預約，B 區 48 席供現場登記，席次分配以座位系統為準。每次原則為 1–3 小時，現場零星時段至少 30 分鐘。',
       reservation: 'https://ireserve.klccab.gov.tw/',
       sources: [...area.sources, 'https://kllib.klcg.gov.tw/cp.aspx?n=9043',
-        'https://kllib.klcg.gov.tw/News_Content.aspx?_CSN=150&n=7789&s=18148&sms=12521'],
+        'https://kllib.klcg.gov.tw/News_Content.aspx?_CSN=150&n=7789&s=18148&sms=12521',
+        'https://ireserve.klccab.gov.tw/sm/display_news_web_new.do?newsId=600960'],
     };
   }
   if (id === 'plis-b4d4a98c101cbfdc3b6d' || id === 'plis-9df366887a25b0673ee7') {

@@ -2,7 +2,7 @@ name: StudyGo uptime
 
 on:
   schedule:
-    - cron: '3-58/5 * * * *'
+    - cron: '3,8,13,18,23,28,33,38,43,48,53,58 * * * *'
   workflow_dispatch:
   push:
     branches: [main]
@@ -16,8 +16,10 @@ jobs:
     timeout-minutes: 3
     steps:
       - name: Check the Render service
-        run: >-
-          curl --head --fail --silent --show-error
-          --max-time 70 --retry 1 --retry-delay 5
-          --output /dev/null --write-out 'HTTP %{http_code}\n'
-          https://studygo-a49h.onrender.com/taichung-library-logo.svg
+        shell: bash
+        run: |
+          response=$(curl --fail --silent --show-error --max-time 65 --retry 1 --retry-all-errors --retry-delay 4 \
+            --header 'Cache-Control: no-cache' --output /dev/null --write-out '%{http_code} %{content_type}' \
+            "https://studygo-a49h.onrender.com/taichung-library-logo.svg?check=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}")
+          printf 'Received %s\n' "$response"
+          [[ "$response" == '200 image/svg+xml'* ]]

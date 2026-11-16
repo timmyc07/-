@@ -1057,7 +1057,14 @@ const fugangLibrary = 'https://www.typl.gov.tw/zh-tw/About/Introduce/015';
 const lanzhouLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F388033A7&s=A3B82F4BECD6CD1C&sms=CFFFC938B352678A';
 const kaohsiungMainReadingRules = 'https://www.ksml.edu.tw/form/Details.aspx?Parser=2%2C8%2C872%2C%2C%2C%2C688';
 const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=099812be491c45e59238adcaf69d3443';
+const yuliLibrary = 'https://www.hlyl.gov.tw/cl.aspx?n=20261';
+const yuliReadingRules = 'https://www.hlyl.gov.tw/cl.aspx?n=21246';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-7d3a7de84e59a626b045': ['2 樓閱讀室', '地下 1 樓閱讀室'].map((name): Area => ({
+    name, kind: 'reading', slots: null, access: null, equipment: {},
+    entryNote: '離座逾 30 分鐘未歸，館方得取消該座位的使用權。',
+    sources: [yuliLibrary, yuliReadingRules],
+  })),
   'plis-482c2d7ffce11506ef81': {
     name: '總館閱覽區', kind: 'reading', slots: null, access: 'walk-in', equipment: {},
     entryNote: '閱覽席自由入座，請勿佔座。張貼離席提醒單逾 60 分鐘後仍未入座，館方可釋出座位。',
@@ -1394,6 +1401,10 @@ const newTaipeiEquipmentWork = {
   note: '2026 年 11 月 17 日至 12 月 9 日進行公共安全設備汰換，施工期間可能有噪音及異味。',
 };
 const serviceUpdates: Record<string, { url: string; note: string; additionalSource?: string } | undefined> = {
+  'plis-7d3a7de84e59a626b045': {
+    url: yuliReadingRules,
+    note: '1 樓網路區公用電腦供資訊檢索，憑閱覽證登記，每次 30 分鐘。離座或預約後未就座超過 5 分鐘，視同放棄。',
+  },
   'plis-0e21ed69e80b8f68b768': {
     url: 'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=020&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp',
     note: '鄉公所列週六 08:00 開館，縣圖目錄列 08:30。週六 08:30 前到館請先向館方確認。',

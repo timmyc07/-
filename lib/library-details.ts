@@ -2339,6 +2339,10 @@ function localStudyRoom(id: string, area: Area): Area {
   if (id === 'plis-24ed27c19953ccb5f0c4') {
     return { ...area, entryNote: '公圖名錄列 C 棟 2 樓自修室 08:30 開放，縣館舍頁列 C 棟 08:00 開館。08:30 前使用自修室請先向館方確認。' };
   }
+  if (id === 'plis-0d08a9f889b9abeca093') {
+    return { ...area, entryNote: '自修室備有桌椅及照明。',
+      sources: [...area.sources, 'https://hcplibrary.hchcc.gov.tw/wSite/sp?orgId=006&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp'] };
+  }
   if (id === 'plis-cf8f59d429a9ca2188f7') {
     return { ...area, name: '地下室自修室', seats: 25,
       sources: [...area.sources, qionglinLibrary] };

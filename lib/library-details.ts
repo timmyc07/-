@@ -2059,6 +2059,11 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
 }
 
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
+  if (library.id === 'plis-bfff639f154e1c065ad1' && library.address === '嘉義縣鹿草鄉西井村長壽路230號') {
+    const address = '嘉義縣鹿草鄉西井村長壽路226巷3號';
+    library = { ...library, address, coordinates: undefined };
+    detail = { ...detail, address, url: 'https://www.cycab.gov.tw/wSite/sp?idPath=5217_5222_5236&mp=1&orgId=016&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp', facilities: ['自修室'] };
+  }
   if (library.id === 'plis-14aad42b37ccee310fd2' && library.address === '南投縣南投市漳興巷51號') {
     const address = '南投縣南投市平和里信義街101號';
     library = { ...library, address, phone: undefined, fax: undefined,
@@ -2247,6 +2252,9 @@ const newTaipeiStudySeats: Record<string, { branchId: string; seats: number; nam
 };
 
 function localStudyRoom(id: string, area: Area): Area {
+  if (id === 'plis-bfff639f154e1c065ad1') {
+    return { ...area, name: '2 樓個人自修室' };
+  }
   if (id === 'plis-73fa3d8c3a6527be6a48') {
     return { ...area, access: 'walk-in',
       entryNote: '自由入座，不得預佔。館方視情況於開館前發放號碼牌。請優先使用 A 自修室，勿私自接用館內電源。',

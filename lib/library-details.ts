@@ -2057,6 +2057,7 @@ const announcedLibraries: (Library & { city: string })[] = [
 ];
 
 const taoyuanReadingRules = 'https://www.typl.gov.tw/zh-tw/Reader/RegulationContent/20';
+const taoyuanReadingSeatNote = '每人限一席，請勿佔位。館方可於開館前發放號碼牌，請依序領牌入座。各館以現場公告為準。';
 // These branches distinguish a laptop zone or publish separate study-room rules.
 const taoyuanStudyRulesToVerify = new Set([
   'plis-62eb0222ac5626717a13', 'plis-07c47313a8f5b473d2bf', 'plis-5f74f02b42c06b3fc9d9',
@@ -2070,13 +2071,21 @@ export function withAnnouncedLibraries(libraries: (Library & { city: string })[]
     if (library.city !== '桃園市' || !library.name.startsWith('桃園市立圖書館')) return library;
     const areas = library.areas.map((area): Area => {
       const applies = area.kind === 'reading' || (area.kind === 'study' && !taoyuanStudyRulesToVerify.has(library.id));
-      if (!applies || area.equipment.laptop !== undefined || /極靜|研習教室/.test(area.name)) return area;
-      return { ...area, equipment: { ...area.equipment, laptop: true },
+      if (!applies || /極靜|研習教室/.test(area.name)) return area;
+      const allowsLaptop = area.equipment.laptop === undefined;
+      const ordinarySeat = area.access === null && !area.entryNote && !area.reservation
+        && (area.kind === 'study' || /閱覽|閱報/.test(area.name))
+        && library.id !== 'plis-b208b8b3efcd2c80cbaa';
+      if (!allowsLaptop && !ordinarySeat) return area;
+      return { ...area,
+        equipment: allowsLaptop ? { ...area.equipment, laptop: true } : area.equipment,
+        entryNote: ordinarySeat ? taoyuanReadingSeatNote : area.entryNote,
         sources: [...new Set([...area.sources, taoyuanReadingRules])] };
     });
     if (areas.every((area, index) => area === library.areas[index])) return library;
     return { ...library, areas,
-      accessNote: [library.accessNote, '閱覽及自修空間使用筆電請勿影響他人，並依館內公告。'].filter(Boolean).join(' '),
+      accessNote: areas.some((area, index) => area.equipment.laptop === true && library.areas[index].equipment.laptop === undefined)
+        ? [library.accessNote, '閱覽及自修空間使用筆電請勿影響他人，並依館內公告。'].filter(Boolean).join(' ') : library.accessNote,
       sources: [...new Set([...library.sources, taoyuanReadingRules])] };
   });
 }
@@ -2444,7 +2453,7 @@ function localStudyRoom(id: string, area: Area): Area {
     return { ...area, entryNote: '自習區專用開放時段請向館方確認。' };
   }
   if (taoyuanWalkInStudyRooms.has(id)) {
-    area = { ...area, access: 'walk-in', entryNote: '依現場指示入座。館方視情況於開館前發放號碼牌。',
+    area = { ...area, access: 'walk-in', entryNote: taoyuanReadingSeatNote,
       equipment: id === 'plis-62af35b79d7d88c393d7' ? area.equipment : { ...area.equipment, laptop: true },
       sources: [...area.sources, 'https://www.typl.gov.tw/zh-tw/Reader/RegulationContent/20', taoyuanSeatPortal] };
   }

@@ -1,0 +1,23 @@
+name: StudyGo uptime
+
+on:
+  schedule:
+    - cron: '3-58/5 * * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [.github/workflows/studygo-uptime.yml]
+
+permissions: {}
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Check the Render service
+        run: >-
+          curl --head --fail --silent --show-error
+          --max-time 70 --retry 1 --retry-delay 5
+          --output /dev/null --write-out 'HTTP %{http_code}\n'
+          https://studygo-a49h.onrender.com/taichung-library-logo.svg

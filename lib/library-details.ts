@@ -1058,6 +1058,11 @@ const lanzhouLibrary = 'https://tpml.gov.taipei/News_Content.aspx?n=4F66F55F3880
 const kaohsiungMainReadingRules = 'https://www.ksml.edu.tw/form/Details.aspx?Parser=2%2C8%2C872%2C%2C%2C%2C688';
 const jinshanLibrary = 'https://www.library.ntpc.gov.tw/branch/libraryBranch/detail/8aa9646575074db0a99c641a5f029ddb?branchId=099812be491c45e59238adcaf69d3443';
 const localAdditionalAreas: Record<string, Area | Area[] | undefined> = {
+  'plis-482c2d7ffce11506ef81': {
+    name: '總館閱覽區', kind: 'reading', slots: null, access: 'walk-in', equipment: {},
+    entryNote: '閱覽席自由入座，請勿佔座。張貼離席提醒單逾 60 分鐘後仍未入座，館方可釋出座位。',
+    sources: ['https://www.cultural.pthg.gov.tw/library/cp.aspx?n=0C8682E5E2075EEE'],
+  },
   'plis-38b264704ba919b0a591': [
     { name: '2 樓閱讀區', kind: 'reading', seats: 30, slots: null, access: null, equipment: {},
       sources: ['https://www.ksml.edu.tw/lib/content/index.aspx?Parser=1,72,753,746'] },

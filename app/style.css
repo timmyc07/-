@@ -61,13 +61,15 @@ h1{font-size:clamp(2rem,1.4rem + 2.5vw,3.875rem);line-height:1.16;margin-bottom:
 .keyword-search button{border-radius:0;background:var(--surface);color:var(--accent)}
 .advanced-trigger{position:absolute;inset-block-start:1px;inset-inline-end:1px;border-radius:0 23px 23px 0;background:var(--surface);color:var(--accent)}
 .keyword-search button:hover,.advanced-trigger:hover{background:var(--soft)}
-.advanced-dialog{width:min(680px,calc(100% - 32px));max-height:calc(100dvh - 32px);padding:clamp(16px,4vw,28px);border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);box-shadow:var(--shadow-raised)}
+.advanced-dialog{width:min(1200px,calc(100% - 32px));max-height:calc(100dvh - 32px);padding:clamp(16px,4vw,28px);border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);box-shadow:var(--shadow-raised)}
 .advanced-dialog::backdrop{background:#25352b66}
-.advanced-dialog h2{margin:0 0 16px;font-size:1.375rem}
-.advanced-dialog .inputs{grid-template-columns:repeat(3,minmax(0,1fr))}
-.search-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:18px}
+.advanced-dialog h2{margin:0 44px 16px 0;font-size:1.375rem}
+.dialog-close{position:absolute;inset-block-start:10px;inset-inline-end:10px;display:grid;place-items:center;width:44px;margin:0;padding:0;background:transparent;color:var(--accent);z-index:1}
+.dialog-close:hover{background:var(--soft)}
+.search-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;align-items:center;gap:8px;margin-top:18px}
 .search-actions button{margin:0}
-.search-actions .dialog-cancel{margin-inline-start:auto;background:var(--soft);color:var(--accent)}
+.clear-filters{display:inline-flex;align-items:center;min-height:44px;padding:10px 18px;border-radius:999px;background:var(--soft);color:var(--accent);font-weight:500;text-decoration:none}
+.clear-filters:hover{background:var(--match-bg)}
 .inputs{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
 label,legend{font-weight:500;font-size:1rem}
 .filter-label{display:inline-flex;align-items:center;gap:6px}
@@ -274,7 +276,6 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
   .transparency-nav{position:static;display:flex;flex-wrap:wrap;padding:0;border:0}
 }
 @media(max-width:630px){
-  .advanced-dialog .inputs{grid-template-columns:repeat(2,minmax(0,1fr))}
   .shell{width:calc(100% - 32px)}
   .bar{flex-wrap:wrap;gap:8px;padding:8px 0}
   .site-nav{gap:4px}
@@ -283,7 +284,6 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
   .cards{grid-template-columns:1fr}
 }
 @media(max-width:360px){
-  .advanced-dialog .inputs{grid-template-columns:1fr}
   .inputs,.audit-filters .inputs{grid-template-columns:1fr}
 }
 
@@ -302,6 +302,30 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
 
 @media(prefers-reduced-motion:no-preference){
   html{scroll-behavior:smooth}
+  .advanced-dialog{
+    opacity:0;scale:.94 .9;
+    transition:opacity 180ms ease,scale 240ms cubic-bezier(.4,0,.3,1),display 240ms allow-discrete,overlay 240ms allow-discrete;
+  }
+  .advanced-dialog[open]{
+    opacity:1;scale:1;
+    transition-duration:220ms,380ms,380ms,380ms;
+    transition-timing-function:ease,cubic-bezier(.22,1.45,.4,1),ease,ease;
+  }
+  .advanced-dialog::backdrop{
+    opacity:0;
+    transition:opacity 240ms ease,display 240ms allow-discrete,overlay 240ms allow-discrete;
+  }
+  .advanced-dialog[open]::backdrop{opacity:1}
+  .dialog-content{opacity:0;translate:0 8px;transition:opacity 140ms ease,translate 210ms ease}
+  .advanced-dialog[open] .dialog-content{
+    opacity:1;translate:0 0;
+    transition:opacity 220ms ease 45ms,translate 300ms var(--motion-ease) 45ms;
+  }
+  @starting-style{
+    .advanced-dialog[open]{opacity:0;scale:.94 .9}
+    .advanced-dialog[open]::backdrop{opacity:0}
+    .advanced-dialog[open] .dialog-content{opacity:0;translate:0 12px}
+  }
   a,button,input,select,summary,tbody tr{
     transition:background-color var(--motion-fast) ease,border-color var(--motion-fast) ease,color var(--motion-fast) ease,
       box-shadow var(--motion-fast) ease,translate var(--motion-fast) var(--motion-ease),scale var(--motion-fast) var(--motion-ease);

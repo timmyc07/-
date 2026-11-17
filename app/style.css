@@ -54,19 +54,26 @@ h1{font-size:clamp(2rem,1.4rem + 2.5vw,3.875rem);line-height:1.16;margin-bottom:
 .search-page{padding-bottom:clamp(36px,6vw,72px)}
 .search-intro{padding:clamp(22px,3.8vw,44px) 0 16px}
 .search-intro h1{font-size:clamp(1.65rem,1.4rem + 1vw,2.25rem);line-height:1.25;margin:0}
-.search{padding:18px 22px;background:var(--surface);border:1px solid var(--line);border-radius:12px;scroll-margin:20px}
-.form-top,.result-heading{display:flex;justify-content:space-between;align-items:baseline;gap:8px 12px;flex-wrap:wrap}
-.form-top h2,.result-heading h2{margin-bottom:14px}
-.form-top h2{font-size:1.0625rem}
-.form-top a,.result-heading p{font-size:.9375rem}
-.inputs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) 1.3fr;gap:10px}
+.search{display:grid;gap:10px;scroll-margin:20px}
+.keyword-search{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.keyword-search label{position:relative;display:flex;align-items:center;min-width:0}
+.keyword-search svg{position:absolute;inset-inline-start:14px;color:var(--accent);pointer-events:none}
+.keyword-search input{width:100%;min-width:0;min-height:46px;padding:6px 14px 6px 42px;border:1px solid var(--control-line);border-radius:999px;background:var(--surface);color:var(--ink)}
+.advanced-search{padding:0 12px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.advanced-search summary{min-height:44px}
+.advanced-search[open]{padding-bottom:12px}
+.search-actions{display:flex;align-items:center;gap:12px;margin-top:12px}
+.result-heading{display:flex;justify-content:space-between;align-items:baseline;gap:8px 12px;flex-wrap:wrap}
+.result-heading h2{margin-bottom:14px}
+.result-heading p{font-size:.9375rem}
+.inputs{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
 label,legend{font-weight:500;font-size:1rem}
 .filter-label{display:inline-flex;align-items:center;gap:6px}
 .filter-label svg{flex:none;color:var(--accent)}
-.inputs label,.nearby-origin label,.document-filter,.duration-field{display:grid;gap:5px;min-width:0}
+.inputs label,.nearby-origin label,.duration-field{display:grid;gap:5px;min-width:0}
 .inputs label,.duration-field{align-content:space-between}
-.inputs input,:is(.inputs,.nearby-origin,.document-filter) select{min-height:46px;border:1px solid var(--control-line);border-radius:8px;padding:4px 9px;background:var(--paper);color:var(--ink);width:100%;min-width:0}
-:is(.inputs,.nearby-origin,.document-filter) select{padding-inline:12px;cursor:pointer}
+.inputs input,:is(.inputs,.nearby-origin) select{min-height:46px;border:1px solid var(--control-line);border-radius:8px;padding:4px 9px;background:var(--paper);color:var(--ink);width:100%;min-width:0}
+:is(.inputs,.nearby-origin) select{padding-inline:12px;cursor:pointer}
 .inputs input::-webkit-calendar-picker-indicator,
 .inputs input::-webkit-search-cancel-button{cursor:pointer}
 .duration-control{position:relative}
@@ -110,17 +117,15 @@ select:disabled{cursor:not-allowed;opacity:.55}
   select option:hover,select option:focus-visible{color:var(--surface);background:var(--accent)}
   select option:focus-visible{outline:2px solid var(--scroll-thumb);outline-offset:-2px}
 }
-.nearby-origin{display:flex;flex-wrap:wrap;align-items:end;gap:8px 12px;margin-top:12px}
+.nearby-origin{display:flex;flex-wrap:wrap;align-items:end;gap:8px 12px}
 .nearby-origin label{flex:0 1 380px;max-width:100%}
 .nearby-origin select{max-width:100%}
 .nearby-origin button{min-height:46px;margin:0;padding:8px 12px;border-radius:8px;background:var(--soft);color:var(--accent);font-size:1rem}
 .nearby-origin button:hover:not(:disabled){background:var(--match-bg)}
 .nearby-origin button:disabled{cursor:wait}
 .nearby-origin [role=status]{flex-basis:100%;color:var(--muted);font-size:.9375rem}
-.nearby-origin [role=status]:empty{margin-top:-8px}
+.nearby-origin [role=status]:empty{height:0;margin-top:-8px}
 .distance-note{color:var(--muted);font-size:.9375rem;margin-bottom:12px}
-.filters{display:flex;gap:18px;align-items:end;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);flex-wrap:wrap}
-.filters button{border-radius:8px}
 fieldset{margin:0;padding:0;border:0;min-width:0}
 legend{margin-bottom:5px}
 .checks{display:flex;gap:5px 12px;flex-wrap:wrap}
@@ -131,8 +136,11 @@ button span{margin-left:7px}
 button:hover{background:var(--accent-hover)}
 .results{margin-top:26px;scroll-margin:20px}
 .results h2{font-size:1.375rem}
-.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:1fr;gap:12px}
-.cards:has(> .card > .card-rules[open]){grid-auto-rows:auto;align-items:start}
+.result-layout{display:flex;justify-content:flex-end;gap:4px;margin-bottom:12px}
+.result-layout a{display:grid;place-items:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.result-layout a[aria-current=true]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start;gap:18px 12px}
+.cards.cards-list{grid-template-columns:minmax(0,1fr)}
 .card{
   display:grid;
   align-content:start;
@@ -142,6 +150,7 @@ button:hover{background:var(--accent-hover)}
   border:1px solid var(--line);
   border-radius:12px;
   background:var(--surface);
+  box-shadow:var(--shadow-raised);
   overflow-wrap:anywhere;
 }
 .card-heading{display:grid;gap:5px}
@@ -149,6 +158,9 @@ button:hover{background:var(--accent-hover)}
 .card h3{margin:2px 0 0;font-size:1.375rem}
 .area{color:var(--accent);font-weight:500;margin:0}
 .address{color:var(--muted);font-size:1rem;margin:0}
+.card-distance{display:flex;align-items:center;gap:5px;color:var(--accent);font-size:.9375rem;margin:0}
+.card-distance svg{flex:none}
+@keyframes card-float{50%{translate:0 -4px}}
 .card-facts,.visit-details{display:grid;gap:6px;margin:0}
 .card-facts{padding:10px 12px;border-radius:12px;background:var(--soft)}
 :is(.card-facts,.visit-details)>div{display:grid;grid-template-columns:3.25em minmax(0,1fr);gap:10px}
@@ -252,10 +264,7 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
   .bar{flex-wrap:wrap;gap:8px;padding:8px 0}
   .site-nav{gap:4px}
   .site-nav a{padding:0 10px}
-  .search{padding:16px}
   .inputs{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .filters{gap:14px}
-  .filters button{width:100%;margin:0}
   .cards{grid-template-columns:1fr}
 }
 @media(max-width:360px){
@@ -270,7 +279,7 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
 }
 :where(a):hover,summary:hover{color:var(--accent-hover)}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
-.inputs input:focus,:is(.inputs,.nearby-origin,.document-filter) select:focus{border-color:var(--focus);box-shadow:0 0 0 3px var(--soft)}
+.inputs input:focus,:is(.inputs,.nearby-origin) select:focus{border-color:var(--focus);box-shadow:0 0 0 3px var(--soft)}
 .card:focus-within,.card:hover,.card:has(>details[open]){border-color:var(--scroll-thumb);box-shadow:var(--shadow-raised)}
 .tabs a:hover,.pager a:hover{border-color:var(--scroll-thumb)}
 tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
@@ -287,15 +296,18 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
   a:hover>span[aria-hidden=true],button:not(:disabled):hover>span[aria-hidden=true]{translate:3px 0}
   .checks input:checked{animation:check-pop 210ms var(--motion-ease)}
   .card{transition:box-shadow 200ms ease,border-color 200ms ease,translate 200ms var(--motion-ease)}
-  .card:hover{translate:0 -2px}
+  .cards:not(.cards-list)>.card:not(:hover,:focus-within){animation:card-float 3.6s ease-in-out}
+  .card:nth-child(3n+2){animation-delay:160ms}
+  .card:nth-child(3n){animation-delay:320ms}
+  .card:hover,.card:focus-within{translate:0 -3px}
   summary::before{transition:rotate var(--motion-fast) var(--motion-ease)}
   .hero-copy>*,
-  .search>:is(.form-top,.inputs,.nearby-origin,.filters),
+  .search>:is(.keyword-search,fieldset,.nearby-origin,.advanced-search),
   .admin>:is(h1,section,.audit-filters,.table-wrap),
   .nearby-origin [role=status]:not(:empty){animation:section-enter 360ms var(--motion-ease) backwards}
-  .hero-copy h1,.search>.inputs,.admin>section{animation-delay:45ms}
+  .hero-copy h1,.search>fieldset,.admin>section{animation-delay:45ms}
   .search>.nearby-origin,.admin>section+section{animation-delay:85ms}
-  .hero-actions,.search>.filters{animation-delay:125ms}
+  .hero-actions,.search>.advanced-search{animation-delay:125ms}
 
   @supports (appearance:base-select){
     select::picker-icon{transition:rotate var(--motion-fast) var(--motion-ease)}

@@ -1,7 +1,8 @@
 import Form from 'next/form';
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { CalendarDays, Clock, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, RotateCcw, Route, Search, Wifi } from '../action-icons.ts';
+import { CalendarDays, Clock, IdCard, Laptop, LayoutGrid, LibraryBig, List, MapPin, Phone, Plug, RotateCcw, Route,
+  Search, SlidersHorizontal, Wifi } from '../action-icons.ts';
 import DurationField from '../duration-field.tsx';
 import NearbyOrigin from '../nearby-origin.tsx';
 import RegionFilters from '../region-filters.tsx';
@@ -40,6 +41,8 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const district = position ? '' : get('district') ?? '';
   const city = position ? '' : get('city') ?? (district ? '臺中市' : '');
   const view = get('view');
+  const listLayout = get('layout') === 'list';
+  const cardsClass = listLayout ? 'cards cards-list' : 'cards';
   const statusFilter = view && Object.hasOwn(statuses, view) ? view as keyof typeof statuses : '';
   const page = Math.max(1, Number.parseInt(get('page') ?? '1', 10) || 1);
   const searched = get('search') === '1';
@@ -52,7 +55,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   for (const library of libraries) if (library.district) regions.get(library.city)!.add(library.district);
   const districtsByCity = Object.fromEntries([...regions].map(([name, districts]) =>
     [name, [...districts].sort((a, b) => a.localeCompare(b, 'zh-Hant'))]));
-  const formKey = JSON.stringify(Object.entries(params).filter(([key]) => !['page', 'view', 'sources'].includes(key)).sort());
+  const formKey = JSON.stringify(Object.entries(params).filter(([key]) => !['page', 'view', 'layout', 'sources'].includes(key)).sort());
   const selected = libraries.find((library) => library.id === original);
   const originLibrary = libraries.find((library) => library.id === near && library.coordinates);
   const origin = position ?? originLibrary?.coordinates;
@@ -69,8 +72,10 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   };
   const rank = { yes: 0, unknown: 1, no: 2 };
   type Result = ReturnType<typeof evaluateLibrary>[number];
-  const compareResults = (a: Result, b: Result) =>
-    rank[a.status] - rank[b.status] || (a.distance ?? Number.MAX_VALUE) - (b.distance ?? Number.MAX_VALUE);
+  const compareDistance = (a: Result, b: Result) =>
+    (a.distance ?? Number.MAX_VALUE) - (b.distance ?? Number.MAX_VALUE);
+  const compareStatus = (a: Result, b: Result) => rank[a.status] - rank[b.status];
+  const compareResults = (a: Result, b: Result) => compareDistance(a, b) || compareStatus(a, b);
   const results = searched && !invalid ? candidates.flatMap(evaluateLibrary).sort(compareResults) : [];
   const visible = results.filter((item) => !statusFilter || item.status === statusFilter);
   const totalPages = Math.max(1, Math.ceil(visible.length / pageSize));
@@ -79,7 +84,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const backups = selected ? backupLibraries(origin ? results : results.map((item) => ({
     ...item, distance: distanceKm(backupOrigin, item.library.coordinates),
   })).sort(compareResults), original) : [];
-  const originalResult = searched && !invalid && selected ? evaluateLibrary(selected).sort(compareResults)[0] : undefined;
+  const originalResult = searched && !invalid && selected ? evaluateLibrary(selected).sort(compareStatus)[0] : undefined;
   const checked = libraries.filter((library) => library.areas.some((area) =>
     area.kind === 'study' && area.slots?.length && (area.access === 'walk-in' || area.access === 'card')));
   const featured = checked.slice(0, 4);
@@ -102,50 +107,61 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       <section className="shell search-intro" aria-labelledby="search-page-title">
         <h1 id="search-page-title">查詢自修空間</h1>
       </section>
-      <Form key={formKey} id="search" className="shell search" action="/search#results" aria-labelledby="search-title">
+      <Form key={formKey} id="search" className="shell search" action="/search#results" aria-labelledby="search-page-title">
         <input type="hidden" name="search" value="1" />
-        <div className="form-top"><h2 id="search-title">查詢條件</h2><Link className="filter-label" href="/search#search"><RotateCcw size={16} />清除條件</Link></div>
-        <div className="inputs">
-          <RegionFilters initialCity={city} initialDistrict={district} districtsByCity={districtsByCity} />
-          <label><span className="filter-label"><CalendarDays size={16} />日期</span><input type="date" name="date" defaultValue={date} required /></label>
-          <label><span className="filter-label"><Clock size={16} />開始時間</span><input type="time" name="start" defaultValue={start} required /></label>
-          <DurationField minutes={Number.isFinite(duration) ? duration : 120} />
-          <label><span className="filter-label"><LibraryBig size={16} />空間類型</span><select name="kind" defaultValue={kind}><option value="">所有空間</option>
-            {Object.entries(kindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
-          <label><span className="filter-label"><Search size={16} />館名或地址</span><input type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="例如 大墩分館" /></label>
+        {listLayout && <input type="hidden" name="layout" value="list" />}
+        {selected && <input type="hidden" name="original" value={selected.id} />}
+        <div className="keyword-search">
+          <label><Search size={18} aria-hidden="true" /><input aria-label="館名或地址" type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="搜尋館名或地址" /></label>
+          <button type="submit">搜尋</button>
         </div>
+        <fieldset aria-label="需要的設備"><div className="checks">
+          {facilityKeys.map((key) => {
+            const Icon = facilityIcons[key];
+            return <label key={key}><input type="checkbox" name={key} defaultChecked={equipment.includes(key)} />
+              <span className="filter-label"><Icon size={16} />{facilities[key]}</span></label>;
+          })}
+        </div></fieldset>
         <NearbyOrigin key={position ? 'me:' + get('position') : originLibrary?.id}
           selectedLibrary={originLibrary && { id: originLibrary.id, name: originLibrary.city + ' · ' + originLibrary.name }}
           initialOrigin={position ? 'me' : originLibrary?.id ?? ''} position={position && get('position')} />
-        <div className="filters">
-          <fieldset><legend>需要的設備</legend><div className="checks">
-            {facilityKeys.map((key) => {
-              const Icon = facilityIcons[key];
-              return <label key={key}><input type="checkbox" name={key} defaultChecked={equipment.includes(key)} />
-                <span className="filter-label"><Icon size={16} />{facilities[key]}</span></label>;
-            })}
-          </div></fieldset>
-          <label className="document-filter"><span className="filter-label"><IdCard size={16} />是否需要特定證件</span>
-            <select name="documents" defaultValue={documentFilter}>
-              <option value="">不限</option>
-              <option value="none">{documentLabels.none}</option>
-              <option value="required">{documentLabels.required}</option>
-            </select>
-          </label>
-          {selected && <input type="hidden" name="original" value={selected.id} />}
-          <button type="submit"><Search className="action-icon" size={18} />查詢空間</button>
-        </div>
+        <details className="advanced-search" open={Boolean(city || kind || documentFilter || start !== '14:00' || duration !== 120 || date !== today)}>
+          <summary className="filter-label"><SlidersHorizontal size={16} />進階篩選</summary>
+          <div className="inputs">
+            <RegionFilters initialCity={city} initialDistrict={district} districtsByCity={districtsByCity} />
+            <label><span className="filter-label"><CalendarDays size={16} />日期</span><input type="date" name="date" defaultValue={date} required /></label>
+            <label><span className="filter-label"><Clock size={16} />開始時間</span><input type="time" name="start" defaultValue={start} required /></label>
+            <DurationField minutes={Number.isFinite(duration) ? duration : 120} />
+            <label><span className="filter-label"><LibraryBig size={16} />空間類型</span><select name="kind" defaultValue={kind}><option value="">所有空間</option>
+              {Object.entries(kindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+            <label><span className="filter-label"><IdCard size={16} />入場證件</span>
+              <select name="documents" defaultValue={documentFilter}>
+                <option value="">不限</option>
+                <option value="none">{documentLabels.none}</option>
+                <option value="required">{documentLabels.required}</option>
+              </select>
+            </label>
+          </div>
+          <div className="search-actions">
+            <Link className="filter-label" href="/search#search"><RotateCcw size={16} />清除條件</Link>
+            <button type="submit">套用篩選</button>
+          </div>
+        </details>
       </Form>
       <section id="results" className="shell results" aria-labelledby="results-title">
         <BlurFade key={resultsKey} inView>
+          {!invalid && <nav className="result-layout" aria-label="結果顯示方式">
+            <Link href={href({ layout: 'list' })} aria-label="清單檢視" title="清單檢視" aria-current={listLayout ? 'true' : undefined}><List size={18} /></Link>
+            <Link href={href({ layout: '' })} aria-label="卡片檢視" title="卡片檢視" aria-current={!listLayout ? 'true' : undefined}><LayoutGrid size={18} /></Link>
+          </nav>}
           {invalid && <><h2 id="results-title">查詢結果</h2><p className="notice" role="alert">請輸入有效日期、開始時間與正整數分鐘。使用時段須在同一天內。</p></>}
           {!searched && <><h2 id="results-title">已核對空間時段</h2>
             {!featured.length && <p>可使用上方表單查詢館舍名錄。</p>}
-            <div className="cards">{featured.map((library) => <LibraryCard key={library.id} library={library} area={library.areas.find((area) => area.kind === 'study' && area.slots?.length)} />)}</div>
+            <div className={cardsClass}>{featured.map((library) => <LibraryCard key={library.id} library={library} area={library.areas.find((area) => area.kind === 'study' && area.slots?.length)} />)}</div>
           </>}
           {searched && !invalid && <>
             <div className="result-heading"><h2 id="results-title">查詢結果</h2><p>{date} · {start}–{clock(query.start + duration)}</p></div>
-            {originLabel && <p className="distance-note">起點 {originLabel} · 同一結果狀態內依直線距離排序</p>}
+            {originLabel && <p className="distance-note">起點 {originLabel} · 依直線距離由近到遠</p>}
             {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult
               ? statuses[originalResult.status] : '沒有符合所選證件條件的空間'}
               {originalResult?.area && ' · ' + originalResult.area.name}
@@ -154,7 +170,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             {selected && <section className="backups" aria-label="備案比較">
               <h3>備案比較</h3>
               {backupOrigin && <p className="distance-note">以{originLabel ?? '原定館舍'}為起點，依直線距離排序</p>}
-              {backups.length ? <div className="cards">{backups.map((item) =>
+              {backups.length ? <div className={cardsClass}>{backups.map((item) =>
                 <LibraryCard key={item.library.id} {...item} />)}</div> :
                 <p>目前條件下沒有已確認符合的備案。{' '}
                   {city ? <Link href={href({ city: '', district: '', page: '' })}>擴大到全臺灣</Link> : '可調整條件再查詢。'}
@@ -166,7 +182,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                 href={href({ view: key, page: '' })}>{label} {results.filter(({ status }) => status === key).length}</Link>)}
             </nav>
             {!visible.length && <p className="notice">沒有符合此篩選的結果。</p>}
-            <div className="cards">{visible.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) =>
+            <div className={cardsClass}>{visible.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) =>
               <LibraryCard key={item.library.id + (item.area?.name ?? '')} {...item}
                 originalLink={href({ original: item.library.id, q: '', page: '' })} />)}</div>
             {totalPages > 1 && <nav className="pager" aria-label="結果頁碼">
@@ -200,8 +216,9 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
       </div>
       <h3>{library.name}</h3>
       <p className="area">{area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
-      <p className="address">{library.address || '地址待確認'}{distance !== undefined && ' · 直線約 ' +
-        (distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里')}</p>
+      <p className="address">{library.address || '地址待確認'}</p>
+      {distance !== undefined && <p className="card-distance"><MapPin size={15} />直線約 {
+        distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里'}</p>}
     </header>
     <dl className="card-facts">
       <div><dt>證件</dt><dd className="entry-documents">{documentLabels[documents]}</dd></div>

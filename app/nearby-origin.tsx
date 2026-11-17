@@ -69,7 +69,7 @@ export default function NearbyOrigin({ selectedLibrary, initialOrigin, position 
     <label><span className="filter-label"><Compass size={16} />距離排序起點</span>
       <select name="near" value={origin} onChange={(event) => setOrigin(event.target.value)}
         onFocus={loadLibraries} onPointerEnter={loadLibraries} aria-busy={libraryStatus === 'loading'}>
-      <option value="">不按距離排序</option>
+      <option value="">請選擇距離起點</option>
       {position && <option value="me">我的位置</option>}
       {(libraries ?? (selectedLibrary ? [selectedLibrary] : [])).map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
       {libraryStatus === 'loading' && <option disabled>載入館舍中…</option>}

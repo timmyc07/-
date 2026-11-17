@@ -4,7 +4,7 @@ import { CalendarDays, Clock, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, R
 import DurationField from '../duration-field.tsx';
 import AutoDistance from './auto-distance.tsx';
 import AdvancedFilters from './advanced-filters.tsx';
-import ResultLayout, { LayoutField, LayoutLink } from './result-layout.tsx';
+import ResultLayout, { LayoutControls, LayoutField, LayoutLink } from './result-layout.tsx';
 import RegionFilters from '../region-filters.tsx';
 import directory from '../../public/datasets/library-directory.json';
 import { libraryCatalog, type RegionalLibrary } from '../../lib/library-catalog.ts';
@@ -113,13 +113,16 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           <input aria-label="館名或地址" type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="搜尋館名或地址" />
           <button type="submit" aria-label="搜尋" title="搜尋"><Search size={19} aria-hidden="true" /></button>
         </div>
-        <fieldset aria-label="需要的設備"><div className="checks">
-          {facilityKeys.map((key) => {
-            const Icon = facilityIcons[key];
-            return <label key={key}><input type="checkbox" name={key} defaultChecked={equipment.includes(key)} />
-              <span className="filter-label"><Icon size={16} />{facilities[key]}</span></label>;
-          })}
-        </div></fieldset>
+        <div className="search-options">
+          <fieldset aria-label="需要的設備"><div className="checks">
+            {facilityKeys.map((key) => {
+              const Icon = facilityIcons[key];
+              return <label key={key}><input type="checkbox" name={key} defaultChecked={equipment.includes(key)} />
+                <span className="filter-label"><Icon size={16} />{facilities[key]}</span></label>;
+            })}
+          </div></fieldset>
+          {!invalid && <LayoutControls />}
+        </div>
         <AdvancedFilters>
           <RegionFilters initialCity={city} initialDistrict={district} districtsByCity={districtsByCity} />
           <label><span className="filter-label"><CalendarDays size={16} />日期</span><input type="date" name="date" defaultValue={date} required /></label>
@@ -136,7 +139,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           </label>
         </AdvancedFilters>
       </Form>
-      <ResultLayout showControls={!invalid}>
+      <ResultLayout hasPosition={Boolean(position)}>
         {!invalid && !position && <AutoDistance searchKey={JSON.stringify(params)} />}
         <div key={resultsKey}>
           {invalid && <p className="notice" role="alert">請輸入有效日期、開始時間與正整數分鐘。使用時段須在同一天內。</p>}
@@ -148,7 +151,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               {' '}<LayoutLink href={href({ original: '' })}>清除原定館舍</LayoutLink></div>}
             {selected && <section className="backups" aria-label="備案比較">
               <h3>備案比較</h3>
-              {backupOrigin && <p className="distance-note">以{position ? '目前位置' : '原定館舍'}為起點，依直線距離排序</p>}
+              {backupOrigin && <p className={position ? 'distance-note user-distance' : 'distance-note'}>以{position ? '目前位置' : '原定館舍'}為起點，依直線距離排序</p>}
               {backups.length ? <div className="cards">{backups.map((item) =>
                 <LibraryCard key={item.library.id} {...item} distance={position ? item.distance : undefined} />)}</div> :
                 <p>目前條件下沒有已確認符合的備案。{' '}
@@ -239,7 +242,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
       </div>
     </details>
     {originalLink && <LayoutLink className="backup-link" href={originalLink}><Route className="action-icon" size={17} />以此館為原定地點找備案</LayoutLink>}
-    <footer className="card-distance"><MapPin size={15} aria-hidden="true" />{distance === undefined ? '距離待確認' :
-      '離你約 ' + (distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里')}</footer>
+    {distance !== undefined && <footer className="card-distance user-distance"><MapPin size={15} aria-hidden="true" />離你約 {
+      distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里'}</footer>}
   </article>;
 }

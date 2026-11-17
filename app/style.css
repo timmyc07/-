@@ -131,7 +131,9 @@ button span{margin-left:7px}
 button:hover{background:var(--accent-hover)}
 .results{margin-top:26px;scroll-margin:20px}
 .results h2{font-size:1.375rem}
-.result-layout{display:flex;justify-content:flex-end;gap:4px;margin-bottom:12px}
+.search-options{display:flex;align-items:center;gap:12px}
+.search-options fieldset{flex:1}
+.result-layout{display:flex;flex:none;gap:4px}
 .result-layout button{display:grid;place-items:center;min-width:44px;min-height:44px;margin:0;padding:0;color:var(--accent);border:1px solid var(--line);border-radius:8px;background:var(--surface)}
 .result-layout button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start;gap:18px 12px}
@@ -166,6 +168,7 @@ button:hover{background:var(--accent-hover)}
 .address{color:var(--muted);font-size:1rem;margin:0}
 .card-distance{display:flex;align-items:center;gap:5px;color:var(--accent);font-size:.9375rem;margin:0}
 .card-distance svg{flex:none}
+.results[data-show-distance=false] .user-distance{display:none}
 @media(min-width:631px){
   .results[data-layout=list] .cards>.card{grid-template-columns:minmax(0,2fr) minmax(0,1fr);column-gap:20px}
   .results[data-layout=list] .cards>.card>:not(.card-heading,.card-facts){grid-column:1/-1}
@@ -313,9 +316,9 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
   .results[data-layout=grid] .cards>.card:nth-child(3n)::before{animation-delay:200ms}
   summary::before{transition:rotate var(--motion-fast) var(--motion-ease)}
   .hero-copy>*,
-  .search>fieldset,
+  .search-options>fieldset,
   .admin>:is(h1,section,.audit-filters,.table-wrap){animation:section-enter 360ms var(--motion-ease) backwards}
-  .hero-copy h1,.search>fieldset,.admin>section{animation-delay:45ms}
+  .hero-copy h1,.search-options>fieldset,.admin>section{animation-delay:45ms}
   .admin>section+section{animation-delay:85ms}
   .hero-actions{animation-delay:125ms}
 

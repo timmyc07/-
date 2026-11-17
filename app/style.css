@@ -165,6 +165,9 @@ button:hover{background:var(--accent-hover)}
   box-shadow:0 5px 14px #25352b0d,0 0 8px #85b69c26,inset 0 0 5px #85b69c1a;
 }
 .card-heading{display:grid;gap:5px}
+.card-photo{margin:0;min-width:0}
+.card-photo img{display:block;width:100%;height:clamp(160px,24vw,240px);object-fit:contain;background:var(--soft);border-radius:8px}
+.card-photo figcaption{margin-top:4px;font-size:.8125rem;color:var(--muted);overflow-wrap:anywhere}
 .card-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;color:var(--muted);font-size:.9375rem}
 .card h3{margin:2px 0 0;font-size:1.375rem}
 .area{color:var(--accent);font-weight:500;margin:0}

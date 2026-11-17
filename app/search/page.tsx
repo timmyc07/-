@@ -1,4 +1,5 @@
 import Form from 'next/form';
+import Image from 'next/image';
 import type { Metadata } from 'next';
 import { CalendarDays, Clock, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, Route, Search, Wifi } from '../action-icons.ts';
 import DurationField from '../duration-field.tsx';
@@ -13,6 +14,7 @@ import { backupLibraries, clock, documentLabels, entryDocumentRequirement, evalu
   regionalCards, timePattern, validDate, weekdays } from '../../lib/study.ts';
 import type { Area, DocumentRequirement, Facility, Query } from '../../lib/study.ts';
 import { pilotVisit } from '../../lib/taichung-visits.ts';
+import { libraryPhotoCredits, type LibraryPhotoCredit } from '../../lib/mongodb.ts';
 
 type Params = Record<string, string | string[] | undefined>;
 export const metadata: Metadata = { title: '查詢自修空間｜StudyGo' };
@@ -85,6 +87,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     ...item, distance: distanceKm(backupOrigin, item.library.coordinates),
   })).sort(compareResults), original) : [];
   const originalResult = !invalid && selected ? evaluateLibrary(selected).sort(compareStatus)[0] : undefined;
+  const visibleResults = results.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const photos = await libraryPhotoCredits(invalid ? [] :
+    [...new Set([...visibleResults, ...backups].map(({ library }) => library.id))]).catch(() => new Map<string, LibraryPhotoCredit>());
   const resultsKey = JSON.stringify([formKey, currentPage, position]);
 
   function href(changes: Record<string, string>) {
@@ -153,14 +158,16 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               <h3>備案比較</h3>
               {backupOrigin && <p className={position ? 'distance-note user-distance' : 'distance-note'}>以{position ? '目前位置' : '原定館舍'}為起點，依直線距離排序</p>}
               {backups.length ? <div className="cards">{backups.map((item) =>
-                <LibraryCard key={item.library.id} {...item} distance={position ? item.distance : undefined} />)}</div> :
+                <LibraryCard key={item.library.id} {...item} photo={photos.get(item.library.id)}
+                  distance={position ? item.distance : undefined} />)}</div> :
                 <p>目前條件下沒有已確認符合的備案。{' '}
                   {city ? <LayoutLink href={href({ city: '', district: '', page: '' })}>擴大到全臺灣</LayoutLink> : '可調整條件再查詢。'}
                 </p>}
             </section>}
             {!results.length && <p className="notice">沒有符合此篩選的結果。</p>}
-            <div className="cards">{results.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) =>
+            <div className="cards">{visibleResults.map((item) =>
               <LibraryCard key={item.library.id + (item.area?.name ?? '')} {...item}
+                photo={photos.get(item.library.id)}
                 originalLink={href({ original: item.library.id, q: '', page: '' })} />)}</div>
             {totalPages > 1 && <nav className="pager" aria-label="結果頁碼">
               {currentPage > 1 && <LayoutLink href={href({ page: String(currentPage - 1) })}>上一頁</LayoutLink>}
@@ -173,7 +180,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     </main>;
 }
 
-function LibraryCard({ library, area, documents = entryDocumentRequirement(area), status, reasons, closure, openUntil, distance, originalLink }: {
+function LibraryCard({ library, area, documents = entryDocumentRequirement(area), status, reasons, closure, openUntil, distance, originalLink, photo }: {
   library: RegionalLibrary;
   area?: Area;
   documents?: DocumentRequirement;
@@ -183,9 +190,15 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
   openUntil?: number;
   distance?: number;
   originalLink?: string;
+  photo?: LibraryPhotoCredit;
 }) {
   const visit = area && pilotVisit(library.id, area);
   return <article className="card">
+    {photo && <figure className="card-photo">
+      <Image src={'/api/library-photos/' + encodeURIComponent(library.id)} alt={library.name + '館舍實景'}
+        width={photo.width} height={photo.height} sizes="(max-width: 630px) 100vw, (max-width: 1000px) 50vw, 400px" />
+      <figcaption><a href={photo.source}>{photo.author} · 照片來源</a> · <a href={photo.licenseUrl}>{photo.license}</a></figcaption>
+    </figure>}
     <header className="card-heading">
       <div className="card-top">
         <span>{library.city}{library.district && ' · ' + library.district}</span>

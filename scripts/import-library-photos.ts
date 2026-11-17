@@ -4,6 +4,7 @@ import { load } from 'cheerio';
 import { Binary } from 'mongodb';
 import { libraryCatalog } from '../lib/library-catalog.ts';
 import { libraryPhotos, mongoClient, type LibraryPhotoCredit } from '../lib/mongodb.ts';
+import { libraryPhotoPreview } from '../lib/library-photo-preview.ts';
 
 const [mode, folder, ...ids] = process.argv.slice(2);
 if (!folder || (mode !== 'review' && mode !== 'import') || !ids.length) {
@@ -80,7 +81,10 @@ try {
       if (credit._id !== id || image.length > maxBytes || image[0] !== 255 || image[1] !== 216) {
         throw new Error('暫存照片與館舍不符：' + id);
       }
-      const result = await libraryPhotos(client).replaceOne({ _id: id }, { ...credit, image: new Binary(image) }, { upsert: true });
+      const preview = await libraryPhotoPreview(image);
+      const result = await libraryPhotos(client).replaceOne({ _id: id }, {
+        ...credit, width: preview.width, height: preview.height, image: new Binary(preview.image),
+      }, { upsert: true });
       if (!result.acknowledged) throw new Error('照片未寫入：' + id);
       console.log('已儲存', id, name);
     }

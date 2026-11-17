@@ -115,7 +115,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           <label><span className="filter-label"><Search size={16} />館名或地址</span><input type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="例如 大墩分館" /></label>
         </div>
         <NearbyOrigin key={position ? 'me:' + get('position') : originLibrary?.id}
-          libraries={libraries.filter((library) => library.coordinates).map(({ id, name, city }) => ({ id, name: city + ' · ' + name }))}
+          selectedLibrary={originLibrary && { id: originLibrary.id, name: originLibrary.city + ' · ' + originLibrary.name }}
           initialOrigin={position ? 'me' : originLibrary?.id ?? ''} position={position && get('position')} />
         <div className="filters">
           <fieldset><legend>需要的設備</legend><div className="checks">

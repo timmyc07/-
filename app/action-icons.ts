@@ -4,6 +4,7 @@ export { CalendarDays } from 'pulsoicon-react/icons/calendar-days';
 export { Clock } from 'pulsoicon-react/icons/clock';
 export { Compass } from 'pulsoicon-react/icons/compass';
 export { Database } from 'pulsoicon-react/icons/database';
+export { House } from 'pulsoicon-react/icons/house';
 export { IdCard } from 'pulsoicon-react/icons/id-card';
 export { Laptop } from 'pulsoicon-react/icons/laptop';
 export { LibraryBig } from 'pulsoicon-react/icons/library-big';

@@ -1,13 +1,14 @@
 import { pilotVisit } from './taichung-visits.ts';
 import type { Library, Snapshot } from './study.ts';
 
-export function sourcesByHost(libraries: Library[], snapshot: Snapshot | null) {
+export function sourcesByHost(libraries: Library[], snapshot: Snapshot | null, onlyHost?: string) {
   const groups = new Map<string, Map<string, string>>();
   const names = new Map(libraries.map(({ id, name }) => [id, name]));
 
   function add(source: string | undefined, label: string) {
     const url = source && URL.parse(source);
     if (!url || !['http:', 'https:'].includes(url.protocol) || url.username || url.password) return;
+    if (onlyHost && url.hostname !== onlyHost) return;
     let links = groups.get(url.hostname);
     if (!links) groups.set(url.hostname, links = new Map());
     if (!links.has(url.href)) links.set(url.href, label);

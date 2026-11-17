@@ -33,15 +33,18 @@ test('頁尾來源依網域去重並涵蓋空間、休館、預約與核對紀�
     areas: [{ ...area, sources: ['https://example.org/area'], reservation: 'https://seat.example.org/reserve',
       closures: [closure] }],
   };
-  const groups = new Map(sourcesByHost([venue], {
-    _id: 'taichung', importedAt: query.date, sourceCounts: { city: 0, branches: 0, publicLibraries: 0 },
+  const snapshot = {
+    _id: 'taichung' as const, importedAt: query.date, sourceCounts: { city: 0, branches: 0, publicLibraries: 0 },
     issues: [], libraries: [venue], fieldReviews: [review],
-  }));
+  };
+  const groups = new Map(sourcesByHost([venue], snapshot));
   assert.deepEqual([...groups.get('example.org')!.keys()], [
     'https://example.org/', 'https://example.org/closed', 'https://example.org/area', 'https://example.org/review',
   ]);
   assert.deepEqual([...groups.get('seat.example.org')!.keys()], ['https://seat.example.org/reserve']);
   assert.equal(groups.size, 2);
+  assert.deepEqual(sourcesByHost([venue], snapshot, 'example.org'), [['example.org', groups.get('example.org')]]);
+  assert.deepEqual(sourcesByHost([venue], snapshot, 'unknown.example.org'), []);
 });
 
 test('公立館清單排除學校、私立、混合館別及未分類館舍', () => {

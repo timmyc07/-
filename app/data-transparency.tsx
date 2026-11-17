@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Database } from './action-icons.ts';
+import SourceGroup from './source-group.tsx';
 import details from '../public/datasets/library-details.json';
 import directory from '../public/datasets/library-directory.json';
 import { sourcesByHost } from '../lib/source-catalog.ts';
@@ -63,12 +64,7 @@ export default function DataTransparency({ libraries, snapshot, expanded }: {
             <Link className="outline-link" href={expanded ? '/#source-index' : '/?sources=1#source-index'} prefetch={false} aria-expanded={expanded}>
               <Database size={16} />{expanded ? '收合逐館來源索引' : '查看完整逐館來源索引'}
             </Link>
-            {expanded && groups.map(([host, links]) => <details key={host}>
-              <summary>{host} · {links.size} 筆</summary>
-              <div className="disclosure-body">
-                <ul>{[...links].map(([url, label]) => <li key={url}><a href={url}>{label}</a></li>)}</ul>
-              </div>
-            </details>)}
+            {groups.map(([host, links]) => <SourceGroup key={host} host={host} count={links.size} />)}
           </section>
         </div>
       </div>

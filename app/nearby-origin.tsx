@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
+import { Crosshair } from 'pulsoicon-react/icons/crosshair';
 
 export default function NearbyOrigin({ libraries, initialOrigin, position }: {
   libraries: { id: string; name: string }[];
@@ -49,7 +50,7 @@ export default function NearbyOrigin({ libraries, initialOrigin, position }: {
       {libraries.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
     </select></label>
     {origin === 'me' && position && <input type="hidden" name="position" value={position} />}
-    <button type="button" onClick={locate} disabled={locating}>使用我的位置查詢</button>
+    <button type="button" onClick={locate} disabled={locating}><Crosshair className="action-icon" size={18} />使用我的位置查詢</button>
     <small>使用我的位置時，會搜尋全臺並保留其他查詢條件。</small>
     <span role="status">{message}</span>
   </div>;

@@ -1,6 +1,7 @@
 import Form from 'next/form';
 import Image from 'next/image';
 import Link from 'next/link';
+import { CalendarDays, Database, LibraryBig, MapPin, Phone, Route, Search } from './action-icons.ts';
 import DurationField from './duration-field.tsx';
 import NearbyOrigin from './nearby-origin.tsx';
 import RegionFilters from './region-filters.tsx';
@@ -115,9 +116,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
           <span className="brand-text">StudyGo<small>全臺圖書館小幫手</small></span>
         </Link>
         <nav className="site-nav" aria-label="主要導覽">
-          <a href="#search">空間查詢</a>
-          <a href="#results">{searched ? '查詢結果' : '已核對館舍'}</a>
-          <Link href="/admin">資料狀態 <span aria-hidden="true">↗</span></Link>
+          <a href="#search"><Search className="action-icon" size={16} />空間查詢</a>
+          <a href="#results"><LibraryBig className="action-icon" size={16} />{searched ? '查詢結果' : '已核對館舍'}</a>
+          <Link href="/admin"><Database className="action-icon" size={16} />資料狀態</Link>
         </nav>
       </div>
     </header>
@@ -129,7 +130,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
             <h1 id="title">找一個時段，<br /><span>安靜讀書。</span></h1>
             <p className="intro">按時間、空間和設備找自修地點，出發前確認入場規則與休館公告。</p>
             <div className="hero-actions">
-              <a className="primary-action" href="#search">查詢自修空間 <span aria-hidden="true">→</span></a>
+              <a className="primary-action" href="#search"><Search className="action-icon" size={18} />查詢自修空間</a>
               <a href="#results">{searched ? '查看查詢結果' : '瀏覽已核對館舍'}</a>
             </div>
           </div>
@@ -172,7 +173,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
             </select>
           </label>
           {selected && <input type="hidden" name="original" value={selected.id} />}
-          <button type="submit">查詢空間 <span aria-hidden="true">→</span></button>
+          <button type="submit"><Search className="action-icon" size={18} />查詢空間</button>
         </div>
       </Form>
       <section id="results" className="shell results" aria-labelledby="results-title">
@@ -258,9 +259,9 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
     </dl>}
     <div className="card-actions">
       {(library.coordinates || library.address) && <a className="map-link" href={directionsUrl(library.coordinates ?? library.address)}
-        aria-label={library.name + ' Google 地圖導航'}>地圖導航 ↗</a>}
-      {!closure && area?.reservation && <a href={area.reservation}>前往館方預約 ↗</a>}
-      {library.phone && <a href={'tel:' + library.phone}>電洽 {library.phone}</a>}
+        aria-label={library.name + ' Google 地圖導航'}><MapPin className="action-icon" size={17} />地圖導航</a>}
+      {!closure && area?.reservation && <a href={area.reservation}><CalendarDays className="action-icon" size={17} />前往館方預約</a>}
+      {library.phone && <a href={'tel:' + library.phone}><Phone className="action-icon" size={17} />電洽 {library.phone}</a>}
     </div>
     {visit && <div className="source-links">{visit.links.map(([label, url]) => <a key={url} href={url}>{label} ↗</a>)}</div>}
     <details className="card-rules">
@@ -291,6 +292,6 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
         </div>
       </div>
     </details>
-    {originalLink && <Link className="backup-link" href={originalLink}>以此館為原定地點找備案 →</Link>}
+    {originalLink && <Link className="backup-link" href={originalLink}><Route className="action-icon" size={17} />以此館為原定地點找備案</Link>}
   </BlurFade>;
 }

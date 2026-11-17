@@ -9,6 +9,8 @@
 body{margin:0;background:var(--paper);color:var(--ink);font-size:1.0625rem;line-height:1.7}
 a{color:var(--accent);text-underline-offset:3px}
 button,input,select{font:inherit}
+.action-icon{flex:none;vertical-align:-.2em}
+button .action-icon{margin-inline-end:7px}
 button,a,input,select,summary{outline-offset:4px}
 .shell{width:min(1180px,calc(100% - 48px));margin:auto}
 .header{background:var(--surface);border-bottom:1px solid var(--line)}
@@ -150,6 +152,7 @@ button:hover{background:var(--accent-hover)}
 .card-actions a{
   display:inline-flex;
   align-items:center;
+  gap:6px;
   min-height:44px;
   padding:6px 11px;
   border:1px solid var(--line);
@@ -183,7 +186,7 @@ dd{margin:0 0 6px;color:var(--muted)}
 .source-links{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.9375rem}
 .source-links a{display:inline-flex;align-items:center;min-height:28px}
 .reasons{font-size:1rem;padding-left:1.3em;margin:0}
-.backup-link{display:flex;align-items:center;min-height:44px;font-size:.9375rem}
+.backup-link{display:flex;align-items:center;gap:7px;min-height:44px;font-size:.9375rem}
 .tabs,.pager{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
 .tabs a,.pager a{display:inline-flex;align-items:center;min-height:44px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 13px;font-size:1rem;text-decoration:none}
 .tabs a[aria-current=page]{background:var(--accent);color:white}

@@ -43,6 +43,7 @@ export default function SiteFooter({ libraries, snapshot, indexHref, expanded }:
             <li>館舍資料更新 <time dateTime={details.collectedAt}>{date.format(new Date(details.collectedAt))}</time></li>
             {snapshot && <li>臺中核對匯入 <time dateTime={snapshot.importedAt}>{date.format(new Date(snapshot.importedAt))}</time></li>}
             <li><a href="https://data.gov.tw/license">政府資料開放授權條款第 1 版</a></li>
+            <li><a href="/licenses/pulsoicon.txt">PulsoIcon 圖示授權</a></li>
             <li><Link href="/admin">資料狀態與逐欄核對</Link></li>
           </ul>
         </section>

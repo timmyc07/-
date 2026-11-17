@@ -38,10 +38,8 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const position = parseCoordinates(get('position'));
   const district = get('district') ?? '';
   const city = get('city') ?? (district ? '臺中市' : '');
-  const view = get('view');
   const listLayout = get('layout') === 'list';
   const cardsClass = listLayout ? 'cards cards-list' : 'cards';
-  const statusFilter = view && Object.hasOwn(statuses, view) ? view as keyof typeof statuses : '';
   const page = Math.max(1, Number.parseInt(get('page') ?? '1', 10) || 1);
   const searched = get('search') === '1';
   const invalid = searched && (!validDate(date) || !timePattern.test(start) ||
@@ -53,7 +51,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   for (const library of libraries) if (library.district) regions.get(library.city)!.add(library.district);
   const districtsByCity = Object.fromEntries([...regions].map(([name, districts]) =>
     [name, [...districts].sort((a, b) => a.localeCompare(b, 'zh-Hant'))]));
-  const formKey = JSON.stringify(Object.entries(params).filter(([key]) => !['page', 'view', 'layout', 'sources', 'position'].includes(key)).sort());
+  const formKey = JSON.stringify(Object.entries(params).filter(([key]) => !['page', 'layout', 'sources', 'position'].includes(key)).sort());
   const selected = libraries.find((library) => library.id === original);
   const normalized = (value: string) => value.normalize('NFKC').replaceAll('台', '臺');
   const candidates = libraries.filter((library) => (!city || library.city === city) && (!district || library.district === district) &&
@@ -72,8 +70,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const compareStatus = (a: Result, b: Result) => rank[a.status] - rank[b.status];
   const compareResults = (a: Result, b: Result) => compareDistance(a, b) || compareStatus(a, b);
   const results = searched && !invalid ? candidates.flatMap(evaluateLibrary).sort(compareResults) : [];
-  const visible = results.filter((item) => !statusFilter || item.status === statusFilter);
-  const totalPages = Math.max(1, Math.ceil(visible.length / pageSize));
+  const totalPages = Math.max(1, Math.ceil(results.length / pageSize));
   const currentPage = Math.min(totalPages, page);
   const backupOrigin = position ?? selected?.coordinates;
   const backups = selected ? backupLibraries(position ? results : results.map((item) => ({
@@ -83,7 +80,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const checked = libraries.filter((library) => library.areas.some((area) =>
     area.kind === 'study' && area.slots?.length && (area.access === 'walk-in' || area.access === 'card')));
   const featured = checked.slice(0, 4);
-  const resultsKey = JSON.stringify([formKey, statusFilter, currentPage, position]);
+  const resultsKey = JSON.stringify([formKey, currentPage, position]);
 
   function href(changes: Record<string, string>) {
     const next = new URLSearchParams();
@@ -143,21 +140,19 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           </div>
         </details>
       </Form>
-      <section id="results" className="shell results" aria-labelledby="results-title">
+      <section id="results" className="shell results" aria-label={searched ? '查詢結果' : '已核對空間時段'}>
         {searched && !invalid && !position && <AutoDistance searchKey={JSON.stringify(params)} />}
         <div key={resultsKey}>
           {!invalid && <nav className="result-layout" aria-label="結果顯示方式">
             <Link href={href({ layout: 'list' })} aria-label="清單檢視" title="清單檢視" aria-current={listLayout ? 'true' : undefined}><List size={18} /></Link>
             <Link href={href({ layout: '' })} aria-label="卡片檢視" title="卡片檢視" aria-current={!listLayout ? 'true' : undefined}><LayoutGrid size={18} /></Link>
           </nav>}
-          {invalid && <><h2 id="results-title">查詢結果</h2><p className="notice" role="alert">請輸入有效日期、開始時間與正整數分鐘。使用時段須在同一天內。</p></>}
-          {!searched && <><h2 id="results-title">已核對空間時段</h2>
+          {invalid && <p className="notice" role="alert">請輸入有效日期、開始時間與正整數分鐘。使用時段須在同一天內。</p>}
+          {!searched && <><h2>已核對空間時段</h2>
             {!featured.length && <p>可使用上方表單查詢館舍名錄。</p>}
             <div className={cardsClass}>{featured.map((library) => <LibraryCard key={library.id} library={library} area={library.areas.find((area) => area.kind === 'study' && area.slots?.length)} />)}</div>
           </>}
           {searched && !invalid && <>
-            <div className="result-heading"><h2 id="results-title">查詢結果</h2><p>{date} · {start}–{clock(query.start + duration)}</p></div>
-            {position && <p className="distance-note">依目前位置的直線距離由近到遠</p>}
             {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult
               ? statuses[originalResult.status] : '沒有符合所選證件條件的空間'}
               {originalResult?.area && ' · ' + originalResult.area.name}
@@ -172,13 +167,8 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                   {city ? <Link href={href({ city: '', district: '', page: '' })}>擴大到全臺灣</Link> : '可調整條件再查詢。'}
                 </p>}
             </section>}
-            <nav className="tabs" aria-label="依查詢結果篩選">
-              <Link aria-current={!statusFilter ? 'page' : undefined} href={href({ view: '', page: '' })}>全部 {results.length}</Link>
-              {Object.entries(statuses).map(([key, label]) => <Link key={key} aria-current={statusFilter === key ? 'page' : undefined}
-                href={href({ view: key, page: '' })}>{label} {results.filter(({ status }) => status === key).length}</Link>)}
-            </nav>
-            {!visible.length && <p className="notice">沒有符合此篩選的結果。</p>}
-            <div className={cardsClass}>{visible.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) =>
+            {!results.length && <p className="notice">沒有符合此篩選的結果。</p>}
+            <div className={cardsClass}>{results.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) =>
               <LibraryCard key={item.library.id + (item.area?.name ?? '')} {...item}
                 originalLink={href({ original: item.library.id, q: '', page: '' })} />)}</div>
             {totalPages > 1 && <nav className="pager" aria-label="結果頁碼">

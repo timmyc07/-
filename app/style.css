@@ -65,9 +65,6 @@ h1{font-size:clamp(2rem,1.4rem + 2.5vw,3.875rem);line-height:1.16;margin-bottom:
 .advanced-search:not([open]){height:0;margin-top:-10px}
 .advanced-panel{padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
 .search-actions{display:flex;align-items:center;gap:12px;margin-top:12px}
-.result-heading{display:flex;justify-content:space-between;align-items:baseline;gap:8px 12px;flex-wrap:wrap}
-.result-heading h2{margin-bottom:14px}
-.result-heading p{font-size:.9375rem}
 .inputs{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
 label,legend{font-weight:500;font-size:1rem}
 .filter-label{display:inline-flex;align-items:center;gap:6px}
@@ -215,11 +212,8 @@ dd{margin:0 0 6px;color:var(--muted)}
 .source-links a{display:inline-flex;align-items:center;min-height:28px}
 .reasons{font-size:1rem;padding-left:1.3em;margin:0}
 .backup-link{display:flex;align-items:center;gap:7px;min-height:44px;font-size:.9375rem}
-.tabs,.pager{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
-.tabs a,.pager a{display:inline-flex;align-items:center;min-height:44px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 13px;font-size:1rem;text-decoration:none}
-.tabs{gap:4px;padding:4px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
-.tabs a{min-height:38px;border:0;border-radius:6px;background:transparent;font-size:.9375rem}
-.tabs a[aria-current=page]{background:var(--soft);color:var(--accent);font-weight:600}
+.pager{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.pager a{display:inline-flex;align-items:center;min-height:44px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 13px;font-size:1rem;text-decoration:none}
 .notice,.backups{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:14px}
 .pager{justify-content:center;align-items:center;margin:18px 0}
 .data-transparency{
@@ -289,7 +283,7 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 .inputs :is(input,select):focus{border-color:var(--focus);box-shadow:0 0 0 3px var(--soft)}
 .card:is(:focus-within,:hover,:has(>details[open]))::before{border-color:#73978380}
-.tabs a:hover,.pager a:hover{border-color:var(--scroll-thumb)}
+.pager a:hover{border-color:var(--scroll-thumb)}
 tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
 
 @media(prefers-reduced-motion:no-preference){
@@ -298,8 +292,8 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
     transition:background-color var(--motion-fast) ease,border-color var(--motion-fast) ease,color var(--motion-fast) ease,
       box-shadow var(--motion-fast) ease,translate var(--motion-fast) var(--motion-ease),scale var(--motion-fast) var(--motion-ease);
   }
-  button:not(:disabled):active,.site-nav a:active,.hero-actions a:active,.tabs a:active,.pager a:active{scale:.97}
-  .site-nav a:hover,.hero-actions a:hover,.tabs a:hover,.pager a:hover,button:not(:disabled,.duration-steps button,.keyword-search button):hover{translate:0 -2px}
+  button:not(:disabled):active,.site-nav a:active,.hero-actions a:active,.pager a:active{scale:.97}
+  .site-nav a:hover,.hero-actions a:hover,.pager a:hover,button:not(:disabled,.duration-steps button,.keyword-search button):hover{translate:0 -2px}
   .site-nav a span,.hero-actions a span,button span{display:inline-block;transition:translate var(--motion-fast) var(--motion-ease)}
   a:hover>span[aria-hidden=true],button:not(:disabled):hover>span[aria-hidden=true]{translate:3px 0}
   .checks input:checked{animation:check-pop 210ms var(--motion-ease)}

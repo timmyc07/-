@@ -2,6 +2,8 @@
 
 export { CalendarDays } from 'pulsoicon-react/icons/calendar-days';
 export { Check } from 'pulsoicon-react/icons/check';
+export { ChevronLeft } from 'pulsoicon-react/icons/chevron-left';
+export { ChevronRight } from 'pulsoicon-react/icons/chevron-right';
 export { Clock } from 'pulsoicon-react/icons/clock';
 export { Database } from 'pulsoicon-react/icons/database';
 export { House } from 'pulsoicon-react/icons/house';

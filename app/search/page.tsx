@@ -5,6 +5,7 @@ import DurationField from '../duration-field.tsx';
 import AutoDistance from './auto-distance.tsx';
 import CardDetails from './card-details.tsx';
 import CardGrid from './card-grid.tsx';
+import Pagination from './pagination.tsx';
 import AdvancedFilters from './advanced-filters.tsx';
 import ResultLayout, { LayoutControls, LayoutField, LayoutLink } from './result-layout.tsx';
 import RegionFilters from '../region-filters.tsx';
@@ -166,11 +167,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             <CardGrid>{results.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) =>
               <LibraryCard key={item.library.id + (item.area?.name ?? '')} {...item}
                 originalLink={href({ original: item.library.id, q: '', page: '' })} />)}</CardGrid>
-            {totalPages > 1 && <nav className="pager" aria-label="結果頁碼">
-              {currentPage > 1 && <LayoutLink href={href({ page: String(currentPage - 1) })}>上一頁</LayoutLink>}
-              <span>{currentPage} / {totalPages}</span>
-              {currentPage < totalPages && <LayoutLink href={href({ page: String(currentPage + 1) })}>下一頁</LayoutLink>}
-            </nav>}
+            {totalPages > 1 && <Pagination page={currentPage} total={totalPages}
+              previous={currentPage > 1 ? href({ page: String(currentPage - 1) }) : undefined}
+              next={currentPage < totalPages ? href({ page: String(currentPage + 1) }) : undefined} />}
           </>}
         </div>
       </ResultLayout>

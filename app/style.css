@@ -57,14 +57,17 @@ h1{font-size:clamp(2rem,1.4rem + 2.5vw,3.875rem);line-height:1.16;margin-bottom:
 .search{position:relative;display:grid;gap:10px;scroll-margin:20px}
 .keyword-search{display:grid;grid-template-columns:minmax(0,1fr) 46px;padding-inline-end:46px;border:1px solid var(--control-line);border-radius:999px;background:var(--surface)}
 .keyword-search input{width:100%;min-width:0;min-height:46px;padding:6px 14px;border:0;border-radius:24px 0 0 24px;background:transparent;color:var(--ink)}
-.keyword-search button,.advanced-search>summary{display:grid;place-items:center;width:46px;height:46px;margin:0;padding:0}
+.keyword-search button,.advanced-trigger{display:grid;place-items:center;width:46px;height:46px;margin:0;padding:0}
 .keyword-search button{border-radius:0;background:var(--surface);color:var(--accent)}
-.advanced-search>summary{position:absolute;inset-block-start:1px;inset-inline-end:1px;border-radius:0 23px 23px 0;background:var(--surface)}
-.advanced-search>summary::before{display:none}
-.keyword-search button:hover,.advanced-search>summary:hover,.advanced-search[open]>summary{background:var(--soft)}
-.advanced-search:not([open]){height:0;margin-top:-10px}
-.advanced-panel{padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
-.search-actions{display:flex;align-items:center;gap:12px;margin-top:12px}
+.advanced-trigger{position:absolute;inset-block-start:1px;inset-inline-end:1px;border-radius:0 23px 23px 0;background:var(--surface);color:var(--accent)}
+.keyword-search button:hover,.advanced-trigger:hover{background:var(--soft)}
+.advanced-dialog{width:min(680px,calc(100% - 32px));max-height:calc(100dvh - 32px);padding:clamp(16px,4vw,28px);border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);box-shadow:var(--shadow-raised)}
+.advanced-dialog::backdrop{background:#25352b66}
+.advanced-dialog h2{margin:0 0 16px;font-size:1.375rem}
+.advanced-dialog .inputs{grid-template-columns:repeat(3,minmax(0,1fr))}
+.search-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:18px}
+.search-actions button{margin:0}
+.search-actions .dialog-cancel{margin-inline-start:auto;background:var(--soft);color:var(--accent)}
 .inputs{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px}
 label,legend{font-weight:500;font-size:1rem}
 .filter-label{display:inline-flex;align-items:center;gap:6px}
@@ -73,6 +76,7 @@ label,legend{font-weight:500;font-size:1rem}
 .inputs label,.duration-field{align-content:space-between}
 .inputs input,.inputs select{min-height:46px;border:1px solid var(--control-line);border-radius:8px;padding:4px 9px;background:var(--paper);color:var(--ink);width:100%;min-width:0}
 .inputs select{padding-inline:12px;cursor:pointer}
+dialog .inputs :is(input,select),dialog textarea{border:0}
 .inputs input::-webkit-calendar-picker-indicator,
 .inputs input::-webkit-search-cancel-button{cursor:pointer}
 .duration-control{position:relative}
@@ -267,6 +271,7 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
   .transparency-nav{position:static;display:flex;flex-wrap:wrap;padding:0;border:0}
 }
 @media(max-width:630px){
+  .advanced-dialog .inputs{grid-template-columns:repeat(2,minmax(0,1fr))}
   .shell{width:calc(100% - 32px)}
   .bar{flex-wrap:wrap;gap:8px;padding:8px 0}
   .site-nav{gap:4px}
@@ -275,6 +280,7 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
   .cards{grid-template-columns:1fr}
 }
 @media(max-width:360px){
+  .advanced-dialog .inputs{grid-template-columns:1fr}
   .inputs,.audit-filters .inputs{grid-template-columns:1fr}
 }
 
@@ -298,7 +304,7 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
       box-shadow var(--motion-fast) ease,translate var(--motion-fast) var(--motion-ease),scale var(--motion-fast) var(--motion-ease);
   }
   button:not(:disabled,.keyword-search button):active,.site-nav a:active,.hero-actions a:active,.pager a:active{scale:.97}
-  .site-nav a:hover,.hero-actions a:hover,.pager a:hover,button:not(:disabled,.duration-steps button,.keyword-search button,.result-layout button):hover{translate:0 -2px}
+  .site-nav a:hover,.hero-actions a:hover,.pager a:hover,button:not(:disabled,.duration-steps button,.keyword-search button,.advanced-trigger,.result-layout button):hover{translate:0 -2px}
   .site-nav a span,.hero-actions a span,button span{display:inline-block;transition:translate var(--motion-fast) var(--motion-ease)}
   a:hover>span[aria-hidden=true],button:not(:disabled):hover>span[aria-hidden=true]{translate:3px 0}
   .checks input:checked{animation:check-pop 210ms var(--motion-ease)}

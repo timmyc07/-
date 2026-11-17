@@ -1,9 +1,9 @@
 import Form from 'next/form';
 import type { Metadata } from 'next';
-import { CalendarDays, Clock, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, RotateCcw, Route,
-  Search, SlidersHorizontal, Wifi } from '../action-icons.ts';
+import { CalendarDays, Clock, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, Route, Search, Wifi } from '../action-icons.ts';
 import DurationField from '../duration-field.tsx';
 import AutoDistance from './auto-distance.tsx';
+import AdvancedFilters from './advanced-filters.tsx';
 import ResultLayout, { LayoutField, LayoutLink } from './result-layout.tsx';
 import RegionFilters from '../region-filters.tsx';
 import directory from '../../public/datasets/library-directory.json';
@@ -120,30 +120,21 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               <span className="filter-label"><Icon size={16} />{facilities[key]}</span></label>;
           })}
         </div></fieldset>
-        <details className="advanced-search" open={advanced}>
-          <summary aria-label="進階篩選" title="進階篩選"><SlidersHorizontal size={19} aria-hidden="true" /></summary>
-          <div className="advanced-panel">
-            <div className="inputs">
-              <RegionFilters initialCity={city} initialDistrict={district} districtsByCity={districtsByCity} />
-              <label><span className="filter-label"><CalendarDays size={16} />日期</span><input type="date" name="date" defaultValue={date} required /></label>
-              <label><span className="filter-label"><Clock size={16} />開始時間</span><input type="time" name="start" defaultValue={start} required /></label>
-              <DurationField minutes={Number.isFinite(duration) ? duration : 120} />
-              <label><span className="filter-label"><LibraryBig size={16} />空間類型</span><select name="kind" defaultValue={kind}><option value="">所有空間</option>
-                {Object.entries(kindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
-              <label><span className="filter-label"><IdCard size={16} />入場證件</span>
-                <select name="documents" defaultValue={documentFilter}>
-                  <option value="">不限</option>
-                  <option value="none">{documentLabels.none}</option>
-                  <option value="required">{documentLabels.required}</option>
-                </select>
-              </label>
-            </div>
-            <div className="search-actions">
-              <LayoutLink className="filter-label" href="/search#search"><RotateCcw size={16} />清除條件</LayoutLink>
-              <button type="submit">套用篩選</button>
-            </div>
-          </div>
-        </details>
+        <AdvancedFilters>
+          <RegionFilters initialCity={city} initialDistrict={district} districtsByCity={districtsByCity} />
+          <label><span className="filter-label"><CalendarDays size={16} />日期</span><input type="date" name="date" defaultValue={date} required /></label>
+          <label><span className="filter-label"><Clock size={16} />開始時間</span><input type="time" name="start" defaultValue={start} required /></label>
+          <DurationField minutes={Number.isFinite(duration) ? duration : 120} />
+          <label><span className="filter-label"><LibraryBig size={16} />空間類型</span><select name="kind" defaultValue={kind}><option value="">所有空間</option>
+            {Object.entries(kindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+          <label><span className="filter-label"><IdCard size={16} />入場證件</span>
+            <select name="documents" defaultValue={documentFilter}>
+              <option value="">不限</option>
+              <option value="none">{documentLabels.none}</option>
+              <option value="required">{documentLabels.required}</option>
+            </select>
+          </label>
+        </AdvancedFilters>
       </Form>
       <ResultLayout showControls={!invalid}>
         {!invalid && !position && <AutoDistance searchKey={JSON.stringify(params)} />}

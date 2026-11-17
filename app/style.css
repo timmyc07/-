@@ -58,10 +58,10 @@ h1{font-size:clamp(2rem,1.4rem + 2.5vw,3.875rem);line-height:1.16;margin-bottom:
 .keyword-search{display:grid;grid-template-columns:minmax(0,1fr) 46px;padding-inline-end:46px;border:1px solid var(--control-line);border-radius:999px;background:var(--surface)}
 .keyword-search input{width:100%;min-width:0;min-height:46px;padding:6px 14px;border:0;border-radius:24px 0 0 24px;background:transparent;color:var(--ink)}
 .keyword-search button,.advanced-search>summary{display:grid;place-items:center;width:46px;height:46px;margin:0;padding:0}
-.keyword-search button{border-radius:0}
+.keyword-search button{border-radius:0;background:var(--surface);color:var(--accent)}
 .advanced-search>summary{position:absolute;inset-block-start:1px;inset-inline-end:1px;border-radius:0 23px 23px 0;background:var(--surface)}
 .advanced-search>summary::before{display:none}
-.advanced-search>summary:hover,.advanced-search[open]>summary{background:var(--soft)}
+.keyword-search button:hover,.advanced-search>summary:hover,.advanced-search[open]>summary{background:var(--soft)}
 .advanced-search:not([open]){height:0;margin-top:-10px}
 .advanced-panel{padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
 .search-actions{display:flex;align-items:center;gap:12px;margin-top:12px}

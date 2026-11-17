@@ -187,7 +187,6 @@ button:hover{background:var(--accent-hover)}
   0%,100%{transform:translateY(0)}
   50%{transform:translateY(-4px)}
 }
-@keyframes card-reveal{from{opacity:.74}to{opacity:1}}
 .card-facts,.visit-details{display:grid;gap:6px;margin:0}
 .card-facts{padding:10px 12px;border-radius:12px;background:var(--soft)}
 :is(.card-facts,.visit-details)>div{display:grid;grid-template-columns:3.25em minmax(0,1fr);gap:10px}
@@ -234,10 +233,9 @@ dd{margin:0 0 6px;color:var(--muted)}
 .source-links a{display:inline-flex;align-items:center;min-height:28px}
 .reasons{font-size:1rem;padding-left:1.3em;margin:0}
 .backup-link{display:flex;align-items:center;gap:7px;min-height:44px;font-size:.9375rem}
-.pager{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
-.pager a{display:inline-flex;align-items:center;min-height:44px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 13px;font-size:1rem;text-decoration:none}
+.more-results{display:grid;justify-items:center;margin-top:18px}
+.more-results :is(button,p){margin:0}
 .notice,.backups{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:14px}
-.pager{justify-content:center;align-items:center;margin:18px 0}
 .data-transparency{
   margin-top:clamp(40px,7vw,86px);padding:clamp(32px,6vw,70px) 0;background:var(--linen);border-top:1px solid var(--sand);
   color:var(--muted);font-size:.9375rem;scroll-margin:20px;overflow-wrap:anywhere;
@@ -305,7 +303,6 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 .inputs :is(input,select):focus{border-color:var(--focus);box-shadow:0 0 0 3px var(--soft)}
 .card:is(:focus-within,:hover)::before{border-color:#73978380}
-.pager a:hover{border-color:var(--scroll-thumb)}
 tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
 
 @media(prefers-reduced-motion:no-preference){
@@ -338,12 +335,11 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
     transition:background-color var(--motion-fast) ease,border-color var(--motion-fast) ease,color var(--motion-fast) ease,
       box-shadow var(--motion-fast) ease,translate var(--motion-fast) var(--motion-ease),scale var(--motion-fast) var(--motion-ease);
   }
-  button:not(:disabled,.keyword-search button):active,.site-nav a:active,.hero-actions a:active,.pager a:active{scale:.97}
-  .site-nav a:hover,.hero-actions a:hover,.pager a:hover,button:not(:disabled,.duration-steps button,.keyword-search button,.advanced-trigger,.result-layout button):hover{translate:0 -2px}
+  button:not(:disabled,.keyword-search button):active,.site-nav a:active,.hero-actions a:active{scale:.97}
+  .site-nav a:hover,.hero-actions a:hover,button:not(:disabled,.duration-steps button,.keyword-search button,.advanced-trigger,.result-layout button):hover{translate:0 -2px}
   .site-nav a span,.hero-actions a span,button span{display:inline-block;transition:translate var(--motion-fast) var(--motion-ease)}
   a:hover>span[aria-hidden=true],button:not(:disabled):hover>span[aria-hidden=true]{translate:3px 0}
   .checks input:checked{animation:check-pop 210ms var(--motion-ease)}
-  .card[data-revealed]{animation:card-reveal 320ms ease-out}
   .card[data-revealed]::before{animation:card-float 2.8s ease-in-out}
   summary::before{transition:rotate var(--motion-fast) var(--motion-ease)}
   .hero-copy>*,

@@ -5,6 +5,8 @@ import DurationField from '../duration-field.tsx';
 import AutoDistance from './auto-distance.tsx';
 import CardDetails from './card-details.tsx';
 import AdvancedFilters from './advanced-filters.tsx';
+import InfiniteResults from './infinite-results.tsx';
+import CardGrid from './card-grid.tsx';
 import ResultLayout, { LayoutControls, LayoutField, LayoutLink } from './result-layout.tsx';
 import RegionFilters from '../region-filters.tsx';
 import directory from '../../public/datasets/library-directory.json';
@@ -22,10 +24,8 @@ const facilityIcons = { laptop: Laptop, wifi: Wifi, outlet: Plug };
 const statuses = { yes: '符合條件', unknown: '待確認', no: '不符合' } as const;
 const pageSize = 15;
 
-export default async function SearchPage({ searchParams }: { searchParams: Promise<Params> }) {
-  const params = await searchParams;
+async function searchData(params: Params, today: string) {
   const get = (key: string) => typeof params[key] === 'string' ? params[key] : undefined;
-  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', dateStyle: 'short' }).format(new Date());
   const date = get('date') ?? today;
   const start = get('start') ?? '14:00';
   const duration = Number(get('duration') ?? 120);
@@ -49,11 +49,6 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const query: Query = { date, start: minutes(start), duration, kind, required: equipment };
 
   const { libraries } = await libraryCatalog();
-  const regions = new Map(Object.keys(directory.cityCounts).map((name) => [name, new Set<string>()]));
-  for (const library of libraries) if (library.district) regions.get(library.city)!.add(library.district);
-  const districtsByCity = Object.fromEntries([...regions].map(([name, districts]) =>
-    [name, [...districts].sort((a, b) => a.localeCompare(b, 'zh-Hant'))]));
-  const formKey = JSON.stringify(Object.entries(params).filter(([key]) => !['page', 'layout', 'sources', 'position'].includes(key)).sort());
   const selected = libraries.find((library) => library.id === original);
   const normalized = (value: string) => value.normalize('NFKC').replaceAll('台', '臺');
   const candidates = libraries.filter((library) => (!city || library.city === city) && (!district || library.district === district) &&
@@ -86,19 +81,50 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     ...item, distance: distanceKm(backupOrigin, item.library.coordinates),
   })).sort(compareResults), original) : [];
   const originalResult = !invalid && selected ? evaluateLibrary(selected).sort(compareStatus)[0] : undefined;
-  const resultsKey = JSON.stringify([formKey, currentPage, position]);
+  return { libraries, date, start, duration, kind, equipment, documentFilter, keyword, position, district, city,
+    advanced, invalid, selected, originalResult, backups, backupOrigin, results, totalPages, currentPage };
+}
 
-  function href(changes: Record<string, string>) {
-    const next = new URLSearchParams();
-    for (const [key, value] of Object.entries(params)) {
-      if (key === 'sources' || key === 'layout') continue;
-      if (typeof value === 'string') next.set(key, value);
-    }
-    for (const [key, value] of Object.entries(changes)) {
-      if (value) next.set(key, value);
-      else next.delete(key);
-    }
-    return '/search?' + next.toString() + '#results';
+function searchHref(params: Params, changes: Record<string, string>) {
+  const next = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (key === 'sources' || key === 'layout') continue;
+    if (typeof value === 'string') next.set(key, value);
+  }
+  for (const [key, value] of Object.entries(changes)) {
+    if (value) next.set(key, value);
+    else next.delete(key);
+  }
+  return '/search?' + next.toString() + '#results';
+}
+
+function renderBatch(data: Awaited<ReturnType<typeof searchData>>, params: Params, page: number) {
+  const results = data.invalid || page > data.totalPages ? [] : data.results.slice((page - 1) * pageSize, page * pageSize);
+  return {
+    cards: results.map((item) => <LibraryCard key={item.library.id + (item.area?.name ?? '')} {...item}
+      originalLink={searchHref(params, { original: item.library.id, q: '', page: '' })} />),
+    nextPage: results.length && page < data.totalPages ? page + 1 : null,
+  };
+}
+
+export default async function SearchPage({ searchParams }: { searchParams: Promise<Params> }) {
+  const params = await searchParams;
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Taipei', dateStyle: 'short' }).format(new Date());
+  const data = await searchData(params, today);
+  const { libraries, date, start, duration, kind, equipment, documentFilter, keyword, position, district, city,
+    advanced, invalid, selected, originalResult, backups, backupOrigin, results, currentPage } = data;
+  const regions = new Map(Object.keys(directory.cityCounts).map((name) => [name, new Set<string>()]));
+  for (const library of libraries) if (library.district) regions.get(library.city)!.add(library.district);
+  const districtsByCity = Object.fromEntries([...regions].map(([name, districts]) =>
+    [name, [...districts].sort((a, b) => a.localeCompare(b, 'zh-Hant'))]));
+  const formKey = JSON.stringify(Object.entries(params).filter(([key]) => !['page', 'layout', 'sources', 'position'].includes(key)).sort());
+  const resultsKey = JSON.stringify([formKey, currentPage, position]);
+  const href = (changes: Record<string, string>) => searchHref(params, changes);
+
+  async function loadPage(page: number) {
+    'use server';
+    if (!Number.isSafeInteger(page) || page < 1) throw new Error('Invalid page');
+    return renderBatch(await searchData(params, today), params, page);
   }
 
   return <main className="search-page">
@@ -107,7 +133,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       </section>
       <Form key={formKey} id="search" className="shell search" action="/search#results" aria-labelledby="search-page-title">
         <input type="hidden" name="search" value="1" />
-        {position && <input type="hidden" name="position" value={get('position')} />}
+        {position && <input type="hidden" name="position" value={String(params.position)} />}
         <LayoutField />
         {selected && <input type="hidden" name="original" value={selected.id} />}
         <div className="keyword-search">
@@ -153,21 +179,14 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             {selected && <section className="backups" aria-label="備案比較">
               <h3>備案比較</h3>
               {backupOrigin && <p className={position ? 'distance-note user-distance' : 'distance-note'}>以{position ? '目前位置' : '原定館舍'}為起點，依直線距離排序</p>}
-              {backups.length ? <div className="cards">{backups.map((item) =>
-                <LibraryCard key={item.library.id} {...item} distance={position ? item.distance : undefined} />)}</div> :
+              {backups.length ? <CardGrid>{backups.map((item) =>
+                <LibraryCard key={item.library.id} {...item} distance={position ? item.distance : undefined} />)}</CardGrid> :
                 <p>目前條件下沒有已確認符合的備案。{' '}
                   {city ? <LayoutLink href={href({ city: '', district: '', page: '' })}>擴大到全臺灣</LayoutLink> : '可調整條件再查詢。'}
                 </p>}
             </section>}
             {!results.length && <p className="notice">沒有符合此篩選的結果。</p>}
-            <div className="cards">{results.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) =>
-              <LibraryCard key={item.library.id + (item.area?.name ?? '')} {...item}
-                originalLink={href({ original: item.library.id, q: '', page: '' })} />)}</div>
-            {totalPages > 1 && <nav className="pager" aria-label="結果頁碼">
-              {currentPage > 1 && <LayoutLink href={href({ page: String(currentPage - 1) })}>上一頁</LayoutLink>}
-              <span>{currentPage} / {totalPages}</span>
-              {currentPage < totalPages && <LayoutLink href={href({ page: String(currentPage + 1) })}>下一頁</LayoutLink>}
-            </nav>}
+            {results.length > 0 && <InfiniteResults initial={renderBatch(data, params, currentPage)} loadPage={loadPage} />}
           </>}
         </div>
       </ResultLayout>

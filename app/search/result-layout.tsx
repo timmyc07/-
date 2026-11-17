@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef } from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 import { LayoutGrid, List } from '../action-icons.ts';
 import { useLocationPermission } from './auto-distance.tsx';
@@ -38,24 +37,10 @@ export function LayoutControls() {
 }
 
 export default function ResultLayout({ children, hasPosition }: { children: ReactNode; hasPosition: boolean }) {
-  const section = useRef<HTMLElement>(null);
   const grid = useSearchParams().get('layout') === 'grid';
   const showDistance = useLocationPermission(hasPosition);
 
-  useEffect(() => {
-    if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.setAttribute('data-revealed', '');
-        observer.unobserve(entry.target);
-      }
-    });
-    section.current?.querySelectorAll('.cards > .card:not([data-revealed])').forEach((card) => observer.observe(card));
-    return () => observer.disconnect();
-  }, [children]);
-
-  return <section ref={section} id="results" className="shell results" aria-label="查詢結果"
+  return <section id="results" className="shell results" aria-label="查詢結果"
     data-layout={grid ? 'grid' : 'list'} data-show-distance={showDistance}>
     {children}
   </section>;

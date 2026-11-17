@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
 import { Crosshair } from 'pulsoicon-react/icons/crosshair';
+import { Compass } from './action-icons.ts';
 
 export default function NearbyOrigin({ libraries, initialOrigin, position }: {
   libraries: { id: string; name: string }[];
@@ -44,7 +45,7 @@ export default function NearbyOrigin({ libraries, initialOrigin, position }: {
   }
 
   return <div className="nearby-origin">
-    <label>距離排序起點<select name="near" value={origin} onChange={(event) => setOrigin(event.target.value)}>
+    <label><span className="filter-label"><Compass size={16} />距離排序起點</span><select name="near" value={origin} onChange={(event) => setOrigin(event.target.value)}>
       <option value="">不按距離排序</option>
       {position && <option value="me">我的位置</option>}
       {libraries.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}

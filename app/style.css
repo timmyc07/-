@@ -57,6 +57,8 @@ h1{font-size:clamp(2rem,1.4rem + 2.5vw,3.875rem);margin-bottom:18px}
 .form-top a,.result-heading p{font-size:.9375rem}
 .inputs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) 1.3fr;gap:10px}
 label,legend{font-weight:650;font-size:1rem}
+.filter-label{display:inline-flex;align-items:center;gap:6px}
+.filter-label svg{flex:none;color:var(--accent)}
 .inputs label,.nearby-origin label,.document-filter,.duration-field{display:grid;gap:5px;min-width:0}
 .inputs label,.duration-field{align-content:space-between}
 .inputs input,:is(.inputs,.nearby-origin,.document-filter) select{min-height:50px;border:1px solid var(--line);border-radius:12px;padding:4px 9px;background:var(--paper);color:var(--ink);width:100%;min-width:0}

@@ -1,7 +1,7 @@
 import Form from 'next/form';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CalendarDays, Database, LibraryBig, MapPin, Phone, Route, Search } from './action-icons.ts';
+import { CalendarDays, Clock, Database, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, RotateCcw, Route, Search, Wifi } from './action-icons.ts';
 import DurationField from './duration-field.tsx';
 import NearbyOrigin from './nearby-origin.tsx';
 import RegionFilters from './region-filters.tsx';
@@ -20,6 +20,7 @@ import { pilotVisit } from '../lib/taichung-visits.ts';
 type RegionalLibrary = Library & { city: string };
 type Params = Record<string, string | string[] | undefined>;
 const facilityKeys = Object.keys(facilities) as Facility[];
+const facilityIcons = { laptop: Laptop, wifi: Wifi, outlet: Plug };
 const statuses = { yes: '符合條件', unknown: '待確認', no: '不符合' } as const;
 const pageSize = 15;
 
@@ -147,25 +148,29 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
       </section>
       <Form key={formKey} id="search" className="shell search" action="/#results" aria-labelledby="search-title">
         <input type="hidden" name="search" value="1" />
-        <div className="form-top"><h2 id="search-title">查詢條件</h2><Link href="/#search">清除條件</Link></div>
+        <div className="form-top"><h2 id="search-title">查詢條件</h2><Link className="filter-label" href="/#search"><RotateCcw size={16} />清除條件</Link></div>
         <p className="coverage-note">全臺可查館舍名錄。自修時段、入場資格及設備依各館核對進度顯示。</p>
         <div className="inputs">
           <RegionFilters initialCity={city} initialDistrict={district} districtsByCity={districtsByCity} />
-          <label>日期<input type="date" name="date" defaultValue={date} required /></label>
-          <label>開始時間<input type="time" name="start" defaultValue={start} required /></label>
+          <label><span className="filter-label"><CalendarDays size={16} />日期</span><input type="date" name="date" defaultValue={date} required /></label>
+          <label><span className="filter-label"><Clock size={16} />開始時間</span><input type="time" name="start" defaultValue={start} required /></label>
           <DurationField minutes={Number.isFinite(duration) ? duration : 120} />
-          <label>空間類型<select name="kind" defaultValue={kind}><option value="">所有空間</option>
+          <label><span className="filter-label"><LibraryBig size={16} />空間類型</span><select name="kind" defaultValue={kind}><option value="">所有空間</option>
             {Object.entries(kindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
-          <label>館名或地址<input type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="例如 大墩分館" /></label>
+          <label><span className="filter-label"><Search size={16} />館名或地址</span><input type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="例如 大墩分館" /></label>
         </div>
         <NearbyOrigin key={position ? 'me:' + get('position') : originLibrary?.id}
           libraries={libraries.filter((library) => library.coordinates).map(({ id, name, city }) => ({ id, name: city + ' · ' + name }))}
           initialOrigin={position ? 'me' : originLibrary?.id ?? ''} position={position && get('position')} />
         <div className="filters">
           <fieldset><legend>需要的設備</legend><div className="checks">
-            {facilityKeys.map((key) => <label key={key}><input type="checkbox" name={key} defaultChecked={equipment.includes(key)} />{facilities[key]}</label>)}
+            {facilityKeys.map((key) => {
+              const Icon = facilityIcons[key];
+              return <label key={key}><input type="checkbox" name={key} defaultChecked={equipment.includes(key)} />
+                <span className="filter-label"><Icon size={16} />{facilities[key]}</span></label>;
+            })}
           </div></fieldset>
-          <label className="document-filter">是否需要特定證件
+          <label className="document-filter"><span className="filter-label"><IdCard size={16} />是否需要特定證件</span>
             <select name="documents" defaultValue={documentFilter}>
               <option value="">不限</option>
               <option value="none">{documentLabels.none}</option>

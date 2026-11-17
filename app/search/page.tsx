@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { CalendarDays, Clock, IdCard, Laptop, LayoutGrid, LibraryBig, List, MapPin, Phone, Plug, RotateCcw, Route,
   Search, SlidersHorizontal, Wifi } from '../action-icons.ts';
 import DurationField from '../duration-field.tsx';
-import NearbyOrigin from '../nearby-origin.tsx';
+import AutoDistance from './auto-distance.tsx';
 import RegionFilters from '../region-filters.tsx';
 import directory from '../../public/datasets/library-directory.json';
 import { libraryCatalog, type RegionalLibrary } from '../../lib/library-catalog.ts';
@@ -35,10 +35,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const documentFilter = requestedDocuments === 'required' || requestedDocuments === 'none' ? requestedDocuments : '';
   const keyword = (get('q') ?? '').trim().slice(0, 100);
   const original = get('original') ?? '';
-  const near = get('near');
-  const position = near === 'me' ? parseCoordinates(get('position')) : undefined;
-  const district = position ? '' : get('district') ?? '';
-  const city = position ? '' : get('city') ?? (district ? '臺中市' : '');
+  const position = parseCoordinates(get('position'));
+  const district = get('district') ?? '';
+  const city = get('city') ?? (district ? '臺中市' : '');
   const view = get('view');
   const listLayout = get('layout') === 'list';
   const cardsClass = listLayout ? 'cards cards-list' : 'cards';
@@ -54,18 +53,15 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   for (const library of libraries) if (library.district) regions.get(library.city)!.add(library.district);
   const districtsByCity = Object.fromEntries([...regions].map(([name, districts]) =>
     [name, [...districts].sort((a, b) => a.localeCompare(b, 'zh-Hant'))]));
-  const formKey = JSON.stringify(Object.entries(params).filter(([key]) => !['page', 'view', 'layout', 'sources'].includes(key)).sort());
+  const formKey = JSON.stringify(Object.entries(params).filter(([key]) => !['page', 'view', 'layout', 'sources', 'position'].includes(key)).sort());
   const selected = libraries.find((library) => library.id === original);
-  const originLibrary = libraries.find((library) => library.id === near && library.coordinates);
-  const origin = position ?? originLibrary?.coordinates;
-  const originLabel = position ? '我的位置' : originLibrary?.name;
   const normalized = (value: string) => value.normalize('NFKC').replaceAll('台', '臺');
   const candidates = libraries.filter((library) => (!city || library.city === city) && (!district || library.district === district) &&
     (!keyword || normalized(library.name + ' ' + library.address).includes(normalized(keyword))));
   const evaluateLibrary = (library: RegionalLibrary) => {
     const matching = kind ? library.areas.filter((area) => area.kind === kind) : library.areas;
     const areas: (Area | undefined)[] = matching.length ? matching : [undefined];
-    const distance = distanceKm(origin, library.coordinates);
+    const distance = distanceKm(position, library.coordinates);
     return areas.map((area) => ({ library, distance, ...evaluate(library, area, query) }))
       .filter(({ documents }) => !documentFilter || documents === documentFilter);
   };
@@ -79,20 +75,20 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const visible = results.filter((item) => !statusFilter || item.status === statusFilter);
   const totalPages = Math.max(1, Math.ceil(visible.length / pageSize));
   const currentPage = Math.min(totalPages, page);
-  const backupOrigin = origin ?? selected?.coordinates;
-  const backups = selected ? backupLibraries(origin ? results : results.map((item) => ({
+  const backupOrigin = position ?? selected?.coordinates;
+  const backups = selected ? backupLibraries(position ? results : results.map((item) => ({
     ...item, distance: distanceKm(backupOrigin, item.library.coordinates),
   })).sort(compareResults), original) : [];
   const originalResult = searched && !invalid && selected ? evaluateLibrary(selected).sort(compareStatus)[0] : undefined;
   const checked = libraries.filter((library) => library.areas.some((area) =>
     area.kind === 'study' && area.slots?.length && (area.access === 'walk-in' || area.access === 'card')));
   const featured = checked.slice(0, 4);
-  const resultsKey = JSON.stringify([formKey, statusFilter, currentPage]);
+  const resultsKey = JSON.stringify([formKey, statusFilter, currentPage, position]);
 
   function href(changes: Record<string, string>) {
     const next = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {
-      if (key === 'sources' || (position && (key === 'city' || key === 'district'))) continue;
+      if (key === 'sources') continue;
       if (typeof value === 'string') next.set(key, value);
     }
     for (const [key, value] of Object.entries(changes)) {
@@ -108,11 +104,12 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       </section>
       <Form key={formKey} id="search" className="shell search" action="/search#results" aria-labelledby="search-page-title">
         <input type="hidden" name="search" value="1" />
+        {position && <input type="hidden" name="position" value={get('position')} />}
         {listLayout && <input type="hidden" name="layout" value="list" />}
         {selected && <input type="hidden" name="original" value={selected.id} />}
         <div className="keyword-search">
-          <label><Search size={18} aria-hidden="true" /><input aria-label="館名或地址" type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="搜尋館名或地址" /></label>
-          <button type="submit">搜尋</button>
+          <input aria-label="館名或地址" type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="搜尋館名或地址" />
+          <button type="submit" aria-label="搜尋" title="搜尋"><Search size={19} aria-hidden="true" /></button>
         </div>
         <fieldset aria-label="需要的設備"><div className="checks">
           {facilityKeys.map((key) => {
@@ -121,33 +118,33 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               <span className="filter-label"><Icon size={16} />{facilities[key]}</span></label>;
           })}
         </div></fieldset>
-        <NearbyOrigin key={position ? 'me:' + get('position') : originLibrary?.id}
-          selectedLibrary={originLibrary && { id: originLibrary.id, name: originLibrary.city + ' · ' + originLibrary.name }}
-          initialOrigin={position ? 'me' : originLibrary?.id ?? ''} position={position && get('position')} />
         <details className="advanced-search" open={Boolean(city || kind || documentFilter || start !== '14:00' || duration !== 120 || date !== today)}>
-          <summary className="filter-label"><SlidersHorizontal size={16} />進階篩選</summary>
-          <div className="inputs">
-            <RegionFilters initialCity={city} initialDistrict={district} districtsByCity={districtsByCity} />
-            <label><span className="filter-label"><CalendarDays size={16} />日期</span><input type="date" name="date" defaultValue={date} required /></label>
-            <label><span className="filter-label"><Clock size={16} />開始時間</span><input type="time" name="start" defaultValue={start} required /></label>
-            <DurationField minutes={Number.isFinite(duration) ? duration : 120} />
-            <label><span className="filter-label"><LibraryBig size={16} />空間類型</span><select name="kind" defaultValue={kind}><option value="">所有空間</option>
-              {Object.entries(kindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
-            <label><span className="filter-label"><IdCard size={16} />入場證件</span>
-              <select name="documents" defaultValue={documentFilter}>
-                <option value="">不限</option>
-                <option value="none">{documentLabels.none}</option>
-                <option value="required">{documentLabels.required}</option>
-              </select>
-            </label>
-          </div>
-          <div className="search-actions">
-            <Link className="filter-label" href="/search#search"><RotateCcw size={16} />清除條件</Link>
-            <button type="submit">套用篩選</button>
+          <summary aria-label="進階篩選" title="進階篩選"><SlidersHorizontal size={19} aria-hidden="true" /></summary>
+          <div className="advanced-panel">
+            <div className="inputs">
+              <RegionFilters initialCity={city} initialDistrict={district} districtsByCity={districtsByCity} />
+              <label><span className="filter-label"><CalendarDays size={16} />日期</span><input type="date" name="date" defaultValue={date} required /></label>
+              <label><span className="filter-label"><Clock size={16} />開始時間</span><input type="time" name="start" defaultValue={start} required /></label>
+              <DurationField minutes={Number.isFinite(duration) ? duration : 120} />
+              <label><span className="filter-label"><LibraryBig size={16} />空間類型</span><select name="kind" defaultValue={kind}><option value="">所有空間</option>
+                {Object.entries(kindLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+              <label><span className="filter-label"><IdCard size={16} />入場證件</span>
+                <select name="documents" defaultValue={documentFilter}>
+                  <option value="">不限</option>
+                  <option value="none">{documentLabels.none}</option>
+                  <option value="required">{documentLabels.required}</option>
+                </select>
+              </label>
+            </div>
+            <div className="search-actions">
+              <Link className="filter-label" href="/search#search"><RotateCcw size={16} />清除條件</Link>
+              <button type="submit">套用篩選</button>
+            </div>
           </div>
         </details>
       </Form>
       <section id="results" className="shell results" aria-labelledby="results-title">
+        {searched && !invalid && !position && <AutoDistance searchKey={JSON.stringify(params)} />}
         <div key={resultsKey}>
           {!invalid && <nav className="result-layout" aria-label="結果顯示方式">
             <Link href={href({ layout: 'list' })} aria-label="清單檢視" title="清單檢視" aria-current={listLayout ? 'true' : undefined}><List size={18} /></Link>
@@ -160,7 +157,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           </>}
           {searched && !invalid && <>
             <div className="result-heading"><h2 id="results-title">查詢結果</h2><p>{date} · {start}–{clock(query.start + duration)}</p></div>
-            {originLabel && <p className="distance-note">起點 {originLabel} · 依直線距離由近到遠</p>}
+            {position && <p className="distance-note">依目前位置的直線距離由近到遠</p>}
             {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult
               ? statuses[originalResult.status] : '沒有符合所選證件條件的空間'}
               {originalResult?.area && ' · ' + originalResult.area.name}
@@ -168,7 +165,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               {' '}<Link href={href({ original: '' })}>清除原定館舍</Link></div>}
             {selected && <section className="backups" aria-label="備案比較">
               <h3>備案比較</h3>
-              {backupOrigin && <p className="distance-note">以{originLabel ?? '原定館舍'}為起點，依直線距離排序</p>}
+              {backupOrigin && <p className="distance-note">以{position ? '目前位置' : '原定館舍'}為起點，依直線距離排序</p>}
               {backups.length ? <div className={cardsClass}>{backups.map((item) =>
                 <LibraryCard key={item.library.id} {...item} />)}</div> :
                 <p>目前條件下沒有已確認符合的備案。{' '}

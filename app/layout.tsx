@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { ScrollProgress } from './site-motion.tsx';
+import SiteHeader from './site-header.tsx';
 import './style.css';
 
 export const metadata: Metadata = {
@@ -9,5 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: ReactNode }) {
-  return <html lang="zh-Hant" data-scroll-behavior="smooth"><body><ScrollProgress />{children}</body></html>;
+  return <html lang="zh-Hant" data-scroll-behavior="smooth"><body><ScrollProgress /><SiteHeader />{children}</body></html>;
 }

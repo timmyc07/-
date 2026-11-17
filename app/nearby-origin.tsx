@@ -35,7 +35,7 @@ export default function NearbyOrigin({ libraries, initialOrigin, position }: {
       params.set('search', '1');
       setLocating(false);
       setMessage('');
-      router.push('/?' + params + '#results');
+      router.push('/search?' + params + '#results');
     }, (error) => {
       setLocating(false);
       setMessage(error.code === error.PERMISSION_DENIED
@@ -52,7 +52,6 @@ export default function NearbyOrigin({ libraries, initialOrigin, position }: {
     </select></label>
     {origin === 'me' && position && <input type="hidden" name="position" value={position} />}
     <button type="button" onClick={locate} disabled={locating}><Crosshair className="action-icon" size={18} />使用我的位置查詢</button>
-    <small>使用我的位置時，會搜尋全臺並保留其他查詢條件。</small>
     <span role="status">{message}</span>
   </div>;
 }

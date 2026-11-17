@@ -6,17 +6,19 @@ import type { Library, Snapshot } from '../lib/study.ts';
 
 const date = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', dateStyle: 'medium' });
 
-export default function SiteFooter({ libraries, snapshot, indexHref, expanded }: {
+export default function DataTransparency({ libraries, snapshot, expanded }: {
   libraries: Library[];
   snapshot: Snapshot | null;
-  indexHref: string;
   expanded: boolean;
 }) {
   const groups = expanded ? sourcesByHost(libraries, snapshot) : [];
 
-  return <footer id="sources" className="site-footer" aria-labelledby="sources-title">
+  return <section id="sources" className="data-transparency" aria-labelledby="sources-title">
     <div className="shell">
-      <h2 id="sources-title">資料來源與授權</h2>
+      <div className="transparency-heading">
+        <div><h2 id="sources-title">資料透明</h2><p>查看館舍資料從哪裡來、何時更新，以及哪些欄位仍待核對。</p></div>
+        <Link className="outline-link" href="/admin">查看資料狀態 →</Link>
+      </div>
       <div className="footer-columns">
         <section>
           <h3>公開資料來源</h3>
@@ -44,12 +46,11 @@ export default function SiteFooter({ libraries, snapshot, indexHref, expanded }:
             {snapshot && <li>臺中核對匯入 <time dateTime={snapshot.importedAt}>{date.format(new Date(snapshot.importedAt))}</time></li>}
             <li><a href="https://data.gov.tw/license">政府資料開放授權條款第 1 版</a></li>
             <li><a href="/licenses/pulsoicon.txt">PulsoIcon 圖示授權</a></li>
-            <li><Link href="/admin">資料狀態與逐欄核對</Link></li>
           </ul>
         </section>
       </div>
       <div className="footer-index">
-        <Link href={indexHref} prefetch={false}>{expanded ? '收合逐館來源索引' : '查看完整逐館來源索引'}</Link>
+        <Link href={expanded ? '/#sources' : '/?sources=1#sources'} prefetch={false}>{expanded ? '收合逐館來源索引' : '查看完整逐館來源索引'}</Link>
         {expanded && groups.map(([host, links]) => <details key={host}>
           <summary>{host} · {links.size} 筆</summary>
           <div className="disclosure-body">
@@ -58,5 +59,5 @@ export default function SiteFooter({ libraries, snapshot, indexHref, expanded }:
         </details>)}
       </div>
     </div>
-  </footer>;
+  </section>;
 }

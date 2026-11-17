@@ -19,7 +19,7 @@ export default async function Admin() {
   }
   const gaps = snapshot?.libraries.filter((library) => coverageGaps(library).length).length;
   return <main className="shell admin">
-    <Link href="/">← 返回查詢</Link>
+    <Link href="/search">← 返回查詢</Link>
     <h1>全臺公立圖書館資料狀態</h1>
     <section aria-labelledby="directory-title">
       <h2 id="directory-title">全臺館舍名錄</h2>

@@ -31,7 +31,7 @@ export default async function LandingPage({ searchParams }: PageProps<'/'>) {
         </div>
       </div>
       <Image className="hero-image" src="/library-reading-room.webp" alt="午後陽光照進圖書館閱覽室，長桌旁排列著木質書架"
-        width={1200} height={800} sizes="(max-width: 760px) 100vw, 52vw" preload />
+        width={1200} height={800} sizes="(max-width: 1228px) 100vw, 1180px" preload />
     </section>
     <section className="shell" aria-label="資料收錄範圍">
       <dl className="coverage-stats">

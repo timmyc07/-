@@ -101,7 +101,6 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   return <main className="search-page">
       <section className="shell search-intro" aria-labelledby="search-page-title">
         <h1 id="search-page-title">查詢自修空間</h1>
-        <p className="intro">依使用時段、入場規則與設備，找出發前可以確認的館舍。</p>
       </section>
       <Form key={formKey} id="search" className="shell search" action="/search#results" aria-labelledby="search-title">
         <input type="hidden" name="search" value="1" />

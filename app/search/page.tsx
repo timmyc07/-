@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { CalendarDays, Clock, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, Route, Search, Wifi } from '../action-icons.ts';
 import DurationField from '../duration-field.tsx';
 import AutoDistance from './auto-distance.tsx';
+import CardDetails from './card-details.tsx';
 import AdvancedFilters from './advanced-filters.tsx';
 import ResultLayout, { LayoutControls, LayoutField, LayoutLink } from './result-layout.tsx';
 import RegionFilters from '../region-filters.tsx';
@@ -194,11 +195,6 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
 }) {
   const visit = area && pilotVisit(library.id, area);
   return <article className="card">
-    {photo && <figure className="card-photo">
-      <Image src={'/api/library-photos/' + encodeURIComponent(library.id)} alt={library.name + '館舍實景'}
-        width={photo.width} height={photo.height} sizes="(max-width: 630px) 100vw, (max-width: 1000px) 50vw, 400px" />
-      <figcaption><a href={photo.source}>{photo.author} · 照片來源</a> · <a href={photo.licenseUrl}>{photo.license}</a></figcaption>
-    </figure>}
     <header className="card-heading">
       <div className="card-top">
         <span>{library.city}{library.district && ' · ' + library.district}</span>
@@ -208,27 +204,34 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
       <p className="area">{area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
       <p className="address">{library.address || '地址待確認'}</p>
     </header>
-    <dl className="card-facts">
-      <div><dt>證件</dt><dd className="entry-documents">{documentLabels[documents]}</dd></div>
-      {openUntil !== undefined && <div><dt>可用至</dt><dd className="open-until">{clock(openUntil)}</dd></div>}
-    </dl>
-    {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>{reason}{' '}
-      {closure && reason === closure.reason && <a href={closure.url}>休館來源 ↗</a>}</li>)}</ul> : null}
-    {visit && <dl className="visit-details">
-      <div><dt>樓層</dt><dd>{visit.location}</dd></div>
-      <div><dt>入座</dt><dd>{visit.entry}</dd></div>
-      <div><dt>充電</dt><dd>{visit.power}</dd></div>
-    </dl>}
-    <div className="card-actions">
-      {(library.coordinates || library.address) && <a className="map-link" href={directionsUrl(library.coordinates ?? library.address)}
-        aria-label={library.name + ' Google 地圖導航'}><MapPin className="action-icon" size={17} />地圖導航</a>}
-      {!closure && area?.reservation && <a href={area.reservation}><CalendarDays className="action-icon" size={17} />前往館方預約</a>}
-      {library.phone && <a href={'tel:' + library.phone}><Phone className="action-icon" size={17} />電洽 {library.phone}</a>}
-    </div>
-    {visit && <div className="source-links">{visit.links.map(([label, url]) => <a key={url} href={url}>{label} ↗</a>)}</div>}
-    <details className="card-rules">
-      <summary>使用規則與來源</summary>
-      <div className="disclosure-body">
+    <CardDetails name={library.name}>
+      {photo && <figure className="card-photo">
+        <Image src={'/api/library-photos/' + encodeURIComponent(library.id)} alt={library.name + '館舍實景'}
+          width={photo.width} height={photo.height} sizes="(max-width: 630px) 100vw, (max-width: 1000px) 50vw, 400px" />
+        <figcaption><a href={photo.source}>{photo.author} · 照片來源</a> · <a href={photo.licenseUrl}>{photo.license}</a></figcaption>
+      </figure>}
+      <p className="area">{area?.name ?? '閱覽空間待確認'}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
+      <p className="address">{library.address || '地址待確認'}</p>
+      <dl className="card-facts">
+        <div><dt>證件</dt><dd className="entry-documents">{documentLabels[documents]}</dd></div>
+        {openUntil !== undefined && <div><dt>可用至</dt><dd className="open-until">{clock(openUntil)}</dd></div>}
+      </dl>
+      {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>{reason}{' '}
+        {closure && reason === closure.reason && <a href={closure.url}>休館來源 ↗</a>}</li>)}</ul> : null}
+      {visit && <dl className="visit-details">
+        <div><dt>樓層</dt><dd>{visit.location}</dd></div>
+        <div><dt>入座</dt><dd>{visit.entry}</dd></div>
+        <div><dt>充電</dt><dd>{visit.power}</dd></div>
+      </dl>}
+      <div className="card-actions">
+        {(library.coordinates || library.address) && <a className="map-link" href={directionsUrl(library.coordinates ?? library.address)}
+          aria-label={library.name + ' Google 地圖導航'}><MapPin className="action-icon" size={17} />地圖導航</a>}
+        {!closure && area?.reservation && <a href={area.reservation}><CalendarDays className="action-icon" size={17} />前往館方預約</a>}
+        {library.phone && <a href={'tel:' + library.phone}><Phone className="action-icon" size={17} />電洽 {library.phone}</a>}
+      </div>
+      {visit && <div className="source-links">{visit.links.map(([label, url]) => <a key={url} href={url}>{label} ↗</a>)}</div>}
+      <section className="card-rules">
+        <h3>使用規則與來源</h3>
         <dl className="rule-details">
           <dt>入場</dt><dd>{area?.entryNote ?? (area?.access === 'walk-in' ? '現場入座' : area?.access === 'card'
             ? '需持' + (area.regionalCard ? regionalCards[area.regionalCard] : '國資圖或臺中市圖個人借閱證') + '，須預約或現場登記' : area?.access === 'restricted' ? '限指定身分' :
@@ -252,9 +255,9 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
           {[...new Set([...(area?.sources ?? []), ...library.sources, ...(library.notices ?? [])])].map((source, index) =>
             <a href={source} key={source}>來源 {index + 1} ↗</a>)}
         </div>
-      </div>
-    </details>
-    {originalLink && <LayoutLink className="backup-link" href={originalLink}><Route className="action-icon" size={17} />以此館為原定地點找備案</LayoutLink>}
+      </section>
+      {originalLink && <LayoutLink className="backup-link" href={originalLink}><Route className="action-icon" size={17} />以此館為原定地點找備案</LayoutLink>}
+    </CardDetails>
     {distance !== undefined && <footer className="card-distance user-distance"><MapPin size={15} aria-hidden="true" />離你約 {
       distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里'}</footer>}
   </article>;

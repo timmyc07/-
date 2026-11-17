@@ -34,12 +34,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
   const equipment = facilityKeys.filter((key) => get(key) === 'on');
   const requestedDocuments = get('documents');
   const documentFilter = requestedDocuments === 'required' || requestedDocuments === 'none' ? requestedDocuments : '';
-  const district = get('district') ?? '';
-  const city = get('city') ?? (district ? '臺中市' : '');
   const keyword = (get('q') ?? '').trim().slice(0, 100);
   const original = get('original') ?? '';
   const near = get('near');
   const position = near === 'me' ? parseCoordinates(get('position')) : undefined;
+  const district = position ? '' : get('district') ?? '';
+  const city = position ? '' : get('city') ?? (district ? '臺中市' : '');
   const view = get('view');
   const statusFilter = view && Object.hasOwn(statuses, view) ? view as keyof typeof statuses : '';
   const page = Math.max(1, Number.parseInt(get('page') ?? '1', 10) || 1);
@@ -96,7 +96,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<Par
 
   function href(changes: Record<string, string>, section = 'results') {
     const next = new URLSearchParams();
-    for (const [key, value] of Object.entries(params)) if (key !== 'sources' && typeof value === 'string') next.set(key, value);
+    for (const [key, value] of Object.entries(params)) {
+      if (key === 'sources' || (position && (key === 'city' || key === 'district'))) continue;
+      if (typeof value === 'string') next.set(key, value);
+    }
     for (const [key, value] of Object.entries(changes)) {
       if (value) next.set(key, value);
       else next.delete(key);

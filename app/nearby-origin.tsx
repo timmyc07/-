@@ -26,6 +26,8 @@ export default function NearbyOrigin({ libraries, initialOrigin, position }: {
     navigator.geolocation.getCurrentPosition(({ coords }) => {
       const params = new URLSearchParams();
       new FormData(form).forEach((value, key) => params.set(key, String(value)));
+      params.delete('city');
+      params.delete('district');
       params.set('near', 'me');
       params.set('position', coords.latitude.toFixed(3) + ',' + coords.longitude.toFixed(3));
       params.set('search', '1');
@@ -48,6 +50,7 @@ export default function NearbyOrigin({ libraries, initialOrigin, position }: {
     </select></label>
     {origin === 'me' && position && <input type="hidden" name="position" value={position} />}
     <button type="button" onClick={locate} disabled={locating}>使用我的位置查詢</button>
+    <small>使用我的位置時，會搜尋全臺並保留其他查詢條件。</small>
     <span role="status">{message}</span>
   </div>;
 }

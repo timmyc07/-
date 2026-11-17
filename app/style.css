@@ -61,7 +61,8 @@ h1{font-size:clamp(2rem,1.4rem + 2.5vw,3.875rem);line-height:1.16;margin-bottom:
 .keyword-search button{border-radius:0;background:var(--surface);color:var(--accent)}
 .advanced-trigger{position:absolute;inset-block-start:1px;inset-inline-end:1px;border-radius:0 23px 23px 0;background:var(--surface);color:var(--accent)}
 .keyword-search button:hover,.advanced-trigger:hover{background:var(--soft)}
-.advanced-dialog{width:min(1200px,calc(100% - 32px));max-height:calc(100dvh - 32px);padding:clamp(16px,4vw,28px);border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);box-shadow:var(--shadow-raised)}
+.advanced-dialog{width:min(460px,calc(100% - 32px));max-height:calc(100dvh - 32px);padding:clamp(16px,4vw,28px);border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);box-shadow:var(--shadow-raised)}
+.advanced-dialog .inputs{grid-template-columns:minmax(0,1fr)}
 .advanced-dialog::backdrop{background:#25352b66}
 .advanced-dialog h2{margin:0 44px 16px 0;font-size:1.375rem}
 .dialog-close{position:absolute;inset-block-start:10px;inset-inline-end:10px;display:grid;place-items:center;width:44px;margin:0;padding:0;background:transparent;color:var(--accent);z-index:1}

@@ -1,10 +1,10 @@
 import Form from 'next/form';
-import Link from 'next/link';
 import type { Metadata } from 'next';
-import { CalendarDays, Clock, IdCard, Laptop, LayoutGrid, LibraryBig, List, MapPin, Phone, Plug, RotateCcw, Route,
+import { CalendarDays, Clock, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, RotateCcw, Route,
   Search, SlidersHorizontal, Wifi } from '../action-icons.ts';
 import DurationField from '../duration-field.tsx';
 import AutoDistance from './auto-distance.tsx';
+import ResultLayout, { LayoutField, LayoutLink } from './result-layout.tsx';
 import RegionFilters from '../region-filters.tsx';
 import directory from '../../public/datasets/library-directory.json';
 import { libraryCatalog, type RegionalLibrary } from '../../lib/library-catalog.ts';
@@ -38,8 +38,6 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const position = parseCoordinates(get('position'));
   const district = get('district') ?? '';
   const city = get('city') ?? (district ? '臺中市' : '');
-  const listLayout = get('layout') !== 'grid';
-  const cardsClass = listLayout ? 'cards cards-list' : 'cards';
   const page = Math.max(1, Number.parseInt(get('page') ?? '1', 10) || 1);
   const searched = get('search') === '1';
   const advanced = Boolean(city || kind || documentFilter ||
@@ -92,7 +90,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   function href(changes: Record<string, string>) {
     const next = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {
-      if (key === 'sources') continue;
+      if (key === 'sources' || key === 'layout') continue;
       if (typeof value === 'string') next.set(key, value);
     }
     for (const [key, value] of Object.entries(changes)) {
@@ -109,7 +107,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       <Form key={formKey} id="search" className="shell search" action="/search#results" aria-labelledby="search-page-title">
         <input type="hidden" name="search" value="1" />
         {position && <input type="hidden" name="position" value={get('position')} />}
-        {!listLayout && <input type="hidden" name="layout" value="grid" />}
+        <LayoutField />
         {selected && <input type="hidden" name="original" value={selected.id} />}
         <div className="keyword-search">
           <input aria-label="館名或地址" type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="搜尋館名或地址" />
@@ -141,47 +139,43 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               </label>
             </div>
             <div className="search-actions">
-              <Link className="filter-label" href="/search#search"><RotateCcw size={16} />清除條件</Link>
+              <LayoutLink className="filter-label" href="/search#search"><RotateCcw size={16} />清除條件</LayoutLink>
               <button type="submit">套用篩選</button>
             </div>
           </div>
         </details>
       </Form>
-      <section id="results" className="shell results" aria-label="查詢結果">
+      <ResultLayout showControls={!invalid}>
         {!invalid && !position && <AutoDistance searchKey={JSON.stringify(params)} />}
         <div key={resultsKey}>
-          {!invalid && <nav className="result-layout" aria-label="結果顯示方式">
-            <Link href={href({ layout: '' })} scroll={false} aria-label="橫排清單" title="橫排清單" aria-current={listLayout ? 'true' : undefined}><List size={18} /></Link>
-            <Link href={href({ layout: 'grid' })} scroll={false} aria-label="網格卡片" title="網格卡片" aria-current={!listLayout ? 'true' : undefined}><LayoutGrid size={18} /></Link>
-          </nav>}
           {invalid && <p className="notice" role="alert">請輸入有效日期、開始時間與正整數分鐘。使用時段須在同一天內。</p>}
           {!invalid && <>
             {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult
               ? statuses[originalResult.status] : '沒有符合所選證件條件的空間'}
               {originalResult?.area && ' · ' + originalResult.area.name}
               {originalResult?.reasons.length ? ' · ' + originalResult.reasons.join('、') : ''}
-              {' '}<Link href={href({ original: '' })}>清除原定館舍</Link></div>}
+              {' '}<LayoutLink href={href({ original: '' })}>清除原定館舍</LayoutLink></div>}
             {selected && <section className="backups" aria-label="備案比較">
               <h3>備案比較</h3>
               {backupOrigin && <p className="distance-note">以{position ? '目前位置' : '原定館舍'}為起點，依直線距離排序</p>}
-              {backups.length ? <div className={cardsClass}>{backups.map((item) =>
+              {backups.length ? <div className="cards">{backups.map((item) =>
                 <LibraryCard key={item.library.id} {...item} distance={position ? item.distance : undefined} />)}</div> :
                 <p>目前條件下沒有已確認符合的備案。{' '}
-                  {city ? <Link href={href({ city: '', district: '', page: '' })}>擴大到全臺灣</Link> : '可調整條件再查詢。'}
+                  {city ? <LayoutLink href={href({ city: '', district: '', page: '' })}>擴大到全臺灣</LayoutLink> : '可調整條件再查詢。'}
                 </p>}
             </section>}
             {!results.length && <p className="notice">沒有符合此篩選的結果。</p>}
-            <div className={cardsClass}>{results.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) =>
+            <div className="cards">{results.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item) =>
               <LibraryCard key={item.library.id + (item.area?.name ?? '')} {...item}
                 originalLink={href({ original: item.library.id, q: '', page: '' })} />)}</div>
             {totalPages > 1 && <nav className="pager" aria-label="結果頁碼">
-              {currentPage > 1 && <Link href={href({ page: String(currentPage - 1) })}>上一頁</Link>}
+              {currentPage > 1 && <LayoutLink href={href({ page: String(currentPage - 1) })}>上一頁</LayoutLink>}
               <span>{currentPage} / {totalPages}</span>
-              {currentPage < totalPages && <Link href={href({ page: String(currentPage + 1) })}>下一頁</Link>}
+              {currentPage < totalPages && <LayoutLink href={href({ page: String(currentPage + 1) })}>下一頁</LayoutLink>}
             </nav>}
           </>}
         </div>
-      </section>
+      </ResultLayout>
     </main>;
 }
 
@@ -253,7 +247,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
         </div>
       </div>
     </details>
-    {originalLink && <Link className="backup-link" href={originalLink}><Route className="action-icon" size={17} />以此館為原定地點找備案</Link>}
+    {originalLink && <LayoutLink className="backup-link" href={originalLink}><Route className="action-icon" size={17} />以此館為原定地點找備案</LayoutLink>}
     <footer className="card-distance"><MapPin size={15} aria-hidden="true" />{distance === undefined ? '距離待確認' :
       '離你約 ' + (distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里')}</footer>
   </article>;

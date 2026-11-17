@@ -19,9 +19,15 @@ export default function AutoDistance({ searchKey }: { searchKey: string }) {
       }, () => resolve(undefined), { timeout: 8000 });
     });
     void locationRequest.then((position) => {
-      if (!position || !active || window.location.href !== url.href) return;
-      url.searchParams.set('position', position);
-      router.replace('/search' + url.search + url.hash, { scroll: false });
+      if (!position || !active) return;
+      const current = new URL(window.location.href);
+      const originalParams = new URLSearchParams(url.search);
+      const currentParams = new URLSearchParams(current.search);
+      originalParams.delete('layout');
+      currentParams.delete('layout');
+      if (current.pathname !== url.pathname || currentParams.toString() !== originalParams.toString()) return;
+      current.searchParams.set('position', position);
+      router.replace('/search' + current.search + current.hash, { scroll: false });
     });
     return () => { active = false; };
   }, [router, searchKey]);

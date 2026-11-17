@@ -128,10 +128,10 @@ button:hover{background:var(--accent-hover)}
 .results{margin-top:26px;scroll-margin:20px}
 .results h2{font-size:1.375rem}
 .result-layout{display:flex;justify-content:flex-end;gap:4px;margin-bottom:12px}
-.result-layout a{display:grid;place-items:center;min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
-.result-layout a[aria-current=true]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.result-layout button{display:grid;place-items:center;min-width:44px;min-height:44px;margin:0;padding:0;color:var(--accent);border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.result-layout button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start;gap:18px 12px}
-.cards.cards-list{grid-template-columns:minmax(0,1fr)}
+.results[data-layout=list] .cards{grid-template-columns:minmax(0,1fr)}
 .card{
   position:relative;
   isolation:isolate;
@@ -163,9 +163,9 @@ button:hover{background:var(--accent-hover)}
 .card-distance{display:flex;align-items:center;gap:5px;color:var(--accent);font-size:.9375rem;margin:0}
 .card-distance svg{flex:none}
 @media(min-width:631px){
-  .cards-list>.card{grid-template-columns:minmax(0,2fr) minmax(0,1fr);column-gap:20px}
-  .cards-list>.card>:not(.card-heading,.card-facts){grid-column:1/-1}
-  .cards-list .card-facts{align-self:start}
+  .results[data-layout=list] .cards>.card{grid-template-columns:minmax(0,2fr) minmax(0,1fr);column-gap:20px}
+  .results[data-layout=list] .cards>.card>:not(.card-heading,.card-facts){grid-column:1/-1}
+  .results[data-layout=list] .cards .card-facts{align-self:start}
 }
 @keyframes card-float{
   0%,100%{transform:translateY(0)}
@@ -298,13 +298,13 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
       box-shadow var(--motion-fast) ease,translate var(--motion-fast) var(--motion-ease),scale var(--motion-fast) var(--motion-ease);
   }
   button:not(:disabled,.keyword-search button):active,.site-nav a:active,.hero-actions a:active,.pager a:active{scale:.97}
-  .site-nav a:hover,.hero-actions a:hover,.pager a:hover,button:not(:disabled,.duration-steps button,.keyword-search button):hover{translate:0 -2px}
+  .site-nav a:hover,.hero-actions a:hover,.pager a:hover,button:not(:disabled,.duration-steps button,.keyword-search button,.result-layout button):hover{translate:0 -2px}
   .site-nav a span,.hero-actions a span,button span{display:inline-block;transition:translate var(--motion-fast) var(--motion-ease)}
   a:hover>span[aria-hidden=true],button:not(:disabled):hover>span[aria-hidden=true]{translate:3px 0}
   .checks input:checked{animation:check-pop 210ms var(--motion-ease)}
-  .cards:not(.cards-list)>.card::before{animation:card-float 2.8s ease-in-out}
-  .cards:not(.cards-list)>.card:nth-child(3n+2)::before{animation-delay:100ms}
-  .cards:not(.cards-list)>.card:nth-child(3n)::before{animation-delay:200ms}
+  .results[data-layout=grid] .cards>.card::before{animation:card-float 2.8s ease-in-out}
+  .results[data-layout=grid] .cards>.card:nth-child(3n+2)::before{animation-delay:100ms}
+  .results[data-layout=grid] .cards>.card:nth-child(3n)::before{animation-delay:200ms}
   summary::before{transition:rotate var(--motion-fast) var(--motion-ease)}
   .hero-copy>*,
   .search>fieldset,

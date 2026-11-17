@@ -55,11 +55,11 @@ h1{font-size:clamp(2rem,1.4rem + 2.5vw,3.875rem);line-height:1.16;margin-bottom:
 .search-intro{padding:clamp(22px,3.8vw,44px) 0 16px}
 .search-intro h1{font-size:clamp(1.65rem,1.4rem + 1vw,2.25rem);line-height:1.25;margin:0}
 .search{position:relative;display:grid;gap:10px;scroll-margin:20px}
-.keyword-search{display:grid;grid-template-columns:minmax(0,1fr) 46px;gap:8px;padding-inline-end:46px}
-.keyword-search input{width:100%;min-width:0;min-height:46px;padding:6px 14px;border:1px solid var(--control-line);border-radius:999px;background:var(--surface);color:var(--ink)}
+.keyword-search{display:grid;grid-template-columns:minmax(0,1fr) 46px;padding-inline-end:46px;border:1px solid var(--control-line);border-radius:999px;background:var(--surface)}
+.keyword-search input{width:100%;min-width:0;min-height:46px;padding:6px 14px;border:0;border-radius:24px 0 0 24px;background:transparent;color:var(--ink)}
 .keyword-search button,.advanced-search>summary{display:grid;place-items:center;width:46px;height:46px;margin:0;padding:0}
-.keyword-search button{border-radius:10px 0 0 10px}
-.advanced-search>summary{position:absolute;inset-block-start:0;inset-inline-end:0;border:1px solid var(--line);border-radius:0 10px 10px 0;background:var(--surface)}
+.keyword-search button{border-radius:0}
+.advanced-search>summary{position:absolute;inset-block-start:1px;inset-inline-end:1px;border-radius:0 23px 23px 0;background:var(--surface)}
 .advanced-search>summary::before{display:none}
 .advanced-search>summary:hover,.advanced-search[open]>summary{background:var(--soft)}
 .advanced-search:not([open]){height:0;margin-top:-10px}
@@ -162,6 +162,11 @@ button:hover{background:var(--accent-hover)}
 .address{color:var(--muted);font-size:1rem;margin:0}
 .card-distance{display:flex;align-items:center;gap:5px;color:var(--accent);font-size:.9375rem;margin:0}
 .card-distance svg{flex:none}
+@media(min-width:631px){
+  .cards-list>.card{grid-template-columns:minmax(0,2fr) minmax(0,1fr);column-gap:20px}
+  .cards-list>.card>:not(.card-heading,.card-facts){grid-column:1/-1}
+  .cards-list .card-facts{align-self:start}
+}
 @keyframes card-float{
   0%,100%{transform:translateY(0)}
   50%{transform:translateY(-4px)}
@@ -292,7 +297,7 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
     transition:background-color var(--motion-fast) ease,border-color var(--motion-fast) ease,color var(--motion-fast) ease,
       box-shadow var(--motion-fast) ease,translate var(--motion-fast) var(--motion-ease),scale var(--motion-fast) var(--motion-ease);
   }
-  button:not(:disabled):active,.site-nav a:active,.hero-actions a:active,.pager a:active{scale:.97}
+  button:not(:disabled,.keyword-search button):active,.site-nav a:active,.hero-actions a:active,.pager a:active{scale:.97}
   .site-nav a:hover,.hero-actions a:hover,.pager a:hover,button:not(:disabled,.duration-steps button,.keyword-search button):hover{translate:0 -2px}
   .site-nav a span,.hero-actions a span,button span{display:inline-block;transition:translate var(--motion-fast) var(--motion-ease)}
   a:hover>span[aria-hidden=true],button:not(:disabled):hover>span[aria-hidden=true]{translate:3px 0}

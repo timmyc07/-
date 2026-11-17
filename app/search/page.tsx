@@ -38,11 +38,14 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const position = parseCoordinates(get('position'));
   const district = get('district') ?? '';
   const city = get('city') ?? (district ? '臺中市' : '');
-  const listLayout = get('layout') === 'list';
+  const listLayout = get('layout') !== 'grid';
   const cardsClass = listLayout ? 'cards cards-list' : 'cards';
   const page = Math.max(1, Number.parseInt(get('page') ?? '1', 10) || 1);
   const searched = get('search') === '1';
-  const invalid = searched && (!validDate(date) || !timePattern.test(start) ||
+  const advanced = Boolean(city || kind || documentFilter ||
+    start !== '14:00' || duration !== 120 || date !== today);
+  const detailed = advanced || equipment.length > 0;
+  const invalid = detailed && (!validDate(date) || !timePattern.test(start) ||
     !Number.isInteger(duration) || duration < 1 || minutes(start) + duration > 1440);
   const query: Query = { date, start: minutes(start), duration, kind, required: equipment };
 
@@ -65,21 +68,25 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   };
   const rank = { yes: 0, unknown: 1, no: 2 };
   type Result = ReturnType<typeof evaluateLibrary>[number];
-  const compareDistance = (a: Result, b: Result) =>
+  const compareDistance = (a: { distance?: number }, b: { distance?: number }) =>
     (a.distance ?? Number.MAX_VALUE) - (b.distance ?? Number.MAX_VALUE);
   const compareStatus = (a: Result, b: Result) => rank[a.status] - rank[b.status];
   const compareResults = (a: Result, b: Result) => compareDistance(a, b) || compareStatus(a, b);
-  const results = searched && !invalid ? candidates.flatMap(evaluateLibrary).sort(compareResults) : [];
+  const evaluated = !invalid && (detailed || selected) ? candidates.flatMap(evaluateLibrary).sort(compareResults) : [];
+  const browse = position || searched || keyword ? candidates : candidates.filter(({ areas }) => areas.some((area) =>
+    area.kind === 'study' && area.slots?.length && (area.access === 'walk-in' || area.access === 'card'))).slice(0, 4);
+  const results = detailed ? evaluated : browse.map((library) => ({
+    library,
+    area: library.areas.find((area) => area.kind === 'study') ?? library.areas[0],
+    distance: distanceKm(position, library.coordinates),
+  })).sort(compareDistance);
   const totalPages = Math.max(1, Math.ceil(results.length / pageSize));
   const currentPage = Math.min(totalPages, page);
   const backupOrigin = position ?? selected?.coordinates;
-  const backups = selected ? backupLibraries(position ? results : results.map((item) => ({
+  const backups = selected ? backupLibraries(position ? evaluated : evaluated.map((item) => ({
     ...item, distance: distanceKm(backupOrigin, item.library.coordinates),
   })).sort(compareResults), original) : [];
-  const originalResult = searched && !invalid && selected ? evaluateLibrary(selected).sort(compareStatus)[0] : undefined;
-  const checked = libraries.filter((library) => library.areas.some((area) =>
-    area.kind === 'study' && area.slots?.length && (area.access === 'walk-in' || area.access === 'card')));
-  const featured = checked.slice(0, 4);
+  const originalResult = !invalid && selected ? evaluateLibrary(selected).sort(compareStatus)[0] : undefined;
   const resultsKey = JSON.stringify([formKey, currentPage, position]);
 
   function href(changes: Record<string, string>) {
@@ -102,7 +109,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       <Form key={formKey} id="search" className="shell search" action="/search#results" aria-labelledby="search-page-title">
         <input type="hidden" name="search" value="1" />
         {position && <input type="hidden" name="position" value={get('position')} />}
-        {listLayout && <input type="hidden" name="layout" value="list" />}
+        {!listLayout && <input type="hidden" name="layout" value="grid" />}
         {selected && <input type="hidden" name="original" value={selected.id} />}
         <div className="keyword-search">
           <input aria-label="館名或地址" type="search" name="q" maxLength={100} defaultValue={keyword} placeholder="搜尋館名或地址" />
@@ -115,7 +122,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               <span className="filter-label"><Icon size={16} />{facilities[key]}</span></label>;
           })}
         </div></fieldset>
-        <details className="advanced-search" open={Boolean(city || kind || documentFilter || start !== '14:00' || duration !== 120 || date !== today)}>
+        <details className="advanced-search" open={advanced}>
           <summary aria-label="進階篩選" title="進階篩選"><SlidersHorizontal size={19} aria-hidden="true" /></summary>
           <div className="advanced-panel">
             <div className="inputs">
@@ -140,19 +147,15 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           </div>
         </details>
       </Form>
-      <section id="results" className="shell results" aria-label={searched ? '查詢結果' : '已核對空間時段'}>
-        {searched && !invalid && !position && <AutoDistance searchKey={JSON.stringify(params)} />}
+      <section id="results" className="shell results" aria-label="查詢結果">
+        {!invalid && !position && <AutoDistance searchKey={JSON.stringify(params)} />}
         <div key={resultsKey}>
           {!invalid && <nav className="result-layout" aria-label="結果顯示方式">
-            <Link href={href({ layout: 'list' })} aria-label="清單檢視" title="清單檢視" aria-current={listLayout ? 'true' : undefined}><List size={18} /></Link>
-            <Link href={href({ layout: '' })} aria-label="卡片檢視" title="卡片檢視" aria-current={!listLayout ? 'true' : undefined}><LayoutGrid size={18} /></Link>
+            <Link href={href({ layout: '' })} scroll={false} aria-label="橫排清單" title="橫排清單" aria-current={listLayout ? 'true' : undefined}><List size={18} /></Link>
+            <Link href={href({ layout: 'grid' })} scroll={false} aria-label="網格卡片" title="網格卡片" aria-current={!listLayout ? 'true' : undefined}><LayoutGrid size={18} /></Link>
           </nav>}
           {invalid && <p className="notice" role="alert">請輸入有效日期、開始時間與正整數分鐘。使用時段須在同一天內。</p>}
-          {!searched && <><h2>已核對空間時段</h2>
-            {!featured.length && <p>可使用上方表單查詢館舍名錄。</p>}
-            <div className={cardsClass}>{featured.map((library) => <LibraryCard key={library.id} library={library} area={library.areas.find((area) => area.kind === 'study' && area.slots?.length)} />)}</div>
-          </>}
-          {searched && !invalid && <>
+          {!invalid && <>
             {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult
               ? statuses[originalResult.status] : '沒有符合所選證件條件的空間'}
               {originalResult?.area && ' · ' + originalResult.area.name}
@@ -162,7 +165,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               <h3>備案比較</h3>
               {backupOrigin && <p className="distance-note">以{position ? '目前位置' : '原定館舍'}為起點，依直線距離排序</p>}
               {backups.length ? <div className={cardsClass}>{backups.map((item) =>
-                <LibraryCard key={item.library.id} {...item} />)}</div> :
+                <LibraryCard key={item.library.id} {...item} distance={position ? item.distance : undefined} />)}</div> :
                 <p>目前條件下沒有已確認符合的備案。{' '}
                   {city ? <Link href={href({ city: '', district: '', page: '' })}>擴大到全臺灣</Link> : '可調整條件再查詢。'}
                 </p>}
@@ -203,8 +206,6 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
       <h3>{library.name}</h3>
       <p className="area">{area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
       <p className="address">{library.address || '地址待確認'}</p>
-      {distance !== undefined && <p className="card-distance"><MapPin size={15} />直線約 {
-        distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里'}</p>}
     </header>
     <dl className="card-facts">
       <div><dt>證件</dt><dd className="entry-documents">{documentLabels[documents]}</dd></div>
@@ -253,5 +254,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
       </div>
     </details>
     {originalLink && <Link className="backup-link" href={originalLink}><Route className="action-icon" size={17} />以此館為原定地點找備案</Link>}
+    <footer className="card-distance"><MapPin size={15} aria-hidden="true" />{distance === undefined ? '距離待確認' :
+      '離你約 ' + (distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里')}</footer>
   </article>;
 }

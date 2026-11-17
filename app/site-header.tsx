@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { House, Search } from './action-icons.ts';
+import ThemeToggle from './theme-toggle.tsx';
 
 export default function SiteHeader() {
   return <header id="top" className="header">
@@ -12,6 +13,7 @@ export default function SiteHeader() {
       <nav className="site-nav" aria-label="主要導覽">
         <a href="/#top"><House size={16} />首頁大廳</a>
         <Link className="nav-search" href="/search" prefetch><Search size={16} />查詢空間</Link>
+        <ThemeToggle />
       </nav>
     </div>
   </header>;

@@ -14,7 +14,13 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: ReactNode }) {
-  return <html lang="zh-Hant" className={`${sans.variable} ${serif.variable}`} data-scroll-behavior="smooth">
+  return <html lang="zh-Hant" className={`${sans.variable} ${serif.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
+    <head>
+      <script dangerouslySetInnerHTML={{ __html: `try {
+        const theme = localStorage.getItem('studygo-theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch {}` }} />
+    </head>
     <body><ScrollProgress /><SiteHeader />{children}</body>
   </html>;
 }

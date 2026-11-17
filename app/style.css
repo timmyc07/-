@@ -185,6 +185,7 @@ button:hover{background:var(--accent-hover)}
   0%,100%{transform:translateY(0)}
   50%{transform:translateY(-4px)}
 }
+@keyframes card-reveal{from{opacity:.74}to{opacity:1}}
 .card-facts,.visit-details{display:grid;gap:6px;margin:0}
 .card-facts{padding:10px 12px;border-radius:12px;background:var(--soft)}
 :is(.card-facts,.visit-details)>div{display:grid;grid-template-columns:3.25em minmax(0,1fr);gap:10px}
@@ -340,9 +341,8 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
   .site-nav a span,.hero-actions a span,button span{display:inline-block;transition:translate var(--motion-fast) var(--motion-ease)}
   a:hover>span[aria-hidden=true],button:not(:disabled):hover>span[aria-hidden=true]{translate:3px 0}
   .checks input:checked{animation:check-pop 210ms var(--motion-ease)}
-  .results[data-layout=grid] .cards>.card::before{animation:card-float 2.8s ease-in-out}
-  .results[data-layout=grid] .cards>.card:nth-child(3n+2)::before{animation-delay:100ms}
-  .results[data-layout=grid] .cards>.card:nth-child(3n)::before{animation-delay:200ms}
+  .card[data-revealed]{animation:card-reveal 320ms ease-out}
+  .card[data-revealed]::before{animation:card-float 2.8s ease-in-out}
   summary::before{transition:rotate var(--motion-fast) var(--motion-ease)}
   .hero-copy>*,
   .search-options>fieldset,

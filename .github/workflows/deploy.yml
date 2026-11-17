@@ -1,0 +1,29 @@
+name: Deploy StudyGo
+
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: studygo-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Trigger Render deploy
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo '::error::RENDER_DEPLOY_HOOK_URL is missing.'
+            exit 1
+          fi
+          if ! curl --fail --silent --output /dev/null --max-time 30 --request POST "$RENDER_DEPLOY_HOOK_URL"; then
+            echo '::error::Render did not accept the deployment request.'
+            exit 1
+          fi

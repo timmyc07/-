@@ -61,9 +61,9 @@ export default function DataTransparency({ libraries, snapshot, expanded }: {
           </section>
           <section id="source-index" className="footer-index">
             <h3>逐館來源索引</h3>
-            <Link className="outline-link" href={expanded ? '/#source-index' : '/?sources=1#source-index'} prefetch={false} aria-expanded={expanded}>
+            <a className="outline-link" href={expanded ? '/#source-index' : '/?sources=1#source-index'} aria-expanded={expanded}>
               <Database size={16} />{expanded ? '收合逐館來源索引' : '查看完整逐館來源索引'}
-            </Link>
+            </a>
             {groups.map(([host, links]) => <SourceGroup key={host} host={host} count={links.size} />)}
           </section>
         </div>

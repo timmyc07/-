@@ -6,7 +6,6 @@ import { CalendarDays, Clock, IdCard, Laptop, LayoutGrid, LibraryBig, List, MapP
 import DurationField from '../duration-field.tsx';
 import NearbyOrigin from '../nearby-origin.tsx';
 import RegionFilters from '../region-filters.tsx';
-import { BlurFade } from '../site-motion.tsx';
 import directory from '../../public/datasets/library-directory.json';
 import { libraryCatalog, type RegionalLibrary } from '../../lib/library-catalog.ts';
 import { directionsUrl, distanceKm, parseCoordinates } from '../../lib/distance.ts';
@@ -149,7 +148,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         </details>
       </Form>
       <section id="results" className="shell results" aria-labelledby="results-title">
-        <BlurFade key={resultsKey} inView>
+        <div key={resultsKey}>
           {!invalid && <nav className="result-layout" aria-label="結果顯示方式">
             <Link href={href({ layout: 'list' })} aria-label="清單檢視" title="清單檢視" aria-current={listLayout ? 'true' : undefined}><List size={18} /></Link>
             <Link href={href({ layout: '' })} aria-label="卡片檢視" title="卡片檢視" aria-current={!listLayout ? 'true' : undefined}><LayoutGrid size={18} /></Link>
@@ -191,7 +190,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               {currentPage < totalPages && <Link href={href({ page: String(currentPage + 1) })}>下一頁</Link>}
             </nav>}
           </>}
-        </BlurFade>
+        </div>
       </section>
     </main>;
 }
@@ -208,7 +207,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
   originalLink?: string;
 }) {
   const visit = area && pilotVisit(library.id, area);
-  return <BlurFade as="article" className="card" inView>
+  return <article className="card">
     <header className="card-heading">
       <div className="card-top">
         <span>{library.city}{library.district && ' · ' + library.district}</span>
@@ -267,5 +266,5 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
       </div>
     </details>
     {originalLink && <Link className="backup-link" href={originalLink}><Route className="action-icon" size={17} />以此館為原定地點找備案</Link>}
-  </BlurFade>;
+  </article>;
 }

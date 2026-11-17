@@ -147,10 +147,12 @@ button:hover{background:var(--accent-hover)}
   gap:11px;
   min-width:0;
   padding:clamp(14px,1.6vw,20px);
-  border:1px solid var(--line);
+  border:1px solid transparent;
   border-radius:12px;
-  background:var(--surface);
-  box-shadow:var(--shadow-raised);
+  background:
+    linear-gradient(var(--surface),var(--surface)) padding-box,
+    linear-gradient(145deg,#a8bdb0,#dce5da 48%,#c3cdbb) border-box;
+  box-shadow:0 5px 14px #25352b0d,0 0 8px #85b69c26,inset 0 0 5px #85b69c1a;
   overflow-wrap:anywhere;
 }
 .card-heading{display:grid;gap:5px}
@@ -160,7 +162,10 @@ button:hover{background:var(--accent-hover)}
 .address{color:var(--muted);font-size:1rem;margin:0}
 .card-distance{display:flex;align-items:center;gap:5px;color:var(--accent);font-size:.9375rem;margin:0}
 .card-distance svg{flex:none}
-@keyframes card-float{50%{translate:0 -4px}}
+@keyframes card-float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
 .card-facts,.visit-details{display:grid;gap:6px;margin:0}
 .card-facts{padding:10px 12px;border-radius:12px;background:var(--soft)}
 :is(.card-facts,.visit-details)>div{display:grid;grid-template-columns:3.25em minmax(0,1fr);gap:10px}
@@ -280,7 +285,7 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
 :where(a):hover,summary:hover{color:var(--accent-hover)}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 .inputs input:focus,:is(.inputs,.nearby-origin) select:focus{border-color:var(--focus);box-shadow:0 0 0 3px var(--soft)}
-.card:focus-within,.card:hover,.card:has(>details[open]){border-color:var(--scroll-thumb);box-shadow:var(--shadow-raised)}
+.card:focus-within,.card:hover,.card:has(>details[open]){border-color:#73978380}
 .tabs a:hover,.pager a:hover{border-color:var(--scroll-thumb)}
 tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
 
@@ -295,11 +300,9 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
   .site-nav a span,.hero-actions a span,button span{display:inline-block;transition:translate var(--motion-fast) var(--motion-ease)}
   a:hover>span[aria-hidden=true],button:not(:disabled):hover>span[aria-hidden=true]{translate:3px 0}
   .checks input:checked{animation:check-pop 210ms var(--motion-ease)}
-  .card{transition:box-shadow 200ms ease,border-color 200ms ease,translate 200ms var(--motion-ease)}
-  .cards:not(.cards-list)>.card:not(:hover,:focus-within){animation:card-float 3.6s ease-in-out}
-  .card:nth-child(3n+2){animation-delay:160ms}
-  .card:nth-child(3n){animation-delay:320ms}
-  .card:hover,.card:focus-within{translate:0 -3px}
+  .cards:not(.cards-list)>.card{animation:card-float 2.8s ease-in-out}
+  .cards:not(.cards-list)>.card:nth-child(3n+2){animation-delay:100ms}
+  .cards:not(.cards-list)>.card:nth-child(3n){animation-delay:200ms}
   summary::before{transition:rotate var(--motion-fast) var(--motion-ease)}
   .hero-copy>*,
   .search>:is(.keyword-search,fieldset,.nearby-origin,.advanced-search),

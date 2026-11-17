@@ -1,27 +1,28 @@
 :root{
   color-scheme:light dark;
-  --paper:light-dark(#efe5dc,#211914);
-  --surface:light-dark(#d0b8ac,#382b24);
-  --card-surface:light-dark(#d0b8ac,#47362d);
-  --accent:light-dark(#936853,#c29176);
-  --ink:light-dark(#382a24,#f1e3d8);
-  --muted:light-dark(#574239,#cbb1a2);
-  --accent-ink:light-dark(#5a3828,#e4b79e);
-  --field:light-dark(#f8f1e9,#2c211b);
-  --soft:light-dark(#e7d7cd,#49382e);
-  --linen:light-dark(#e4d3c8,#2b211b);
-  --sand:light-dark(#ba9d8d,#795846);
-  --accent-hover:light-dark(#714b39,#d4a388);
-  --on-accent:light-dark(#fffaf5,#251912);
-  --line:light-dark(#b69c8e,#675046);
-  --control-line:light-dark(#806052,#a5816e);
+  --paper:light-dark(#3b2e26,#211914);
+  --surface:light-dark(#4e3b31,#382b24);
+  --card-surface:light-dark(#efe5dc,#cfb6a8);
+  --card-action:light-dark(#936853,#7b503c);
+  --accent:light-dark(#d3a58b,#c29176);
+  --ink:light-dark(#fff1e7,#f1e3d8);
+  --muted:light-dark(#e4ccbe,#cbb1a2);
+  --accent-ink:light-dark(#f1c7ae,#e4b79e);
+  --field:light-dark(#49362d,#2c211b);
+  --soft:light-dark(#5b4539,#49382e);
+  --linen:light-dark(#45352c,#2b211b);
+  --sand:light-dark(#a78371,#795846);
+  --accent-hover:light-dark(#e1b69c,#d4a388);
+  --on-accent:#251912;
+  --line:light-dark(#816454,#675046);
+  --control-line:light-dark(#c09b86,#a5816e);
   --focus:var(--accent-ink);--scroll-thumb:var(--accent);
   --match-bg:light-dark(#e9ded1,#4b3d31);--match-ink:light-dark(#55442f,#ebd5bc);
   --pending-bg:light-dark(#f0dcc4,#563e2b);--pending-ink:light-dark(#674521,#f3d0a5);
   --mismatch-bg:light-dark(#efd4cd,#512f2a);--mismatch-ink:light-dark(#7a372e,#f5c1b4);
-  --shadow-color:light-dark(#382a240d,#0005);
-  --shadow-raised:0 10px 30px light-dark(#382a241c,#0007);
-  --overlay:light-dark(#382a2466,#100b08a8);
+  --shadow-color:light-dark(#100b0833,#0005);
+  --shadow-raised:0 10px 30px light-dark(#100b0855,#0007);
+  --overlay:light-dark(#21150e88,#100b08a8);
   --card-glow:light-dark(#93685326,#c2917626);
   --card-glow-inset:light-dark(#9368531a,#c291761a);
   --card-active-border:light-dark(#93685380,#c2917680);
@@ -112,6 +113,10 @@ label,legend{font-weight:500;font-size:1rem}
 .inputs input,.inputs select{min-height:46px;border:1px solid var(--control-line);border-radius:8px;padding:4px 9px;background:var(--paper);color:var(--ink);width:100%;min-width:0}
 .inputs select{padding-inline:12px;cursor:pointer}
 dialog .inputs :is(input,select),dialog textarea{border:0}
+:root[data-theme=light] .inputs input::-webkit-calendar-picker-indicator{filter:invert(1)}
+@media(prefers-color-scheme:light){
+  :root:not([data-theme]) .inputs input::-webkit-calendar-picker-indicator{filter:invert(1)}
+}
 .inputs input::-webkit-calendar-picker-indicator,
 .inputs input::-webkit-search-cancel-button{cursor:pointer}
 .duration-control{position:relative}
@@ -208,7 +213,9 @@ button:hover{background:var(--accent-hover)}
   box-shadow:0 5px 14px var(--shadow-color),0 0 8px var(--card-glow),inset 0 0 5px var(--card-glow-inset);
 }
 .card-heading{display:grid;gap:5px}
-.card-details-trigger{justify-self:start;margin:0}
+.card-heading,.card>.card-distance{--muted:#574239;--accent-ink:#5a3828;color:#382a24}
+.card-details-trigger{justify-self:start;margin:0;background:var(--card-action);color:#fffaf5}
+.card-details-trigger:hover{background:#684230}
 .card-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;color:var(--muted);font-size:.9375rem}
 .card h3{margin:2px 0 0;font-size:1.375rem}
 .area{color:var(--accent-ink);font-weight:500;margin:0}

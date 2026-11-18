@@ -247,6 +247,13 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.deepEqual(baoshan.coordinates, { latitude: 24.7665, longitude: 120.993 });
   assert.equal(baoshan.studyRoom, undefined);
   assert.equal(baoshan.areas.length, 0);
+  const fangliao = libraries.find(({ id }) => id === 'plis-48e5de0282ee6831ad5e')!;
+  assert.equal(fangliao.address, '屏東縣枋寮鄉地利村建興路286號');
+  assert.deepEqual(fangliao.coordinates, { latitude: 22.3870345, longitude: 120.5945911 });
+  assert.equal(fangliao.phone, '08-8782503');
+  assert.equal(fangliao.fax, undefined);
+  assert.equal(fangliao.studyRoom, undefined);
+  assert.equal(fangliao.facilities, undefined);
   const jianshi = libraries.find(({ id }) => id === 'plis-0a0cb9e669998c949020')!;
   assert.equal(jianshi.address, '新竹縣尖石鄉嘉樂村2鄰64號');
   assert(jianshi.facilities?.includes('原住民館藏室'));

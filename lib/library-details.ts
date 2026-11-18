@@ -433,10 +433,6 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
     url: 'https://isp.ncl.edu.tw/infant-tw/cityres?res=0K291754691357031236',
     facilities: ['嬰幼兒專區'],
   },
-  'plis-48e5de0282ee6831ad5e': {
-    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000451',
-    facilities: ['新書展示區', '期刊展示區', '兒童區', '閱報區', '電腦上網區', '成人閱覽區', '研習室'],
-  },
   'plis-4d0c8d7a33e035e307ff': {
     url: 'https://isp.ncl.edu.tw/teen-tw/cityres?res=0K313038486137355169',
     facilities: ['青少年書櫃'],
@@ -2173,6 +2169,16 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
       sources: [...library.sources, 'https://itaiwan.moe.gov.tw/doc/index.php?doc=416',
         'https://www.openstreetmap.org/way/1434626872'] };
     detail = { address, url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000447' };
+  }
+  if (library.id === 'plis-48e5de0282ee6831ad5e' && library.address === '屏東縣枋寮鄉德興路36號') {
+    const address = '屏東縣枋寮鄉地利村建興路286號';
+    const website = 'https://www.pthg.gov.tw/TownFto/cp.aspx?n=8C16713CEDB571AE&s=C51C2FB98367FAE0';
+    const hoursSource = 'https://themefile.culture.tw/file/2025-12-05/3b7570f3-f89a-47c0-a8cc-2c37d98ca30d/1201%E7%AC%AC%E4%BA%8C%E6%9C%9F%E5%8F%83%E8%88%87%E7%B8%A3%E5%B8%82%E5%8F%B0%E8%AA%9E%E5%AE%B6%E5%BA%AD%E6%8E%A8%E5%BB%A3%E9%BB%9E%E8%B3%87%E8%A8%8A-%E5%A5%89%E6%A0%B8.pdf';
+    library = { ...library, address, website, phone: '08-8782503', fax: undefined,
+      coordinates: { latitude: 22.3870345, longitude: 120.5945911 },
+      accessNote: '原館重建期間，圖書館在水底寮教會 1 樓提供服務。',
+      sources: [...library.sources, hoursSource] };
+    detail = { address, url: website, hours: '臨時館週二至週日 08:00–17:30。' };
   }
   if (library.id === 'plis-d34887b8b49b91a79656' && library.address === '南投縣信義鄉明德村玉山路47號') {
     const address = '南投縣信義鄉愛國村愛國巷114號';

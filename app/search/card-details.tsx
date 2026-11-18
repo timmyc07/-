@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
+import { ChevronRight } from '../action-icons.ts';
 import DialogPanel from './dialog-panel.tsx';
 
 export default function CardDetails({ name, children }: { name: string; children: ReactNode }) {
@@ -17,7 +18,7 @@ export default function CardDetails({ name, children }: { name: string; children
       event.currentTarget.focus();
       if (loaded) dialog.current?.showModal();
       else setLoaded(true);
-    }}>查看詳情</button>
+    }}>查看詳情 <ChevronRight size={14} aria-hidden="true" /></button>
     <DialogPanel dialog={dialog} className="library-dialog" title={name}>
       {loaded && children}
     </DialogPanel>

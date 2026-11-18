@@ -1,7 +1,8 @@
 import Form from 'next/form';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { CalendarDays, Check, Clock, Fax, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, Route, Search, Wifi } from '../action-icons.ts';
+import { ArrowUpDown, Baby, BookOpen, CalendarDays, Check, Clock, Fax, IdCard, Laptop, LibraryBig, MapPin,
+  MessagesSquare, Phone, Plug, Route, Search, Wifi } from '../action-icons.ts';
 import DurationField from '../duration-field.tsx';
 import AutoDistance from './auto-distance.tsx';
 import CardDetails from './card-details.tsx';
@@ -25,6 +26,9 @@ type Params = Record<string, string | string[] | undefined>;
 export const metadata: Metadata = { title: '查詢自修空間｜StudyGo' };
 const facilityKeys = Object.keys(facilities) as Facility[];
 const facilityIcons = { laptop: Laptop, wifi: Wifi, outlet: Plug };
+const libraryFacilityIcons = new Map([
+  ['討論室', MessagesSquare], ['自修室', BookOpen], ['無線上網wifi', Wifi], ['電梯', ArrowUpDown], ['哺乳室', Baby],
+]);
 const statuses = { yes: '符合條件', unknown: '待確認', no: '不符合' } as const;
 const pageSize = 15;
 
@@ -197,14 +201,23 @@ async function LibraryPhoto({ library, photos }: { library: RegionalLibrary; pho
 type HoursRange = Pick<Slot, 'start' | 'end'>;
 
 function HoursBars({ ranges, from, to }: { ranges: HoursRange[]; from: number; to: number }) {
-  const ordered = ranges.toSorted((a, b) => a.start - b.start);
+  const segments: (HoursRange & { open: boolean })[] = [];
+  for (const { start, end } of ranges.toSorted((a, b) => a.start - b.start)) {
+    const previous = segments.at(-1);
+    if (previous && start <= previous.end) {
+      previous.end = Math.max(previous.end, end);
+    } else {
+      if (previous) segments.push({ start: previous.end, end: start, open: false });
+      segments.push({ start, end, open: true });
+    }
+  }
   const percent = (minutes: number) => minutes / (to - from) * 100 + '%';
 
   return <div className="hours-bars">
-    <div className="hours-track" aria-hidden="true">{ordered.map(({ start, end }, index) =>
-      <span key={index} style={{ insetInlineStart: percent(start - from), inlineSize: percent(end - start) }} />)}</div>
-    <ul className="hours-labels" role="list">{ordered.map(({ start, end }, index) =>
-      <li key={index}>{clock(start)}–{clock(end)}</li>)}</ul>
+    <div className="hours-track" aria-hidden="true">{segments.filter(({ open }) => open).map(({ start, end }) =>
+      <span key={start} style={{ insetInlineStart: percent(start - from), inlineSize: percent(end - start) }} />)}</div>
+    <ul className="hours-labels" role="list">{segments.map(({ start, end, open }) =>
+      <li key={start} data-open={open}><span>{open ? '開放' : '未開放'}</span> <strong>{clock(start)}–{clock(end)}</strong></li>)}</ul>
   </div>;
 }
 
@@ -291,7 +304,12 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
           {library.openingHours && <><dt>館方公告的開放時間</dt><dd className="opening-hours"><AnnouncedHours hours={library.openingHours} /></dd></>}
           <dt>設備</dt><dd>{facilityKeys.map((key) => facilities[key] + ' ' +
             (area?.equipment[key] === true ? '有' : area?.equipment[key] === false ? '未提供' : '待確認')).join(' · ')}</dd>
-          {library.facilities?.length ? <><dt>館舍設備</dt><dd>{library.facilities.join('、')}</dd></> : null}
+          {library.facilities?.length ? <><dt>館舍設備</dt><dd>
+            <ul className="library-facilities" role="list">{library.facilities.map((facility) => {
+              const Icon = libraryFacilityIcons.get(facility) ?? LibraryBig;
+              return <li key={facility} data-icon-trigger><Icon className="action-icon" size={16} aria-hidden="true" />{facility}</li>;
+            })}</ul>
+          </dd></> : null}
         </dl>
         <div className="source-links">
           {library.website && <a href={library.website}>館方網站 ↗</a>}

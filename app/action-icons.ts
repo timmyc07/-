@@ -1,5 +1,8 @@
 'use client';
 
+export { ArrowUpDown } from 'pulsoicon-react/icons/arrow-up-down';
+export { Baby } from 'pulsoicon-react/icons/baby';
+export { BookOpen } from 'pulsoicon-react/icons/book-open';
 export { CalendarDays } from 'pulsoicon-react/icons/calendar-days';
 export { Check } from 'pulsoicon-react/icons/check';
 export { ChevronLeft } from 'pulsoicon-react/icons/chevron-left';
@@ -17,6 +20,7 @@ export { LibraryBig } from 'pulsoicon-react/icons/library-big';
 export { List } from 'pulsoicon-react/icons/list';
 export { Map } from 'pulsoicon-react/icons/map';
 export { MapPin } from 'pulsoicon-react/icons/map-pin';
+export { MessagesSquare } from 'pulsoicon-react/icons/messages-square';
 export { Moon } from 'pulsoicon-react/icons/moon';
 export { Phone } from 'pulsoicon-react/icons/phone';
 export { Plug } from 'pulsoicon-react/icons/plug';

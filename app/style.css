@@ -63,9 +63,10 @@ button,a,input,select,summary{outline-offset:4px}
   :root:not([data-theme]) .theme-sun{display:block}
 }
 .hero{display:grid;align-items:center;margin-block:clamp(24px,4vw,52px) clamp(24px,4vw,44px)}
-.hero-copy,.hero-image{grid-area:1/1}
+.hero-copy,.hero-media{grid-area:1/1}
 .hero-copy{z-index:1;max-width:min(490px,47%);margin:clamp(20px,4vw,54px);padding:clamp(22px,3.6vw,44px);border-top:4px solid var(--accent);border-radius:20px;background:var(--surface)}
-.hero-image{display:block;width:100%;height:clamp(435px,46vw,565px);object-fit:cover;object-position:center 54%;border-radius:24px;background:var(--soft)}
+.hero-media{position:relative;overflow:hidden;border-radius:24px;background:var(--soft)}
+.hero-image{display:block;width:100%;height:clamp(435px,46vw,565px);object-fit:cover;object-position:center 54%}
 .eyebrow{font-size:.875rem;letter-spacing:.04em;color:var(--accent-ink);font-weight:500;margin:0 0 16px}
 h1,h2,h3,p{margin-top:0}
 h1,h2,h3,strong{font-weight:600}
@@ -357,7 +358,8 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
   .coverage-panel{grid-template-columns:minmax(0,1fr);gap:8px}
   .coverage-map{width:min(100%,330px)}
   .hero{gap:18px}
-  .hero-image{grid-area:1/1;height:auto;aspect-ratio:1.65;border-radius:16px}
+  .hero-media{border-radius:16px}
+  .hero-image{height:auto;aspect-ratio:1.65}
   .hero-copy{grid-area:2/1;max-width:none;margin:0;padding:0;border:0;background:none}
 }
 @media(max-width:630px){
@@ -421,12 +423,32 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
   a:hover>span[aria-hidden=true],button:not(:disabled):hover>span[aria-hidden=true]{translate:3px 0}
   .checks input:checked{animation:check-pop 210ms var(--motion-ease)}
   summary::before{transition:rotate var(--motion-fast) var(--motion-ease)}
-  .hero-copy>*,
   .search-options>fieldset,
   .admin>:is(h1,section,.audit-filters,.table-wrap){animation:section-enter 360ms var(--motion-ease) backwards}
-  .hero-copy h1,.search-options>fieldset,.admin>section{animation-delay:45ms}
+  .search-options>fieldset,.admin>section{animation-delay:45ms}
   .admin>section+section{animation-delay:85ms}
-  .hero-actions{animation-delay:125ms}
+
+  .landing .hero-image{animation:reading-room-focus 1.65s cubic-bezier(.18,.66,.28,1) both}
+  .landing .hero-media::after{
+    content:"";position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;
+    background:linear-gradient(112deg,transparent 33%,#ffcf8647 50%,transparent 67%);
+    animation:reading-room-light 1.8s .12s ease-out both;
+  }
+  .landing .hero-copy>*{animation:landing-rise .7s var(--motion-ease) backwards}
+  .landing .hero-copy h1{animation-delay:.09s}
+  .landing .hero-copy .intro{animation-delay:.2s}
+  .landing .hero-actions{animation-delay:.31s}
+
+  @supports (animation-timeline:view()) and (animation-range:entry 0% entry 80%){
+    .landing :is(.coverage-stats>div,.transparency-heading,.transparency-grid>section){
+      animation:landing-rise linear both;animation-timeline:view();animation-range:entry 0% entry 65%;
+    }
+    .landing :is(.coverage-stats>div:nth-child(3),.transparency-grid>section:nth-child(3n+2)){
+      animation-range:entry 8% entry 74%;
+    }
+    .landing .transparency-grid>section:nth-child(3n){animation-range:entry 16% entry 82%}
+    .landing :is(.transparency-heading,.transparency-grid>section):focus-within{animation:none}
+  }
 
   @supports (appearance:base-select){
     select::picker-icon{transition:rotate var(--motion-fast) var(--motion-ease)}
@@ -457,6 +479,13 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
   }
 }
 @keyframes section-enter{from{opacity:.6;translate:0 8px}to{opacity:1;translate:0}}
+@keyframes landing-rise{from{opacity:.69;translate:0 24px}to{opacity:1;translate:0}}
+@keyframes reading-room-focus{from{scale:1.075}to{scale:1}}
+@keyframes reading-room-light{
+  0%{opacity:0;translate:-100%}
+  35%{opacity:.8}
+  100%{opacity:0;translate:100%}
+}
 @keyframes check-pop{50%{scale:1.16}}
 @media(prefers-reduced-motion:reduce){
   .motion-reveal{opacity:1!important;transform:none!important}

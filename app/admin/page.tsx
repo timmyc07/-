@@ -19,7 +19,7 @@ export default async function Admin() {
   }
   const gaps = snapshot?.libraries.filter((library) => coverageGaps(library).length).length;
   return <main className="shell admin">
-    <Link href="/search">← 返回查詢</Link>
+    <Link href="/#sources">← 返回資訊總覽</Link>
     <h1>全臺公立圖書館資料狀態</h1>
     <section aria-labelledby="directory-title">
       <h2 id="directory-title">全臺館舍名錄</h2>
@@ -39,7 +39,7 @@ export default async function Admin() {
     </section>
     <section className="audit-history" aria-labelledby="taichung-title">
       <h2 id="taichung-title">臺中自修規則核對</h2>
-      <p>臺中的逐館核對資料會優先用於查詢；其他縣市的空間時段、入場規則、設備及休館公告待逐館核對。</p>
+      <p>這裡顯示臺中的逐欄核對進度。全臺查詢也會使用其他縣市已收錄的館舍與空間規則。</p>
       {snapshot ? <>
         <p>最近匯入 {new Date(snapshot.importedAt).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })}</p>
         <ul>

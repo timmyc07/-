@@ -179,6 +179,11 @@ button span{margin-left:7px}
 button:hover{background:var(--accent-hover)}
 .results{margin-top:26px;scroll-margin:20px}
 .results h2{font-size:1.375rem}
+.result-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.result-tools .outline-link{margin:0;color:var(--accent-ink)}
+.result-tools .outline-link:hover{background:var(--soft)}
+.result-tools button:disabled{opacity:.6;cursor:wait}
+.result-tools .distance-note{margin:0}
 .search-options{display:flex;align-items:center;gap:12px}
 .search-options fieldset{flex:1}
 .result-layout{display:flex;flex:none;border:1px solid var(--line);border-radius:8px;background:var(--field)}
@@ -211,17 +216,17 @@ button:hover{background:var(--accent-hover)}
   box-shadow:0 5px 14px var(--shadow-color);
 }
 .card-photo{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px;background:var(--soft)}
+.card-photo-placeholder{display:grid;place-content:center;justify-items:center;gap:6px;background:#e8d7bd;color:var(--card-link);font-size:.875rem}
 .card-heading{display:grid;gap:5px}
 .card-heading,.card>.card-distance{--muted:#604a37;--accent-ink:var(--card-link);color:var(--card-ink)}
 .card-details-trigger{justify-self:start;margin:0;background:var(--card-action);color:#fff7eb;--focus:var(--card-link)}
 .card-details-trigger:hover{background:#58371c}
-.card-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;color:var(--muted);font-size:.9375rem}
+.card-status{justify-self:start}
 .card h3{margin:2px 0 0;font-size:1.375rem}
 .area{color:var(--accent-ink);font-weight:500;margin:0}
 .address{color:var(--muted);font-size:1rem;margin:0}
 .card-distance{display:flex;align-items:center;gap:5px;color:var(--accent-ink);font-size:.9375rem;margin:0}
 .card-distance svg{flex:none}
-.results[data-show-distance=false] .user-distance{display:none}
 @media(min-width:631px){
   .results[data-layout=list] .cards>.card{grid-template-columns:minmax(0,2fr) minmax(0,1fr);column-gap:20px}
   .results[data-layout=list] .cards>.card>.card-distance{grid-column:1/-1}

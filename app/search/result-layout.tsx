@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import type { ComponentProps, ReactNode } from 'react';
 import { LayoutGrid, List } from '../action-icons.ts';
-import { useLocationPermission } from './auto-distance.tsx';
 
 export function LayoutField() {
   return useSearchParams().get('layout') === 'grid'
@@ -14,9 +13,9 @@ export function LayoutField() {
 
 export function LayoutLink({ href, ...props }: Omit<ComponentProps<typeof Link>, 'href'> & { href: string }) {
   const grid = useSearchParams().get('layout') === 'grid';
-  const [path, hash] = href.split('#');
-  const separator = path.includes('?') ? '&' : '?';
-  return <Link prefetch={false} {...props} href={grid ? path + separator + 'layout=grid' + (hash ? '#' + hash : '') : href} />;
+  const url = new URL(href, 'https://studygo.local');
+  if (grid) url.searchParams.set('layout', 'grid');
+  return <Link prefetch={false} {...props} href={url.pathname + url.search + url.hash} />;
 }
 
 export function LayoutControls() {
@@ -36,12 +35,10 @@ export function LayoutControls() {
   </div>;
 }
 
-export default function ResultLayout({ children, hasPosition }: { children: ReactNode; hasPosition: boolean }) {
+export default function ResultLayout({ children }: { children: ReactNode }) {
   const grid = useSearchParams().get('layout') === 'grid';
-  const showDistance = useLocationPermission(hasPosition);
 
-  return <section id="results" className="shell results" aria-label="查詢結果"
-    data-layout={grid ? 'grid' : 'list'} data-show-distance={showDistance}>
+  return <section id="results" className="shell results" tabIndex={-1} aria-label="查詢結果" data-layout={grid ? 'grid' : 'list'}>
     {children}
   </section>;
 }

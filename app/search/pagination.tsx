@@ -11,7 +11,7 @@ export default function Pagination({ page, total, previous, next }: {
   previous?: string;
   next?: string;
 }) {
-  const params = [...useSearchParams()].filter(([key]) => key !== 'page' && key !== 'sources');
+  const params = [...useSearchParams()].filter(([key]) => key !== 'page' && key !== 'sources' && key !== 'photos');
 
   return <nav className="pager" aria-label="結果頁碼">
     {previous

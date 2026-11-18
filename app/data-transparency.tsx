@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { CalendarDays, ChevronRight, Database, Download, ImageIcon, LibraryBig } from './action-icons.ts';
 import SourceGroup from './source-group.tsx';
+import TransparencyDisclosure from './transparency-disclosure.tsx';
 import details from '../public/datasets/library-details.json';
 import directory from '../public/datasets/library-directory.json';
 import type { RegionalLibrary } from '../lib/library-catalog.ts';
@@ -74,14 +75,16 @@ export default async function DataTransparency({ libraries, snapshot, expanded, 
           <Link className="outline-link" href={indexHref(expanded, !photosExpanded, 'photo-credits')} aria-expanded={photosExpanded} prefetch={false}>
             {photosExpanded ? '收合照片清單' : '查看照片清單'} <ChevronRight size={16} aria-hidden="true" />
           </Link>
-          {photosExpanded && !photos && <p>照片清單暫時無法載入。</p>}
-          {photos?.size === 0 && <p>目前沒有館舍照片。</p>}
-          {[...photosByCity].map(([city, entries]) => <details key={city}>
-            <summary>{city}（{entries.length} 張）</summary>
-            <ul>{entries.map(({ library, photo }) => <li key={library.id}>
-              <strong>{library.name}</strong> · <a href={photo.source}>{photo.author}</a> · <a href={photo.licenseUrl}>{photo.license}</a>
-            </li>)}</ul>
-          </details>)}
+          <TransparencyDisclosure expanded={photosExpanded}>{photosExpanded && <>
+            {!photos && <p>照片清單暫時無法載入。</p>}
+            {photos?.size === 0 && <p>目前沒有館舍照片。</p>}
+            {[...photosByCity].map(([city, entries]) => <details key={city}>
+              <summary>{city}（{entries.length} 張）</summary>
+              <ul>{entries.map(({ library, photo }) => <li key={library.id}>
+                <strong>{library.name}</strong> · <a href={photo.source}>{photo.author}</a> · <a href={photo.licenseUrl}>{photo.license}</a>
+              </li>)}</ul>
+            </details>)}
+          </>}</TransparencyDisclosure>
         </section>
         <section id="source-index" className="footer-index">
           <h3><span><Database size={20} aria-hidden="true" /></span>逐館來源索引</h3>
@@ -89,7 +92,9 @@ export default async function DataTransparency({ libraries, snapshot, expanded, 
           <Link className="outline-link" href={indexHref(!expanded, photosExpanded, 'source-index')} aria-expanded={expanded} prefetch={false}>
             {expanded ? '收合逐館來源索引' : '查看完整逐館來源索引'} <ChevronRight size={16} aria-hidden="true" />
           </Link>
-          {groups.map(([host, links]) => <SourceGroup key={host} host={host} count={links.size} />)}
+          <TransparencyDisclosure expanded={expanded}>
+            {groups.map(([host, links]) => <SourceGroup key={host} host={host} count={links.size} />)}
+          </TransparencyDisclosure>
         </section>
       </div>
     </div>

@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { CalendarDays, Check, Clock, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, Route, Search, Wifi } from '../action-icons.ts';
 import DurationField from '../duration-field.tsx';
-import LocationSort from './location-sort.tsx';
+import AutoDistance from './auto-distance.tsx';
 import CardDetails from './card-details.tsx';
 import CardPhoto, { CardPhotoPlaceholder } from './card-photo.tsx';
 import Pagination from './pagination.tsx';
@@ -107,6 +107,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   }
 
   return <main className="search-page">
+      <AutoDistance />
       <section className="shell search-intro" aria-labelledby="search-page-title">
         <h1 id="search-page-title">查詢自修空間</h1>
       </section>
@@ -152,10 +153,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           {time.invalidTime && <p className="notice" role="alert">日期或時段無效。請在進階篩選確認日期與分鐘數後重新查詢，使用時段須在同一天內。</p>}
           {invalidRegion && <p className="notice" role="alert">縣市或行政區不相符。請在進階篩選重新選擇地區。</p>}
           {!invalid && <>
-            <div className="result-tools">
-              {sample && <LayoutLink className="outline-link" href={href({ search: '1' })}>查看全部館舍</LayoutLink>}
-              <LocationSort hasPosition={Boolean(position)} />
-            </div>
+            {sample && <div className="result-tools">
+              <LayoutLink className="outline-link" href={href({ search: '1' })}>查看全部館舍</LayoutLink>
+            </div>}
             {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult
               ? statuses[originalResult.status] : '沒有符合所選證件條件的空間'}
               {originalResult?.area && ' · ' + originalResult.area.name}

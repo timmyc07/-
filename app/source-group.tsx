@@ -27,9 +27,9 @@ export default function SourceGroup({ host, count }: { host: string; count: numb
   return <details onToggle={(event) => { if (event.currentTarget.open) void loadLinks(); }}>
     <summary>{host} · {count} 筆</summary>
     <div className="disclosure-body" aria-busy={loading}>
-      {loading && <p role="status">載入來源中…</p>}
-      {failed && <p>來源載入失敗。 <button type="button" onClick={loadLinks}>重試</button></p>}
-      {links && <ul>{links.map(([url, label]) => <li key={url}><a href={url}>{label}</a></li>)}</ul>}
+      {loading && <p className="source-response" role="status">載入來源中…</p>}
+      {failed && <p className="source-response">來源載入失敗。 <button type="button" onClick={loadLinks}>重試</button></p>}
+      {links && <ul className="source-response">{links.map(([url, label]) => <li key={url}><a href={url}>{label}</a></li>)}</ul>}
     </div>
   </details>;
 }

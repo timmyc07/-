@@ -96,15 +96,15 @@ export default function TaiwanCoverageMap() {
       const delay = { '--callout-delay': `${index * 32}ms` } as CSSProperties;
 
       return <g className="coverage-callout" key={city} style={delay} data-active={active === city || undefined}
-        aria-label={city} tabIndex={0}
-        onFocus={(event) => { if (event.currentTarget.matches(':focus-visible')) setFocused(city); }}
-        onBlur={() => setFocused(undefined)}
         onPointerEnter={(event) => { if (event.pointerType === 'mouse') setHovered(city); }}
         onPointerLeave={() => setHovered(undefined)}>
         <path className="coverage-leader" d={`M${x},${y} L${elbow},${row} H${end}`} />
         <circle className="coverage-pin" cx={x} cy={y} r="2.5" />
-        <rect className="coverage-label-target" x={east ? end + 4 : end - 70} y={row - 12} width="66" height="24" rx="4" />
-        <text className="coverage-label" x={end + (east ? 8 : -8)} y={row} textAnchor={east ? 'start' : 'end'} dy=".34em">{city}</text>
+        <rect className="coverage-label-target" x={east ? end + 4 : end - 70} y={row - 12} width="66" height="24" rx="4"
+          role="img" aria-label={city} tabIndex={0}
+          onFocus={(event) => { if (event.currentTarget.matches(':focus-visible')) setFocused(city); }}
+          onBlur={() => setFocused(undefined)} />
+        <text className="coverage-label" x={end + (east ? 8 : -8)} y={row} textAnchor={east ? 'start' : 'end'} dy=".34em" aria-hidden="true">{city}</text>
       </g>;
     })}
   </svg>;

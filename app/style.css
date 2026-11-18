@@ -141,8 +141,8 @@ h1{font-size:clamp(2rem,1.4rem + 2.5vw,3.875rem);line-height:1.16;margin-bottom:
 .coverage-pin{fill:var(--map-spark);stroke:var(--accent-ink);stroke-width:1.15}
 .coverage-label{fill:var(--ink);font-size:19px;font-weight:600}
 .coverage-label-target{fill:transparent;pointer-events:all}
-.coverage-callout:focus-visible{outline:none;--callout-start:1}
-.coverage-callout:focus-visible .coverage-label-target{stroke:var(--focus);stroke-width:2}
+.coverage-callout:focus-within{--callout-start:1}
+.coverage-label-target:focus-visible{outline:none;stroke:var(--focus);stroke-width:2}
 .coverage-callout[data-active] .coverage-label{fill:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
 .coverage-callout[data-active] .coverage-leader{stroke-opacity:1;stroke-width:1.7}
 .coverage-callout[data-active] .coverage-pin{stroke-width:1.7}

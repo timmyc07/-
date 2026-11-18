@@ -14,7 +14,7 @@ import RegionFilters from '../region-filters.tsx';
 import directory from '../../public/datasets/library-directory.json';
 import { libraryCatalog, type RegionalLibrary } from '../../lib/library-catalog.ts';
 import { directionsUrl, distanceKm, parseCoordinates } from '../../lib/distance.ts';
-import { backupLibraries, clock, documentLabels, entryDocumentRequirement, evaluate, facilities, kindLabels,
+import { backupLibraries, clock, documentLabels, entryDocumentRequirement, evaluate, facilities, kindLabels, minutes,
   regionalCards, weekdays } from '../../lib/study.ts';
 import type { Area, DocumentRequirement, Facility, Query, Slot } from '../../lib/study.ts';
 import { pilotVisit } from '../../lib/taichung-visits.ts';
@@ -194,20 +194,41 @@ async function LibraryPhoto({ library, photos }: { library: RegionalLibrary; pho
     : <CardPhotoPlaceholder />;
 }
 
+type HoursRange = Pick<Slot, 'start' | 'end'>;
+
+function HoursBars({ ranges, from, to }: { ranges: HoursRange[]; from: number; to: number }) {
+  const ordered = ranges.toSorted((a, b) => a.start - b.start);
+  const percent = (minutes: number) => minutes / (to - from) * 100 + '%';
+
+  return <div className="hours-bars">
+    <div className="hours-track" aria-hidden="true">{ordered.map(({ start, end }, index) =>
+      <span key={index} style={{ insetInlineStart: percent(start - from), inlineSize: percent(end - start) }} />)}</div>
+    <ul className="hours-labels" role="list">{ordered.map(({ start, end }, index) =>
+      <li key={index}>{clock(start)}–{clock(end)}</li>)}</ul>
+  </div>;
+}
+
 function HoursTimeline({ slots }: { slots: Slot[] }) {
-  return <ul className="hours-timeline" role="list">{slots.map(({ day, start, end }) =>
-    <li key={day + ':' + start}><span className="hours-period">週{weekdays[day]}</span> <strong>{clock(start)}–{clock(end)}</strong></li>)}</ul>;
+  const from = Math.min(...slots.map(({ start }) => start));
+  const to = Math.max(...slots.map(({ end }) => end));
+  return <ul className="hours-week" role="list">{Array.from(Map.groupBy(slots, ({ day }) => day), ([day, ranges]) =>
+    <li key={day}><span>週{weekdays[day]}</span><HoursBars ranges={ranges} from={from} to={to} /></li>)}</ul>;
 }
 
 function AnnouncedHours({ hours }: { hours: string }) {
   // Only separate ranges that share one explicit weekday label.
-  const schedule = /^(週[^0-9。；：\n]+?)\s+(\d{1,2}:\d{2}[–—-]\d{1,2}:\d{2}(?:、\s*\d{1,2}:\d{2}[–—-]\d{1,2}:\d{2})*)(?:。([\s\S]*))?$/u.exec(hours.trim());
+  const schedule = /^(週[^0-9。；：\n]+?)\s+(\d{1,2}:[0-5]\d[–—-]\d{1,2}:[0-5]\d(?:、\s*\d{1,2}:[0-5]\d[–—-]\d{1,2}:[0-5]\d)*)(?:。([\s\S]*))?$/u.exec(hours.trim());
   if (!schedule) return hours;
-  const [, days, ranges, note] = schedule;
+  const [, days, times, note] = schedule;
+  const ranges = times.split('、').map((range) => {
+    const [start, end] = range.trim().split(/[–—-]/u).map(minutes);
+    return { start, end };
+  });
+  if (ranges.some(({ start, end }) => start >= end || end > 24 * 60)) return hours;
+
   return <>
     <span>{days}</span>
-    <ul className="hours-timeline" role="list">{ranges.split('、').map((range, index) =>
-      <li key={index}><strong>{range.trim()}</strong></li>)}</ul>
+    <HoursBars ranges={ranges} from={Math.min(...ranges.map(({ start }) => start))} to={Math.max(...ranges.map(({ end }) => end))} />
     {note?.trim()}
   </>;
 }

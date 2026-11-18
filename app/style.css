@@ -371,14 +371,18 @@ dd{margin:0 0 6px;color:var(--muted)}
 .card-rules h3{margin:0 0 8px;font-size:1rem}
 .rule-details{margin:4px 0 12px}
 .rule-details dd{margin:0 0 9px}
-.hours-timeline{margin:4px 0 6px;padding:0 0 0 13px;border-inline-start:1px solid var(--line);list-style:none}
-.hours-timeline li{position:relative;padding-block:2px}
-.hours-timeline li::before{
-  content:"";position:absolute;inset-inline-start:-17px;inset-block-start:.77em;
-  width:7px;height:7px;border-radius:50%;background:var(--accent);
+.hours-week,.hours-labels{margin:0;padding:0;list-style:none}
+.hours-week{display:grid;gap:6px}
+.hours-week>li{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:12px}
+.hours-bars{margin-block:4px 6px}
+.hours-track{position:relative;height:10px}
+.hours-track span{position:absolute;inset-block:0;border-radius:3px;background:var(--accent)}
+.hours-track span:nth-child(even){background:light-dark(#a06d40,#b78756)}
+.hours-labels{
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:0 12px;margin-top:4px;
+  color:var(--ink);font-size:.875rem;font-variant-numeric:tabular-nums;
 }
-.hours-timeline strong{color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
-.hours-period{display:inline-block;min-width:2.7em;margin-inline-end:6px}
+.hours-labels li{white-space:nowrap}
 .opening-hours{white-space:pre-line}
 .source-links{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.9375rem}
 .source-links a{display:inline-flex;align-items:center;min-height:28px}

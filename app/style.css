@@ -472,9 +472,8 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
 :where(a):hover,summary:hover{color:var(--ink)}
 :where(button,a,select,summary,input[type=checkbox],input[type=radio]):focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 :is(input:not([type=checkbox],[type=radio]),textarea):focus{
-  outline:2px solid transparent;outline-offset:-2px;
-  box-shadow:inset 0 -2px var(--focus);
-  @media(forced-colors:active){outline-color:Highlight}
+  outline:none;
+  @media(forced-colors:active){outline:2px solid Highlight;outline-offset:-2px}
 }
 .card:is(:focus-within,:hover)::before{border-color:var(--card-link)}
 tbody tr:hover,tbody tr:focus-within{background:var(--paper)}

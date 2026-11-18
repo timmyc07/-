@@ -1,12 +1,11 @@
 import Link from 'next/link';
+import type { CSSProperties } from 'react';
 import { CalendarDays, ChevronRight } from './action-icons.ts';
 import AnimatedStat from './animated-stat.tsx';
 import DepthVisual from './depth-visual.tsx';
 import CardPhoto from './search/card-photo.tsx';
-import TaiwanConstellation from './taiwan-constellation.tsx';
 import type { RegionalLibrary } from '../lib/library-catalog.ts';
 import { clock, weekdays } from '../lib/study.ts';
-import { projectTaiwan } from '../lib/taiwan-map.ts';
 
 const showcaseIds = ['plis-6c9e30dc1c6abf7a17d4', 'plis-b4f11997a2a0f56cc70b'];
 
@@ -15,16 +14,6 @@ export default function LandingStories({ libraries, cityCount }: { libraries: Re
     const area = library.areas.find((item) => item.kind === 'study' && item.slots?.length &&
       (item.access === 'walk-in' || item.access === 'card'));
     return area?.slots?.length ? [{ library, area, slot: area.slots[0] }] : [];
-  });
-  const mapLocations = libraries.flatMap(({ coordinates }) => coordinates
-    ? [projectTaiwan(coordinates.longitude, coordinates.latitude)] : []);
-  const mapCities = ['澎湖縣', '臺中市', '臺北市', '花蓮縣', '高雄市'].flatMap((city) => {
-    const locations = libraries.flatMap(({ city: region, coordinates }) => region === city && coordinates
-      ? [coordinates] : []);
-    if (!locations.length) return [];
-    const longitude = locations.reduce((sum, point) => sum + point.longitude, 0) / locations.length;
-    const latitude = locations.reduce((sum, point) => sum + point.latitude, 0) / locations.length;
-    return [{ name: city.slice(0, -1), point: projectTaiwan(longitude, latitude) }];
   });
   const photos = showcaseIds.flatMap((id) => libraries.filter((library) => library.id === id));
   const sampleHours = ['臺北市', '臺中市', '高雄市'].flatMap((city) => {
@@ -40,7 +29,12 @@ export default function LandingStories({ libraries, cityCount }: { libraries: Re
         <p>從臺灣本島到離島，依縣市查找公立圖書館。</p>
       </div>
       <DepthVisual className="story-map">
-        <TaiwanConstellation libraries={mapLocations} cities={mapCities} />
+        <div className="coverage-rig" aria-hidden="true">
+          {Array.from({ length: 12 }, (_, layer) =>
+            <span className="coverage-slice" key={layer} style={{ '--layer': layer + 1 } as CSSProperties} />)}
+          {/* The face shares its projection with the sidewall mask. */}
+          <img className="coverage-map" src="/taiwan-relief-face.webp" alt="" width={560} height={540} loading="lazy" decoding="async" />
+        </div>
       </DepthVisual>
     </section>
 

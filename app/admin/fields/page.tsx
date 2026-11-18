@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Form from 'next/form';
 import { auditRows, fieldLabels, type FieldReview } from '../../../lib/field-audit.ts';
 import { taichungSnapshot } from '../../../lib/mongodb.ts';
 
@@ -22,6 +23,7 @@ export default async function FieldAudit({ searchParams }: {
   const selected = snapshot.libraries.find(({ id }) => id === library);
   const selectedField = typeof field === 'string' && Object.hasOwn(fieldLabels, field) ? field : '';
   const pending = status === 'pending';
+  const filterKey = JSON.stringify([selected?.id, selectedField, pending]);
   const rows = auditRows(snapshot.libraries, snapshot.fieldReviews).sort((a, b) =>
     Number(b.libraryId === 'tc-123') - Number(a.libraryId === 'tc-123'));
   const visible = rows.filter((row) => (!selected || row.libraryId === selected.id) &&
@@ -37,7 +39,7 @@ export default async function FieldAudit({ searchParams }: {
     <Link href="/admin">← 資料狀態</Link>
     <h1>臺中館舍逐欄核對</h1>
     <p>最近匯入 <time dateTime={snapshot.importedAt}>{taipeiDateTime.format(new Date(snapshot.importedAt))}</time></p>
-    <form className="audit-filters" method="get" action="/admin/fields">
+    <Form key={filterKey} className="audit-filters" action="/admin/fields">
       <div className="inputs">
         <label>館舍<select name="library" defaultValue={selected?.id ?? ''}>
           <option value="">全部館舍</option>
@@ -52,8 +54,8 @@ export default async function FieldAudit({ searchParams }: {
         </select></label>
       </div>
       <button type="submit">套用篩選</button>
-    </form>
-    <p>{visible.length} 項欄位，{visible.filter((row) => row.value === null).length} 項待確認。</p>
+    </Form>
+    <p key={'summary-' + filterKey} className="audit-summary">{visible.length} 項欄位，{visible.filter((row) => row.value === null).length} 項待確認。</p>
     {visible.length ? <div className="table-wrap"><table>
       <caption>館舍、空間與欄位證據</caption>
       <thead><tr><th scope="col">館舍</th><th scope="col">空間</th><th scope="col">欄位</th>

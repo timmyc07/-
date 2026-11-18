@@ -1,6 +1,9 @@
 @font-face{
   font-family:"StudyGo Serif";src:url('/fonts/studygo-serif.woff2') format('woff2');font-weight:400 600;font-display:swap;
 }
+@property --wood-tone{
+  syntax:"<color>";inherits:false;initial-value:#f0dfc5ab;
+}
 :root{
   color-scheme:light dark;
   --paper:light-dark(#f0dfc5,#281e17);
@@ -38,8 +41,9 @@
 :root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box}
 body{
+  --wood-tone:var(--wood-wash);
   margin:0;
-  background:linear-gradient(var(--wood-wash),var(--wood-wash)),url('/wood-grain.webp') 0 0/640px auto repeat var(--paper);
+  background:linear-gradient(var(--wood-tone),var(--wood-tone)),url('/wood-grain.webp') 0 0/640px auto repeat var(--paper);
   color:var(--ink);font-size:1.0625rem;font-weight:400;line-height:1.7;
 }
 a{color:var(--accent-ink);text-underline-offset:3px}
@@ -59,11 +63,13 @@ button,a,input,select,summary{outline-offset:4px}
 .site-nav .nav-search:hover{background:var(--accent-hover);color:var(--on-accent)}
 .theme-toggle{display:grid;place-items:center;width:44px;margin:0;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--accent-ink)}
 .theme-toggle:hover{background:var(--soft)}
-.theme-sun,:root[data-theme=dark] .theme-moon{display:none}
-:root[data-theme=dark] .theme-sun{display:block}
+.theme-toggle svg{grid-area:1/1}
+.theme-toggle{--moon-opacity:1;--sun-opacity:0;--moon-turn:0deg;--sun-turn:45deg}
+.theme-moon{opacity:var(--moon-opacity);rotate:var(--moon-turn)}
+.theme-sun{opacity:var(--sun-opacity);rotate:var(--sun-turn)}
+:root[data-theme=dark] .theme-toggle{--moon-opacity:0;--sun-opacity:1;--moon-turn:-45deg;--sun-turn:0deg}
 @media(prefers-color-scheme:dark){
-  :root:not([data-theme]) .theme-moon{display:none}
-  :root:not([data-theme]) .theme-sun{display:block}
+  :root:not([data-theme]) .theme-toggle{--moon-opacity:0;--sun-opacity:1;--moon-turn:-45deg;--sun-turn:0deg}
 }
 .hero{display:grid;align-items:center;margin-block:clamp(24px,4vw,52px) clamp(24px,4vw,44px)}
 .hero-copy,.hero-media{grid-area:1/1}
@@ -247,8 +253,6 @@ button:hover{background:var(--accent-hover)}
 .result-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .result-tools .outline-link{margin:0;color:var(--accent-ink)}
 .result-tools .outline-link:hover{background:var(--soft)}
-.result-tools button:disabled{opacity:.6;cursor:wait}
-.result-tools .distance-note{margin:0}
 .search-options{display:flex;align-items:center;gap:12px}
 .search-options fieldset{flex:1}
 .result-layout{display:flex;flex:none;border:1px solid var(--line);border-radius:8px;background:var(--field)}
@@ -386,8 +390,11 @@ dd{margin:0 0 6px;color:var(--muted)}
 .transparency-links>li+li{border-top:1px solid var(--line)}
 .transparency-links>li>a{display:flex;align-items:center;min-height:44px;padding:6px 0;text-decoration-color:var(--sand)}
 .transparency-links>li>a:hover{text-decoration-color:currentColor}
-.footer-index>.outline-link+details{margin-top:16px}
-.footer-index>details{padding-top:4px}
+.transparency-reveal{display:grid;grid-template-rows:0fr;opacity:0}
+.transparency-reveal[data-expanded=true]{grid-template-rows:1fr;opacity:1}
+.transparency-reveal>div{min-height:0;overflow:clip;overflow-clip-margin:5px}
+.transparency-reveal>div>:first-child{margin-top:16px}
+.footer-index details{padding-top:4px}
 .footer-index summary{min-height:40px}
 .footer-index details ul{padding:8px 0 8px 17px}
 .admin{padding:24px 0}
@@ -458,17 +465,24 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
 
 @media(prefers-reduced-motion:no-preference){
   html{scroll-behavior:smooth}
-  .route-entry>main:not(.route-loading){animation:route-arrive .28s var(--motion-ease) backwards}
+  .route-entry>main:not(.route-loading,.search-page){animation:route-arrive .28s var(--motion-ease) backwards}
   .route-loading{animation:route-arrive .22s var(--motion-ease) backwards}
+  .search-intro,.result-set>:is(.notice,.result-tools,.pager),.backups h3,
+  .source-response,.audit-summary{animation:route-arrive .22s var(--motion-ease) backwards}
+  .transparency-reveal{transition:grid-template-rows var(--motion-open) var(--motion-ease),opacity var(--motion-open) ease}
+  .results[data-layout=list] .result-set>.cards>.card:nth-child(-n+2){
+    animation:result-list-in .22s var(--motion-ease) backwards;
+  }
+  .results[data-layout=grid] .result-set>.cards>.card:nth-child(-n+2){
+    animation:result-grid-in .22s var(--motion-ease) backwards;
+  }
+  .card-photo-frame[data-ready=true] img{animation:photo-arrive .22s ease backwards}
   .loading-surface::after{
     content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 30%,var(--field) 51%,transparent 72%);
     animation:loading-sweep 1.45s ease-in-out 3 both;
   }
   @media(max-width:760px){
-    .route-entry>main.search-page,.route-entry>main.route-loading{animation:none}
-    .search-intro,.result-set>.cards>.card:nth-child(-n+2){
-      animation:route-arrive .22s var(--motion-ease) backwards;
-    }
+    .route-loading{animation:none}
     .loading-card:not(:first-child)::after{content:none}
   }
   @supports(animation-timeline:scroll()){
@@ -498,15 +512,27 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
     .animated-dialog[open]::backdrop{opacity:0}
     .animated-dialog[open] .dialog-content{opacity:0;translate:0 12px}
   }
+  body{transition:--wood-tone var(--motion-fast) ease,color var(--motion-fast) ease}
+  .theme-toggle svg{transition:opacity var(--motion-fast) ease,rotate .23s var(--motion-ease)}
+  .footer-index>a[aria-expanded]>svg{transition:rotate var(--motion-open) var(--motion-ease)}
+  .footer-index>a[aria-expanded=true]>svg{rotate:90deg}
+  :is(.header,.hero-copy,.landing-story,.data-transparency,.transparency-grid>section),.card::before{
+    transition:background-color var(--motion-fast) ease,border-color var(--motion-fast) ease;
+  }
   a,button,input,select,summary,tbody tr{
     transition:background-color var(--motion-fast) ease,border-color var(--motion-fast) ease,color var(--motion-fast) ease,
-      box-shadow var(--motion-fast) ease,translate var(--motion-fast) var(--motion-ease),scale var(--motion-fast) var(--motion-ease);
+      box-shadow var(--motion-fast) ease,text-decoration-color var(--motion-fast) ease,
+      translate var(--motion-fast) var(--motion-ease),scale var(--motion-fast) var(--motion-ease),opacity var(--motion-fast) ease;
   }
-  button:not(:disabled,.keyword-search button,.result-layout button):active,.site-nav a:active,.hero-actions a:active{scale:.97}
-  .site-nav a:hover,.hero-actions a:hover,button:not(:disabled,.duration-steps button,.keyword-search button,.advanced-trigger,.result-layout button):hover{translate:0 -2px}
+  :is(a[href],button:not(:disabled),summary):active{scale:.96;opacity:.8}
+  @media(hover:hover) and (pointer:fine){
+    .site-nav a:hover,.hero-actions a:hover,button:not(:disabled,.duration-steps button,.keyword-search button,.advanced-trigger,.result-layout button):hover{translate:0 -2px}
+  }
   .site-nav a span,.hero-actions a span,button span{display:inline-block;transition:translate var(--motion-fast) var(--motion-ease)}
   a:hover>span[aria-hidden=true],button:not(:disabled):hover>span[aria-hidden=true]{translate:3px 0}
-  .checks input:checked{animation:check-pop 210ms var(--motion-ease)}
+  .check-control svg{visibility:visible;opacity:0;scale:.6;transition:opacity var(--motion-fast) ease,scale var(--motion-fast) var(--motion-ease)}
+  .check-control input:checked+svg{opacity:1;scale:1}
+  .check-control input:active{scale:.92}
   summary::before{transition:rotate var(--motion-fast) var(--motion-ease)}
   .search-options>fieldset,
   .admin>:is(h1,section,.audit-filters,.table-wrap){animation:section-enter 360ms var(--motion-ease) backwards}
@@ -598,7 +624,9 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
   35%{opacity:.8}
   100%{opacity:0;translate:100%}
 }
-@keyframes check-pop{50%{scale:1.16}}
+@keyframes result-list-in{from{opacity:.65;translate:-8px 0}to{opacity:1;translate:0}}
+@keyframes result-grid-in{from{opacity:.65;translate:0 8px;scale:.985}to{opacity:1;translate:0;scale:1}}
+@keyframes photo-arrive{from{opacity:.25}to{opacity:1}}
 @keyframes coverage-turn{
   from{transform:translateZ(35px) rotateX(55deg) rotateY(-40deg) rotateZ(-8deg)}
   54%{transform:translateZ(72px) rotateX(19deg) rotateY(-20deg)}

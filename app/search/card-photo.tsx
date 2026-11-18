@@ -12,11 +12,12 @@ export function CardPhotoPlaceholder({ loading = false }: { loading?: boolean })
 
 export default function CardPhoto({ id, name }: { id: string; name: string }) {
   const [failed, setFailed] = useState(false);
+  const [ready, setReady] = useState(false);
   if (failed) return <CardPhotoPlaceholder />;
 
-  return <div className="card-photo card-photo-frame">
+  return <div className="card-photo card-photo-frame" data-ready={ready}>
     <CardPhotoPlaceholder loading />
     <Image src={'/api/library-photos/' + encodeURIComponent(id)} alt={name + '館舍實景'}
-      fill unoptimized onError={() => setFailed(true)} />
+      fill unoptimized onLoad={() => setReady(true)} onError={() => setFailed(true)} />
   </div>;
 }

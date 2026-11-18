@@ -1,15 +1,16 @@
 import Form from 'next/form';
-import Image from 'next/image';
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { CalendarDays, Check, Clock, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, Route, Search, Wifi } from '../action-icons.ts';
 import DurationField from '../duration-field.tsx';
 import LocationSort from './location-sort.tsx';
 import CardDetails from './card-details.tsx';
-import CardGrid from './card-grid.tsx';
+import CardPhoto, { CardPhotoPlaceholder } from './card-photo.tsx';
 import Pagination from './pagination.tsx';
 import AdvancedFilters from './advanced-filters.tsx';
 import ResultLayout, { LayoutControls, LayoutField, LayoutLink } from './result-layout.tsx';
 import RegionFilters from '../region-filters.tsx';
+import TaiwanConstellation from '../taiwan-constellation.tsx';
 import directory from '../../public/datasets/library-directory.json';
 import { libraryCatalog, type RegionalLibrary } from '../../lib/library-catalog.ts';
 import { directionsUrl, distanceKm, parseCoordinates } from '../../lib/distance.ts';
@@ -19,6 +20,7 @@ import type { Area, DocumentRequirement, Facility, Query } from '../../lib/study
 import { pilotVisit } from '../../lib/taichung-visits.ts';
 import { libraryPhotoCredits, type LibraryPhotoCredit } from '../../lib/mongodb.ts';
 import { normalizeSearchText, requestedPage, searchRegion, searchTime } from '../../lib/search-query.ts';
+import { projectTaiwan } from '../../lib/taiwan-map.ts';
 
 type Params = Record<string, string | string[] | undefined>;
 export const metadata: Metadata = { title: '查詢自修空間｜StudyGo' };
@@ -90,8 +92,10 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const originalResult = !invalid && selected ? evaluateLibrary(selected).sort(compareStatus)[0] : undefined;
   const visibleResults = results.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const photoIds = invalid ? [] : [...new Set([...visibleResults, ...backups].map(({ library }) => library.id))];
-  const photos = await libraryPhotoCredits(photoIds).catch(() => undefined);
+  const photos = libraryPhotoCredits(photoIds).catch(() => undefined);
   const resultsKey = JSON.stringify([formKey, currentPage, position]);
+  const mapLocations = libraries.flatMap(({ coordinates }) => coordinates
+    ? [projectTaiwan(coordinates.longitude, coordinates.latitude)] : []);
 
   function href(changes: Record<string, string>) {
     const next = new URLSearchParams();
@@ -107,6 +111,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   }
 
   return <main className="search-page">
+      <TaiwanConstellation libraries={mapLocations} />
       <section className="shell search-intro" aria-labelledby="search-page-title">
         <h1 id="search-page-title">查詢自修空間</h1>
       </section>
@@ -164,18 +169,18 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             {selected && <section className="backups" aria-label="備案比較">
               <h3>備案比較</h3>
               {backupOrigin && <p className="distance-note">以{position ? '定位起點' : '原定館舍'}為起點，依直線距離排序</p>}
-              {backups.length ? <CardGrid>{backups.map((item) =>
-                <LibraryCard key={item.library.id} {...item} photo={photos?.get(item.library.id)}
-                  distance={position ? item.distance : undefined} />)}</CardGrid> :
+              {backups.length ? <div className="cards">{backups.map((item) =>
+                <LibraryCard key={item.library.id} {...item} photos={photos}
+                  distance={position ? item.distance : undefined} />)}</div> :
                 <p>目前條件下沒有已確認符合的備案。{' '}
                   {city || keyword ? <LayoutLink href={href({ city: '', district: '', q: '', page: '' })}>擴大到全臺灣</LayoutLink> : '可調整條件再查詢。'}
                 </p>}
             </section>}
             {!results.length && <p className="notice">沒有符合此篩選的結果。</p>}
-            <CardGrid>{visibleResults.map((item) =>
+            <div className="cards">{visibleResults.map((item) =>
               <LibraryCard key={item.library.id + (item.area?.name ?? '')} {...item}
-                photo={photos?.get(item.library.id)}
-                originalLink={item.library.id === original ? undefined : href({ original: item.library.id, q: '', page: '' })} />)}</CardGrid>
+                photos={photos}
+                originalLink={item.library.id === original ? undefined : href({ original: item.library.id, q: '', page: '' })} />)}</div>
             {totalPages > 1 && <Pagination page={currentPage} total={totalPages}
               previous={currentPage > 1 ? href({ page: String(currentPage - 1) }) : undefined}
               next={currentPage < totalPages ? href({ page: String(currentPage + 1) }) : undefined} />}
@@ -185,7 +190,15 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     </main>;
 }
 
-function LibraryCard({ library, area, documents = entryDocumentRequirement(area), status, reasons, closure, openUntil, distance, originalLink, photo }: {
+type CardPhotos = Promise<Map<string, LibraryPhotoCredit> | undefined>;
+
+async function LibraryPhoto({ library, photos }: { library: RegionalLibrary; photos: CardPhotos }) {
+  return (await photos)?.has(library.id)
+    ? <CardPhoto id={library.id} name={library.name} />
+    : <CardPhotoPlaceholder />;
+}
+
+function LibraryCard({ library, area, documents = entryDocumentRequirement(area), status, reasons, closure, openUntil, distance, originalLink, photos }: {
   library: RegionalLibrary;
   area?: Area;
   documents?: DocumentRequirement;
@@ -195,13 +208,13 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
   openUntil?: number;
   distance?: number;
   originalLink?: string;
-  photo?: LibraryPhotoCredit;
+  photos: CardPhotos;
 }) {
   const visit = area && pilotVisit(library.id, area);
   return <article className="card">
-    {photo ? <Image className="card-photo" src={'/api/library-photos/' + encodeURIComponent(library.id)}
-      alt={library.name + '館舍實景'} width={photo.width} height={photo.height} unoptimized /> :
-      <div className="card-photo card-photo-placeholder"><LibraryBig size={28} aria-hidden="true" />暫無館舍照片</div>}
+    <Suspense fallback={<CardPhotoPlaceholder loading />}>
+      <LibraryPhoto library={library} photos={photos} />
+    </Suspense>
     <header className="card-heading">
       {status && <span className={'card-status badge ' + status}>{statuses[status]}</span>}
       <h3>{library.name}</h3>

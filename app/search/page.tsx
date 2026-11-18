@@ -10,7 +10,6 @@ import Pagination from './pagination.tsx';
 import AdvancedFilters from './advanced-filters.tsx';
 import ResultLayout, { LayoutControls, LayoutField, LayoutLink } from './result-layout.tsx';
 import RegionFilters from '../region-filters.tsx';
-import TaiwanConstellation from '../taiwan-constellation.tsx';
 import directory from '../../public/datasets/library-directory.json';
 import { libraryCatalog, type RegionalLibrary } from '../../lib/library-catalog.ts';
 import { directionsUrl, distanceKm, parseCoordinates } from '../../lib/distance.ts';
@@ -20,7 +19,6 @@ import type { Area, DocumentRequirement, Facility, Query } from '../../lib/study
 import { pilotVisit } from '../../lib/taichung-visits.ts';
 import { libraryPhotoCredits, type LibraryPhotoCredit } from '../../lib/mongodb.ts';
 import { normalizeSearchText, requestedPage, searchRegion, searchTime } from '../../lib/search-query.ts';
-import { projectTaiwan } from '../../lib/taiwan-map.ts';
 
 type Params = Record<string, string | string[] | undefined>;
 export const metadata: Metadata = { title: '查詢自修空間｜StudyGo' };
@@ -94,8 +92,6 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const photoIds = invalid ? [] : [...new Set([...visibleResults, ...backups].map(({ library }) => library.id))];
   const photos = libraryPhotoCredits(photoIds).catch(() => undefined);
   const resultsKey = JSON.stringify([formKey, currentPage, position]);
-  const mapLocations = libraries.flatMap(({ coordinates }) => coordinates
-    ? [projectTaiwan(coordinates.longitude, coordinates.latitude)] : []);
 
   function href(changes: Record<string, string>) {
     const next = new URLSearchParams();
@@ -111,7 +107,6 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   }
 
   return <main className="search-page">
-      <TaiwanConstellation libraries={mapLocations} />
       <section className="shell search-intro" aria-labelledby="search-page-title">
         <h1 id="search-page-title">查詢自修空間</h1>
       </section>

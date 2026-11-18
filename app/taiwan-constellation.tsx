@@ -5,6 +5,7 @@ import { taiwanMap } from '../lib/taiwan-map.ts';
 import outline from './taiwan-map-outline.json';
 
 type MapPoint = [x: number, y: number];
+type CityMarker = { name: string; point: MapPoint };
 const { width, height } = taiwanMap;
 const palette = ['#f7cc8a', '#bd7844', '#e8a969', '#9b9e73', '#f7dfae'];
 
@@ -18,7 +19,7 @@ function triangle(context: CanvasRenderingContext2D, x: number, y: number, size:
   context.closePath();
 }
 
-function drawMap(context: CanvasRenderingContext2D, libraries: MapPoint[]) {
+function drawMap(context: CanvasRenderingContext2D, libraries: MapPoint[], cities: CityMarker[]) {
   const land = new Path2D(outline.land);
   const coast = new Path2D(outline.coast);
   context.fill(land);
@@ -79,9 +80,34 @@ function drawMap(context: CanvasRenderingContext2D, libraries: MapPoint[]) {
     context.fill();
   }
   context.globalAlpha = 1;
+
+  context.beginPath();
+  for (const [index, { point: [x, y] }] of cities.entries()) {
+    if (index === 0) context.moveTo(x, y);
+    else context.lineTo(x, y);
+  }
+  context.strokeStyle = '#b98048';
+  context.lineWidth = 2;
+  context.setLineDash([5, 6]);
+  context.stroke();
+  context.setLineDash([]);
+
+  context.font = '600 17px "Microsoft JhengHei", "PingFang TC", sans-serif';
+  context.textBaseline = 'middle';
+  for (const { name, point: [x, y] } of cities) {
+    const left = x < 340;
+    context.beginPath();
+    context.arc(x, y, 4.5, 0, 2 * Math.PI);
+    context.fillStyle = '#ffe7b0';
+    context.fill();
+    context.strokeStyle = '#98663c';
+    context.stroke();
+    context.textAlign = left ? 'right' : 'left';
+    context.fillText(name, x + (left ? -10 : 10), y);
+  }
 }
 
-export default function TaiwanConstellation({ libraries }: { libraries: MapPoint[] }) {
+export default function TaiwanConstellation({ libraries, cities }: { libraries: MapPoint[]; cities: CityMarker[] }) {
   const canvas = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -92,22 +118,20 @@ export default function TaiwanConstellation({ libraries }: { libraries: MapPoint
     const backdrop = layer.getContext('2d');
     const context = target?.getContext('2d');
     if (!target || !context || !backdrop) return;
-    drawMap(backdrop, libraries);
+    drawMap(backdrop, libraries, cities);
 
     const scale = Math.min(window.devicePixelRatio || 1, 2);
     target.width = width * scale;
     target.height = height * scale;
     context.scale(scale, scale);
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const bounds = target.getBoundingClientRect();
-    const inView = bounds.top < window.innerHeight && bounds.bottom > 0;
     let frame = 0;
     let started: number | undefined;
 
     function paint(now: number) {
       if (!context) return;
       started ??= now;
-      const seconds = motion.matches || !inView ? 5 : (now - started) / 1000;
+      const seconds = motion.matches ? 5 : (now - started) / 1000;
       context.clearRect(0, 0, width, height);
       context.globalAlpha = .36 + .64 * Math.min(1, seconds / .85);
       context.drawImage(layer, 0, 0);
@@ -126,9 +150,22 @@ export default function TaiwanConstellation({ libraries }: { libraries: MapPoint
       context.globalAlpha = 1;
     }
 
-    paint(performance.now());
-    return () => cancelAnimationFrame(frame);
-  }, [libraries]);
+    let observer: IntersectionObserver | undefined;
+    if (!motion.matches && 'IntersectionObserver' in window) {
+      observer = new IntersectionObserver(([entry]) => {
+        if (entry.intersectionRatio < .2) return;
+        observer?.disconnect();
+        paint(performance.now());
+      }, { threshold: .2 });
+      observer.observe(target);
+    } else {
+      paint(performance.now());
+    }
+    return () => {
+      observer?.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  }, [libraries, cities]);
 
-  return <canvas className="search-map" ref={canvas} width={width} height={height} aria-hidden="true" />;
+  return <canvas className="coverage-map" ref={canvas} width={width} height={height} aria-hidden="true" />;
 }

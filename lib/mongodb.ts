@@ -1,4 +1,4 @@
-import { MongoClient, MongoServerError } from 'mongodb';
+import { MongoClient, MongoServerError, type Binary } from 'mongodb';
 import { diffAuditFields } from './field-audit.ts';
 import { isPublicLibrary, type Snapshot } from './study.ts';
 
@@ -37,6 +37,28 @@ export async function saveTaichungSnapshot(collection: ReturnType<typeof snapsho
 }
 
 const globalMongo = globalThis as typeof globalThis & { studygoClient?: MongoClient };
+
+export type LibraryPhotoCredit = {
+  _id: string;
+  source: string;
+  author: string;
+  license: string;
+  licenseUrl: string;
+  width: number;
+  height: number;
+};
+
+export function libraryPhotos() {
+  const client = globalMongo.studygoClient ??= mongoClient();
+  return client.db('studygo_dev').collection<LibraryPhotoCredit & { image: Binary }>('library_photos');
+}
+
+export async function libraryPhotoCredits(ids: string[]) {
+  if (!ids.length) return new Map<string, LibraryPhotoCredit>();
+  const rows = await libraryPhotos().find({ _id: { $in: ids } })
+    .project<LibraryPhotoCredit>({ source: 1, author: 1, license: 1, licenseUrl: 1, width: 1, height: 1 }).toArray();
+  return new Map(rows.map((row) => [row._id, row]));
+}
 
 export async function taichungSnapshot() {
   const client = globalMongo.studygoClient ??= mongoClient();

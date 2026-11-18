@@ -1,31 +1,31 @@
 :root{
   color-scheme:light dark;
-  --paper:light-dark(#3b2e26,#211914);
-  --surface:light-dark(#4e3b31,#382b24);
-  --card-surface:light-dark(#efe5dc,#cfb6a8);
-  --card-action:light-dark(#936853,#7b503c);
-  --accent:light-dark(#d3a58b,#c29176);
-  --ink:light-dark(#fff1e7,#f1e3d8);
-  --muted:light-dark(#e4ccbe,#cbb1a2);
-  --accent-ink:light-dark(#f1c7ae,#e4b79e);
-  --field:light-dark(#49362d,#2c211b);
-  --soft:light-dark(#5b4539,#49382e);
-  --linen:light-dark(#45352c,#2b211b);
-  --sand:light-dark(#a78371,#795846);
-  --accent-hover:light-dark(#e1b69c,#d4a388);
-  --on-accent:#251912;
-  --line:light-dark(#816454,#675046);
-  --control-line:light-dark(#c09b86,#a5816e);
+  --paper:light-dark(#f0dfc5,#281e17);
+  --wood-wash:light-dark(#f0dfc5ab,#261b13ee);
+  --surface:light-dark(#fff8ed,#3b2c21);
+  --card-surface:light-dark(#fff9ef,#efdfc7);
+  --card-ink:#352519;
+  --card-link:#684324;
+  --card-action:#704723;
+  --accent:light-dark(#704723,#ddb486);
+  --ink:light-dark(#332419,#fff2df);
+  --muted:light-dark(#5f4732,#ddc8ac);
+  --accent-ink:light-dark(#684324,#f2cda5);
+  --field:light-dark(#fffaf2,#34261c);
+  --soft:light-dark(#ecdbc2,#4a3728);
+  --linen:light-dark(#e9d3b4,#302219);
+  --sand:light-dark(#bb976d,#8f6c4d);
+  --accent-hover:light-dark(#58371c,#f0c89c);
+  --on-accent:light-dark(#fff7eb,#2a1c12);
+  --line:light-dark(#cfb28e,#70543c);
+  --control-line:light-dark(#99754f,#a98762);
   --focus:var(--accent-ink);--scroll-thumb:var(--accent);
-  --match-bg:light-dark(#e9ded1,#4b3d31);--match-ink:light-dark(#55442f,#ebd5bc);
+  --match-bg:light-dark(#e8e5d1,#3d3f2f);--match-ink:light-dark(#45472b,#e6e8c6);
   --pending-bg:light-dark(#f0dcc4,#563e2b);--pending-ink:light-dark(#674521,#f3d0a5);
   --mismatch-bg:light-dark(#efd4cd,#512f2a);--mismatch-ink:light-dark(#7a372e,#f5c1b4);
   --shadow-color:light-dark(#100b0833,#0005);
   --shadow-raised:0 10px 30px light-dark(#100b0855,#0007);
   --overlay:light-dark(#21150e88,#100b08a8);
-  --card-glow:light-dark(#93685326,#c2917626);
-  --card-glow-inset:light-dark(#9368531a,#c291761a);
-  --card-active-border:light-dark(#93685380,#c2917680);
   --motion-fast:160ms;--motion-open:300ms;--motion-ease:cubic-bezier(.2,.65,.25,1);
   --display:var(--font-serif),serif;
   font-family:var(--font-sans),"PingFang TC","Microsoft JhengHei",sans-serif;
@@ -34,7 +34,11 @@
 :root[data-theme=light]{color-scheme:light}
 :root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-size:1.0625rem;font-weight:400;line-height:1.7}
+body{
+  margin:0;
+  background:linear-gradient(var(--wood-wash),var(--wood-wash)),url('/wood-grain.webp') 0 0/640px auto repeat var(--paper);
+  color:var(--ink);font-size:1.0625rem;font-weight:400;line-height:1.7;
+}
 a{color:var(--accent-ink);text-underline-offset:3px}
 button,input,select{font:inherit}
 .action-icon{flex:none;vertical-align:-.2em}
@@ -113,10 +117,6 @@ label,legend{font-weight:500;font-size:1rem}
 .inputs input,.inputs select{min-height:46px;border:1px solid var(--control-line);border-radius:8px;padding:4px 9px;background:var(--paper);color:var(--ink);width:100%;min-width:0}
 .inputs select{padding-inline:12px;cursor:pointer}
 dialog .inputs :is(input,select),dialog textarea{border:0}
-:root[data-theme=light] .inputs input::-webkit-calendar-picker-indicator{filter:invert(1)}
-@media(prefers-color-scheme:light){
-  :root:not([data-theme]) .inputs input::-webkit-calendar-picker-indicator{filter:invert(1)}
-}
 .inputs input::-webkit-calendar-picker-indicator,
 .inputs input::-webkit-search-cancel-button{cursor:pointer}
 .duration-control{position:relative}
@@ -205,17 +205,20 @@ button:hover{background:var(--accent-hover)}
   inset:0;
   z-index:-1;
   pointer-events:none;
-  border:1px solid transparent;
+  border:1px solid var(--sand);
   border-radius:12px;
-  background:
-    linear-gradient(var(--card-surface),var(--card-surface)) padding-box,
-    linear-gradient(145deg,var(--sand),var(--paper) 48%,var(--line)) border-box;
-  box-shadow:0 5px 14px var(--shadow-color),0 0 8px var(--card-glow),inset 0 0 5px var(--card-glow-inset);
+  background:var(--card-surface);
+  box-shadow:0 5px 14px var(--shadow-color);
 }
+.card-photo{margin:0;--focus:var(--card-link)}
+.card-photo img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px;background:var(--soft)}
+.card-photo figcaption{margin-top:4px;color:var(--card-ink);font-size:.75rem;line-height:1.5}
+.card-photo a{color:var(--card-link)}
+.card-photo a:hover{color:var(--card-ink)}
 .card-heading{display:grid;gap:5px}
-.card-heading,.card>.card-distance{--muted:#574239;--accent-ink:#5a3828;color:#382a24}
-.card-details-trigger{justify-self:start;margin:0;background:var(--card-action);color:#fffaf5}
-.card-details-trigger:hover{background:#684230}
+.card-heading,.card>.card-distance{--muted:#604a37;--accent-ink:var(--card-link);color:var(--card-ink)}
+.card-details-trigger{justify-self:start;margin:0;background:var(--card-action);color:#fff7eb;--focus:var(--card-link)}
+.card-details-trigger:hover{background:#58371c}
 .card-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;color:var(--muted);font-size:.9375rem}
 .card h3{margin:2px 0 0;font-size:1.375rem}
 .area{color:var(--accent-ink);font-weight:500;margin:0}
@@ -227,6 +230,9 @@ button:hover{background:var(--accent-hover)}
   .results[data-layout=list] .cards>.card{grid-template-columns:minmax(0,2fr) minmax(0,1fr);column-gap:20px}
   .results[data-layout=list] .cards>.card>.card-distance{grid-column:1/-1}
   .results[data-layout=list] .cards .card-details-trigger{align-self:center;justify-self:end}
+  .results[data-layout=list] .card:has(>.card-photo){grid-template-columns:clamp(135px,22%,240px) minmax(0,1fr) auto;align-items:center}
+  .results[data-layout=list] .card>.card-photo{grid-row:1/span 2}
+  .results[data-layout=list] .card:has(>.card-photo)>.card-distance{grid-column:2/-1}
 }
 @keyframes card-float{
   0%,100%{transform:translateY(0)}
@@ -352,7 +358,7 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
 :where(a):hover,summary:hover{color:var(--ink)}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 .inputs :is(input,select):focus{border-color:var(--focus);box-shadow:0 0 0 3px var(--soft)}
-.card:is(:focus-within,:hover)::before{border-color:var(--card-active-border)}
+.card:is(:focus-within,:hover)::before{border-color:var(--card-link)}
 tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
 
 @media(prefers-reduced-motion:no-preference){

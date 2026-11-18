@@ -102,6 +102,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const photoIds = invalid ? [] : [...new Set([...visibleResults, ...backups].map(({ library }) => library.id))];
   const photos = libraryPhotoCredits(photoIds).catch(() => undefined);
   const resultsKey = JSON.stringify([formKey, currentPage, position]);
+  const backupDistanceFrom = position ? '定位起點' : '原定館舍';
 
   function href(changes: Record<string, string>) {
     const next = new URLSearchParams();
@@ -163,20 +164,21 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           {time.invalidTime && <p className="notice" role="alert">日期或時段無效。請在進階篩選確認日期與分鐘數後重新查詢，使用時段須在同一天內。</p>}
           {invalidRegion && <p className="notice" role="alert">縣市或行政區不相符。請在進階篩選重新選擇地區。</p>}
           {!invalid && <>
+            {detailed && <p className="distance-note">查詢時段 {time.date} · {clock(query.start)}–{clock(query.start + query.duration)}</p>}
             {sample && <div className="result-tools">
               <LayoutLink className="outline-link" href={href({ search: '1' })}>查看全部館舍</LayoutLink>
             </div>}
             {selected && <div className="notice"><strong>原定館舍：{selected.name}</strong> · {originalResult
               ? statuses[originalResult.status] : '沒有符合所選證件條件的空間'}
               {originalResult?.area && ' · ' + originalResult.area.name}
-              {originalResult?.reasons.length ? ' · ' + originalResult.reasons.join('、') : ''}
+              {originalResult?.reasons.length ? <> · {originalResult.reasons.join('、')}
+                {originalResult.closure && <> · <a href={originalResult.closure.url}>休館公告</a></>}</> : null}
               {' '}<LayoutLink href={href({ original: '', page: '' })}>清除原定館舍</LayoutLink></div>}
             {selected && <section className="backups" aria-label="備案比較">
               <h3>備案比較</h3>
-              {backupOrigin && <p className="distance-note">以{position ? '定位起點' : '原定館舍'}為起點，依直線距離排序</p>}
+              {backupOrigin && <p className="distance-note">以{backupDistanceFrom}為起點，依直線距離排序</p>}
               {backups.length ? <div className="cards">{backups.map((item) =>
-                <LibraryCard key={item.library.id} {...item} photos={photos}
-                  distance={position ? item.distance : undefined} />)}</div> :
+                <LibraryCard key={item.library.id} {...item} photos={photos} distanceFrom={backupDistanceFrom} />)}</div> :
                 <p>目前條件下沒有已確認符合的備案。{' '}
                   {city || keyword ? <LayoutLink href={href({ city: '', district: '', q: '', page: '' })}>擴大到全臺灣</LayoutLink> : '可調整條件再查詢。'}
                 </p>}
@@ -235,7 +237,8 @@ function LibraryFacilities({ items }: { items: string[] }) {
   })}</dl>;
 }
 
-function LibraryCard({ library, area, documents = entryDocumentRequirement(area), status, reasons, closure, openUntil, distance, originalLink, photos }: {
+function LibraryCard({ library, area, documents = entryDocumentRequirement(area), status, reasons, closure, openUntil, distance,
+  distanceFrom = '定位起點', originalLink, photos }: {
   library: RegionalLibrary;
   area?: Area;
   documents?: DocumentRequirement;
@@ -244,6 +247,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
   closure?: { reason: string; url: string };
   openUntil?: number;
   distance?: number;
+  distanceFrom?: string;
   originalLink?: string;
   photos: CardPhotos;
 }) {
@@ -267,7 +271,8 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
         <div><dt>證件</dt><dd className="entry-documents">{documentLabels[documents]}</dd></div>
         {openUntil !== undefined && <div><dt>可用至</dt><dd className="open-until">{clock(openUntil)}</dd></div>}
       </dl>
-      {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul> : null}
+      {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>
+        {reason === closure?.reason ? <a href={closure.url}>{reason}</a> : reason}</li>)}</ul> : null}
       {visit && <dl className="visit-details">
         <div><dt>樓層</dt><dd>{visit.location}</dd></div>
         <div><dt>入座</dt><dd>{visit.entry}</dd></div>
@@ -302,7 +307,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
       </section>
       {originalLink && <LayoutLink className="backup-link" href={originalLink}><Route className="action-icon" size={17} />以此館為原定地點找備案</LayoutLink>}
     </CardDetails>
-    {distance !== undefined && <footer className="card-distance"><MapPin size={15} aria-hidden="true" />距定位起點約 {
+    {distance !== undefined && <footer className="card-distance"><MapPin size={15} aria-hidden="true" />距{distanceFrom}約 {
       distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里'}</footer>}
   </article>;
 }

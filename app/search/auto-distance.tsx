@@ -39,39 +39,34 @@ function locate() {
 export default function AutoDistance() {
   const router = useRouter();
   const urlPosition = useSearchParams().get('position');
-  const [result, setResult] = useState<LocationResult>();
-  const position = result && ('position' in result ? result.position : result.error === 'denied' ? null : undefined);
+  const sorted = parseCoordinates(urlPosition ?? undefined) !== undefined;
+  const [error, setError] = useState<keyof typeof locationMessages>();
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
+    if (sorted) return;
     let active = true;
-    void locate().then((value) => {
-      if (active) setResult(value);
+    void locate().then((result) => {
+      if (!active) return;
+      if ('error' in result) {
+        setError(result.error);
+        return;
+      }
+      const url = new URL(window.location.href);
+      if (url.pathname !== '/search' || parseCoordinates(url.searchParams.get('position') ?? undefined)) return;
+      url.searchParams.set('position', result.position);
+      router.replace('/search' + url.search + url.hash, { scroll: false });
     });
     return () => { active = false; };
-  }, []);
-
-  useEffect(() => {
-    if (position === undefined || position === urlPosition) return;
-    const url = new URL(window.location.href);
-    if (url.pathname !== '/search' || url.searchParams.get('position') === position) return;
-    if (position) url.searchParams.set('position', position);
-    else url.searchParams.delete('position');
-    url.searchParams.delete('page');
-    router.replace('/search' + url.search + url.hash, { scroll: false });
-  }, [position, router, urlPosition]);
-
-  const error = result && 'error' in result ? result.error : undefined;
-  const sorted = parseCoordinates(urlPosition ?? undefined) !== undefined;
+  }, [attempt, router, sorted]);
 
   return <div className="result-tools location-sort">
     <span role="status">
-      {error
-        ? (sorted && error !== 'denied' ? '仍依上次定位排序。' : '') + locationMessages[error]
-        : sorted && (!position || position === urlPosition) ? '已依目前位置排序' : '正在定位並依距離排序…'}
+      {sorted ? '已依查詢位置排序' : error ? locationMessages[error] : '正在定位並依距離排序…'}
     </span>
-    {error && error !== 'unsupported' && <button className="outline-link" type="button" onClick={() => {
-      setResult(undefined);
-      void locate().then(setResult);
+    {!sorted && error && error !== 'unsupported' && <button className="outline-link" type="button" onClick={() => {
+      setError(undefined);
+      setAttempt((value) => value + 1);
     }}>重新定位</button>}
   </div>;
 }

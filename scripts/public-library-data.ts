@@ -16,7 +16,7 @@ type PublicRow = {
   Longitude: string | number; Latitude: string | number;
 };
 type PublicRegion = { 縣市: string; 圖書館資訊: PublicRow[] };
-type PublicDetail = { url: string; study: boolean; schedule: ReturnType<typeof roomHours> };
+type PublicDetail = { url: string; address: string; study: boolean; schedule: ReturnType<typeof roomHours> };
 export type PublicEvidence = {
   url: string;
   row: PublicRow;
@@ -25,13 +25,14 @@ export type PublicEvidence = {
 
 export function publicLibraryDetail(html: string, url: string): PublicDetail {
   const $ = load(html);
+  const address = $('td[data-th="地址"]').text().trim();
   const hours = $('td[data-th="開放時間"]');
   hours.find('br').replaceWith('\n');
   hours.find('p').append('\n');
   const schedule = roomHours(hours.text());
   const study = $('td[data-th="服務設施"] img').toArray().some((image) =>
     /自[修習]室/.test($(image).attr('alt') ?? ''));
-  return { url, study: study || schedule.study.length > 0, schedule };
+  return { url, address, study: study || schedule.study.length > 0, schedule };
 }
 
 export async function publicEvidence(html: (url: string) => Promise<string>) {
@@ -80,13 +81,20 @@ export function addressKey(address: string) {
   return clean(address).replace(/^\d{3,6}\s*/, '').replace(/\s|[()]/g, '').replace(/臺中市/, '').replace(/[-–](?=\d)/g, '之');
 }
 
+export function publicDetailsAt(address: string, details?: PublicDetail) {
+  const key = addressKey(address);
+  return details && key && key === addressKey(details.address) ? details : undefined;
+}
+
 export function applyPublicEvidence(library: Library, evidence: PublicEvidence | undefined) {
   if (!evidence) return;
-  const { row, details } = evidence;
+  const { row } = evidence;
+  const details = publicDetailsAt(library.address, evidence.details);
   library.sources.push(evidence.url);
   if (details) library.sources.push(details.url);
-  if (!library.phone) library.phone = clean(row.TEL) || undefined;
-  if (addressKey(library.address) === addressKey(row.Address)) {
+  const key = addressKey(library.address);
+  if (key && key === addressKey(row.Address)) {
+    if (!library.phone) library.phone = clean(row.TEL) || undefined;
     const latitude = Number(row.Latitude);
     const longitude = Number(row.Longitude);
     if (latitude >= 23 && latitude <= 25 && longitude >= 120 && longitude <= 122) {

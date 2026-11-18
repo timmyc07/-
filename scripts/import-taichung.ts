@@ -3,7 +3,7 @@ import { load } from 'cheerio';
 import { mongoClient, saveTaichungSnapshot, snapshots } from '../lib/mongodb.ts';
 import type { Library, Snapshot } from '../lib/study.ts';
 import { addressKey, applyPublicEvidence, cityFacilities, laptopFaq, limingName, municipalFacilities,
-  publicEvidence, readingRules, reviewedSources, studyLocations, verifiedCoordinates, wifiFaq } from './public-library-data.ts';
+  publicDetailsAt, publicEvidence, readingRules, reviewedSources, studyLocations, verifiedCoordinates, wifiFaq } from './public-library-data.ts';
 import { readRuleAudit } from './crawl-taichung-rules.ts';
 import { taichungFieldReviews } from './taichung-field-reviews.ts';
 import { branchHours, branchInfo, branchName, cityCalendar, cityDirectory, cityHours,
@@ -69,12 +69,13 @@ async function importTaichung() {
   const issues = [...publicLibraries.errors];
   for (const [key, evidence] of publicLibraries.records) {
     if (branches.has(key)) continue;
-    const { row, details } = evidence;
+    const { row } = evidence;
     const name = clean(row.Name);
     const id = nonMunicipalPublicIds.get(name);
     if (!id) continue;
     const address = clean(row.Address).replace(/^\d{3,6}\s*/, '');
     const district = districtOf(address);
+    const details = publicDetailsAt(address, evidence.details);
     if (!district || !details) throw new Error('公立館舍資料不完整：' + name);
     const library: Library = {
       id, name, district, address, types: ['公共圖書館'], sources: [],
@@ -94,8 +95,6 @@ async function importTaichung() {
     const cityContact = contact.get(key);
     const publicInfo = publicLibraries.records.get(key);
     const listed = branchFacilities.get(branch.code);
-    const publicRoom = publicInfo?.details;
-    const confirmedStudy = publicRoom?.schedule.study ?? [];
     const wifi = listed?.includes('無線上網') ? true : undefined;
     const studyEquipment = { outlet: false, laptop: true, wifi };
     const studyRules = [cityRules, laptopFaq, ...(wifi ? [wifiFaq, cityFacilities] : [])];
@@ -113,19 +112,17 @@ async function importTaichung() {
     const branchResponse = await request(branch.url);
     const page = await branchResponse.text();
     const times = branchHours(page);
-    const regular = times.regular.length ? times.regular : publicRoom?.schedule.regular;
-    const studySlots = times.study.length ? times.study : confirmedStudy;
-    library.schedule = regular?.length ? regular : undefined;
     const branchPage = load(page);
     let buildings: ReturnType<typeof branchInfo>['buildingAddresses'] = [];
     const introHref = branchPage('a[title="分館介紹"], a[title="總館介紹"]').first().attr('href');
-    if (introHref) {
-      const intro = new URL(introHref, branchResponse.url);
+    const intro = introHref ? new URL(introHref, branchResponse.url) : undefined;
+    let info: ReturnType<typeof branchInfo> | undefined;
+    if (intro) {
       if (intro.origin !== new URL(citySite).origin || !intro.pathname.toLowerCase().startsWith('/lib/introduction/')) {
         throw new Error('未識別的館舍介紹網址：' + intro.href);
       }
       await delay(400);
-      const info = branchInfo(await html(intro.href));
+      info = branchInfo(await html(intro.href));
       buildings = info.buildingAddresses;
       if (info.address && districtOf(info.address)) {
         library.address = info.address;
@@ -134,6 +131,12 @@ async function importTaichung() {
       }
       library.phone = info.phone ?? library.phone;
       library.sources.push(intro.href);
+    }
+    const publicRoom = publicDetailsAt(library.address, publicInfo?.details);
+    const regular = times.regular.length ? times.regular : publicRoom?.schedule.regular;
+    const studySlots = times.study.length ? times.study : publicRoom?.schedule.study ?? [];
+    library.schedule = regular?.length ? regular : undefined;
+    if (intro && info) {
       const hasStudy = studySlots.length > 0 || info.study || (!info.noStudy &&
         (Boolean(publicRoom?.study) || Boolean(listed?.some((item) => /自[修習]室/.test(item)))));
       library.studyRoom = hasStudy ? true : info.noStudy ? false : undefined;

@@ -264,16 +264,23 @@ test('有明確證據的無自修室可以排除，訪客換證需求保留待�
   assert.equal(evaluate(library, { ...area, access: 'conditional' }, query).status, 'unknown');
 });
 
-test('公共館開放資料只在新舊地址一致時補上座標', async () => {
-  const { applyPublicEvidence } = await import('../scripts/public-library-data.ts');
+test('公共館名錄與詳情各自核對地址，避免把另一棟的資料帶入館舍', async () => {
+  const { applyPublicEvidence, publicDetailsAt, publicLibraryDetail } = await import('../scripts/public-library-data.ts');
   const venue = { ...library, address: '臺中市西屯區中科路2201號', sources: [] } as Library;
   const row = { Name: venue.name, Address: '406 臺中市北屯區豐樂路二段158號', TEL: '04-00000000',
     Latitude: '24.1', Longitude: '120.6' };
-  applyPublicEvidence(venue, { row, url: 'https://data.gov.tw/dataset/99567' });
+  const details = publicLibraryDetail(`<table><tr><td data-th="地址">${row.Address}</td>
+    <td data-th="開放時間">自修室<br>週二至週六8:30至21:00</td></tr></table>`, 'https://example.org/details');
+  assert.ok(publicDetailsAt('臺中市北屯區豐樂路二段158號', details)?.study);
+  assert.equal(publicDetailsAt(venue.address, details), undefined);
+  applyPublicEvidence(venue, { row, details, url: 'https://data.gov.tw/dataset/99567' });
   assert.equal(venue.coordinates, undefined);
+  assert.equal(venue.phone, undefined);
   row.Address = '407011臺中市西屯區中科路2201號';
-  applyPublicEvidence(venue, { row, url: 'https://data.gov.tw/dataset/99567' });
+  applyPublicEvidence(venue, { row, details, url: 'https://data.gov.tw/dataset/99567' });
   assert.deepEqual(venue.coordinates, { latitude: 24.1, longitude: 120.6 });
+  assert.equal(venue.phone, row.TEL);
+  assert.ok(!venue.sources.includes(details.url));
 });
 
 test('特殊時段只影響公告期間，新增一般閱覽區不會消除自修缺口', () => {

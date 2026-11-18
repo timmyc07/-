@@ -65,6 +65,7 @@ export default async function DataTransparency({ libraries, snapshot, expanded, 
           <ul className="transparency-links">
             <li><a href="https://data.gov.tw/license">政府資料開放授權條款第 1 版</a></li>
             <li><a href="/licenses/pulsoicon.txt">PulsoIcon 圖示授權</a></li>
+              <li><a href="https://github.com/g0v/twgeojson#cc0-10-universal">臺灣地圖輪廓資料（CC0）</a></li>
           </ul>
         </section>
         <section id="photo-credits" className="footer-index">

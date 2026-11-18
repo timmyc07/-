@@ -43,7 +43,6 @@ export default function TaiwanCoverageMap() {
   const [focused, setFocused] = useState<string>();
   const active = hovered ?? focused;
   const grainId = id + '-grain';
-  const lightId = id + '-light';
 
   useEffect(() => {
     const graphic = map.current;
@@ -68,14 +67,6 @@ export default function TaiwanCoverageMap() {
         {grain.map(({ x, y, r, opacity }, index) =>
           <circle className={index % 4 === 0 ? 'coverage-spark' : undefined} key={index} cx={x} cy={y} r={r} opacity={opacity} />)}
       </pattern>
-      <linearGradient id={lightId} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stopColor="white" stopOpacity="0" />
-        <stop offset=".55" stopColor="white" />
-        <stop offset="1" stopColor="white" stopOpacity="0" />
-      </linearGradient>
-      <mask id={id + '-sweep'} maskUnits="userSpaceOnUse" x="8" y="18" width="534" height="530">
-        <rect className="coverage-light" x="8" y="18" width="534" height="120" fill={`url(#${lightId})`} />
-      </mask>
     </defs>
     <g className="coverage-drift" aria-hidden="true">
       {Array.from({ length: 48 }, (_, index) =>
@@ -90,11 +81,6 @@ export default function TaiwanCoverageMap() {
       <g className="coverage-grain" fill={`url(#${grainId})`}>
         {annotations.map(({ city }, index) => <use key={city} href={`#${id}-county-${index}`} />)}
       </g>
-      <g mask={`url(#${id}-sweep)`}>
-        <g className="coverage-glint" fill={`url(#${grainId})`}>
-          {annotations.map(({ city }, index) => <use key={city} href={`#${id}-county-${index}`} />)}
-        </g>
-      </g>
       {annotations.map(({ city, rail }, index) => <g key={city} className="coverage-raised"
         data-active={active === city || undefined} data-rail={rail}>
         <use className="coverage-raised-face" href={`#${id}-county-${index}`} />
@@ -107,7 +93,7 @@ export default function TaiwanCoverageMap() {
       const east = rail === 'east';
       const end = east ? 467 : rail === 'west' ? 179 : city === '金門縣' ? 79 : 174;
       const elbow = east ? 452 : rail === 'west' ? 195 : end + 14;
-      const delay = { '--callout-delay': `${160 + index * 95}ms` } as CSSProperties;
+      const delay = { '--callout-delay': `${index * 32}ms` } as CSSProperties;
 
       return <g className="coverage-callout" key={city} style={delay} data-active={active === city || undefined}
         aria-label={city} tabIndex={0}
@@ -115,10 +101,9 @@ export default function TaiwanCoverageMap() {
         onBlur={() => setFocused(undefined)}
         onPointerEnter={(event) => { if (event.pointerType === 'mouse') setHovered(city); }}
         onPointerLeave={() => setHovered(undefined)}>
-        <path className="coverage-leader" d={`M${x},${y} L${elbow},${row} H${end}`} pathLength="1" />
-        <circle className="coverage-ripple" cx={x} cy={y} r="6" />
+        <path className="coverage-leader" d={`M${x},${y} L${elbow},${row} H${end}`} />
         <circle className="coverage-pin" cx={x} cy={y} r="2.5" />
-        <rect className="coverage-label-target" x={east ? end + 4 : end - 70} y={row - 12} width="66" height="24" />
+        <rect className="coverage-label-target" x={east ? end + 4 : end - 70} y={row - 12} width="66" height="24" rx="4" />
         <text className="coverage-label" x={end + (east ? 8 : -8)} y={row} textAnchor={east ? 'start' : 'end'} dy=".34em">{city}</text>
       </g>;
     })}

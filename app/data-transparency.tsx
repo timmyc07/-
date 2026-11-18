@@ -3,17 +3,32 @@ import { Database } from './action-icons.ts';
 import SourceGroup from './source-group.tsx';
 import details from '../public/datasets/library-details.json';
 import directory from '../public/datasets/library-directory.json';
+import type { RegionalLibrary } from '../lib/library-catalog.ts';
+import { libraryPhotoCredits } from '../lib/mongodb.ts';
 import { sourcesByHost } from '../lib/source-catalog.ts';
-import type { Library, Snapshot } from '../lib/study.ts';
+import type { Snapshot } from '../lib/study.ts';
 
 const date = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', dateStyle: 'medium' });
 
-export default function DataTransparency({ libraries, snapshot, expanded }: {
-  libraries: Library[];
+export default async function DataTransparency({ libraries, snapshot, expanded, photosExpanded }: {
+  libraries: RegionalLibrary[];
   snapshot: Snapshot | null;
   expanded: boolean;
+  photosExpanded: boolean;
 }) {
   const groups = expanded ? sourcesByHost(libraries, snapshot) : [];
+  const photos = photosExpanded ? await libraryPhotoCredits(libraries.map(({ id }) => id)).catch(() => null) : null;
+  const photosByCity = Map.groupBy(libraries.flatMap((library) => {
+    const photo = photos?.get(library.id);
+    return photo ? [{ library, photo }] : [];
+  }), ({ library }) => library.city);
+
+  function indexHref(sourcesOpen: boolean, photosOpen: boolean, anchor: string) {
+    const query = new URLSearchParams();
+    if (sourcesOpen) query.set('sources', '1');
+    if (photosOpen) query.set('photos', '1');
+    return `/${query.size ? '?' + query : ''}#${anchor}`;
+  }
 
   return <section id="sources" className="data-transparency" aria-labelledby="sources-title">
     <div className="shell">
@@ -26,6 +41,7 @@ export default function DataTransparency({ libraries, snapshot, expanded }: {
           <a href="#official-sources">公開資料來源</a>
           <a href="#data-downloads">資料下載</a>
           <a href="#updates-and-licenses">更新與授權</a>
+          <a href="#photo-credits">館舍照片來源與授權</a>
           <a href="#source-index">逐館來源索引</a>
         </nav>
         <div className="transparency-content">
@@ -59,9 +75,23 @@ export default function DataTransparency({ libraries, snapshot, expanded }: {
               <li><a href="/licenses/pulsoicon.txt">PulsoIcon 圖示授權</a></li>
             </ul>
           </section>
+          <section id="photo-credits" className="footer-index">
+            <h3>館舍照片來源與授權</h3>
+            <a className="outline-link" href={indexHref(expanded, !photosExpanded, 'photo-credits')} aria-expanded={photosExpanded}>
+              {photosExpanded ? '收合照片清單' : '查看照片清單'}
+            </a>
+            {photosExpanded && !photos && <p>照片清單暫時無法載入。</p>}
+            {photos?.size === 0 && <p>目前沒有館舍照片。</p>}
+            {[...photosByCity].map(([city, entries]) => <details key={city}>
+              <summary>{city}（{entries.length} 張）</summary>
+              <ul>{entries.map(({ library, photo }) => <li key={library.id}>
+                <strong>{library.name}</strong> · <a href={photo.source}>{photo.author}</a> · <a href={photo.licenseUrl}>{photo.license}</a>
+              </li>)}</ul>
+            </details>)}
+          </section>
           <section id="source-index" className="footer-index">
             <h3>逐館來源索引</h3>
-            <a className="outline-link" href={expanded ? '/#source-index' : '/?sources=1#source-index'} aria-expanded={expanded}>
+            <a className="outline-link" href={indexHref(!expanded, photosExpanded, 'source-index')} aria-expanded={expanded}>
               <Database size={16} />{expanded ? '收合逐館來源索引' : '查看完整逐館來源索引'}
             </a>
             {groups.map(([host, links]) => <SourceGroup key={host} host={host} count={links.size} />)}

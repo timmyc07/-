@@ -210,11 +210,8 @@ button:hover{background:var(--accent-hover)}
   background:var(--card-surface);
   box-shadow:0 5px 14px var(--shadow-color);
 }
-.card-photo{margin:0;--focus:var(--card-link)}
-.card-photo img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px;background:var(--soft)}
-.card-photo figcaption{margin-top:4px;color:var(--card-ink);font-size:.75rem;line-height:1.5}
-.card-photo a{color:var(--card-link)}
-.card-photo a:hover{color:var(--card-ink)}
+.card-photo{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px;background:var(--soft)}
+.photo-credit-link{margin:18px 0 0;font-size:.875rem}
 .card-heading{display:grid;gap:5px}
 .card-heading,.card>.card-distance{--muted:#604a37;--accent-ink:var(--card-link);color:var(--card-ink)}
 .card-details-trigger{justify-self:start;margin:0;background:var(--card-action);color:#fff7eb;--focus:var(--card-link)}

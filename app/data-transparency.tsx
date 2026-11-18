@@ -33,11 +33,11 @@ export default async function DataTransparency({ libraries, snapshot, expanded, 
   return <section id="sources" className="data-transparency" aria-labelledby="sources-title">
     <div className="shell">
       <div className="transparency-heading">
-        <div><h2 id="sources-title">資料透明</h2><p>查看館舍資料從哪裡來、何時更新，以及哪些欄位仍待核對。</p></div>
+        <div><h2 id="sources-title">資訊總覽</h2><p>查看館舍資料從哪裡來、何時更新，以及哪些欄位仍待核對。</p></div>
         <Link className="outline-link" href="/admin">查看資料狀態 →</Link>
       </div>
       <div className="transparency-layout">
-        <nav className="transparency-nav" aria-label="資料透明章節">
+        <nav className="transparency-nav" aria-label="資訊總覽章節">
           <a href="#official-sources">公開資料來源</a>
           <a href="#data-downloads">資料下載</a>
           <a href="#updates-and-licenses">更新與授權</a>

@@ -118,18 +118,34 @@ h1{font-size:clamp(2rem,1.4rem + 2.5vw,3.875rem);line-height:1.16;margin-bottom:
 .story-copy .outline-link:hover{background:var(--soft)}
 .story-visual{min-width:0;perspective:850px}
 .story-depth{display:grid;transform-style:preserve-3d}
-.story-map .story-depth{place-items:center}
-.coverage-rig{
-  --relief-step:10px;
-  position:relative;width:min(100%,510px);aspect-ratio:560/540;
-  transform:translateZ(56px) rotateX(35deg) rotateY(-32deg);transform-origin:60% 56%;transform-style:preserve-3d;
+.coverage-graphic{
+  --map-ground:light-dark(#caa16f,#72563d);
+  --map-grain:light-dark(#81532a,#f2bf81);
+  --map-spark:light-dark(#fff3cb,#fff2d3);
+  --map-raised:light-dark(#e5b577,#ab7845);
+  display:block;width:100%;max-width:600px;height:auto;justify-self:center;
 }
-.coverage-slice{
-  position:absolute;inset:0;pointer-events:none;mask:url('/taiwan-relief-mask.png') center/100% 100% no-repeat;
-  background:color-mix(in srgb,#c08850,#3a2015 calc(var(--layer) * 6%));
-  transform:translateZ(calc(-1 * var(--layer) * var(--relief-step)));
-}
-.coverage-map{position:relative;display:block;width:100%;height:auto;pointer-events:none}
+.coverage-tile{fill:var(--map-ground);stroke:var(--paper);stroke-width:1.25;stroke-linejoin:round;pointer-events:fill}
+.coverage-tile[data-tone="1"]{fill:color-mix(in srgb,var(--map-ground) 82%,var(--accent))}
+.coverage-tile[data-tone="2"]{fill:color-mix(in srgb,var(--map-ground) 85%,var(--map-spark))}
+.coverage-tile[data-tone="3"]{fill:color-mix(in srgb,var(--map-ground) 88%,var(--accent-ink))}
+.coverage-raised{opacity:0;pointer-events:none}
+.coverage-raised[data-active]{opacity:1}
+.coverage-raised-face{fill:var(--map-raised);stroke:var(--accent-ink);stroke-width:1.45;stroke-linejoin:round}
+.coverage-raised-grain{opacity:.92}
+.coverage-graphic pattern,.coverage-drift{fill:var(--map-grain)}
+.coverage-spark{fill:var(--map-spark)}
+.coverage-drift,.coverage-grain,.coverage-glint,.coverage-callout{pointer-events:none}
+.coverage-grain{opacity:.72}
+.coverage-glint,.coverage-ripple{opacity:0}
+.coverage-leader{fill:none;stroke:var(--accent-ink);stroke-width:.9;stroke-opacity:.69;stroke-linecap:round;stroke-linejoin:round}
+.coverage-pin{fill:var(--map-spark);stroke:var(--accent-ink);stroke-width:1.15}
+.coverage-ripple{fill:none;stroke:var(--accent-ink);stroke-width:1.1;transform-box:fill-box;transform-origin:center}
+.coverage-label{fill:var(--ink);font-size:19px;font-weight:600}
+.coverage-label-target{fill:transparent;pointer-events:all}
+.coverage-callout[data-active] .coverage-label{fill:var(--accent-ink);text-decoration:underline;text-underline-offset:3px}
+.coverage-callout[data-active] .coverage-leader{stroke-opacity:1;stroke-width:1.7}
+.coverage-callout[data-active] .coverage-pin{stroke-width:1.7}
 .story-photos .story-depth{grid-template-columns:repeat(12,minmax(0,1fr));align-items:start}
 .story-photo{
   display:flex;flex-direction:column;gap:8px;grid-row:1;min-width:0;margin:0;padding:9px;
@@ -418,7 +434,8 @@ th,td{padding:8px 12px;border-bottom:1px solid var(--line)}
 @media(max-width:760px){
   .landing-story{grid-template-columns:minmax(0,1fr);min-height:0;gap:30px}
   .story-directory .story-copy,.story-directory .story-visual{grid-column:auto;grid-row:auto}
-  .coverage-rig{--relief-step:7px;width:min(100%,340px)}
+  .story-coverage{padding-inline:0}
+  .story-coverage .story-copy{padding-inline:clamp(12px,4vw,28px)}
   .hero{gap:18px}
   .hero-media{border-radius:16px}
   .hero-image{height:auto;aspect-ratio:1.65}
@@ -464,6 +481,9 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,su
 tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
 
 @media(prefers-reduced-motion:no-preference){
+  .coverage-raised{transition:translate 260ms var(--motion-ease),opacity 180ms ease;--tile-shift:-9px}
+  .coverage-raised[data-rail="east"]{--tile-shift:9px}
+  .coverage-raised[data-active]{translate:var(--tile-shift) -10px;filter:drop-shadow(0 4px 0 var(--accent-ink))}
   html{scroll-behavior:smooth}
   .route-entry>main:not(.route-loading,.search-page){animation:route-arrive .28s var(--motion-ease) backwards}
   .route-loading{animation:route-arrive .22s var(--motion-ease) backwards}
@@ -558,7 +578,6 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
   }
   @supports (animation-timeline:view()) and (animation-range:entry 0% entry 80%){
     .landing-story{view-timeline:--story block}
-    .coverage-rig{animation:coverage-turn linear both;animation-timeline:--story;animation-range:cover 8% cover 90%}
     .story-copy>:is(p,h2){
       animation:landing-rise linear both;animation-timeline:--story;animation-range:entry 6% entry 54%;
     }
@@ -627,11 +646,29 @@ tbody tr:hover,tbody tr:focus-within{background:var(--paper)}
 @keyframes result-list-in{from{opacity:.65;translate:-8px 0}to{opacity:1;translate:0}}
 @keyframes result-grid-in{from{opacity:.65;translate:0 8px;scale:.985}to{opacity:1;translate:0;scale:1}}
 @keyframes photo-arrive{from{opacity:.25}to{opacity:1}}
-@keyframes coverage-turn{
-  from{transform:translateZ(35px) rotateX(55deg) rotateY(-40deg) rotateZ(-8deg)}
-  54%{transform:translateZ(72px) rotateX(19deg) rotateY(-20deg)}
-  to{transform:translateZ(42px) rotateX(48deg) rotateY(40deg) rotateZ(7deg)}
+@media(prefers-reduced-motion:no-preference){
+  .coverage-graphic[data-observe] :is(.coverage-leader,.coverage-label,.coverage-pin){opacity:0}
+  .coverage-graphic[data-entered] .coverage-leader{
+    stroke-dasharray:1;animation:coverage-draw 650ms var(--callout-delay) var(--motion-ease) both;
+  }
+  .coverage-graphic[data-entered] .coverage-pin{animation:coverage-appear 240ms var(--callout-delay) ease-out both}
+  .coverage-graphic[data-entered] .coverage-ripple{animation:coverage-pulse 920ms var(--callout-delay) ease-out both}
+  .coverage-graphic[data-entered] .coverage-label{
+    animation:coverage-label-in 360ms calc(var(--callout-delay) + 495ms) var(--motion-ease) both;
+  }
+  .coverage-graphic[data-entered] .coverage-drift{animation:coverage-drift 4.4s ease-out both}
+  .coverage-graphic[data-entered] .coverage-grain{animation:coverage-grain 1.1s ease-out both}
+  .coverage-graphic[data-entered] .coverage-glint{animation:coverage-glint 2.15s ease-in-out 2}
+  .coverage-graphic[data-entered] .coverage-light{animation:coverage-sweep 2.15s linear 2 both}
 }
+@keyframes coverage-appear{from{opacity:0}to{opacity:1}}
+@keyframes coverage-draw{from{stroke-dashoffset:1;opacity:1}to{stroke-dashoffset:0;opacity:1}}
+@keyframes coverage-label-in{from{opacity:0;translate:0 5px}to{opacity:1;translate:0 0}}
+@keyframes coverage-pulse{from{opacity:.8;scale:.45}to{opacity:0;scale:2.6}}
+@keyframes coverage-drift{from{opacity:0;translate:8px 16px}38%{opacity:.85}to{opacity:1;translate:0 0}}
+@keyframes coverage-grain{from{opacity:.12}to{opacity:.72}}
+@keyframes coverage-glint{0%,100%{opacity:0}35%,68%{opacity:1}}
+@keyframes coverage-sweep{from{transform:translateY(-120px)}to{transform:translateY(530px)}}
 @keyframes route-arrive{from{opacity:.72;translate:0 9px}to{opacity:1;translate:0}}
 @keyframes loading-sweep{0%{opacity:0;translate:-100%}35%,65%{opacity:.52}100%{opacity:0;translate:100%}}
 @keyframes scroll-progress{from{scale:0 1}to{scale:1 1}}

@@ -109,6 +109,7 @@ StudyGo 讓使用者依地區、距離起點、日期、開始時間、使用時
 | 資料 | 出處及保存位置 |
 | --- | --- |
 | 全臺公立公共圖書館基本資料 | [國立公共資訊圖書館・政府開放資料 99567](https://data.gov.tw/dataset/99567) · [上游 JSON](https://plisnet.nlpi.edu.tw/api/API/LibraryInfoData) · 政府資料開放授權條款第 1 版 |
+| 首頁縣市地圖 | [內政部國土測繪中心・縣市界線](https://data.gov.tw/dataset/7442) · [Taiwan Atlas 2021.9.20](https://cdn.jsdelivr.net/npm/taiwan-atlas@2021.9.20/counties-10t.json) · 政府資料開放授權條款第 1 版。首頁使用簡化及投影後的界線。 |
 | 官方原始檔 | `public/datasets/plis-<雜湊前 12 字元>.json` · 按內容保存下載原檔 |
 | StudyGo 全臺館舍名錄 | [library-directory.json](public/datasets/library-directory.json) · 含擷取時間、來源連結、原始檔 SHA-256、排除紀錄、各縣市筆數及館舍資料 |
 | 臺中館舍與自修規則核對 | MongoDB `studygo_dev.city_snapshots` 的 `taichung` 快照，包含逐館來源、逐欄佐證與異動歷程 · 來源及範圍參見上方「臺中資料與驗收」，另可從 `/admin/gaps` 下載缺口 CSV |

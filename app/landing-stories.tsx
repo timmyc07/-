@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import type { CSSProperties } from 'react';
 import { CalendarDays, ChevronRight } from './action-icons.ts';
 import AnimatedStat from './animated-stat.tsx';
 import DepthVisual from './depth-visual.tsx';
+import TaiwanCoverageMap from './taiwan-coverage-map.tsx';
 import CardPhoto from './search/card-photo.tsx';
 import type { RegionalLibrary } from '../lib/library-catalog.ts';
 import { clock, weekdays } from '../lib/study.ts';
@@ -28,14 +28,7 @@ export default function LandingStories({ libraries, cityCount }: { libraries: Re
         <h2 id="coverage-title">涵蓋縣市</h2>
         <p>從臺灣本島到離島，依縣市查找公立圖書館。</p>
       </div>
-      <DepthVisual className="story-map">
-        <div className="coverage-rig" aria-hidden="true">
-          {Array.from({ length: 12 }, (_, layer) =>
-            <span className="coverage-slice" key={layer} style={{ '--layer': layer + 1 } as CSSProperties} />)}
-          {/* The face shares its projection with the sidewall mask. */}
-          <img className="coverage-map" src="/taiwan-relief-face.webp" alt="" width={560} height={540} loading="lazy" decoding="async" />
-        </div>
-      </DepthVisual>
+      <TaiwanCoverageMap />
     </section>
 
     <section id="directory" className="shell landing-story story-directory" aria-labelledby="directory-title">

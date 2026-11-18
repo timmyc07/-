@@ -40,8 +40,6 @@ export default function TaiwanCoverageMap() {
   const map = useRef<SVGSVGElement>(null);
   const id = useId();
   const [hovered, setHovered] = useState<string>();
-  const [focused, setFocused] = useState<string>();
-  const active = hovered ?? focused;
   const grainId = id + '-grain';
 
   useEffect(() => {
@@ -82,7 +80,7 @@ export default function TaiwanCoverageMap() {
         {annotations.map(({ city }, index) => <use key={city} href={`#${id}-county-${index}`} />)}
       </g>
       {annotations.map(({ city, rail }, index) => <g key={city} className="coverage-raised"
-        data-active={active === city || undefined} data-rail={rail}>
+        data-active={hovered === city || undefined} data-rail={rail}>
         <use className="coverage-raised-face" href={`#${id}-county-${index}`} />
         <use className="coverage-raised-grain" href={`#${id}-county-${index}`} fill={`url(#${grainId})`} />
       </g>)}
@@ -95,16 +93,13 @@ export default function TaiwanCoverageMap() {
       const elbow = east ? 452 : rail === 'west' ? 195 : end + 14;
       const delay = { '--callout-delay': `${index * 32}ms` } as CSSProperties;
 
-      return <g className="coverage-callout" key={city} style={delay} data-active={active === city || undefined}
+      return <g className="coverage-callout" key={city} style={delay} data-active={hovered === city || undefined}
         onPointerEnter={(event) => { if (event.pointerType === 'mouse') setHovered(city); }}
         onPointerLeave={() => setHovered(undefined)}>
         <path className="coverage-leader" d={`M${x},${y} L${elbow},${row} H${end}`} />
         <circle className="coverage-pin" cx={x} cy={y} r="2.5" />
-        <rect className="coverage-label-target" x={east ? end + 4 : end - 70} y={row - 12} width="66" height="24" rx="4"
-          role="img" aria-label={city} tabIndex={0}
-          onFocus={(event) => { if (event.currentTarget.matches(':focus-visible')) setFocused(city); }}
-          onBlur={() => setFocused(undefined)} />
-        <text className="coverage-label" x={end + (east ? 8 : -8)} y={row} textAnchor={east ? 'start' : 'end'} dy=".34em" aria-hidden="true">{city}</text>
+        <rect className="coverage-label-target" x={east ? end + 4 : end - 70} y={row - 12} width="66" height="24" aria-hidden="true" />
+        <text className="coverage-label" x={end + (east ? 8 : -8)} y={row} textAnchor={east ? 'start' : 'end'} dy=".34em">{city}</text>
       </g>;
     })}
   </svg>;

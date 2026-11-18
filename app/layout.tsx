@@ -16,6 +16,6 @@ export default function Layout({ children }: { children: ReactNode }) {
         if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
       } catch {}` }} />
     </head>
-    <body><div className="scroll-progress" aria-hidden="true" /><SiteHeader />{children}</body>
+    <body><SiteHeader />{children}</body>
   </html>;
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type CSSProperties } from 'react';
 import { taiwanMap } from '../lib/taiwan-map.ts';
 import outline from './taiwan-map-outline.json';
 
@@ -137,20 +137,29 @@ export default function TaiwanConstellation({ libraries, cities }: { libraries: 
     const backdrop = layer.getContext('2d');
     const context = target?.getContext('2d');
     if (!target || !context || !backdrop) return;
-    drawMap(backdrop, libraries);
-
-    const scale = Math.min(window.devicePixelRatio || 1, 2);
-    target.width = width * scale;
-    target.height = height * scale;
-    context.scale(scale, scale);
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0;
     let started: number | undefined;
+    let visible = false;
+    let ready = false;
+
+    function render() {
+      if (!target || !context || !backdrop) return;
+      if (!ready) {
+        drawMap(backdrop, libraries);
+        const scale = Math.min(1.25, Math.max(.65, target.clientWidth * window.devicePixelRatio / width));
+        target.width = Math.round(width * scale);
+        target.height = Math.round(height * scale);
+        context.scale(target.width / width, target.height / height);
+        ready = true;
+      }
+      paint(performance.now());
+    }
 
     function paint(now: number) {
       if (!context) return;
       started ??= now;
-      const seconds = motion.matches ? 5 : (now - started) / 1000;
+      const seconds = motion.matches || !visible ? 5 : (now - started) / 1000;
       context.clearRect(0, 0, width, height);
       context.globalAlpha = .36 + .64 * Math.min(1, seconds / .85);
       context.drawImage(layer, 0, 0);
@@ -170,15 +179,15 @@ export default function TaiwanConstellation({ libraries, cities }: { libraries: 
     }
 
     let observer: IntersectionObserver | undefined;
-    if (!motion.matches && 'IntersectionObserver' in window) {
+    if ('IntersectionObserver' in window) {
       observer = new IntersectionObserver(([entry]) => {
-        if (entry.intersectionRatio < .2) return;
-        observer?.disconnect();
-        paint(performance.now());
-      }, { threshold: .2 });
+        visible = entry.intersectionRatio >= .16;
+        cancelAnimationFrame(frame);
+        if (visible) render();
+      }, { threshold: .16 });
       observer.observe(target);
     } else {
-      paint(performance.now());
+      render();
     }
     return () => {
       observer?.disconnect();
@@ -186,5 +195,9 @@ export default function TaiwanConstellation({ libraries, cities }: { libraries: 
     };
   }, [libraries, cities]);
 
-  return <canvas className="coverage-map" ref={canvas} width={width} height={height} aria-hidden="true" />;
+  return <div className="coverage-rig" aria-hidden="true">
+    {Array.from({ length: 8 }, (_, slice) =>
+      <span className="coverage-slice" key={slice} style={{ '--slice': slice } as CSSProperties} />)}
+    <canvas className="coverage-map" ref={canvas} width={width} height={height} />
+  </div>;
 }

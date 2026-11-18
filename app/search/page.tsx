@@ -223,8 +223,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
         <div><dt>證件</dt><dd className="entry-documents">{documentLabels[documents]}</dd></div>
         {openUntil !== undefined && <div><dt>可用至</dt><dd className="open-until">{clock(openUntil)}</dd></div>}
       </dl>
-      {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>{reason}{' '}
-        {closure && reason === closure.reason && <a href={closure.url}>休館來源 ↗</a>}</li>)}</ul> : null}
+      {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul> : null}
       {visit && <dl className="visit-details">
         <div><dt>樓層</dt><dd>{visit.location}</dd></div>
         <div><dt>入座</dt><dd>{visit.entry}</dd></div>
@@ -236,9 +235,8 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
         {!closure && area?.reservation && <a href={area.reservation}><CalendarDays className="action-icon" size={17} />前往館方預約</a>}
         {library.phone && <a href={'tel:' + library.phone}><Phone className="action-icon" size={17} />電洽 {library.phone}</a>}
       </div>
-      {visit && <div className="source-links">{visit.links.map(([label, url]) => <a key={url} href={url}>{label} ↗</a>)}</div>}
       <section className="card-rules">
-        <h3>使用規則與來源</h3>
+        <h3>使用規則</h3>
         <dl className="rule-details">
           <dt>入場</dt><dd>{area?.entryNote ?? (area?.access === 'walk-in' ? '現場入座' : area?.access === 'card'
             ? '需持' + (area.regionalCard ? regionalCards[area.regionalCard] : '國資圖或臺中市圖個人借閱證') + '，須預約或現場登記' : area?.access === 'restricted' ? '限指定身分' :
@@ -258,9 +256,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
         </dl>
         <div className="source-links">
           {library.website && <a href={library.website}>館方網站 ↗</a>}
-          {library.ruleLinks?.map((link, index) => <a key={link} href={link}>館方規則 {index + 1} ↗</a>)}
-          {[...new Set([...(area?.sources ?? []), ...library.sources, ...(library.notices ?? [])])].map((source, index) =>
-            <a href={source} key={source}>來源 {index + 1} ↗</a>)}
+          <a href="/?sources=1#source-index">查看逐館來源索引</a>
         </div>
       </section>
       {originalLink && <LayoutLink className="backup-link" href={originalLink}><Route className="action-icon" size={17} />以此館為原定地點找備案</LayoutLink>}

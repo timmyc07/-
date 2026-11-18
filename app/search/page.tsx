@@ -8,6 +8,7 @@ import CardDetails from './card-details.tsx';
 import CardPhoto, { CardPhotoPlaceholder } from './card-photo.tsx';
 import Pagination from './pagination.tsx';
 import AdvancedFilters from './advanced-filters.tsx';
+import EquipmentFilters from './equipment-filters.tsx';
 import ResultLayout, { LayoutControls, LayoutField, LayoutLink } from './result-layout.tsx';
 import RegionFilters from '../region-filters.tsx';
 import directory from '../../public/datasets/library-directory.json';
@@ -120,7 +121,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           <button type="submit" aria-label="搜尋" title="搜尋"><Search size={19} aria-hidden="true" /></button>
         </div>
         <div className="search-options">
-          <fieldset aria-label="需要的設備"><div className="checks">
+          <EquipmentFilters>
             {facilityKeys.map((key) => {
               const Icon = facilityIcons[key];
               return <label key={key}>
@@ -128,7 +129,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                   <Check size={13} aria-hidden="true" /></span>
                 <span className="filter-label"><Icon size={16} />{facilities[key]}</span></label>;
             })}
-          </div></fieldset>
+          </EquipmentFilters>
           {!invalid && <LayoutControls />}
         </div>
         <AdvancedFilters checkTime={checkTime}>

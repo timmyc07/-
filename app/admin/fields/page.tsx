@@ -26,9 +26,11 @@ export default async function FieldAudit({ searchParams }: {
     Number(b.libraryId === 'tc-123') - Number(a.libraryId === 'tc-123'));
   const visible = rows.filter((row) => (!selected || row.libraryId === selected.id) &&
     (!selectedField || row.field === selectedField) && (!pending || row.value === null));
+  const visibleKeys = new Set(visible.map(({ libraryId, area, field }) => JSON.stringify([libraryId, area, field])));
   const history = (snapshot.fieldHistory ?? []).map((batch) => ({ ...batch,
     changes: batch.changes.filter((change) => (!selected || change.libraryId === selected.id) &&
-      (!selectedField || change.field === selectedField)),
+      (!selectedField || change.field === selectedField) &&
+      (!pending || visibleKeys.has(JSON.stringify([change.libraryId, change.area, change.field])))),
   })).filter(({ changes }) => changes.length);
 
   return <main className="shell admin">
@@ -57,7 +59,9 @@ export default async function FieldAudit({ searchParams }: {
       <thead><tr><th scope="col">館舍</th><th scope="col">空間</th><th scope="col">欄位</th>
         <th scope="col">目前資料</th><th scope="col">最後核對</th><th scope="col">核對紀錄與來源</th></tr></thead>
       <tbody>{visible.map((row) => <tr key={JSON.stringify([row.libraryId, row.area, row.field])}>
-        <th scope="row"><Link href={{ pathname: '/admin/fields', query: { library: row.libraryId } }}>{row.library.name}</Link>
+        <th scope="row"><Link href={{ pathname: '/admin/fields', query: {
+          library: row.libraryId, ...(selectedField ? { field: selectedField } : {}), ...(pending ? { status: 'pending' } : {}),
+        } }}>{row.library.name}</Link>
           {row.library.phone && <a className="audit-phone" href={'tel:' + row.library.phone}>{row.library.phone}</a>}
         </th>
         <td>{row.area || '館舍'}</td><td>{fieldLabels[row.field]}</td>

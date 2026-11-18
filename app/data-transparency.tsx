@@ -70,9 +70,9 @@ export default async function DataTransparency({ libraries, snapshot, expanded, 
         <section id="photo-credits" className="footer-index">
           <h3><span><ImageIcon size={20} aria-hidden="true" /></span>館舍照片來源與授權</h3>
           <p>依縣市查看照片出處與使用授權。</p>
-          <a className="outline-link" href={indexHref(expanded, !photosExpanded, 'photo-credits')} aria-expanded={photosExpanded}>
+          <Link className="outline-link" href={indexHref(expanded, !photosExpanded, 'photo-credits')} aria-expanded={photosExpanded} prefetch={false}>
             {photosExpanded ? '收合照片清單' : '查看照片清單'} <ChevronRight size={16} aria-hidden="true" />
-          </a>
+          </Link>
           {photosExpanded && !photos && <p>照片清單暫時無法載入。</p>}
           {photos?.size === 0 && <p>目前沒有館舍照片。</p>}
           {[...photosByCity].map(([city, entries]) => <details key={city}>
@@ -85,9 +85,9 @@ export default async function DataTransparency({ libraries, snapshot, expanded, 
         <section id="source-index" className="footer-index">
           <h3><span><Database size={20} aria-hidden="true" /></span>逐館來源索引</h3>
           <p>依來源網站瀏覽館舍資料連結。</p>
-          <a className="outline-link" href={indexHref(!expanded, photosExpanded, 'source-index')} aria-expanded={expanded}>
+          <Link className="outline-link" href={indexHref(!expanded, photosExpanded, 'source-index')} aria-expanded={expanded} prefetch={false}>
             {expanded ? '收合逐館來源索引' : '查看完整逐館來源索引'} <ChevronRight size={16} aria-hidden="true" />
-          </a>
+          </Link>
           {groups.map(([host, links]) => <SourceGroup key={host} host={host} count={links.size} />)}
         </section>
       </div>

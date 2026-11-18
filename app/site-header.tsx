@@ -11,7 +11,7 @@ export default function SiteHeader() {
         StudyGo
       </Link>
       <nav className="site-nav" aria-label="主要導覽">
-        <a href="/#top"><House size={16} />首頁大廳</a>
+        <Link href="/#top"><House size={16} />首頁大廳</Link>
         <Link className="nav-search" href="/search" prefetch><Search size={16} />查詢空間</Link>
         <ThemeToggle />
       </nav>

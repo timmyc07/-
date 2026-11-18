@@ -7,6 +7,7 @@ export { ChevronRight } from 'pulsoicon-react/icons/chevron-right';
 export { Clock } from 'pulsoicon-react/icons/clock';
 export { Database } from 'pulsoicon-react/icons/database';
 export { Download } from 'pulsoicon-react/icons/download';
+export { Fax } from 'pulsoicon-react/icons/fax';
 export { House } from 'pulsoicon-react/icons/house';
 export { IdCard } from 'pulsoicon-react/icons/id-card';
 export { Image as ImageIcon } from 'pulsoicon-react/icons/image';

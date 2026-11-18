@@ -48,22 +48,17 @@ export default function LandingStories({ libraries, cityCount }: { libraries: Re
 
     <section id="study-hours" className="shell landing-story story-hours" aria-labelledby="study-hours-title">
       <div className="story-copy">
-        <p className="story-number">{checked.length}</p>
-        <h2 id="study-hours-title">已核對自修時段的館舍</h2>
-        <p>查詢指定日期和時段，並一起確認入場規則、設備和休館公告。</p>
+        <h2 id="study-hours-title">查詢自修時段</h2>
+        <p>已核對 <strong>{checked.length} 間館舍</strong>的自修時段。依日期和時間查詢開放情形、入場規則與設備。</p>
         <Link className="outline-link" href="/search?search=1&availability=1#results">查詢自修時段 <ChevronRight size={16} aria-hidden="true" /></Link>
       </div>
-      <div className="story-visual story-schedule">
-        <div className="story-depth">
-          {sampleHours.length > 0 && <>
-            <h3><CalendarDays size={21} aria-hidden="true" />每週開放時段示例</h3>
-            <ul>{sampleHours.map(({ library, area, slot }) => <li key={library.id}>
-              <div><strong>{library.name}</strong><span>{area.name}</span></div>
-              <span className="story-hour">週{weekdays[slot.day]} · {clock(slot.start)}–{clock(slot.end)}</span>
-            </li>)}</ul>
-          </>}
-        </div>
-      </div>
+      {sampleHours.length > 0 && <div className="story-schedule">
+        <h3><CalendarDays size={19} aria-hidden="true" />每週開放時段示例</h3>
+        <ul>{sampleHours.map(({ library, area, slot }) => <li key={library.id}>
+          <div><strong>{library.name}</strong><span>{area.name}</span></div>
+          <span className="story-hour">週{weekdays[slot.day]} · {clock(slot.start)}–{clock(slot.end)}</span>
+        </li>)}</ul>
+      </div>}
     </section>
   </div>;
 }

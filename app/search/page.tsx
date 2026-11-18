@@ -1,7 +1,7 @@
 import Form from 'next/form';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { CalendarDays, Check, Clock, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, Route, Search, Wifi } from '../action-icons.ts';
+import { CalendarDays, Check, Clock, Fax, IdCard, Laptop, LibraryBig, MapPin, Phone, Plug, Route, Search, Wifi } from '../action-icons.ts';
 import DurationField from '../duration-field.tsx';
 import AutoDistance from './auto-distance.tsx';
 import CardDetails from './card-details.tsx';
@@ -16,7 +16,7 @@ import { libraryCatalog, type RegionalLibrary } from '../../lib/library-catalog.
 import { directionsUrl, distanceKm, parseCoordinates } from '../../lib/distance.ts';
 import { backupLibraries, clock, documentLabels, entryDocumentRequirement, evaluate, facilities, kindLabels,
   regionalCards, weekdays } from '../../lib/study.ts';
-import type { Area, DocumentRequirement, Facility, Query } from '../../lib/study.ts';
+import type { Area, DocumentRequirement, Facility, Query, Slot } from '../../lib/study.ts';
 import { pilotVisit } from '../../lib/taichung-visits.ts';
 import { libraryPhotoCredits, type LibraryPhotoCredit } from '../../lib/mongodb.ts';
 import { normalizeSearchText, requestedPage, searchRegion, searchTime } from '../../lib/search-query.ts';
@@ -194,6 +194,24 @@ async function LibraryPhoto({ library, photos }: { library: RegionalLibrary; pho
     : <CardPhotoPlaceholder />;
 }
 
+function HoursTimeline({ slots }: { slots: Slot[] }) {
+  return <ul className="hours-timeline" role="list">{slots.map(({ day, start, end }) =>
+    <li key={day + ':' + start}><span className="hours-period">週{weekdays[day]}</span> <strong>{clock(start)}–{clock(end)}</strong></li>)}</ul>;
+}
+
+function AnnouncedHours({ hours }: { hours: string }) {
+  // Only separate ranges that share one explicit weekday label.
+  const schedule = /^(週[^0-9。；：\n]+?)\s+(\d{1,2}:\d{2}[–—-]\d{1,2}:\d{2}(?:、\s*\d{1,2}:\d{2}[–—-]\d{1,2}:\d{2})*)(?:。([\s\S]*))?$/u.exec(hours.trim());
+  if (!schedule) return hours;
+  const [, days, ranges, note] = schedule;
+  return <>
+    <span>{days}</span>
+    <ul className="hours-timeline" role="list">{ranges.split('、').map((range, index) =>
+      <li key={index}><strong>{range.trim()}</strong></li>)}</ul>
+    {note?.trim()}
+  </>;
+}
+
 function LibraryCard({ library, area, documents = entryDocumentRequirement(area), status, reasons, closure, openUntil, distance, originalLink, photos }: {
   library: RegionalLibrary;
   area?: Area;
@@ -207,16 +225,18 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
   photos: CardPhotos;
 }) {
   const visit = area && pilotVisit(library.id, area);
+  const photo = <Suspense fallback={<CardPhotoPlaceholder loading />}>
+    <LibraryPhoto library={library} photos={photos} />
+  </Suspense>;
   return <article className="card">
-    <Suspense fallback={<CardPhotoPlaceholder loading />}>
-      <LibraryPhoto library={library} photos={photos} />
-    </Suspense>
+    {photo}
     <header className="card-heading">
       {status && <span className={'card-status badge ' + status}>{statuses[status]}</span>}
       <h3>{library.name}</h3>
       <p className="address">{library.address || '地址待確認'}</p>
     </header>
     <CardDetails name={library.name}>
+      {photo}
       <p className="address">{library.city}{library.district && ' · ' + library.district}</p>
       <p className="area">{area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
       <p className="address">{library.address || '地址待確認'}</p>
@@ -234,7 +254,8 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
         {(library.coordinates || library.address) && <a className="map-link" href={directionsUrl(library.coordinates ?? library.address)}
           aria-label={library.name + ' Google 地圖導航'}><MapPin className="action-icon" size={17} />地圖導航</a>}
         {!closure && area?.reservation && <a href={area.reservation}><CalendarDays className="action-icon" size={17} />前往館方預約</a>}
-        {library.phone && <a href={'tel:' + library.phone}><Phone className="action-icon" size={17} />電洽 {library.phone}</a>}
+        {library.phone && <a href={'tel:' + library.phone}><Phone className="action-icon" size={17} />電話 {library.phone}</a>}
+        {library.fax && <span className="card-fax" data-icon-trigger><Fax className="action-icon" size={17} />傳真 {library.fax}</span>}
       </div>
       <section className="card-rules">
         <h3>使用規則</h3>
@@ -244,16 +265,12 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
             area?.access === 'conditional' ? '須符合校外訪客資格' : '待確認')}</dd>
           {library.reviewNote && !library.accessNote && <><dt>規則核對</dt><dd>{library.reviewNote}</dd></>}
           {library.accessNote && <><dt>館方補充</dt><dd>{library.accessNote}</dd></>}
-          <dt>每週開放</dt><dd>{area?.slots?.map((slot) => <span className="slot" key={slot.day + ':' + slot.start}>
-            週{weekdays[slot.day]} {clock(slot.start)}–{clock(slot.end)}</span>) ?? '空間時段待確認'}</dd>
-          {!area?.slots && library.schedule?.length ? <><dt>館舍開放時間</dt><dd>{library.schedule.map((slot) =>
-            <span className="slot" key={slot.day + ':' + slot.start}>週{weekdays[slot.day]} {clock(slot.start)}–{clock(slot.end)}</span>)}</dd></> : null}
-          {library.openingHours && <><dt>館方公告的開放時間</dt><dd className="opening-hours">{library.openingHours}</dd></>}
+          <dt>每週開放</dt><dd>{area?.slots?.length ? <HoursTimeline slots={area.slots} /> : '空間時段待確認'}</dd>
+          {!area?.slots?.length && library.schedule?.length ? <><dt>館舍開放時間</dt><dd><HoursTimeline slots={library.schedule} /></dd></> : null}
+          {library.openingHours && <><dt>館方公告的開放時間</dt><dd className="opening-hours"><AnnouncedHours hours={library.openingHours} /></dd></>}
           <dt>設備</dt><dd>{facilityKeys.map((key) => facilities[key] + ' ' +
             (area?.equipment[key] === true ? '有' : area?.equipment[key] === false ? '未提供' : '待確認')).join(' · ')}</dd>
           {library.facilities?.length ? <><dt>館舍設備</dt><dd>{library.facilities.join('、')}</dd></> : null}
-          {library.phone && <><dt>電話</dt><dd>{library.phone}</dd></>}
-          {library.fax && <><dt>傳真</dt><dd>{library.fax}</dd></>}
         </dl>
         <div className="source-links">
           {library.website && <a href={library.website}>館方網站 ↗</a>}

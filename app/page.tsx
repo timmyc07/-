@@ -25,7 +25,7 @@ export default async function LandingPage({ searchParams }: PageProps<'/'>) {
         <h1 id="landing-title">找一個時段，<br />安靜讀書。</h1>
         <p className="intro">按時段、入場規則與設備找到合適的自修空間，出發前先看館方資訊。</p>
         <div className="hero-actions">
-          <Link className="primary-action" href="/search" prefetch><Search size={18} />查詢自修空間</Link>
+          <Link className="primary-action" href="/search"><Search size={18} />查詢自修空間</Link>
           <a href="#coverage">探索館舍分布 ↓</a>
         </div>
       </div>

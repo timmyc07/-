@@ -117,4 +117,4 @@ StudyGo 讓使用者依地區、距離起點、日期、開始時間、使用時
 
 執行 `npm run refresh:library-details` 可更新[全臺館舍詳情](/public/datasets/library-details.json)。與名錄同址的開館文字和設施會顯示在館舍卡片，官方詳情明載的自修室也會列出。專室時段、入場資格、座位設備與年度休館依逐館規則核對。
 
-動畫採用 [Magic UI Blur Fade](https://magicui.design/docs/components/blur-fade) 與 [Scroll Progress](https://magicui.design/docs/components/scroll-progress) 的實作，搭配鎖定版本的 Motion。授權保存在 [Magic UI 授權文件](app/MAGIC-UI-LICENSE.md)。
+首頁與路由轉場採用 CSS 動畫，並支援系統的減少動態效果設定。首頁的標題字型子集採用 [Noto Serif TC](public/licenses/noto-serif-tc.txt)。

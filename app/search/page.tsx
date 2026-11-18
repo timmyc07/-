@@ -177,7 +177,6 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             {totalPages > 1 && <Pagination page={currentPage} total={totalPages}
               previous={currentPage > 1 ? href({ page: String(currentPage - 1) }) : undefined}
               next={currentPage < totalPages ? href({ page: String(currentPage + 1) }) : undefined} />}
-            {!!photos?.size && <p className="photo-credit-link"><a href="/?photos=1#photo-credits">館舍照片來源與授權</a></p>}
           </>}
         </div>
       </ResultLayout>

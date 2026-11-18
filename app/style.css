@@ -381,9 +381,13 @@ dd{margin:0 0 6px;color:var(--muted)}
 .hours-timeline strong{color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
 .hours-period{display:inline-block;min-width:2.7em;margin-inline-end:6px}
 .opening-hours{white-space:pre-line}
-.library-facilities{display:flex;flex-wrap:wrap;gap:6px 14px;margin:4px 0 0;padding:0;list-style:none}
-.library-facilities li{display:flex;align-items:center;gap:5px}
-.library-facilities svg{color:var(--accent-ink)}
+.library-facilities{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:8px 20px;margin:6px 0 0;
+}
+.library-facilities>div{padding-block:7px 3px;border-top:1px solid var(--line)}
+.library-facilities dt{display:flex;align-items:center;gap:7px;color:var(--accent-ink);font-size:.875rem;font-weight:600}
+.rule-details .library-facilities dd{margin:2px 0 0 24px;font-size:.9375rem;overflow-wrap:anywhere}
+.library-facilities dd span{display:inline-block;max-inline-size:100%}
 .source-links{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.9375rem}
 .source-links a{display:inline-flex;align-items:center;min-height:28px}
 .reasons{font-size:1rem;padding-left:1.3em;margin:0}

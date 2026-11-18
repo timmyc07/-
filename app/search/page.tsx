@@ -1,8 +1,8 @@
 import Form from 'next/form';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { ArrowUpDown, Baby, BookOpen, CalendarDays, Check, Clock, Fax, IdCard, Laptop, LibraryBig, MapPin,
-  MessagesSquare, Phone, Plug, Route, Search, Wifi } from '../action-icons.ts';
+import { ArrowUpDown, Baby, BookOpen, CalendarDays, Check, Clock, Fax, IdCard, Laptop, LibraryBig, List,
+  MapPin, Phone, Plug, Route, Search, Wifi } from '../action-icons.ts';
 import DurationField from '../duration-field.tsx';
 import AutoDistance from './auto-distance.tsx';
 import CardDetails from './card-details.tsx';
@@ -26,9 +26,14 @@ type Params = Record<string, string | string[] | undefined>;
 export const metadata: Metadata = { title: '查詢自修空間｜StudyGo' };
 const facilityKeys = Object.keys(facilities) as Facility[];
 const facilityIcons = { laptop: Laptop, wifi: Wifi, outlet: Plug };
-const libraryFacilityIcons = new Map([
-  ['討論室', MessagesSquare], ['自修室', BookOpen], ['無線上網wifi', Wifi], ['電梯', ArrowUpDown], ['哺乳室', Baby],
-]);
+const facilityGroups = [
+  { title: '閱讀與討論', Icon: BookOpen, match: /自[修習]|討論|研討|閱[讀覽]|書報|期刊/u },
+  { title: '網路與資訊', Icon: Wifi, match: /上網|wi[\s-]?fi|網路|筆電|電腦|檢索|多媒體|插座|充電|視聽/iu },
+  { title: '借閱服務', Icon: LibraryBig, match: /借書|還書|借還|借閱|預約取書|取書機/u },
+  { title: '親子設施', Icon: Baby, match: /親子|哺|集乳|嬰幼兒|尿布|兒童室/u },
+  { title: '出入與交通', Icon: ArrowUpDown, match: /電梯|升降|無障礙|坡道|停車|[iu]bike|自行車/iu },
+];
+const otherFacilities = { title: '其他設備', Icon: List };
 const statuses = { yes: '符合條件', unknown: '待確認', no: '不符合' } as const;
 const pageSize = 15;
 
@@ -216,6 +221,20 @@ function AnnouncedHours({ hours }: { hours: string }) {
   </>;
 }
 
+function LibraryFacilities({ items }: { items: string[] }) {
+  const grouped = Map.groupBy(items, (item) => facilityGroups.find(({ match }) => match.test(item)) ?? otherFacilities);
+  return <dl className="library-facilities">{[...facilityGroups, otherFacilities].map((group) => {
+    const names = grouped.get(group);
+    if (!names) return null;
+    const { title, Icon } = group;
+    return <div key={title} data-icon-trigger>
+      <dt><Icon className="action-icon" size={17} aria-hidden="true" />{title}</dt>
+      <dd>{names.map((name, index) =>
+        <span key={index}>{name}{index < names.length - 1 && '、'}</span>)}</dd>
+    </div>;
+  })}</dl>;
+}
+
 function LibraryCard({ library, area, documents = entryDocumentRequirement(area), status, reasons, closure, openUntil, distance, originalLink, photos }: {
   library: RegionalLibrary;
   area?: Area;
@@ -274,12 +293,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
           {library.openingHours && <><dt>館方公告的開放時間</dt><dd className="opening-hours"><AnnouncedHours hours={library.openingHours} /></dd></>}
           <dt>設備</dt><dd>{facilityKeys.map((key) => facilities[key] + ' ' +
             (area?.equipment[key] === true ? '有' : area?.equipment[key] === false ? '未提供' : '待確認')).join(' · ')}</dd>
-          {library.facilities?.length ? <><dt>館舍設備</dt><dd>
-            <ul className="library-facilities" role="list">{library.facilities.map((facility) => {
-              const Icon = libraryFacilityIcons.get(facility) ?? LibraryBig;
-              return <li key={facility} data-icon-trigger><Icon className="action-icon" size={16} aria-hidden="true" />{facility}</li>;
-            })}</ul>
-          </dd></> : null}
+          {library.facilities?.length ? <><dt>館舍設備</dt><dd><LibraryFacilities items={library.facilities} /></dd></> : null}
         </dl>
         <div className="source-links">
           {library.website && <a href={library.website}>館方網站 ↗</a>}

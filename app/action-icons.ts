@@ -20,7 +20,6 @@ export { LibraryBig } from 'pulsoicon-react/icons/library-big';
 export { List } from 'pulsoicon-react/icons/list';
 export { Map } from 'pulsoicon-react/icons/map';
 export { MapPin } from 'pulsoicon-react/icons/map-pin';
-export { MessagesSquare } from 'pulsoicon-react/icons/messages-square';
 export { Moon } from 'pulsoicon-react/icons/moon';
 export { Phone } from 'pulsoicon-react/icons/phone';
 export { Plug } from 'pulsoicon-react/icons/plug';

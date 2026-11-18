@@ -59,7 +59,7 @@ button .action-icon{margin-inline-end:7px}
 .site-nav a:hover,.hero-actions a:hover{background:var(--soft)}
 .site-nav .nav-search{background:var(--accent);color:var(--on-accent)}
 .site-nav .nav-search:hover{background:var(--accent-hover);color:var(--on-accent)}
-.theme-toggle{display:grid;place-items:center;width:44px;margin:0;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--accent-ink)}
+.theme-toggle{display:grid;place-items:center;width:44px;margin:0;padding:0;border:0;border-radius:8px;background:transparent;color:var(--accent-ink)}
 .theme-toggle:hover{background:var(--soft)}
 .theme-toggle svg{grid-area:1/1}
 .theme-toggle{--moon-opacity:1;--sun-opacity:0;--moon-turn:0deg;--sun-turn:45deg}

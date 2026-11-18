@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { House, Search } from './action-icons.ts';
+import { Search } from './action-icons.ts';
 import ThemeToggle from './theme-toggle.tsx';
 
 export default function SiteHeader() {
@@ -11,7 +11,6 @@ export default function SiteHeader() {
         StudyGo
       </Link>
       <nav className="site-nav" aria-label="主要導覽">
-        <Link href="/"><House size={16} />首頁大廳</Link>
         <Link className="nav-search" href="/search"><Search size={16} />查詢空間</Link>
         <ThemeToggle />
       </nav>

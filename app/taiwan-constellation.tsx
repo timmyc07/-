@@ -19,7 +19,7 @@ function triangle(context: CanvasRenderingContext2D, x: number, y: number, size:
   context.closePath();
 }
 
-function drawMap(context: CanvasRenderingContext2D, libraries: MapPoint[], cities: CityMarker[]) {
+function drawMap(context: CanvasRenderingContext2D, libraries: MapPoint[]) {
   const land = new Path2D(outline.land);
   const coast = new Path2D(outline.coast);
   context.fill(land);
@@ -80,11 +80,19 @@ function drawMap(context: CanvasRenderingContext2D, libraries: MapPoint[], citie
     context.fill();
   }
   context.globalAlpha = 1;
+}
 
+function drawCities(context: CanvasRenderingContext2D, cities: CityMarker[], seconds: number) {
+  const travelled = (seconds - .3) * 2.1;
+  context.globalAlpha = 1;
   context.beginPath();
-  for (const [index, { point: [x, y] }] of cities.entries()) {
-    if (index === 0) context.moveTo(x, y);
-    else context.lineTo(x, y);
+  for (let index = 1; index < cities.length; index++) {
+    const progress = Math.min(1, travelled - index + 1);
+    if (progress <= 0) break;
+    const [x, y] = cities[index - 1].point;
+    const [endX, endY] = cities[index].point;
+    context.moveTo(x, y);
+    context.lineTo(x + (endX - x) * progress, y + (endY - y) * progress);
   }
   context.strokeStyle = '#b98048';
   context.lineWidth = 2;
@@ -94,7 +102,10 @@ function drawMap(context: CanvasRenderingContext2D, libraries: MapPoint[], citie
 
   context.font = '600 17px "Microsoft JhengHei", "PingFang TC", sans-serif';
   context.textBaseline = 'middle';
-  for (const { name, point: [x, y] } of cities) {
+  for (const [index, { name, point: [x, y] }] of cities.entries()) {
+    const arrival = travelled - index;
+    if (arrival < 0) break;
+    context.globalAlpha = Math.min(1, arrival * 2.8);
     const left = x < 340;
     context.beginPath();
     context.arc(x, y, 4.5, 0, 2 * Math.PI);
@@ -104,7 +115,15 @@ function drawMap(context: CanvasRenderingContext2D, libraries: MapPoint[], citie
     context.stroke();
     context.textAlign = left ? 'right' : 'left';
     context.fillText(name, x + (left ? -10 : 10), y);
+    if (arrival < 1.4) {
+      context.globalAlpha = .52 * (1 - arrival / 1.4);
+      context.beginPath();
+      context.arc(x, y, 5 + 8 * arrival, 0, 2 * Math.PI);
+      context.strokeStyle = '#efb976';
+      context.stroke();
+    }
   }
+  context.globalAlpha = 1;
 }
 
 export default function TaiwanConstellation({ libraries, cities }: { libraries: MapPoint[]; cities: CityMarker[] }) {
@@ -118,7 +137,7 @@ export default function TaiwanConstellation({ libraries, cities }: { libraries: 
     const backdrop = layer.getContext('2d');
     const context = target?.getContext('2d');
     if (!target || !context || !backdrop) return;
-    drawMap(backdrop, libraries, cities);
+    drawMap(backdrop, libraries);
 
     const scale = Math.min(window.devicePixelRatio || 1, 2);
     target.width = width * scale;
@@ -147,7 +166,7 @@ export default function TaiwanConstellation({ libraries, cities }: { libraries: 
         }
         frame = requestAnimationFrame(paint);
       }
-      context.globalAlpha = 1;
+      drawCities(context, cities, seconds);
     }
 
     let observer: IntersectionObserver | undefined;

@@ -130,8 +130,5 @@ export default function TaiwanConstellation({ libraries }: { libraries: MapPoint
     return () => cancelAnimationFrame(frame);
   }, [libraries]);
 
-  return <figure className="hero-map">
-    <canvas ref={canvas} width={width} height={height} role="img" aria-label="臺灣粒子地圖，亮點標示圖書館的位置" />
-    <figcaption><span aria-hidden="true" />館舍位置</figcaption>
-  </figure>;
+  return <canvas className="search-map" ref={canvas} width={width} height={height} aria-hidden="true" />;
 }

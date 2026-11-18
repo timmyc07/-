@@ -11,7 +11,7 @@ export default async function LandingPage({ searchParams }: PageProps<'/'>) {
   if (params.search === '1') {
     const query = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {
-      if (key !== 'sources' && typeof value === 'string') query.set(key, value);
+      if (key !== 'sources' && key !== 'photos' && typeof value === 'string') query.set(key, value);
     }
     redirect('/search?' + query + '#results');
   }
@@ -40,6 +40,7 @@ export default async function LandingPage({ searchParams }: PageProps<'/'>) {
         <div><dt>已核對自修時段的館舍</dt><dd>{checked}</dd></div>
       </dl>
     </section>
-    <DataTransparency libraries={libraries} snapshot={snapshot} expanded={params.sources === '1'} />
+    <DataTransparency libraries={libraries} snapshot={snapshot} expanded={params.sources === '1'}
+      photosExpanded={params.photos === '1'} />
   </main>;
 }

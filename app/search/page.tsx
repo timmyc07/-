@@ -177,6 +177,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             {totalPages > 1 && <Pagination page={currentPage} total={totalPages}
               previous={currentPage > 1 ? href({ page: String(currentPage - 1) }) : undefined}
               next={currentPage < totalPages ? href({ page: String(currentPage + 1) }) : undefined} />}
+            {!!photos?.size && <p className="photo-credit-link"><a href="/?photos=1#photo-credits">館舍照片來源與授權</a></p>}
           </>}
         </div>
       </ResultLayout>
@@ -197,11 +198,8 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
 }) {
   const visit = area && pilotVisit(library.id, area);
   return <article className="card">
-    {photo && <figure className="card-photo">
-      <Image src={'/api/library-photos/' + encodeURIComponent(library.id)} alt={library.name + '館舍實景'}
-        width={photo.width} height={photo.height} unoptimized />
-      <figcaption><a href={photo.source}>{photo.author} · 照片來源</a> · <a href={photo.licenseUrl}>{photo.license}</a></figcaption>
-    </figure>}
+    {photo && <Image className="card-photo" src={'/api/library-photos/' + encodeURIComponent(library.id)}
+      alt={library.name + '館舍實景'} width={photo.width} height={photo.height} unoptimized />}
     <header className="card-heading">
       <div className="card-top">
         <span>{library.city}{library.district && ' · ' + library.district}</span>

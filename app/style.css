@@ -269,6 +269,7 @@ button:hover{background:var(--accent-hover)}
 .result-tools{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .result-tools .outline-link{margin:0;color:var(--accent-ink)}
 .result-tools .outline-link:hover{background:var(--soft)}
+.location-sort{color:var(--muted);font-size:.875rem}
 .search-options{display:flex;align-items:center;gap:12px}
 .search-options fieldset{flex:1}
 .result-layout{display:flex;flex:none;border:1px solid var(--line);border-radius:8px;background:var(--field)}

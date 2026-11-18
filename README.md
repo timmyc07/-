@@ -26,7 +26,7 @@ npm run dev
 
 ### 臺中出發流程
 
-- **附近查詢。** 選一間圖書館作為距離起點，或允許瀏覽器定位並送出目前條件。結果保留「符合條件／待確認／不符合」的優先順序，同一狀態內依直線距離排序。定位查詢網址含四捨五入至小數第三位的座標。館舍卡片可用已核對座標開啟 Google 地圖導航。 [Google Maps URLs](https://developers.google.com/maps/documentation/urls/get-started)
+- **附近查詢。** 進入查詢頁後自動使用瀏覽器定位，取得位置後依直線距離排序。時段與規則查詢保留「符合條件／待確認／不符合」的優先順序，再於各組內依距離排序。查詢網址含四捨五入至小數第三位的座標。館舍卡片可用已核對座標開啟 Google 地圖導航。 [Google Maps URLs](https://developers.google.com/maps/documentation/urls/get-started)
 - **備案。** 按館舍去重，最多顯示三間符合原條件的不同館舍。已有查詢起點時沿用該起點，否則從原定館舍計算距離。同區沒有符合的備案時，可一鍵擴大到全臺中市。
 - **試點出發資訊。** 大墩、太平、國資圖總館的結果卡列出樓層、入座方式、充電規則、電話和官方來源。已確認符合的時段顯示當天可用到幾點。太平 B1 施工期間的使用情況及專室時段仍待館方確認。國資圖 B1 提供 iSpace 入口、實體借閱證與報到指引。 [大墩樓層導覽](https://www.library.taichung.gov.tw/lib/content/index?Parser=1%2C105%2C195) · [太平樓層導覽](https://www.library.taichung.gov.tw/lib/content/index?Parser=1%2C123%2C375) · [太平修繕進度](https://assess-public.taichung.gov.tw/ImportantWork/Detail/115DQ00007) · [國資圖 iSpace 教學](https://www.nlpi.edu.tw/StaticPage/ispace-tutorial)
 

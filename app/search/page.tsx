@@ -107,7 +107,6 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   }
 
   return <main className="search-page">
-      <AutoDistance />
       <section className="shell search-intro" aria-labelledby="search-page-title">
         <h1 id="search-page-title">查詢自修空間</h1>
       </section>
@@ -149,6 +148,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         </AdvancedFilters>
       </Form>
       <ResultLayout>
+        <AutoDistance />
         <div key={resultsKey} className="result-set">
           {time.invalidTime && <p className="notice" role="alert">日期或時段無效。請在進階篩選確認日期與分鐘數後重新查詢，使用時段須在同一天內。</p>}
           {invalidRegion && <p className="notice" role="alert">縣市或行政區不相符。請在進階篩選重新選擇地區。</p>}

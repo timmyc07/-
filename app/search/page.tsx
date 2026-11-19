@@ -199,10 +199,16 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
 type CardPhotos = Promise<Map<string, LibraryPhotoCredit> | undefined>;
 
-async function LibraryPhoto({ library, photos }: { library: RegionalLibrary; photos: CardPhotos }) {
-  return (await photos)?.has(library.id)
-    ? <CardPhoto id={library.id} name={library.name} />
-    : <CardPhotoPlaceholder />;
+async function LibraryPhoto({ library, photos, showCredit }: {
+  library: RegionalLibrary; photos: CardPhotos; showCredit?: boolean;
+}) {
+  const credit = (await photos)?.get(library.id);
+  if (!credit) return <CardPhotoPlaceholder />;
+  const image = <CardPhoto id={library.id} name={library.name} />;
+  return showCredit ? <figure className="card-photo-credit">
+    {image}
+    <figcaption>照片來源 <a href={credit.source}>{credit.author}</a> · <a href={credit.licenseUrl}>{credit.license}</a></figcaption>
+  </figure> : image;
 }
 
 function HoursTimeline({ slots }: { slots: Slot[] }) {
@@ -252,62 +258,89 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
   photos: CardPhotos;
 }) {
   const visit = area && pilotVisit(library.id, area);
-  const photo = <Suspense fallback={<CardPhotoPlaceholder loading />}>
-    <LibraryPhoto library={library} photos={photos} />
-  </Suspense>;
+  const region = library.city + (library.district ? ' · ' + library.district : '');
+  const space = area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認');
+  const seats = area?.seats ? ' · ' + area.seats + ' 席' : '';
+  const equipment = facilityKeys.filter((key) => area?.equipment[key] === true);
+  const reason = reasons?.[0];
+  const destination = library.coordinates ?? library.address;
+  const mapLink = destination && <a className="map-link" href={directionsUrl(destination)}
+    aria-label={library.name + ' Google 地圖導航'}><MapPin className="action-icon" size={17} aria-hidden="true" />地圖導航</a>;
   return <article className="card">
-    {photo}
-    <header className="card-heading">
-      {status && <span className={'card-status badge ' + status}>{statuses[status]}</span>}
-      <h3>{library.name}</h3>
-      <p className="address">{library.address || '地址待確認'}</p>
-    </header>
-    <CardDetails name={library.name}>
-      {photo}
-      <p className="address">{library.city}{library.district && ' · ' + library.district}</p>
-      <p className="area">{area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認')}{area?.seats ? ' · ' + area.seats + ' 席' : ''}</p>
-      <p className="address">{library.address || '地址待確認'}</p>
-      <dl className="card-facts">
-        <div><dt>證件</dt><dd className="entry-documents">{documentLabels[documents]}</dd></div>
-        {openUntil !== undefined && <div><dt>可用至</dt><dd className="open-until">{clock(openUntil)}</dd></div>}
-      </dl>
-      {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>
-        {reason === closure?.reason ? <a href={closure.url}>{reason}</a> : reason}</li>)}</ul> : null}
-      {visit && <dl className="visit-details">
-        <div><dt>樓層</dt><dd>{visit.location}</dd></div>
-        <div><dt>入座</dt><dd>{visit.entry}</dd></div>
-        <div><dt>充電</dt><dd>{visit.power}</dd></div>
-      </dl>}
-      <div className="card-actions">
-        {(library.coordinates || library.address) && <a className="map-link" href={directionsUrl(library.coordinates ?? library.address)}
-          aria-label={library.name + ' Google 地圖導航'}><MapPin className="action-icon" size={17} />地圖導航</a>}
-        {!closure && area?.reservation && <a href={area.reservation}><CalendarDays className="action-icon" size={17} />前往館方預約</a>}
-        {library.phone && <a href={'tel:' + library.phone}><Phone className="action-icon" size={17} />電話 {library.phone}</a>}
-        {library.fax && <span className="card-fax" data-icon-trigger><Fax className="action-icon" size={17} />傳真 {library.fax}</span>}
-      </div>
-      <section className="card-rules">
-        <h3>使用規則</h3>
-        <dl className="rule-details">
-          <dt>入場</dt><dd>{area?.entryNote ?? (area?.access === 'walk-in' ? '現場入座' : area?.access === 'card'
-            ? '需持' + (area.regionalCard ? regionalCards[area.regionalCard] : '國資圖或臺中市圖個人借閱證') + '，須預約或現場登記' : area?.access === 'restricted' ? '限指定身分' :
-            area?.access === 'conditional' ? '須符合校外訪客資格' : '待確認')}</dd>
-          {library.reviewNote && !library.accessNote && <><dt>規則核對</dt><dd>{library.reviewNote}</dd></>}
-          {library.accessNote && <><dt>館方補充</dt><dd>{library.accessNote}</dd></>}
-          <dt>每週開放</dt><dd>{area?.slots?.length ? <HoursTimeline slots={area.slots} /> : '空間時段待確認'}</dd>
-          {!area?.slots?.length && library.schedule?.length ? <><dt>館舍開放時間</dt><dd><HoursTimeline slots={library.schedule} /></dd></> : null}
-          {library.openingHours && <><dt>館方公告的開放時間</dt><dd className="opening-hours"><AnnouncedHours hours={library.openingHours} /></dd></>}
-          <dt>設備</dt><dd>{facilityKeys.map((key) => facilities[key] + ' ' +
-            (area?.equipment[key] === true ? '有' : area?.equipment[key] === false ? '未提供' : '待確認')).join(' · ')}</dd>
-          {library.facilities?.length ? <><dt>館舍設備</dt><dd><LibraryFacilities items={library.facilities} /></dd></> : null}
-        </dl>
-        <div className="source-links">
-          {library.website && <a href={library.website}>館方網站 ↗</a>}
-          <a href="/?sources=1#source-index">查看逐館來源索引</a>
+    <Suspense fallback={<CardPhotoPlaceholder loading />}>
+      <LibraryPhoto library={library} photos={photos} />
+    </Suspense>
+    <div className="card-content">
+      <header className="card-heading">
+        <div className="card-meta"><span>{region}</span>
+          {status && <span className={'badge ' + status}>{statuses[status]}</span>}
         </div>
-      </section>
-      {originalLink && <LayoutLink className="backup-link" href={originalLink}><Route className="action-icon" size={17} />以此館為原定地點找備案</LayoutLink>}
-    </CardDetails>
-    {distance !== undefined && <footer className="card-distance"><MapPin size={15} aria-hidden="true" />距{distanceFrom}約 {
-      distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里'}</footer>}
+        <h3>{library.name}</h3>
+        <p className="address">{library.address || '地址待確認'}</p>
+        {distance !== undefined && <p className="card-distance"><Route size={15} aria-hidden="true" />距{distanceFrom}約 {
+          distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里'}</p>}
+      </header>
+      <div className="card-summary">
+        <p className="card-space"><BookOpen size={16} aria-hidden="true" /><span>{space}{seats}</span></p>
+        <ul className="card-quick-facts" role="list" aria-label="空間使用資訊">
+          <li><IdCard size={15} aria-hidden="true" />{documentLabels[documents]}</li>
+          {openUntil !== undefined && <li><Clock size={15} aria-hidden="true" />可用至 {clock(openUntil)}</li>}
+          {equipment.map((key) => {
+            const Icon = facilityIcons[key];
+            return <li key={key}><Icon size={15} aria-hidden="true" />{key === 'laptop' ? '可用筆電' : facilities[key]}</li>;
+          })}
+        </ul>
+        {reason && <p className="card-reason">{reason === closure?.reason ? <a href={closure.url}>{reason}</a> : reason}</p>}
+      </div>
+      <footer className="card-footer">
+        <CardDetails name={library.name}>
+          <Suspense fallback={<CardPhotoPlaceholder loading />}>
+            <LibraryPhoto library={library} photos={photos} showCredit />
+          </Suspense>
+          <p className="address">{region}</p>
+          <p className="area">{space}{seats}</p>
+          <p className="address">{library.address || '地址待確認'}</p>
+          <dl className="card-facts">
+            <div><dt>證件</dt><dd className="entry-documents">{documentLabels[documents]}</dd></div>
+            {openUntil !== undefined && <div><dt>可用至</dt><dd className="open-until">{clock(openUntil)}</dd></div>}
+          </dl>
+          {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>
+            {reason === closure?.reason ? <a href={closure.url}>{reason}</a> : reason}</li>)}</ul> : null}
+          {visit && <dl className="visit-details">
+            <div><dt>樓層</dt><dd>{visit.location}</dd></div>
+            <div><dt>入座</dt><dd>{visit.entry}</dd></div>
+            <div><dt>充電</dt><dd>{visit.power}</dd></div>
+          </dl>}
+          <div className="card-actions">
+            {mapLink}
+            {!closure && area?.reservation && <a href={area.reservation}><CalendarDays className="action-icon" size={17} />前往館方預約</a>}
+            {library.phone && <a href={'tel:' + library.phone}><Phone className="action-icon" size={17} />電話 {library.phone}</a>}
+            {library.fax && <span className="card-fax" data-icon-trigger><Fax className="action-icon" size={17} />傳真 {library.fax}</span>}
+          </div>
+          <section className="card-rules">
+            <h3>使用規則</h3>
+            <dl className="rule-details">
+              <dt>入場</dt><dd>{area?.entryNote ?? (area?.access === 'walk-in' ? '現場入座' : area?.access === 'card'
+                ? '需持' + (area.regionalCard ? regionalCards[area.regionalCard] : '國資圖或臺中市圖個人借閱證') + '，須預約或現場登記' : area?.access === 'restricted' ? '限指定身分' :
+                area?.access === 'conditional' ? '須符合校外訪客資格' : '待確認')}</dd>
+              {library.reviewNote && !library.accessNote && <><dt>規則核對</dt><dd>{library.reviewNote}</dd></>}
+              {library.accessNote && <><dt>館方補充</dt><dd>{library.accessNote}</dd></>}
+              <dt>每週開放</dt><dd>{area?.slots?.length ? <HoursTimeline slots={area.slots} /> : '空間時段待確認'}</dd>
+              {!area?.slots?.length && library.schedule?.length ? <><dt>館舍開放時間</dt><dd><HoursTimeline slots={library.schedule} /></dd></> : null}
+              {library.openingHours && <><dt>館方公告的開放時間</dt><dd className="opening-hours"><AnnouncedHours hours={library.openingHours} /></dd></>}
+              <dt>設備</dt><dd>{facilityKeys.map((key) => facilities[key] + ' ' +
+                (area?.equipment[key] === true ? '有' : area?.equipment[key] === false ? '未提供' : '待確認')).join(' · ')}</dd>
+              {library.facilities?.length ? <><dt>館舍設備</dt><dd><LibraryFacilities items={library.facilities} /></dd></> : null}
+            </dl>
+            <div className="source-links">
+              {library.website && <a href={library.website}>館方網站 ↗</a>}
+              <a href="/?sources=1#source-index">查看逐館來源索引</a>
+            </div>
+          </section>
+          {originalLink && <LayoutLink className="backup-link" href={originalLink}><Route className="action-icon" size={17} />以此館為原定地點找備案</LayoutLink>}
+        </CardDetails>
+        {mapLink}
+      </footer>
+    </div>
   </article>;
 }

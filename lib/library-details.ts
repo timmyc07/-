@@ -1554,7 +1554,7 @@ const serviceUpdates: Record<string, { url: string; note: string; additionalSour
   },
   'plis-ae39026bfbebe222706a': {
     url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000449',
-    note: '竹田國小內的臨時圖書館（公正路 35 號）因空間有限，展閱近 3 年的新書，其餘館藏暫時封存。',
+    note: '臨時圖書館位於竹田國小南側校舍，與竹田鄉文化觀光所共用聯合辦公室。展閱近 3 年的新書，其餘館藏暫時封存。',
   },
   'plis-65e63bfdbf5ce145d999': {
     url: 'https://library.hsichou.gov.tw/news_content.aspx?nid=732',
@@ -2134,6 +2134,9 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
 }
 
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
+  if (library.id === 'plis-ae39026bfbebe222706a' && library.address === '屏東縣竹田鄉竹田村公正路35號') {
+    library = { ...library, coordinates: { latitude: 22.58186, longitude: 120.54418 } };
+  }
   if (library.id === 'plis-d6eefd9316cdacfd6e67' && library.address === '花蓮縣萬榮鄉萬榮村2鄰23號') {
     const address = '花蓮縣萬榮鄉萬榮村1鄰19號（鄉公所2樓）';
     library = { ...library, address, coordinates: { latitude: 23.71499, longitude: 121.41102 },

@@ -482,6 +482,9 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(shoufeng.closures[0].until, '2026-12-08');
   assert.match(shoufeng.closures[0].reason, /館外還書箱/);
   const wanrong = libraries.find(({ id }) => id === 'plis-d6eefd9316cdacfd6e67')!;
+  assert.equal(wanrong.address, '花蓮縣萬榮鄉萬榮村1鄰19號（鄉公所2樓）');
+  assert.deepEqual(wanrong.coordinates, { latitude: 23.71499, longitude: 121.41102 });
+  assert.deepEqual(wanrong.facilities, ['臨時取還書服務']);
   assert.equal(wanrong.closures[0].from, '2026-05-20');
   assert.equal(wanrong.closures[0].until, '2026-12-31');
   assert.match(wanrong.openingHours!, /萬榮鄉公所 2 樓/);
@@ -498,6 +501,8 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert(fonglin.closures.some(({ from, until }) => from === '2026-02-14' && until === '2026-02-23'));
   assert(fonglin.checkDates?.includes('2026-12-26'));
   const ruisi = libraries.find(({ id }) => id === 'plis-37cd73be99573999d94d')!;
+  assert.equal(ruisi.address, '花蓮縣瑞穗鄉溫泉路一段1號（瑞穗站西站對面）');
+  assert.deepEqual(ruisi.coordinates, { latitude: 23.49746, longitude: 121.37575 });
   assert.match(ruisi.openingHours!, /溫泉路一段 1 號/);
   const jian = libraries.find(({ id }) => id === 'plis-1d71cbf4cd1d410256ad')!;
   assert.equal(jian.closures[0].until, '2026-10-08');

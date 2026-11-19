@@ -11,6 +11,8 @@ export type LibraryDetail = { url: string; address: string; hours?: string; faci
 
 const hsinchuCountyRules = 'https://hcplibrary.hchcc.gov.tw/wSite/ct?CPType=&ctNode=4303&mp=1&xItem=10646';
 const wanluanTemporaryClosure = 'https://www.globgov.com/TW/Wanluan/1414151405576012/萬巒圖書館-暨萬巒Doc';
+const wanrongTemporaryService = 'https://www.wanrung.gov.tw/News_Content.aspx?n=11750&s=209430';
+const ruisuiTemporaryService = 'https://www.juisui.gov.tw/News_Content.aspx?n=3419&s=204355';
 const buildingClosures: Record<string, Library['closures'][number] | undefined> = {
   'plis-21b90fd0847520bc7c74': {
     from: '2026-01-19', reason: '館舍因耐震補強工程暫停對外開放，仍可領取預約書及還書。重新開館日期依公所公告。',
@@ -36,7 +38,7 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
   'plis-d6eefd9316cdacfd6e67': {
     from: '2026-05-20', until: '2026-12-31',
     reason: '耐震補強工程期間暫停開館。萬榮鄉公所 2 樓文化暨觀光課提供現場還書及取書。恢復日期依館方公告。',
-    url: 'https://www.wanrung.gov.tw/News_Content.aspx?n=11750&s=209430',
+    url: wanrongTemporaryService,
   },
   'plis-6834a05fd469c4134918': {
     from: '2026-10-31', until: '2026-12-31',
@@ -81,7 +83,7 @@ const buildingClosures: Record<string, Library['closures'][number] | undefined> 
   },
   'plis-37cd73be99573999d94d': {
     from: '2026-03-05', reason: '瑞穗原館耐震補強暫停開放。借閱服務移至溫泉路一段 1 號臨時圖書館（瑞穗站後站對面）。',
-    url: 'https://www.juisui.gov.tw/News_Content.aspx?n=3419&s=204355',
+    url: ruisuiTemporaryService,
   },
   'plis-2fcff6be9344e712594c': {
     from: '2022-03-01', reason: '宜蘭縣文化局圖書館因縣級圖書館總館工程閉館，復館日期以館方公告為準。',
@@ -248,10 +250,6 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
   'plis-6475285c674791ca9696': {
     url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000503',
     facilities: ['地下室視聽室', '親子閱讀區', '電腦資訊區', '閱讀區', '交誼廳'],
-  },
-  'plis-d6eefd9316cdacfd6e67': {
-    url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000504',
-    facilities: ['期刊閱報區', '圖書參考區', '親子共讀區', '網路查詢電腦區', '書庫', '閱覽區', '視聽室', '小型會議室', '文物展示區'],
   },
   'plis-efe674464e6fce8f380e': {
     url: 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000505',
@@ -2136,6 +2134,21 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
 }
 
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
+  if (library.id === 'plis-d6eefd9316cdacfd6e67' && library.address === '花蓮縣萬榮鄉萬榮村2鄰23號') {
+    const address = '花蓮縣萬榮鄉萬榮村1鄰19號（鄉公所2樓）';
+    library = { ...library, address, coordinates: { latitude: 23.71499, longitude: 121.41102 },
+      facilities: ['臨時取還書服務'], studyRoom: false, areas: [], fax: undefined,
+      sources: [...library.sources, 'https://data.gov.tw/dataset/175221'] };
+    detail = { address, url: wanrongTemporaryService };
+  }
+  if (library.id === 'plis-37cd73be99573999d94d' && library.address === '花蓮縣瑞穗鄉中山路二段377號') {
+    const address = '花蓮縣瑞穗鄉溫泉路一段1號（瑞穗站西站對面）';
+    library = { ...library, address, coordinates: { latitude: 23.49746, longitude: 121.37575 },
+      facilities: ['臨時圖書館'], areas: [], fax: undefined,
+      sources: [...library.sources, 'https://www.juisui.gov.tw/News_Content.aspx?n=1552&s=126118',
+        'https://www.juisui.gov.tw/News_Content.aspx?n=1552&s=206683&sms=9855'] };
+    detail = { address, url: ruisuiTemporaryService };
+  }
   if (library.id === 'plis-4f656e6f21c469e566ae' && library.address === '嘉義縣水上鄉柳林村80-1號') {
     const address = '嘉義縣水上鄉水上村正義路141號';
     library = { ...library, address, coordinates: { latitude: 23.42856, longitude: 120.39819 }, fax: undefined };

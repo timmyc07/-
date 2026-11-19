@@ -27,14 +27,14 @@ export const metadata: Metadata = { title: '查詢自修空間｜StudyGo' };
 const facilityKeys = Object.keys(facilities) as Facility[];
 const facilityIcons = { laptop: Laptop, wifi: Wifi, outlet: Plug };
 const facilityGroups = [
-  { title: '閱讀與討論', Icon: BookOpen, match: /自[修習]|討論|研討|閱[讀覽]|書報|期刊/u },
-  { title: '網路與資訊', Icon: Wifi, match: /上網|wi[\s-]?fi|網路|筆電|電腦|檢索|多媒體|插座|充電|視聽/iu },
-  { title: '借閱服務', Icon: LibraryBig, match: /借書|還書|借還|借閱|預約取書|取書機/u },
-  { title: '親子設施', Icon: Baby, match: /親子|哺|集乳|嬰幼兒|尿布|兒童室/u },
-  { title: '出入與交通', Icon: ArrowUpDown, match: /電梯|升降|無障礙|坡道|停車|[iu]bike|自行車/iu },
+  { Icon: BookOpen, match: /自[修習]|討論|研討|閱[讀覽]|書報|期刊/u },
+  { Icon: Wifi, match: /上網|wi[\s-]?fi|網路|筆電|電腦|檢索|多媒體|插座|充電|視聽/iu },
+  { Icon: LibraryBig, match: /借書|還書|借還|借閱|預約取書|取書機/u },
+  { Icon: Baby, match: /親子|哺|集乳|嬰幼兒|尿布|兒童室/u },
+  { Icon: ArrowUpDown, match: /電梯|升降|無障礙|坡道|停車|[iu]bike|自行車/iu },
 ];
-const otherFacilities = { title: '其他設備', Icon: List };
 const statuses = { yes: '符合條件', unknown: '待確認', no: '不符合' } as const;
+const documentShortLabels = { none: '免特定證件', required: '需特定證件', unknown: '證件待確認' };
 const pageSize = 15;
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<Params> }) {
@@ -199,16 +199,10 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
 type CardPhotos = Promise<Map<string, LibraryPhotoCredit> | undefined>;
 
-async function LibraryPhoto({ library, photos, showCredit }: {
-  library: RegionalLibrary; photos: CardPhotos; showCredit?: boolean;
-}) {
-  const credit = (await photos)?.get(library.id);
-  if (!credit) return <CardPhotoPlaceholder />;
-  const image = <CardPhoto id={library.id} name={library.name} />;
-  return showCredit ? <figure className="card-photo-credit">
-    {image}
-    <figcaption>照片來源 <a href={credit.source}>{credit.author}</a> · <a href={credit.licenseUrl}>{credit.license}</a></figcaption>
-  </figure> : image;
+async function LibraryPhoto({ library, photos }: { library: RegionalLibrary; photos: CardPhotos }) {
+  return (await photos)?.has(library.id)
+    ? <CardPhoto id={library.id} name={library.name} />
+    : <CardPhotoPlaceholder />;
 }
 
 function HoursTimeline({ slots }: { slots: Slot[] }) {
@@ -230,17 +224,10 @@ function AnnouncedHours({ hours }: { hours: string }) {
 }
 
 function LibraryFacilities({ items }: { items: string[] }) {
-  const grouped = Map.groupBy(items, (item) => facilityGroups.find(({ match }) => match.test(item)) ?? otherFacilities);
-  return <dl className="library-facilities">{[...facilityGroups, otherFacilities].map((group) => {
-    const names = grouped.get(group);
-    if (!names) return null;
-    const { title, Icon } = group;
-    return <div key={title} data-icon-trigger>
-      <dt><Icon className="action-icon" size={17} aria-hidden="true" />{title}</dt>
-      <dd>{names.map((name, index) =>
-        <span key={index}>{name}{index < names.length - 1 && '、'}</span>)}</dd>
-    </div>;
-  })}</dl>;
+  return <ul className="library-facilities" role="list" aria-label="館舍設備">{items.map((name, index) => {
+    const Icon = facilityGroups.find(({ match }) => match.test(name))?.Icon ?? List;
+    return <li key={index} data-icon-trigger><Icon className="action-icon" size={17} aria-hidden="true" />{name}</li>;
+  })}</ul>;
 }
 
 function LibraryCard({ library, area, documents = entryDocumentRequirement(area), status, reasons, closure, openUntil, distance,
@@ -261,30 +248,46 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
   const region = library.city + (library.district ? ' · ' + library.district : '');
   const space = area?.name ?? (library.studyRoom === false ? '無獨立自修室' : '閱覽空間待確認');
   const seats = area?.seats ? ' · ' + area.seats + ' 席' : '';
+  const address = library.address || region + ' · 地址待確認';
   const destination = library.coordinates ?? library.address;
+  const reason = reasons?.[0];
+  const documentChip = <span className="card-fact-chip" data-icon-trigger>
+    <IdCard size={16} aria-hidden="true" />{documentShortLabels[documents]}
+  </span>;
+  const photo = <Suspense fallback={<CardPhotoPlaceholder loading />}>
+    <LibraryPhoto library={library} photos={photos} />
+  </Suspense>;
   return <article className="card">
-    <Suspense fallback={<CardPhotoPlaceholder loading />}>
-      <LibraryPhoto library={library} photos={photos} />
-    </Suspense>
+    {photo}
     <div className="card-content">
       <header className="card-heading">
+        {status && <span className={'badge ' + status}>{statuses[status]}</span>}
         <h3>{library.name}</h3>
         {distance !== undefined && <p className="card-distance"><Route size={15} aria-hidden="true" />距{distanceFrom}約 {
           distance < 1 ? Math.round(distance * 1000) + ' 公尺' : distance.toFixed(1) + ' 公里'}</p>}
-        <p className="address">{library.address || '地址待確認'}</p>
+        <p className="address">{address}</p>
       </header>
+      <div className="card-summary">
+        <p className="card-space"><BookOpen size={16} aria-hidden="true" /><span>{space}{seats}</span></p>
+        <ul className="card-quick-facts" role="list" aria-label="空間使用資訊">
+          <li>{documentChip}</li>
+          {openUntil !== undefined && <li className="card-fact-chip"><Clock size={15} aria-hidden="true" />可用至 {clock(openUntil)}</li>}
+          {facilityKeys.filter((key) => area?.equipment[key] === true).map((key) => {
+            const Icon = facilityIcons[key];
+            return <li key={key} className="card-fact-chip"><Icon size={15} aria-hidden="true" />{key === 'laptop' ? '可用筆電' : facilities[key]}</li>;
+          })}
+        </ul>
+        {reason && <p className="card-reason">{reason === closure?.reason ? <a href={closure.url}>{reason}</a> : reason}</p>}
+      </div>
       <CardDetails name={library.name}>
-        <Suspense fallback={<CardPhotoPlaceholder loading />}>
-          <LibraryPhoto library={library} photos={photos} showCredit />
-        </Suspense>
-        <p className="address">{region}</p>
+        {photo}
+        <p className="address">{address}</p>
         <p className="area">{space}{seats}</p>
-        <p className="address">{library.address || '地址待確認'}</p>
-        <dl className="card-facts">
+        {documentChip}
+        {(status || openUntil !== undefined) && <dl className="card-facts">
           {status && <div><dt>時段</dt><dd>{statuses[status]}</dd></div>}
-          <div><dt>證件</dt><dd className="entry-documents">{documentLabels[documents]}</dd></div>
           {openUntil !== undefined && <div><dt>可用至</dt><dd className="open-until">{clock(openUntil)}</dd></div>}
-        </dl>
+        </dl>}
         {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>
           {reason === closure?.reason ? <a href={closure.url}>{reason}</a> : reason}</li>)}</ul> : null}
         {visit && <dl className="visit-details">
@@ -312,8 +315,8 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
             {library.openingHours && <><dt>館方公告的開放時間</dt><dd className="opening-hours"><AnnouncedHours hours={library.openingHours} /></dd></>}
             <dt>設備</dt><dd>{facilityKeys.map((key) => facilities[key] + ' ' +
               (area?.equipment[key] === true ? '有' : area?.equipment[key] === false ? '未提供' : '待確認')).join(' · ')}</dd>
-            {library.facilities?.length ? <><dt>館舍設備</dt><dd><LibraryFacilities items={library.facilities} /></dd></> : null}
           </dl>
+          {library.facilities?.length ? <LibraryFacilities items={library.facilities} /> : null}
           <div className="source-links">
             {library.website && <a href={library.website}>館方網站 ↗</a>}
             <a href="/?sources=1#source-index">查看逐館來源索引</a>

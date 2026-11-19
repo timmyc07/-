@@ -9,7 +9,6 @@
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1",
     "build": "next build",
-    "postbuild": "node scripts/library-photo-import/upload.mjs",
     "start": "next start --hostname 127.0.0.1",
     "crawl:taichung-rules": "node --env-file-if-exists=.env scripts/crawl-taichung-rules.ts",
     "import:taichung": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env scripts/import-taichung.ts",

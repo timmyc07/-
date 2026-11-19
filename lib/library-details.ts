@@ -2180,6 +2180,12 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
       sources: [...library.sources, hoursSource] };
     detail = { address, url: website, hours: '臨時館週二至週日 08:00–17:30。' };
   }
+  if (library.id === 'plis-949d8708d5597baaf12e' && library.address === '臺東縣太麻里鄉泰和村民權路58號') {
+    const address = '臺東縣太麻里鄉泰和村德輝路12號';
+    const url = 'https://www.taimali.gov.tw/home/index.php/about/2020-04-16-07-53-00.html';
+    library = { ...library, address, sources: [...library.sources, url] };
+    detail = { ...detail, address, url };
+  }
   if (library.id === 'plis-d34887b8b49b91a79656' && library.address === '南投縣信義鄉明德村玉山路47號') {
     const address = '南投縣信義鄉愛國村愛國巷114號';
     library = { ...library, address, phone: '049-2791534',

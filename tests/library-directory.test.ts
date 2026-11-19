@@ -532,6 +532,8 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.equal(taitung.areas[0].access, 'card');
   assert.equal(taitung.areas[0].regionalCard, 'taitung');
   const taimali = libraries.find(({ id }) => id === 'plis-949d8708d5597baaf12e')!;
+  assert.equal(taimali.address, '臺東縣太麻里鄉泰和村德輝路12號');
+  assert.deepEqual(taimali.coordinates, { latitude: 22.6154, longitude: 121.007 });
   const taimaliStudy = taimali.areas.find(({ kind }) => kind === 'study')!;
   assert.equal(taimaliStudy.name, '1 樓閱覽室');
   assert.match(taimaliStudy.entryNote!, /閱覽及自習.*30 分鐘/);

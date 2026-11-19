@@ -1009,10 +1009,6 @@ const localFacilityLists: Record<string, { url: string; facilities: string[] } |
     url: 'https://www.jw.gov.tw/cp.aspx?n=15005',
     facilities: ['書庫', '期刊區', '館藏特色區', '縣籍作家專區', '藝文教室', '兒童室', '親子共讀區'],
   },
-  'plis-44d1777aefba3d40891b': {
-    url: 'https://www.yuanshan.gov.tw/cp.aspx?n=5787',
-    facilities: ['地下 1 樓民眾閱覽室', '期刊雜誌區', '兒童閱覽室', '視聽室', '書庫', '資訊研討室', '無障礙廁所'],
-  },
   'plis-e3c1d8e816d9e6061a7d': {
     url: kinmenCollectionPolicy, facilities: ['南棟親子活動區', '南棟青少年閱覽室', '南棟期刊室', '南棟自修室'],
   },
@@ -1993,6 +1989,7 @@ const announcedLibraries: (Library & { city: string })[] = [
   {
     id: 'local-yunlin-beigang-learning-center', name: '北港鎮立圖書館學習中心', city: '雲林縣', district: '北港鎮',
     address: '雲林縣北港鎮文仁路10號', types: ['公共圖書館'],
+    coordinates: { latitude: 23.57994, longitude: 120.30469 },
     website: 'https://bggov.yunlin.gov.tw/cp.aspx?n=3316',
     sources: ['https://bggov.yunlin.gov.tw/cp.aspx?n=3316',
       'https://lib.ylccb.gov.tw/wSite/sp?ctNode=6218&mp=1&orgId=010&xdUrl=%2FwSite%2FApBlock%2FLibrary.jsp'],
@@ -2141,9 +2138,18 @@ export function withTaichungDirectoryDetails(library: Library, directory: Librar
 export function withLibraryDetail<T extends Library>(library: T, detail: LibraryDetail | undefined): T & Library {
   if (library.id === 'plis-4f656e6f21c469e566ae' && library.address === '嘉義縣水上鄉柳林村80-1號') {
     const address = '嘉義縣水上鄉水上村正義路141號';
-    library = { ...library, address, coordinates: undefined, fax: undefined };
+    library = { ...library, address, coordinates: { latitude: 23.42856, longitude: 120.39819 }, fax: undefined };
     detail = { address, url: 'https://www.cycab.gov.tw/wSite/ct?ctNode=5231&mp=1&xItem=13562',
       hours: '臨時服務點週一至週五 08:00–12:00、13:00–17:00，週末及國定假日休息。' };
+  }
+  if (library.id === 'plis-44d1777aefba3d40891b' && library.address === '宜蘭縣員山鄉員山村員山村復興路20號') {
+    const address = '宜蘭縣員山鄉復興路39號（員山國小書香樓2樓）';
+    const url = 'https://www.kamalan-news.com/local/4/14858';
+    library = { ...library, address, coordinates: { latitude: 24.74363, longitude: 121.72282 },
+      fax: undefined, facilities: ['臨時圖書室'], studyRoom: false, areas: [],
+      accessNote: '重建期間請前往員山國小書香樓 2 樓，臨時圖書室提供借閱、報刊瀏覽及館際代借還。',
+      sources: [...library.sources, 'https://test2.taiwanbuying.com.tw/ShowPRWDetail.ASP?RecNo=7704'] };
+    detail = { address, url, hours: '臨時圖書室週一至週六 08:00–17:00，異動依館方公告。' };
   }
   if (library.id === 'plis-bfff639f154e1c065ad1' && library.address === '嘉義縣鹿草鄉西井村長壽路230號') {
     const address = '嘉義縣鹿草鄉西井村長壽路226巷3號';
@@ -2189,9 +2195,10 @@ export function withLibraryDetail<T extends Library>(library: T, detail: Library
   if (library.id === 'plis-d34887b8b49b91a79656' && library.address === '南投縣信義鄉明德村玉山路47號') {
     const address = '南投縣信義鄉愛國村愛國巷114號';
     library = { ...library, address, phone: '049-2791534',
-      coordinates: { latitude: 23.7060107, longitude: 120.8332703 },
+      coordinates: { latitude: 23.69338, longitude: 120.84829 },
       sources: [...library.sources, 'https://plisnet.nlpi.edu.tw/Frontend/LibraryFamily/LibraryDetail?LIID=Lib0000252',
-        'https://data.nantou.gov.tw/da_DK/dataset/d4d03a54-582b-4a5a-b7b8-f0ca56d2775b/resource/bf17428a-8756-4f85-875d-19a8bdf202b5/preview'] };
+        'https://web.cec.gov.tw/api/file/b6bf79d3-4412-4839-b3c0-59b18c8e43c7.pdf',
+        'https://www.openstreetmap.org/way/813834546'] };
     detail = { address, url: nantouEarlyReading, hours: '臨時館開放時間請致電 049-2791534 確認。' };
   }
   if (library.id === 'plis-a2b6c71763cc26d5bc25' && library.address === '高雄市永安區永華路49號') {

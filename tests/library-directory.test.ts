@@ -78,8 +78,17 @@ test('全臺名錄的電話與網址齊全，搬遷館舍不帶入舊址座標',
   const aiguo = withLibraryDetail(xinyi, undefined);
   assert.equal(aiguo.address, '南投縣信義鄉愛國村愛國巷114號');
   assert.equal(aiguo.phone, '049-2791534');
-  assert.deepEqual(aiguo.coordinates, { latitude: 23.7060107, longitude: 120.8332703 });
+  assert.deepEqual(aiguo.coordinates, { latitude: 23.69338, longitude: 120.84829 });
   assert.notDeepEqual(aiguo.coordinates, xinyi.coordinates);
+  const shuishang = directory.libraries.find(({ id }) => id === 'plis-4f656e6f21c469e566ae')!;
+  const serviceDesk = withLibraryDetail(shuishang, undefined);
+  assert.match(serviceDesk.address, /正義路141號/);
+  assert.deepEqual(serviceDesk.coordinates, { latitude: 23.42856, longitude: 120.39819 });
+  const yuanshan = directory.libraries.find(({ id }) => id === 'plis-44d1777aefba3d40891b')!;
+  const readingRoom = withLibraryDetail(yuanshan, undefined);
+  assert.match(readingRoom.address, /復興路39號.*書香樓2樓/);
+  assert.deepEqual(readingRoom.coordinates, { latitude: 24.74363, longitude: 121.72282 });
+  assert.deepEqual(readingRoom.facilities, ['臨時圖書室']);
 });
 
 test('傳真補錄保留來源，原始名錄明載無傳真的欄位持續有效', () => {
@@ -307,7 +316,8 @@ test('專室時段採館方資料，施工閉館可排除查詢', () => {
   assert.match(zhuangwei.openingHours!, /08:30–17:00/);
   assert(zhuangwei.facilities?.includes('電梯') && zhuangwei.facilities.includes('親子共讀區'));
   const yuanshan = libraries.find(({ id }) => id === 'plis-44d1777aefba3d40891b')!;
-  assert(yuanshan.facilities?.includes('地下 1 樓民眾閱覽室'));
+  assert.equal(yuanshan.studyRoom, false);
+  assert.match(yuanshan.openingHours!, /臨時圖書室/);
   const qionglin = libraries.find(({ id }) => id === 'plis-cf8f59d429a9ca2188f7')!;
   assert.equal(qionglin.areas.find(({ kind }) => kind === 'reading')?.seats, 36);
   assert.equal(qionglin.areas.find(({ kind }) => kind === 'study')?.seats, 25);

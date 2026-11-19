@@ -390,7 +390,7 @@ dd{margin:0 0 6px;color:var(--muted)}
 .library-section h3{display:flex;align-items:center;gap:7px;margin:0 0 8px;color:var(--ink);font-size:1rem}
 .library-section :is(h3,dt) svg{color:var(--accent-ink)}
 .library-section p{margin:0}
-.library-entry{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:baseline;gap:6px 12px}
+.library-entry{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:start;gap:6px 12px;font-size:1rem}
 .library-entry h3{margin:0}
 .library-entry .visit-details{grid-column:2;font-size:inherit}
 .library-hours h4{margin:12px 0 4px;color:var(--ink);font-size:.875rem}
@@ -410,7 +410,6 @@ dd{margin:0 0 6px;color:var(--muted)}
 }
 .library-facilities li{display:flex;align-items:center;gap:5px;max-width:100%;padding:2px 7px;border-radius:6px;background:var(--surface);font-size:.8125rem}
 .library-facilities svg{color:var(--accent-ink)}
-.library-note{border-inline-start:3px solid var(--accent)}
 .library-note p{max-width:62ch;white-space:pre-line;line-height:1.75}
 .library-footer{display:flex;align-items:baseline;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;border-top:1px solid var(--line);padding-top:6px}
 .source-links{display:flex;align-items:center;flex-wrap:wrap;gap:2px 12px;font-size:.875rem}

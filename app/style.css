@@ -413,7 +413,10 @@ dd{margin:0 0 6px;color:var(--muted)}
 .reasons{font-size:1rem;padding-left:1.3em;margin:0}
 .backup-link{display:flex;align-items:center;gap:7px;min-height:44px;font-size:.875rem}
 @media(min-width:620px){
-  .library-visit{grid-template-columns:fit-content(55%) minmax(0,1fr)}
+  .library-visit{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+  .library-hours>.hours-list{columns:2 10rem;column-gap:16px}
+  .library-hours>.hours-list li{break-inside:avoid}
+  .library-equipment-status{width:100%}
 }
 .pager{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;margin:18px 0}
 .pager :is(a,button:not([hidden])){display:grid;place-items:center;width:44px;min-height:44px;margin:0;padding:0;border:0;border-radius:8px;background:transparent;color:var(--accent-ink)}

@@ -338,11 +338,11 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
               </div>;
             })}</dl>
           </section>
-          {library.facilities?.length ? <details className="facility-disclosure">
-            <summary>館內設施（{library.facilities.length}）</summary>
-            <LibraryFacilities items={library.facilities} />
-          </details> : null}
         </div>
+        {library.facilities?.length ? <details className="facility-disclosure">
+          <summary>館內設施（{library.facilities.length}）</summary>
+          <LibraryFacilities items={library.facilities} />
+        </details> : null}
         {(library.accessNote || library.reviewNote) && <details className="library-note">
           <summary>{library.accessNote ? '館方補充' : '規則核對'}</summary>
           <p>{library.accessNote || library.reviewNote}</p>

@@ -382,7 +382,7 @@ details[open]>summary::before{rotate:45deg}
 dl{font-size:1rem;margin:9px 0}
 dt,th{font-weight:500}
 dd{margin:0 0 6px;color:var(--muted)}
-.library-visit{display:grid;align-items:start;gap:18px 32px}
+.library-visit{display:grid;align-items:start;gap:18px 32px;padding:14px 16px;border-radius:12px;background:color-mix(in srgb,var(--surface) 45%,var(--paper))}
 .library-section{
   min-width:0;
   color:var(--muted);font-size:.9375rem;
@@ -395,14 +395,12 @@ dd{margin:0 0 6px;color:var(--muted)}
 .hours-list li{display:flex;align-items:baseline;gap:1.5em;padding:3px 0}
 .hours-list strong{color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
 .opening-hours{white-space:pre-line}
-.library-hours{padding:14px 16px;border-radius:12px;background:color-mix(in srgb,var(--surface) 45%,var(--paper))}
-.library-equipment-status{display:grid;width:fit-content;gap:6px;margin:0;font-size:inherit}
+.library-equipment-status{display:grid;gap:6px;margin:0;font-size:inherit}
 .library-equipment-status>div,.library-equipment-status dt{display:flex;align-items:center;gap:6px}
 .library-equipment-status>div{justify-content:space-between;gap:1.5em}
 .library-equipment-status dt{color:var(--ink)}
 .library-equipment-status dd{margin:0}
 .facility-disclosure,.library-note{margin:0;padding:0;border:0}
-.facility-disclosure{grid-column:1/-1}
 .facility-disclosure summary,.library-note summary{min-height:44px}
 .library-facilities{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,8rem),1fr));gap:6px;margin:0;padding:0;list-style:none}
 .library-facilities li{display:flex;align-items:center;gap:5px;max-width:100%;padding:2px 7px;border-radius:6px;background:var(--surface);font-size:.8125rem}

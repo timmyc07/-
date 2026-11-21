@@ -23,7 +23,7 @@ export default async function LandingPage({ searchParams }: PageProps<'/'>) {
       <div className="hero-copy">
         <p className="eyebrow">全臺公立圖書館自修查詢</p>
         <h1 id="landing-title">無舟如書，<br />載我們遠航。</h1>
-        <p className="intro">—— <a href="https://www.emilydickinsonmuseum.org/roomitem/no-frigate-like-a-book/">艾蜜莉・狄金生</a>（詩句意譯）</p>
+        <p className="intro">—— <Link href="/poems/no-frigate-like-a-book">艾蜜莉・狄金生</Link>（詩句意譯）</p>
         <div className="hero-actions">
           <Link className="primary-action" href="/search"><Search size={18} />查詢自修空間</Link>
           <a href="#coverage">探索館舍分布 ↓</a>

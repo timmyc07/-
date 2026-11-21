@@ -253,7 +253,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
   const reason = reasons?.[0];
   const entry = area?.entryNote ?? (area?.access === 'walk-in' ? '現場入座' : area?.access === 'card'
     ? '需持' + (area.regionalCard ? regionalCards[area.regionalCard] : '國資圖或臺中市圖個人借閱證') + '，須預約或現場登記'
-    : area?.access === 'restricted' ? '限指定身分' : area?.access === 'conditional' ? '須符合校外訪客資格' : '待確認');
+    : area?.access === 'restricted' ? '限指定身分' : area?.access === 'conditional' ? '須符合校外訪客資格' : '入場方式待確認');
   const documentChip = <span className="card-fact-chip" data-icon-trigger>
     <IdCard size={16} aria-hidden="true" />{documentShortLabels[documents]}
   </span>;
@@ -287,7 +287,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
         <div className="library-overview">
           <p className="address"><MapPin className="action-icon" size={17} aria-hidden="true" />{address}</p>
           <div className="library-space">
-            <p className="area"><BookOpen className="action-icon" size={17} aria-hidden="true" />{space}{seats}</p>
+            <p className="area"><BookOpen className="action-icon" size={17} aria-hidden="true" /><span>{space}{seats} · {entry}</span></p>
             {documentChip}
           </div>
           <div className="card-actions">
@@ -304,15 +304,14 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
         </dl>}
         {reasons?.length ? <ul className="reasons">{reasons.map((reason) => <li key={reason}>
           {reason === closure?.reason ? <a href={closure.url}>{reason}</a> : reason}</li>)}</ul> : null}
-        <section className="library-section library-entry">
-          <h3><IdCard className="action-icon" size={18} aria-hidden="true" />入場方式</h3>
-          <p>{entry}</p>
-          {visit && <dl className="visit-details">
+        {visit && <section className="library-section">
+          <h3>到館資訊</h3>
+          <dl className="visit-details">
             <div><dt>樓層</dt><dd>{visit.location}</dd></div>
             <div><dt>入座</dt><dd>{visit.entry}</dd></div>
             <div><dt>充電</dt><dd>{visit.power}</dd></div>
-          </dl>}
-        </section>
+          </dl>
+        </section>}
         <div className="library-visit">
           <section className="library-section library-hours">
             <h3><Clock className="action-icon" size={18} aria-hidden="true" />每週開放</h3>

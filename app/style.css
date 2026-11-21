@@ -389,10 +389,6 @@ dd{margin:0 0 6px;color:var(--muted)}
 .library-section h3{display:flex;align-items:center;gap:7px;margin:0 0 8px;color:var(--ink);font-size:1rem}
 .library-section :is(h3,dt) svg{color:var(--accent-ink)}
 .library-section p{margin:0}
-.library-entry{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:baseline;gap:6px 12px;font-size:1rem}
-.library-entry h3{display:block;margin:0}
-.library-entry h3 svg{margin-inline-end:7px}
-.library-entry .visit-details{grid-column:2;font-size:inherit}
 .library-hours h4{margin:12px 0 4px;color:var(--ink);font-size:.875rem}
 .hours-list{margin:0;padding:0;list-style:none}
 .hours-list li{display:flex;justify-content:space-between;gap:8px;padding:3px 0}

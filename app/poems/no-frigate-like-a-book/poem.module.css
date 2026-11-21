@@ -1,0 +1,32 @@
+.reader {
+  max-width: 1100px;
+  padding-block: clamp(20px, 4vw, 48px);
+}
+.spread {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(24px, 4vw, 48px);
+  margin-top: 16px;
+  padding: clamp(22px, 5vw, 64px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--accent);
+  border-radius: 20px;
+}
+.heading, .source { grid-column: 1 / -1; }
+.heading { border-bottom: 1px solid var(--line); }
+.heading h1 { font-family: var(--display); }
+.subtitle, .manuscript figcaption { color: var(--muted); }
+.subtitle span { font-family: Georgia, serif; font-style: italic; }
+.verse h2 { font-size: 1rem; color: var(--accent-ink); }
+.verse p { font-family: Georgia, serif; font-size: clamp(1.12rem, 2vw, 1.5rem); line-height: 1.8; margin: 0; }
+.manuscript { margin: 0; }
+.manuscript a { display: block; padding: 8px; background: var(--soft); border: 1px solid var(--line); cursor: zoom-in; }
+.manuscript img { display: block; width: 100%; height: auto; }
+.manuscript figcaption { margin-top: 8px; font-size: .875rem; }
+.source { padding-top: 20px; border-top: 1px solid var(--line); }
+.source p { max-width: 38em; margin-bottom: 12px; }
+@media (max-width: 800px) {
+  .spread { grid-template-columns: minmax(0, 1fr); }
+}

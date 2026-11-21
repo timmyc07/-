@@ -188,11 +188,11 @@ html:has(.animated-dialog[open]){overflow:hidden}
 .advanced-dialog .inputs{grid-template-columns:minmax(0,1fr)}
 .animated-dialog::backdrop{background:var(--overlay)}
 .animated-dialog h2{margin:0 44px 16px 0;font-size:1.375rem}
-.library-dialog{width:min(740px,calc(100% - 24px));scroll-padding-block:56px 16px}
-.library-dialog .dialog-content{display:grid;gap:clamp(14px,3vw,22px);overflow-wrap:anywhere}
-.library-dialog h2{margin:0 52px 0 0;font-family:var(--display);font-size:clamp(1.6rem,3vw,2rem);line-height:1.35;min-height:44px;align-content:center}
-.library-intro{display:grid;align-items:center;gap:16px}
-.library-dialog .card-photo{aspect-ratio:3/1;border-radius:12px}
+.library-dialog{--detail-gutter:clamp(16px,4vw,28px);width:min(740px,calc(100% - 24px));padding-inline:var(--detail-gutter);scroll-padding-block:56px 16px}
+.library-dialog .dialog-content{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(14px,3vw,22px);overflow-wrap:anywhere}
+.library-dialog h2{margin:0;padding-inline-end:52px;font-family:var(--display);font-size:clamp(1.6rem,3vw,2rem);line-height:1.35;min-height:44px;align-content:center}
+.library-intro{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.library-dialog .card-photo{aspect-ratio:16/9;border-radius:12px}
 .dialog-close{position:absolute;inset-block-start:10px;inset-inline-end:10px;display:grid;place-items:center;width:44px;margin:0;padding:0;background:transparent;color:var(--accent-ink);z-index:1}
 .dialog-close:hover{background:var(--soft)}
 .library-dialog .dialog-close{
@@ -344,7 +344,7 @@ button:hover{background:var(--accent-hover)}
   .results[data-layout=list] .card>.card-photo{aspect-ratio:4/3}
 }
 .card-facts,.visit-details{display:grid;gap:6px;margin:0}
-.card-facts{padding:10px 12px;border-radius:12px;background:var(--soft)}
+.card-facts{padding-block:10px;background:var(--soft)}
 :is(.card-facts,.visit-details)>div{display:grid;grid-template-columns:3.25em minmax(0,1fr);gap:10px}
 :is(.card-facts,.visit-details) dd{margin:0}
 .open-until{color:var(--ink);font-variant-numeric:tabular-nums}
@@ -382,7 +382,8 @@ details[open]>summary::before{rotate:45deg}
 dl{font-size:1rem;margin:9px 0}
 dt,th{font-weight:500}
 dd{margin:0 0 6px;color:var(--muted)}
-.library-visit{display:grid;align-items:start;gap:18px 32px;padding:14px 16px;border-radius:12px;background:color-mix(in srgb,var(--surface) 45%,var(--paper))}
+.library-visit{display:grid;align-items:start;gap:18px 32px;padding-block:14px;background:color-mix(in srgb,var(--surface) 45%,var(--paper))}
+.library-dialog :is(.library-visit,.card-facts){margin-inline:calc(-1 * var(--detail-gutter));padding-inline:var(--detail-gutter)}
 .library-section{
   min-width:0;
   color:var(--muted);font-size:.9375rem;
@@ -403,9 +404,9 @@ dd{margin:0 0 6px;color:var(--muted)}
 .facility-disclosure,.library-note{margin:0;padding:0;border:0}
 .facility-disclosure summary,.library-note summary{min-height:44px}
 .library-facilities{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,8rem),1fr));gap:6px;margin:0;padding:0;list-style:none}
-.library-facilities li{display:flex;align-items:center;gap:5px;max-width:100%;padding:2px 7px;border-radius:6px;background:var(--surface);font-size:.8125rem}
+.library-facilities li{display:flex;align-items:center;gap:5px;max-width:100%;padding-block:2px;font-size:.8125rem}
 .library-facilities svg{color:var(--accent-ink)}
-.library-note p{max-width:62ch;margin:0;white-space:pre-line;line-height:1.75;color:var(--muted)}
+.library-note p{margin:0;white-space:pre-line;line-height:1.75;color:var(--muted)}
 .library-footer{display:flex;align-items:baseline;flex-wrap:wrap;justify-content:space-between;gap:4px 16px}
 .source-links{display:flex;align-items:center;flex-wrap:wrap;gap:2px 12px;font-size:.875rem}
 .source-links a,.card-fax{display:inline-flex;align-items:center;gap:5px;min-height:44px}
@@ -413,8 +414,6 @@ dd{margin:0 0 6px;color:var(--muted)}
 .reasons{font-size:1rem;padding-left:1.3em;margin:0}
 .backup-link{display:flex;align-items:center;gap:7px;min-height:44px;font-size:.875rem}
 @media(min-width:620px){
-  .library-intro{grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:24px}
-  .library-dialog .card-photo{aspect-ratio:4/3}
   .library-visit{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 .pager{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;margin:18px 0}

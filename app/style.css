@@ -384,7 +384,7 @@ dt,th{font-weight:500}
 dd{margin:0 0 6px;color:var(--muted)}
 .library-visit{display:grid;align-items:start;gap:18px 32px}
 .library-section{
-  min-width:0;padding-top:14px;border-top:1px solid var(--line);
+  min-width:0;
   color:var(--muted);font-size:.9375rem;
 }
 .library-section h3{display:flex;align-items:center;gap:7px;margin:0 0 8px;color:var(--ink);font-size:1rem}
@@ -401,14 +401,14 @@ dd{margin:0 0 6px;color:var(--muted)}
 .library-equipment-status>div{justify-content:space-between}
 .library-equipment-status dt{color:var(--ink)}
 .library-equipment-status dd{margin:0}
-.facility-disclosure,.library-note{margin:0;padding:0}
+.facility-disclosure,.library-note{margin:0;padding:0;border:0}
 .facility-disclosure{margin-top:10px}
 .facility-disclosure summary,.library-note summary{min-height:44px}
 .library-facilities{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
 .library-facilities li{display:flex;align-items:center;gap:5px;max-width:100%;padding:2px 7px;border-radius:6px;background:var(--surface);font-size:.8125rem}
 .library-facilities svg{color:var(--accent-ink)}
 .library-note p{max-width:62ch;margin:0;white-space:pre-line;line-height:1.75;color:var(--muted)}
-.library-footer{display:flex;align-items:baseline;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;border-top:1px solid var(--line);padding-top:6px}
+.library-footer{display:flex;align-items:baseline;flex-wrap:wrap;justify-content:space-between;gap:4px 16px}
 .source-links{display:flex;align-items:center;flex-wrap:wrap;gap:2px 12px;font-size:.875rem}
 .source-links :is(a,.card-fax){display:inline-flex;align-items:center;gap:5px;min-height:44px}
 .source-links .card-fax{color:var(--muted)}

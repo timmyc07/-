@@ -283,19 +283,21 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
         {reason && <p className="card-reason">{reason === closure?.reason ? <a href={closure.url}>{reason}</a> : reason}</p>}
       </div>
       <CardDetails name={library.name}>
-        {photo}
-        <div className="library-overview">
-          <p className="address"><MapPin className="action-icon" size={17} aria-hidden="true" />{address}</p>
-          <div className="library-space">
-            <p className="area"><BookOpen className="action-icon" size={17} aria-hidden="true" /><span>{space}{seats} · {entry}</span></p>
-            {documentChip}
-          </div>
-          <div className="card-actions">
-            {destination && <a className="map-link" href={directionsUrl(destination)} aria-label={library.name + ' Google 地圖導航'}>
-              <MapPin className="action-icon" size={17} aria-hidden="true" />地圖導航</a>}
-            {!closure && area?.reservation && <a href={area.reservation}><CalendarDays className="action-icon" size={17} aria-hidden="true" />前往館方預約</a>}
-            {library.phone && <a href={'tel:' + library.phone} aria-label={'撥打館舍電話 ' + library.phone}>
-              <Phone className="action-icon" size={17} aria-hidden="true" />{library.phone}</a>}
+        <div className="library-intro">
+          {photo}
+          <div className="library-overview">
+            <p className="address"><MapPin className="action-icon" size={17} aria-hidden="true" />{address}</p>
+            <div className="library-space">
+              <p className="area"><BookOpen className="action-icon" size={17} aria-hidden="true" /><span>{space}{seats} · {entry}</span></p>
+              {documentChip}
+            </div>
+            <div className="card-actions">
+              {destination && <a className="map-link" href={directionsUrl(destination)} aria-label={library.name + ' Google 地圖導航'}>
+                <MapPin className="action-icon" size={17} aria-hidden="true" />地圖導航</a>}
+              {!closure && area?.reservation && <a href={area.reservation}><CalendarDays className="action-icon" size={17} aria-hidden="true" />前往館方預約</a>}
+              {library.phone && <a href={'tel:' + library.phone} aria-label={'撥打館舍電話 ' + library.phone}>
+                <Phone className="action-icon" size={17} aria-hidden="true" />{library.phone}</a>}
+            </div>
           </div>
         </div>
         {(status || openUntil !== undefined) && <dl className="card-facts">
@@ -333,13 +335,16 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
                 <dd>{available === true ? '有' : available === false ? '未提供' : '待確認'}</dd>
               </div>;
             })}</dl>
-            {library.facilities?.length ? <LibraryFacilities items={library.facilities} /> : null}
+            {library.facilities?.length ? <details className="facility-disclosure">
+              <summary>館內設施（{library.facilities.length}）</summary>
+              <LibraryFacilities items={library.facilities} />
+            </details> : null}
           </section>
         </div>
-        {(library.accessNote || library.reviewNote) && <section className="library-section library-note">
-          <h3>{library.accessNote ? '館方補充' : '規則核對'}</h3>
+        {(library.accessNote || library.reviewNote) && <details className="library-note">
+          <summary>{library.accessNote ? '館方補充' : '規則核對'}</summary>
           <p>{library.accessNote || library.reviewNote}</p>
-        </section>}
+        </details>}
         <footer className="library-footer">
           <div className="source-links">
             {library.website && <a href={library.website}>館方網站 ↗</a>}

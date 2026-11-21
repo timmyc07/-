@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import manuscript from './manuscript.webp';
 import styles from './poem.module.css';
 
 export const metadata = {
@@ -31,8 +32,7 @@ export default function PoemPage() {
       </section>
       <figure className={styles.manuscript}>
         <a href="/dickinson-manuscript.jpg" aria-label="查看手稿原圖">
-          <Image src="/dickinson-manuscript.jpg" width={896} height={749}
-            sizes="(max-width: 800px) 90vw, 460px"
+          <Image src={manuscript} preload unoptimized
             alt="兩張鉛筆手稿上下並列，上半張有藍色橫線，詩行之間留有替換用字。" />
         </a>
         <figcaption>詩作手稿 · <span lang="en">Amherst College Archives &amp; Special Collections</span></figcaption>

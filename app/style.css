@@ -410,8 +410,8 @@ dd{margin:0 0 6px;color:var(--muted)}
 .library-note p{max-width:62ch;margin:0;white-space:pre-line;line-height:1.75;color:var(--muted)}
 .library-footer{display:flex;align-items:baseline;flex-wrap:wrap;justify-content:space-between;gap:4px 16px}
 .source-links{display:flex;align-items:center;flex-wrap:wrap;gap:2px 12px;font-size:.875rem}
-.source-links :is(a,.card-fax){display:inline-flex;align-items:center;gap:5px;min-height:44px}
-.source-links .card-fax{color:var(--muted)}
+.source-links a,.card-fax{display:inline-flex;align-items:center;gap:5px;min-height:44px}
+.card-fax{color:var(--muted);font-size:.875rem}
 .reasons{font-size:1rem;padding-left:1.3em;margin:0}
 .backup-link{display:flex;align-items:center;gap:7px;min-height:44px;font-size:.875rem}
 @media(min-width:620px){

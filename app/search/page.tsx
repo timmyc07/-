@@ -224,10 +224,11 @@ function AnnouncedHours({ hours }: { hours: string }) {
 }
 
 function LibraryFacilities({ items }: { items: string[] }) {
-  return <ul className="library-facilities" role="list" aria-label="館舍設備">{items.map((name, index) => {
-    const Icon = facilityGroups.find(({ match }) => match.test(name))?.Icon ?? List;
-    return <li key={index} data-icon-trigger><Icon className="action-icon" size={17} aria-hidden="true" />{name}</li>;
-  })}</ul>;
+  const groups = Map.groupBy(items, name => facilityGroups.find(({ match }) => match.test(name))?.Icon ?? List);
+  return <ul className="library-facilities" role="list" aria-label="館舍設備">{Array.from(groups, ([Icon, names]) =>
+    names.map((name, index) => <li key={index} data-icon-trigger>
+      <Icon className="action-icon" size={17} aria-hidden="true" />{name}
+    </li>))}</ul>;
 }
 
 function LibraryCard({ library, area, documents = entryDocumentRequirement(area), status, reasons, closure, openUntil, distance,
@@ -297,6 +298,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
               {!closure && area?.reservation && <a href={area.reservation}><CalendarDays className="action-icon" size={17} aria-hidden="true" />前往館方預約</a>}
               {library.phone && <a href={'tel:' + library.phone} aria-label={'撥打館舍電話 ' + library.phone}>
                 <Phone className="action-icon" size={17} aria-hidden="true" />{library.phone}</a>}
+              {library.fax && <span className="card-fax" data-icon-trigger><Fax className="action-icon" size={16} aria-hidden="true" />傳真 {library.fax}</span>}
             </div>
           </div>
         </div>
@@ -349,7 +351,6 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
           <div className="source-links">
             {library.website && <a href={library.website}>館方網站 ↗</a>}
             <a href="/?sources=1#source-index">查看逐館來源索引</a>
-            {library.fax && <span className="card-fax" data-icon-trigger><Fax className="action-icon" size={16} aria-hidden="true" />傳真 {library.fax}</span>}
           </div>
           {originalLink && <LayoutLink className="backup-link" href={originalLink}><Route className="action-icon" size={17} aria-hidden="true" />以此館為原定地點找備案</LayoutLink>}
         </footer>

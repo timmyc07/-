@@ -416,7 +416,12 @@ dd{margin:0 0 6px;color:var(--muted)}
 @media(min-width:620px){
   .library-intro{grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:24px}
   .library-dialog .card-photo{aspect-ratio:4/3}
-  .library-visit{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .library-visit{grid-template-columns:minmax(0,2fr) minmax(0,3fr)}
+  .library-visit:has(>.facility-disclosure:not([open])){grid-template-rows:max-content 1fr}
+  .library-visit:has(>.facility-disclosure:not([open]))>.library-hours{grid-row:span 2}
+  .facility-disclosure:not([open]){grid-column:2}
+  .library-equipment-status{width:auto;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .library-equipment-status>div{flex-direction:column;align-items:flex-start;gap:2px}
 }
 .pager{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px;margin:18px 0}
 .pager :is(a,button:not([hidden])){display:grid;place-items:center;width:44px;min-height:44px;margin:0;padding:0;border:0;border-radius:8px;background:transparent;color:var(--accent-ink)}

@@ -328,7 +328,7 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
             </>}
           </section>
           <section className="library-section library-equipment">
-            <h3>設備</h3>
+            <h3><Plug className="action-icon" size={18} aria-hidden="true" />設備</h3>
             <dl className="library-equipment-status">{facilityKeys.map((key) => {
               const Icon = facilityIcons[key];
               const available = area?.equipment[key];
@@ -337,11 +337,11 @@ function LibraryCard({ library, area, documents = entryDocumentRequirement(area)
                 <dd>{available === true ? '有' : available === false ? '未提供' : '待確認'}</dd>
               </div>;
             })}</dl>
-            {library.facilities?.length ? <details className="facility-disclosure">
-              <summary>館內設施（{library.facilities.length}）</summary>
-              <LibraryFacilities items={library.facilities} />
-            </details> : null}
           </section>
+          {library.facilities?.length ? <details className="facility-disclosure">
+            <summary>館內設施（{library.facilities.length}）</summary>
+            <LibraryFacilities items={library.facilities} />
+          </details> : null}
         </div>
         {(library.accessNote || library.reviewNote) && <details className="library-note">
           <summary>{library.accessNote ? '館方補充' : '規則核對'}</summary>

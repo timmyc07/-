@@ -392,19 +392,18 @@ dd{margin:0 0 6px;color:var(--muted)}
 .library-section p{margin:0}
 .library-hours h4{margin:12px 0 4px;color:var(--ink);font-size:.875rem}
 .hours-list{margin:0;padding:0;list-style:none}
-.hours-list li{display:flex;justify-content:space-between;gap:8px;padding:3px 0}
+.hours-list li{display:flex;align-items:baseline;gap:1.5em;padding:3px 0}
 .hours-list strong{color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
-.hours-list li>strong:only-child{margin-inline-start:auto}
 .opening-hours{white-space:pre-line}
-.library-equipment-status{display:grid;gap:6px;margin:0;font-size:inherit}
+.library-equipment-status{display:grid;width:fit-content;gap:6px;margin:0;font-size:inherit}
 .library-equipment-status>div,.library-equipment-status dt{display:flex;align-items:center;gap:6px}
-.library-equipment-status>div{justify-content:space-between}
+.library-equipment-status>div{justify-content:space-between;gap:1.5em}
 .library-equipment-status dt{color:var(--ink)}
 .library-equipment-status dd{margin:0}
 .facility-disclosure,.library-note{margin:0;padding:0;border:0}
-.facility-disclosure{margin-top:10px}
+.facility-disclosure{grid-column:1/-1}
 .facility-disclosure summary,.library-note summary{min-height:44px}
-.library-facilities{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.library-facilities{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,8rem),1fr));gap:6px;margin:0;padding:0;list-style:none}
 .library-facilities li{display:flex;align-items:center;gap:5px;max-width:100%;padding:2px 7px;border-radius:6px;background:var(--surface);font-size:.8125rem}
 .library-facilities svg{color:var(--accent-ink)}
 .library-note p{max-width:62ch;margin:0;white-space:pre-line;line-height:1.75;color:var(--muted)}
